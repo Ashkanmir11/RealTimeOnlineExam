@@ -17,11 +17,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ui", "Ui", "{79B2441B-BD50-
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Api", "OnlineExam.Api\OnlineExam.Api.csproj", "{051AC287-576D-467D-B746-061BF9A6E4D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Ui", "OnlineExam.Ui\OnlineExam.Ui.csproj", "{6EBCDBFB-AFDD-4212-B3C7-A244457D9A86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Ui", "OnlineExam.Ui\OnlineExam.Ui.csproj", "{6EBCDBFB-AFDD-4212-B3C7-A244457D9A86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Identity", "OnlineExam.Identity\OnlineExam.Identity.csproj", "{6AE3E3C0-49EA-49C4-89A0-55C776525834}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Identity", "OnlineExam.Identity\OnlineExam.Identity.csproj", "{6AE3E3C0-49EA-49C4-89A0-55C776525834}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Application", "OnlineExam.Application\OnlineExam.Application.csproj", "{5291A236-72FE-45ED-AE5F-E72E1898F0D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Application", "OnlineExam.Application\OnlineExam.Application.csproj", "{5291A236-72FE-45ED-AE5F-E72E1898F0D9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
