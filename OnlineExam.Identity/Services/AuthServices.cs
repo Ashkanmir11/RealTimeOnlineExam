@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Identity.Model;
+using OnlineExam.Application.DTOs.Common;
 
 
 namespace OnlineExam.Identity.Services
@@ -22,7 +23,9 @@ namespace OnlineExam.Identity.Services
             _userManager = userManager; 
             _roleManager = roleManager;
         }
-        public Task<List<GetUserDTO>> GetAll()
+      
+
+        public Task<PaginateResponse<GetUserDTO>> GetAll(PaginateRequestDTO paginateRequestDTO)
         {
             throw new NotImplementedException();
         }
