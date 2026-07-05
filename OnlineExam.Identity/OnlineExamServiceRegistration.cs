@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Identity.ErrorDescribers;
 using OnlineExam.Identity.Model;
 using OnlineExam.Identity.Services;
 using System;
@@ -10,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace OnlineExam.Identity
 {
     public static class OnlineExamServiceRegistration
@@ -29,8 +29,7 @@ namespace OnlineExam.Identity
                 e.Password.RequireDigit = true;
                 e.Password.RequireLowercase = true;
                 e.Password.RequireNonAlphanumeric = true;
-            });
-             
+            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddErrorDescriber<ErrorToFarsi>(); ;
             services.AddScoped<IAuthServices, AuthServices>();
             return services;
         }

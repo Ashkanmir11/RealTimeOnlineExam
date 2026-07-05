@@ -12,8 +12,8 @@ using OnlineExam.Identity;
 namespace OnlineExam.Identity.Migrations
 {
     [DbContext(typeof(OnlineExamIdentityDbContext))]
-    [Migration("20260705113846_initDb")]
-    partial class initDb
+    [Migration("20260705151126_InitIdentityDb")]
+    partial class InitIdentityDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,6 +50,18 @@ namespace OnlineExam.Identity.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "d095f88b-ab72-4e91-8c9f-f678e7ceb520",
+                            Name = "Admin"
+                        },
+                        new
+                        {
+                            Id = "30fe32e4-a744-4031-9bd0-20145d900108",
+                            Name = "User"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

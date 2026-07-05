@@ -33,7 +33,7 @@ namespace OnlineExam.Identity.ErrorDescribers
         public override IdentityError PasswordTooShort(int length) => new IdentityError
         {
             Code = nameof(PasswordTooShort),
-            Description = "رمز عبور باید حداقل 8 کاراکتر باشد."
+            Description = $"رمز عبور باید حداقل {length} کاراکتر باشد."
         };
         public override IdentityError PasswordRequiresNonAlphanumeric() => new IdentityError
         {
