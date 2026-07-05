@@ -8,15 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Identity.Model;
 
 
 namespace OnlineExam.Identity.Services
 {
     public class AuthServices : IAuthServices
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<OnlineExamUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-
+        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager)
+        {
+            _userManager = userManager; 
+            _roleManager = roleManager;
+        }
         public Task<List<GetUserDTO>> GetAll()
         {
             throw new NotImplementedException();
