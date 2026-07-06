@@ -37,8 +37,19 @@ namespace OnlineExam.Identity.ErrorDescribers
         };
         public override IdentityError PasswordRequiresNonAlphanumeric() => new IdentityError
         {
-            Code = nameof(PasswordTooShort),
+            Code = nameof(PasswordRequiresNonAlphanumeric),
             Description = "رمز عبور باید حداقل یک علامت داشته باشد."
+        };
+
+        public override IdentityError InvalidEmail(string? email) => new IdentityError
+        {
+            Code = nameof(InvalidEmail),
+            Description = $"ایمیل {email} معتبر نیست"
+        };
+        public override IdentityError DuplicateEmail(string email) => new IdentityError
+        {
+            Code = nameof(DuplicateEmail),
+            Description = $"ایمیل {email} تکراری است."
         };
 
     }

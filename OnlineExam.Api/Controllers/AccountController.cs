@@ -23,7 +23,8 @@ namespace OnlineExam.Api.Controllers
         {
             try
             {
-                var result = await _authServices.Register(registerDTO);
+                var response = await _authServices.Register(registerDTO);
+                var result = ResponseHelper<GetUserDTO>.Success(response,201);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -39,6 +40,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPost("Account/GetAll")]
+        
         public async Task<IActionResult> GetAll(PaginateRequestDTO paginateRequestDTO)
         {
             try

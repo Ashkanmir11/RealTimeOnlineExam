@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineExam.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class InitIdentityDb : Migration
+    public partial class initIdentityDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,6 +32,9 @@ namespace OnlineExam.Identity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NationalCode = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -163,8 +166,8 @@ namespace OnlineExam.Identity.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "30fe32e4-a744-4031-9bd0-20145d900108", null, "User", null },
-                    { "d095f88b-ab72-4e91-8c9f-f678e7ceb520", null, "Admin", null }
+                    { "06688548-0ef4-4719-83fb-e45a40b2a771", null, "User", null },
+                    { "3d2d9895-7c3f-4de8-acde-19c296c5e401", null, "Admin", null }
                 });
 
             migrationBuilder.CreateIndex(

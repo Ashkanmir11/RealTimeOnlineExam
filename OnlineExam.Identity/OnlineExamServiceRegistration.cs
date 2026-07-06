@@ -25,10 +25,8 @@ namespace OnlineExam.Identity
                 e.User.RequireUniqueEmail = true;
                 e.Password.RequiredLength = 8;
                 e.Password.RequireUppercase = true;
-                e.Password.RequiredUniqueChars = 0;
                 e.Password.RequireDigit = true;
                 e.Password.RequireLowercase = true;
-                e.Password.RequireNonAlphanumeric = true;
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddErrorDescriber<ErrorToFarsi>(); ;
             services.AddScoped<IAuthServices, AuthServices>();
             return services;
