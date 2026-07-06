@@ -41,7 +41,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPost("Account/GetAll")]
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> GetAll(PaginateRequestDTO paginateRequestDTO)
         {
             try
@@ -55,6 +55,14 @@ namespace OnlineExam.Api.Controllers
                 throw;
             }
 
+        }
+
+        [HttpPost("auth/Logout")]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            _cookieHelper.DeleteCookie(Response,"accessToken");
+            return Ok();
         }
 
     }
