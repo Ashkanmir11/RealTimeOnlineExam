@@ -26,7 +26,7 @@ namespace OnlineExam.Api.Controllers
 
             var response = await _authServices.Register(registerDTO);
             var result = ResponseHelper<GetUserDTO>.Success(response, 201);
-            return Ok(result);
+            return StatusCode(201,result);
 
 
 
@@ -36,24 +36,19 @@ namespace OnlineExam.Api.Controllers
         {
             var token = await _authServices.Login(loginDTO);
             _cookieHelper.SetAccessToken(token);
-            return Ok(ResponseHelper<string>.Success(token, 200));
+            return StatusCode(200,ResponseHelper<string>.Success(token, 200));
 
         }
 
-        [HttpPost("Account/GetAll")]
-        [Authorize(Roles ="Admin")]
-        public async Task<IActionResult> GetAll(PaginateRequestDTO paginateRequestDTO)
+        [HttpGet("Account/GetAll")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            try
-            {
-                var response = await _authServices.GetAll(paginateRequestDTO);
-                var result = ResponseHelper<PaginateResponse<GetUserDTO>>.Success(response, 200);
-                return Ok(result);
-            }
-            catch
-            {
-                throw;
-            }
+
+            var response = await _authServices.GetAll(paginateRequestDTO);
+            var result = ResponseHelper<PaginateResponse<GetUserDTO>>.Success(response, 200);
+            return Ok(result);
+
 
         }
 
@@ -61,8 +56,8 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Logout()
         {
-            _cookieHelper.DeleteCookie(Response,"accessToken");
-            return Ok();
+            _cookieHelper.DeleteCookie(Response, "accessToken");
+            return StatusCode(204,ResponseHelper<bool>.Success(true,204));
         }
 
     }
