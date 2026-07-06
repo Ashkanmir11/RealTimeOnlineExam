@@ -32,7 +32,7 @@ namespace OnlineExam.Identity.Services
 
         public Task<bool> Login(RegisterDTO registerDTO)
         {
-            throw new NotImplementedException();
+
         }
 
         public async Task<GetUserDTO> Register(RegisterDTO RegisterDTO)
@@ -45,7 +45,7 @@ namespace OnlineExam.Identity.Services
             {
                 foreach (var err in valid.Errors)
                 {
-                    errorMassages = errorMassages + err.ErrorMessage + ".";
+                    errorMassages = errorMassages + err.ErrorMessage + " ";
                 }
                 throw new ValidationException(errorMassages);
 
@@ -81,7 +81,7 @@ namespace OnlineExam.Identity.Services
             {
                 foreach (var err in result.Errors)
                 {
-                    errorMassages = errorMassages + err.Description + "-";
+                    errorMassages = errorMassages + err.Description + " ";
                 }
                 throw new ValidationException(errorMassages);
 
