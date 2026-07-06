@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.Identity;
@@ -13,10 +14,11 @@ namespace OnlineExam.Api.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthServices _authServices;
-
-        public AccountController(IAuthServices authServices)
+        private readonly CookieHelper _cookieHelper;
+        public AccountController(IAuthServices authServices, CookieHelper cookieHelper)
         {
             _authServices = authServices;
+            _cookieHelper = cookieHelper;
         }
         [HttpPost("auth/Register")]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
@@ -30,13 +32,16 @@ namespace OnlineExam.Api.Controllers
 
         }
         [HttpPost("auth/Login")]
-        public Task<IActionResult> Login()
+        public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            throw new NotImplementedException();
+            var token = await _authServices.Login(loginDTO);
+            _cookieHelper.SetAccessToken(token);
+            return Ok(ResponseHelper<string>.Success(token, 200));
+
         }
 
         [HttpPost("Account/GetAll")]
-
+        [Authorize]
         public async Task<IActionResult> GetAll(PaginateRequestDTO paginateRequestDTO)
         {
             try
@@ -51,5 +56,6 @@ namespace OnlineExam.Api.Controllers
             }
 
         }
+
     }
 }
