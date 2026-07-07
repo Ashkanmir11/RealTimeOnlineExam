@@ -21,6 +21,8 @@ namespace OnlineExam.Identity
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new UserConfiguration());
+            builder.ApplyConfiguration(new UserRolesConfiguration());
             base.OnModelCreating(builder);
         }
     }

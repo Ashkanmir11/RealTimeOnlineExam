@@ -42,6 +42,7 @@ namespace OnlineExam.Identity
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(o =>
               {
+                  //jwt setting
                   o.TokenValidationParameters = new TokenValidationParameters
                   {
                       ValidateIssuerSigningKey = true,
@@ -53,6 +54,7 @@ namespace OnlineExam.Identity
                       ValidAudience = configuration["JwtSettings:Audience"],
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                   };
+                  //for read from request header
                   o.Events= new JwtBearerEvents
                   {
                       OnMessageReceived = context =>

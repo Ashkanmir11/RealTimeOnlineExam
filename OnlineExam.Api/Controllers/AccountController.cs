@@ -21,6 +21,7 @@ namespace OnlineExam.Api.Controllers
             _cookieHelper = cookieHelper;
         }
         [HttpPost("auth/Register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
 
@@ -32,6 +33,7 @@ namespace OnlineExam.Api.Controllers
 
         }
         [HttpPost("auth/Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
             var token = await _authServices.Login(loginDTO);

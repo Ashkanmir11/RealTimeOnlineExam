@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineExam.Identity.Migrations
 {
     /// <inheritdoc />
-    public partial class initIdentityDb : Migration
+    public partial class InitIdentityDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -169,6 +169,16 @@ namespace OnlineExam.Identity.Migrations
                     { "06688548-0ef4-4719-83fb-e45a40b2a771", null, "User", null },
                     { "3d2d9895-7c3f-4de8-acde-19c296c5e401", null, "Admin", null }
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NationalCode", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "017d4854-86f0-4e95-ba1d-3c5e0f9be6be", 0, "32590ec3-27e0-4494-bed9-1840e8b67dca", "ashkan110mir@gmail.com", true, "Ashkan", "Mr", false, null, 1111111111, null, null, "AQAAAAIAAYagAAAAEFJYkQlt0jsT2MiXcVm6ER3cSijup2r54JiTSyHC+JEjyLA07IMWUWHpJTxgPssJtw==", "09908752252", true, "fc15a497-e9de-4a22-86bc-b446ed1365a7", false, "AshkanTest" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUserRoles",
+                columns: new[] { "RoleId", "UserId" },
+                values: new object[] { "3d2d9895-7c3f-4de8-acde-19c296c5e401", "017d4854-86f0-4e95-ba1d-3c5e0f9be6be" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
