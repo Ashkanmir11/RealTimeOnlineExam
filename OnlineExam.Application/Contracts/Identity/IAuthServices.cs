@@ -13,6 +13,6 @@ namespace OnlineExam.Application.Contracts.Identity
     {
         Task<GetUserDTO> Register(RegisterDTO registerionRequest);
         Task<PaginateResponse<GetUserDTO>> GetAll(PaginateRequestDTO paginateRequestDTO);
-        Task<string> Login(LoginDTO loginRequest);
+        Task<SuccessLoginResultDTO> Login(LoginDTO loginRequest);
     }
 }

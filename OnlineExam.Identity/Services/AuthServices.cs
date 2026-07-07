@@ -24,13 +24,12 @@ namespace OnlineExam.Identity.Services
     {
         private readonly UserManager<OnlineExamUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly JwtSettings _jwtSettings;
-
-        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, IOptions<JwtSettings> jwtSettings)
+        private readonly TokenServices _tokenServices;
+        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _jwtSettings = jwtSettings.Value;
+            _tokenServices = tokenServices;
         }
 
 
@@ -39,7 +38,9 @@ namespace OnlineExam.Identity.Services
             throw new NotImplementedException();
         }
 
-        public async Task<string> Login(LoginDTO loginDto)
+      
+
+        public async Task<SuccessLoginResultDTO> Login(LoginDTO loginDto)
         {
             var validation = new LoginDtoValidaiton();
             var valid = await validation.ValidateAsync(loginDto);
@@ -53,8 +54,25 @@ namespace OnlineExam.Identity.Services
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if (isPasswordValid)
             {
-                JwtSecurityToken jwtSecurityToken =await GenerateToken(user);
-                return new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+                JwtSecurityToken jwtSecurityToken = await _tokenServices.GenerateAccessTokenAsync(user);
+                var refreshToken = await _tokenServices.AddRefreshTokenAsync(user.Id);
+                var result = new SuccessLoginResultDTO()
+                {
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                    RefreshToken = refreshToken.Token,
+                    User = new GetUserDTO()
+                    {
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Phone = user.PhoneNumber,
+                        UserName = user.UserName,
+                        Id = user.Id
+                    },
+                };
+                return result;
+
             }
             else
             {
@@ -118,34 +136,6 @@ namespace OnlineExam.Identity.Services
         }
 
 
-        private async Task<JwtSecurityToken> GenerateToken(OnlineExamUser onlineExamUser)
-        {
-            var userRoles = await _userManager.GetRolesAsync(onlineExamUser);
-            var roleClaims = new List<Claim>();
 
-            for (int i = 0; i < userRoles.Count; i++)
-            {
-                roleClaims.Add(new Claim(ClaimTypes.Role, userRoles[i]));
-            }
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.UniqueName,onlineExamUser.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email,onlineExamUser.Email),
-                new Claim(CustomClaimTypes.UserId,onlineExamUser.Id),
-            }.Union(roleClaims).Union(roleClaims);
-
-            var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-
-            var jwtSecurityToken = new JwtSecurityToken(
-                issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
-                signingCredentials: signingCredentials);
-
-            return jwtSecurityToken;
-        }
     }
 }

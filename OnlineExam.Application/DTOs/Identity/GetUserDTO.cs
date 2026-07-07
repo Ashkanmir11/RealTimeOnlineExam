@@ -1,4 +1,5 @@
 ﻿using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.Identity
 {
-    public class GetUserDTO 
+    public class GetUserDTO : IdentityBaseDTO
     {
-        public string? Id { get; set; }
         public string? UserName { get; set; }
 
         public string? FirstName { get; set; }

@@ -21,7 +21,6 @@ namespace OnlineExam.Identity
         {
 
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
             var connetionString = configuration.GetConnectionString("OnlineExamIdentityConnectionString");
             services.AddDbContext<OnlineExamIdentityDbContext>(option => option.UseSqlServer(connetionString));
 
@@ -32,9 +31,9 @@ namespace OnlineExam.Identity
                 e.Password.RequireUppercase = true;
                 e.Password.RequireDigit = true;
                 e.Password.RequireLowercase = true;
-            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddErrorDescriber<ErrorToFarsi>(); ;
+            }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddDefaultTokenProviders().AddErrorDescriber<ErrorToFarsi>(); ;
             services.AddScoped<IAuthServices, AuthServices>();
-
+            services.AddScoped<TokenServices>();
 
             services.AddAuthentication(options =>
             {

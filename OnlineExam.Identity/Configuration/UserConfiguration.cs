@@ -15,7 +15,7 @@ namespace OnlineExam.Identity.Configuration
     {
         public void Configure(EntityTypeBuilder<OnlineExamUser> builder)
         {
-  
+           builder.HasMany(e=>e.RefreshTokens).WithOne(e=>e.User).HasForeignKey(e=>e.UserId).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

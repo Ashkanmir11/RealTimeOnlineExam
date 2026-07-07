@@ -36,9 +36,10 @@ namespace OnlineExam.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            var token = await _authServices.Login(loginDTO);
-            _cookieHelper.SetAccessToken(token);
-            return StatusCode(200,ResponseHelper<string>.Success(token, 200));
+            var loginReslt = await _authServices.Login(loginDTO);
+            _cookieHelper.SetAccessToken(loginReslt.AccessToken);
+            _cookieHelper.SetRefreshToken(loginReslt.RefreshToken);
+            return StatusCode(200,ResponseHelper<SuccessLoginResultDTO>.Success(loginReslt, 200));
 
         }
 
