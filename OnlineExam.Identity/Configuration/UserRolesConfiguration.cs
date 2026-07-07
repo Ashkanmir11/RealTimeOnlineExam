@@ -15,11 +15,7 @@ namespace OnlineExam.Identity.Configuration
         public void Configure(EntityTypeBuilder<IdentityUserRole<string>> builder)
         {
 
-            builder.HasData(new IdentityUserRole<string>()
-            {
-                RoleId = "3d2d9895-7c3f-4de8-acde-19c296c5e401",
-                UserId = "017d4854-86f0-4e95-ba1d-3c5e0f9be6be"
-            });
+       
         }
     }
 

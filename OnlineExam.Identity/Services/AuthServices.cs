@@ -48,6 +48,7 @@ namespace OnlineExam.Identity.Services
                 //todo
                 throw new Exception();
             }
+            var role = await _roleManager.FindByNameAsync("User");
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if (isPasswordValid)
