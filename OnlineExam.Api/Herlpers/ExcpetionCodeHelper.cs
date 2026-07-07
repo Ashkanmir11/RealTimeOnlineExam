@@ -25,7 +25,6 @@ namespace OnlineExam.Api.Herlpers
                     {
                         return 403;
                     }
-
                 default:
                     {
                         return 500;

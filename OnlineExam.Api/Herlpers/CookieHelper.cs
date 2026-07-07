@@ -41,7 +41,11 @@
             }
 
         }
-
+        public string GetCookieValue(string cookieName)
+        {
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(cookieName, out var result);
+            return result;
+        }
         public void DeleteCookie(HttpResponse httpResponse,string cookieName)
         {
 

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Constants;
@@ -59,7 +61,7 @@ namespace OnlineExam.Identity.Services
         {
             var newRefreshToken = new RefreshToken()
             {
-                Id=Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 UserId = userId,
                 Token = GenerateRefreshToken(),
                 ExpireDate = DateTime.UtcNow.AddDays(10)
@@ -72,5 +74,30 @@ namespace OnlineExam.Identity.Services
         {
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
+
+        public async Task<string> RefreshTokenAsync(string refreshToken)
+        {
+            var rToken = await _context.RefreshTokens.Where(e => e.Token == refreshToken).FirstOrDefaultAsync();
+            if (rToken == null)
+            {
+                throw new UnauthorizedAccessException();
+
+            }
+            if (rToken.ExpireDate < DateTime.UtcNow)
+            {
+                _context.Remove(rToken);
+                await _context.SaveChangesAsync();
+                throw new UnauthorizedAccessException();
+            }
+
+            var user = await _userManager.FindByIdAsync(rToken.UserId);
+            var securityToken = await GenerateAccessTokenAsync(user);
+            return new JwtSecurityTokenHandler().WriteToken(securityToken);
+
+
+
+        }
+
+
     }
 }

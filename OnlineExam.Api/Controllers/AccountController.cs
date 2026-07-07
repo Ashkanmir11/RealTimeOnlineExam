@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Application.Response;
+using OnlineExam.Identity.Services;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -15,10 +17,12 @@ namespace OnlineExam.Api.Controllers
     {
         private readonly IAuthServices _authServices;
         private readonly CookieHelper _cookieHelper;
-        public AccountController(IAuthServices authServices, CookieHelper cookieHelper)
+        private readonly TokenServices _tokenServices;
+        public AccountController(IAuthServices authServices, CookieHelper cookieHelper, TokenServices tokenServices)
         {
             _authServices = authServices;
             _cookieHelper = cookieHelper;
+            _tokenServices = tokenServices;
         }
         [HttpPost("auth/Register")]
         [AllowAnonymous]
@@ -27,7 +31,7 @@ namespace OnlineExam.Api.Controllers
 
             var response = await _authServices.Register(registerDTO);
             var result = ResponseHelper<GetUserDTO>.Success(response, 201);
-            return StatusCode(201,result);
+            return StatusCode(201, result);
 
 
 
@@ -39,10 +43,19 @@ namespace OnlineExam.Api.Controllers
             var loginReslt = await _authServices.Login(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
             _cookieHelper.SetRefreshToken(loginReslt.RefreshToken);
-            return StatusCode(200,ResponseHelper<SuccessLoginResultDTO>.Success(loginReslt, 200));
+            return StatusCode(200, ResponseHelper<SuccessLoginResultDTO>.Success(loginReslt, 200));
 
         }
 
+        [HttpPost("auth/RefreshToken")]
+        //[Authorize]
+        public async Task<IActionResult> RefreshToken()
+        {
+            var refreshToken = _cookieHelper.GetCookieValue("refreshToken");
+            var newAccessToken = await _tokenServices.RefreshTokenAsync(refreshToken);
+            _cookieHelper.SetAccessToken(newAccessToken);
+            return Ok();
+        }
         [HttpGet("Account/GetAll")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll([FromQuery] PaginateRequestDTO paginateRequestDTO)
@@ -60,7 +73,8 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> Logout()
         {
             _cookieHelper.DeleteCookie(Response, "accessToken");
-            return StatusCode(204,ResponseHelper<bool>.Success(true,204));
+            _cookieHelper.DeleteCookie(Response, "refreshToken");
+            return StatusCode(204, ResponseHelper<bool>.Success(true, 204));
         }
 
     }
