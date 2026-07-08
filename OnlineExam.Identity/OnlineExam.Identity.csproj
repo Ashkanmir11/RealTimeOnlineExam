@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineExam.Application\OnlineExam.Application.csproj" />
+    <ProjectReference Include="..\OnlineExam.Domain\OnlineExam.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

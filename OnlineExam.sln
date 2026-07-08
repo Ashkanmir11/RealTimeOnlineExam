@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Identity", "Onli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Application", "OnlineExam.Application\OnlineExam.Application.csproj", "{5291A236-72FE-45ED-AE5F-E72E1898F0D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Domain", "OnlineExam.Domain\OnlineExam.Domain.csproj", "{E086B745-2B88-49A8-99FE-53BA6947017D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{5291A236-72FE-45ED-AE5F-E72E1898F0D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5291A236-72FE-45ED-AE5F-E72E1898F0D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5291A236-72FE-45ED-AE5F-E72E1898F0D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E086B745-2B88-49A8-99FE-53BA6947017D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E086B745-2B88-49A8-99FE-53BA6947017D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E086B745-2B88-49A8-99FE-53BA6947017D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E086B745-2B88-49A8-99FE-53BA6947017D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{6EBCDBFB-AFDD-4212-B3C7-A244457D9A86} = {79B2441B-BD50-4EDD-B687-3C2290388B49}
 		{6AE3E3C0-49EA-49C4-89A0-55C776525834} = {89F12870-3345-4530-8F0F-A53ED4397125}
 		{5291A236-72FE-45ED-AE5F-E72E1898F0D9} = {66C5B7DE-0275-4F57-9558-AC14550A6D53}
+		{E086B745-2B88-49A8-99FE-53BA6947017D} = {66C5B7DE-0275-4F57-9558-AC14550A6D53}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {49D94537-F104-4C65-834E-87E1CC008B42}
