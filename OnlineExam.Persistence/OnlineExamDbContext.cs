@@ -16,22 +16,32 @@ namespace OnlineExam.Persistence
 
         }
         public DbSet<ClassRoom> ClassRooms { get; set; }
+        public DbSet<ClassRoomMembers> ClassRoomMembers { get; set; }
+        public DbSet<DescriptiveQuestion> DescriptiveQuestions { get; set; }
+        public DbSet<DescriptiveQuestionAnswers> DescriptiveQuestionAnswers { get; set; }
         public DbSet<Exam> Exams { get; set; }
         public DbSet<ExamLog> ExamsLogs { get; set; }
         public DbSet<LogType> LogTypes { get; set; }
-        public DbSet<Objection> Objections { get; set;}
-        public DbSet<Question> Questions { get; set; }
-        public DbSet<QuestionType> QuestionTypes { get; set; }
+        public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
+        public DbSet<MultipleChoiceQuestionAnswers> MultipleChoiceQuestionAnswers { get; set; }
+        public DbSet<Objection> Objections { get; set; }
+        public DbSet<TrueOrFalseQuestion> TrueOrFalseQuestions { get; set; }
+        public DbSet<TrueOrFalseQuestionAnswers> TrueOrFalseQuestionAnswers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ClassRoomConfiguration());
+            builder.ApplyConfiguration(new ClassRoomMembersConfiguration());
+            builder.ApplyConfiguration(new DescriptiveQuestionAnswersConfiguration());
+            builder.ApplyConfiguration(new DescriptiveQuestionConfiguration());
             builder.ApplyConfiguration(new ExamConfiguration());
             builder.ApplyConfiguration(new ExamLogConfiguration());
             builder.ApplyConfiguration(new LogTypeConfiguration());
+            builder.ApplyConfiguration(new MultipleChoiceQuestionAnswersConfiguration());
+            builder.ApplyConfiguration(new MultipleChoiceQuestionConfiguration());
             builder.ApplyConfiguration(new ObjectionConfiguration());
-            builder.ApplyConfiguration(new QuestionConfiguration());
-            builder.ApplyConfiguration(new QuestionTypeConfiguration());
+            builder.ApplyConfiguration(new TrueOrFalseQuestionAnswersConfiguration());
+            builder.ApplyConfiguration(new TrueOrFalseQuestionConfiguration());
 
             base.OnModelCreating(builder);
         }

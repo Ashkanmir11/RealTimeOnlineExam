@@ -49,6 +49,87 @@ namespace OnlineExam.Persistence.Migrations
                     b.ToTable("ClassRooms");
                 });
 
+            modelBuilder.Entity("OnlineExam.Domain.Entities.ClassRoomMembers", b =>
+                {
+                    b.Property<int>("ClassRomeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("ClassRoomMembers");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.DescriptiveQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CorrectAnswer")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExamId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<int?>("TotalScore")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("DescriptiveQuestions");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.DescriptiveQuestionAnswers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StudentAnswer")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("StudentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("descriptiveQuestionAnswersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("descriptiveQuestionAnswersId");
+
+                    b.ToTable("DescriptiveQuestionAnswers");
+                });
+
             modelBuilder.Entity("OnlineExam.Domain.Entities.Exam", b =>
                 {
                     b.Property<int>("Id")
@@ -165,6 +246,73 @@ namespace OnlineExam.Persistence.Migrations
                     b.ToTable("LogTypes");
                 });
 
+            modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceQuestion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Choices")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CorrectChoice")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ExamId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("QuestionText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TotalScore")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("MultipleChoiceQuestions");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceQuestionAnswers", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MultipleChoiceQuestionId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("StudentChoice")
+                        .HasColumnType("int");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MultipleChoiceQuestionId");
+
+                    b.ToTable("MultipleChoiceQuestionAnswers");
+                });
+
             modelBuilder.Entity("OnlineExam.Domain.Entities.Objection", b =>
                 {
                     b.Property<int>("Id")
@@ -198,7 +346,7 @@ namespace OnlineExam.Persistence.Migrations
                     b.ToTable("Objections");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.Question", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -206,10 +354,8 @@ namespace OnlineExam.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CorrectAnswer")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                    b.Property<bool>("CorrectAnswer")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -221,64 +367,19 @@ namespace OnlineExam.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.Property<int?>("QuestionTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentAnswer")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
-                    b.Property<int?>("StudnetScore")
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TotalScore")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ExamId");
 
-                    b.HasIndex("QuestionTypeId");
-
-                    b.ToTable("Questions");
+                    b.ToTable("TrueOrFalseQuestions");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.QuestionAnswer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("QuestionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("QuestionAnswer");
-                });
-
-            modelBuilder.Entity("OnlineExam.Domain.Entities.QuestionType", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestionAnswers", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -292,14 +393,39 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TypeName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<bool>("StudentAnswer")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("TrueOrFalseQuestionId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.ToTable("QuestionTypes");
+                    b.HasIndex("TrueOrFalseQuestionId");
+
+                    b.ToTable("TrueOrFalseQuestionAnswers");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.DescriptiveQuestion", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
+                        .WithMany("DescriptiveQuestions")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.DescriptiveQuestionAnswers", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.DescriptiveQuestion", "DescriptiveQuestion")
+                        .WithMany("Answers")
+                        .HasForeignKey("descriptiveQuestionAnswersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DescriptiveQuestion");
                 });
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.Exam", b =>
@@ -332,33 +458,48 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("LogType");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.Question", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceQuestion", b =>
                 {
                     b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
-                        .WithMany("Questions")
+                        .WithMany("MultipleChoiceQuestions")
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OnlineExam.Domain.Entities.QuestionType", "QuestionType")
-                        .WithMany("Questions")
-                        .HasForeignKey("QuestionTypeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Exam");
-
-                    b.Navigation("QuestionType");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.QuestionAnswer", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceQuestionAnswers", b =>
                 {
-                    b.HasOne("OnlineExam.Domain.Entities.Question", "Question")
-                        .WithMany("QuestionAnswers")
-                        .HasForeignKey("QuestionId")
+                    b.HasOne("OnlineExam.Domain.Entities.MultipleChoiceQuestion", "MultipleChoiceQuestion")
+                        .WithMany("Answers")
+                        .HasForeignKey("MultipleChoiceQuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Question");
+                    b.Navigation("MultipleChoiceQuestion");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestion", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
+                        .WithMany("TrueOrFalseQuestions")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestionAnswers", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.TrueOrFalseQuestion", "TrueOrFalseQuestion")
+                        .WithMany("Answers")
+                        .HasForeignKey("TrueOrFalseQuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TrueOrFalseQuestion");
                 });
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.ClassRoom", b =>
@@ -366,11 +507,20 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("Exams");
                 });
 
+            modelBuilder.Entity("OnlineExam.Domain.Entities.DescriptiveQuestion", b =>
+                {
+                    b.Navigation("Answers");
+                });
+
             modelBuilder.Entity("OnlineExam.Domain.Entities.Exam", b =>
                 {
+                    b.Navigation("DescriptiveQuestions");
+
                     b.Navigation("ExamLog");
 
-                    b.Navigation("Questions");
+                    b.Navigation("MultipleChoiceQuestions");
+
+                    b.Navigation("TrueOrFalseQuestions");
                 });
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.LogType", b =>
@@ -378,14 +528,14 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("examLogs");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.Question", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceQuestion", b =>
                 {
-                    b.Navigation("QuestionAnswers");
+                    b.Navigation("Answers");
                 });
 
-            modelBuilder.Entity("OnlineExam.Domain.Entities.QuestionType", b =>
+            modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestion", b =>
                 {
-                    b.Navigation("Questions");
+                    b.Navigation("Answers");
                 });
 #pragma warning restore 612, 618
         }

@@ -22,9 +22,10 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.AllowedDelay).IsRequired();
 
             builder.HasOne(e => e.ClassRoom).WithMany(e => e.Exams).HasForeignKey(e => e.ClassId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasMany(e => e.Questions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(e => e.ExamLog).WithOne(e => e.Exam).HasForeignKey(e=>e.ExamId).OnDelete(DeleteBehavior.Cascade);
-
+            builder.HasMany(e => e.MultipleChoiceQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(e => e.TrueOrFalseQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(e => e.DescriptiveQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

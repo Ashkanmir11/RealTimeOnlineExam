@@ -4,6 +4,10 @@ using OnlineExam.Api.Middleware;
 using OnlineExam.Identity;
 using OnlineExam.Identity.SeedData;
 using OnlineExam.Persistence;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -17,14 +21,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
+
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    //var dbContext = services.GetRequiredService<VehicleDbContext>();
 
-    //await dbContext.Database.MigrateAsync();
+    var OnlineExamContext = services.GetRequiredService<OnlineExamDbContext>();
+    await OnlineExamContext.Database.MigrateAsync();
 
+    var OnlineExamIdentityDbContext = services.GetRequiredService<OnlineExamIdentityDbContext>();
+    await OnlineExamIdentityDbContext.Database.MigrateAsync();
     await IdentitySeed.Seed(services);
 }
 

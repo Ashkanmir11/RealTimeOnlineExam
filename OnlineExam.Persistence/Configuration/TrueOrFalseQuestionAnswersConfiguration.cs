@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
-    public class QuestionTypeConfiguration : IEntityTypeConfiguration<QuestionType>
+    public class TrueOrFalseQuestionAnswersConfiguration : IEntityTypeConfiguration<TrueOrFalseQuestionAnswers>
     {
-        public void Configure(EntityTypeBuilder<QuestionType> builder)
+        public void Configure(EntityTypeBuilder<TrueOrFalseQuestionAnswers> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.Property(e=>e.Id).UseIdentityColumn();
-            builder.Property(e => e.TypeName).IsRequired().HasMaxLength(150);
+            builder.Property(e => e.Id).UseIdentityColumn();
         }
     }
 }

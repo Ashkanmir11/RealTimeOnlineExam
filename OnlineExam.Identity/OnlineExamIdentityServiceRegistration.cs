@@ -7,17 +7,18 @@ using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Identity.ErrorDescribers;
 using OnlineExam.Identity.Model;
+using OnlineExam.Identity.SeedData;
 using OnlineExam.Identity.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 
 namespace OnlineExam.Identity
 {
-    public static class OnlineExamServiceRegistration
+    public static class OnlineExamIdentityServiceRegistration
     {
         public static IServiceCollection ConfigureIdentityServices(this IServiceCollection services, IConfiguration configuration)
         {
@@ -56,7 +57,7 @@ namespace OnlineExam.Identity
                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                   };
                   //for read from request header
-                  o.Events= new JwtBearerEvents
+                  o.Events = new JwtBearerEvents
                   {
                       OnMessageReceived = context =>
                       {
@@ -65,6 +66,9 @@ namespace OnlineExam.Identity
                       }
                   };
               });
+
+      
+            
             return services;
         }
     }
