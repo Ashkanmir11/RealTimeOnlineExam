@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Domain.Entities
+namespace OnlineExam.Domain.Identities
 {
     public class OnlineExamUser : IdentityUser
     {

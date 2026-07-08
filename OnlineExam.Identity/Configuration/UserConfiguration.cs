@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using OnlineExam.Domain.Entities;
+using OnlineExam.Domain.Identities;
 
 namespace OnlineExam.Identity.Configuration
 {

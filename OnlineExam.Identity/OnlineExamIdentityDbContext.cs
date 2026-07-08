@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using OnlineExam.Identity.Configuration;
 using OnlineExam.Identity.Model;
-using OnlineExam.Domain.Entities;
+using OnlineExam.Domain.Identities;
 
 namespace OnlineExam.Identity
 {
