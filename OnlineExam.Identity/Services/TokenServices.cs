@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using OnlineExam.Domain.Identities;
+ 
 namespace OnlineExam.Identity.Services
 {
     public class TokenServices

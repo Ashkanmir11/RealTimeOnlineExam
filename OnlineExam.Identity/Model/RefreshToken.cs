@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Domain.Identities
+namespace OnlineExam.Identity.Model
 {
     public class RefreshToken : IdentityBaseModel
     {
