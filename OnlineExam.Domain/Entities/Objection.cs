@@ -8,13 +8,16 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Entities
 {
-    public class ClassRoom : BaseModel
+    public class Objection : BaseModel
     {
-        public string? ClassName { get; set; }
-
+        public string? Comment {  get; set; }
+        public bool Accepted { get; set; } = false;
         //Relations
-        public string? TeacherId { get; set; }
-        public List<OnlineExamUser>? Students { get; set; }
+        public string? StudentId {  get; set; }
+        public OnlineExamUser? student {  get; set; }
+
+        public string?TeacherId { get; set; }
         public OnlineExamUser? Teacher { get; set; }
+
     }
 }

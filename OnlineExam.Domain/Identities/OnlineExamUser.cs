@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace OnlineExam.Domain.Identities
 
         //Relations
         public List<RefreshToken>? RefreshTokens { get; set; }
+        public List<ClassRoom>? classRooms { get; set; }
     }
 }
