@@ -33,14 +33,11 @@ namespace OnlineExam.Identity.Services
         }
 
 
-        public Task<PaginateResponse<GetUserDTO>> GetAll(PaginateRequestDTO paginateRequestDTO)
+        public Task<PaginateResponse<GetUserDTO>> GetAllAsync(PaginateRequestDTO paginateRequestDTO)
         {
             throw new NotImplementedException();
         }
-
-      
-
-        public async Task<SuccessLoginResultDTO> Login(LoginDTO loginDto)
+        public async Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginDto)
         {
             var validation = new LoginDtoValidaiton();
             var valid = await validation.ValidateAsync(loginDto);
@@ -81,10 +78,10 @@ namespace OnlineExam.Identity.Services
             }
         }
 
-        public async Task<GetUserDTO> Register(RegisterDTO RegisterDTO)
+        public async Task<GetUserDTO> RegisterAsync(RegisterDTO registerDTO)
         {
             var validation = new RegisterDtoValidation();
-            var valid = await validation.ValidateAsync(RegisterDTO, CancellationToken.None);
+            var valid = await validation.ValidateAsync(registerDTO, CancellationToken.None);
             var errorMassages = "";
 
             if (valid.IsValid == false)
@@ -99,19 +96,19 @@ namespace OnlineExam.Identity.Services
 
             var identityUser = new OnlineExamUser()
             {
-                NationalCode = RegisterDTO.NationCode,
-                Email = RegisterDTO.Email,
+                NationalCode = registerDTO.NationCode,
+                Email = registerDTO.Email,
                 EmailConfirmed = true,
-                PhoneNumber = RegisterDTO.PhoneNumber,
-                FirstName = RegisterDTO.FirstName,
-                LastName = RegisterDTO.LastName,
-                UserName = RegisterDTO.UserName,
+                PhoneNumber = registerDTO.PhoneNumber,
+                FirstName = registerDTO.FirstName,
+                LastName = registerDTO.LastName,
+                UserName = registerDTO.UserName,
                 PhoneNumberConfirmed = true,
             };
-            var result = await _userManager.CreateAsync(identityUser, RegisterDTO.Password);
+            var result = await _userManager.CreateAsync(identityUser, registerDTO.Password);
             if (result.Succeeded)
             {
-                var response = await _userManager.FindByEmailAsync(RegisterDTO.Email);
+                var response = await _userManager.FindByEmailAsync(registerDTO.Email);
                 var role = await _userManager.AddToRoleAsync(response, "User");
                 return new GetUserDTO()
                 {
@@ -133,6 +130,10 @@ namespace OnlineExam.Identity.Services
                 throw new ValidationException(errorMassages);
 
             }
+        }
+        public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
+        {
+          return await _tokenServices.RefreshTokenAsync(refreshToken);
         }
 
 

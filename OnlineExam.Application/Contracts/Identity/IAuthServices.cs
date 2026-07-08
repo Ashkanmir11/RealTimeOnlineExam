@@ -11,8 +11,10 @@ namespace OnlineExam.Application.Contracts.Identity
 {
     public interface IAuthServices
     {
-        Task<GetUserDTO> Register(RegisterDTO registerionRequest);
-        Task<PaginateResponse<GetUserDTO>> GetAll(PaginateRequestDTO paginateRequestDTO);
-        Task<SuccessLoginResultDTO> Login(LoginDTO loginRequest);
+        Task<GetUserDTO> RegisterAsync(RegisterDTO registerionRequest);
+        Task<PaginateResponse<GetUserDTO>> GetAllAsync(PaginateRequestDTO paginateRequestDTO);
+        Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginRequest);
+        Task<GetTokens> RefreshTokenAsync(string refreshToken);
+
     }
 }

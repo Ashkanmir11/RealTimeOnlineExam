@@ -17,19 +17,17 @@ namespace OnlineExam.Api.Controllers
     {
         private readonly IAuthServices _authServices;
         private readonly CookieHelper _cookieHelper;
-        private readonly TokenServices _tokenServices;
-        public AccountController(IAuthServices authServices, CookieHelper cookieHelper, TokenServices tokenServices)
+        public AccountController(IAuthServices authServices, CookieHelper cookieHelper)
         {
             _authServices = authServices;
             _cookieHelper = cookieHelper;
-            _tokenServices = tokenServices;
         }
         [HttpPost("auth/Register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
 
-            var response = await _authServices.Register(registerDTO);
+            var response = await _authServices.RegisterAsync(registerDTO);
             var result = ResponseHelper<GetUserDTO>.Success(response, 201);
             return StatusCode(201, result);
 
@@ -40,7 +38,7 @@ namespace OnlineExam.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            var loginReslt = await _authServices.Login(loginDTO);
+            var loginReslt = await _authServices.LoginAsync(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
             _cookieHelper.SetRefreshToken(loginReslt.RefreshToken);
             return StatusCode(200, ResponseHelper<SuccessLoginResultDTO>.Success(loginReslt, 200));
@@ -52,7 +50,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = _cookieHelper.GetCookieValue("refreshToken");
-            var response = await _tokenServices.RefreshTokenAsync(refreshToken);
+            var response = await _authServices.RefreshTokenAsync(refreshToken);
             _cookieHelper.SetAccessToken(response.AccessToken);
             _cookieHelper.SetRefreshToken(response.RefreshToken);
             return Ok();
@@ -62,7 +60,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetAll([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
 
-            var response = await _authServices.GetAll(paginateRequestDTO);
+            var response = await _authServices.GetAllAsync(paginateRequestDTO);
             var result = ResponseHelper<PaginateResponse<GetUserDTO>>.Success(response, 200);
             return Ok(result);
 
@@ -71,7 +69,7 @@ namespace OnlineExam.Api.Controllers
 
         [HttpPost("auth/Logout")]
         [Authorize]
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             _cookieHelper.DeleteCookie(Response, "accessToken");
             _cookieHelper.DeleteCookie(Response, "refreshToken");

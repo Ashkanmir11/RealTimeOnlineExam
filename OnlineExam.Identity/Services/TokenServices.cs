@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Constants;
+using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Identity.Model;
 using System;
 using System.Collections.Generic;
