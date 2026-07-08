@@ -27,11 +27,11 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    var OnlineExamContext = services.GetRequiredService<OnlineExamDbContext>();
-    await OnlineExamContext.Database.MigrateAsync();
+    var onlineExamContext = services.GetRequiredService<OnlineExamDbContext>();
+    await onlineExamContext.Database.MigrateAsync();
 
-    var OnlineExamIdentityDbContext = services.GetRequiredService<OnlineExamIdentityDbContext>();
-    await OnlineExamIdentityDbContext.Database.MigrateAsync();
+    var onlineExamIdentityDbContext = services.GetRequiredService<OnlineExamIdentityDbContext>();
+    await onlineExamIdentityDbContext.Database.MigrateAsync();
     await IdentitySeed.Seed(services);
 }
 
