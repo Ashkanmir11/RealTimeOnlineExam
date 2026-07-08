@@ -17,7 +17,7 @@ using System.Data;
 using OnlineExam.Application.Constants;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
-
+using OnlineExam.Domain.Entities;
 namespace OnlineExam.Identity.Services
 {
     public class AuthServices : IAuthServices

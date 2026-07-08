@@ -1,13 +1,14 @@
-﻿using OnlineExam.Application.DTOs.Identity.Common;
+﻿using OnlineExam.Domain.Common;
+using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Identity.Model
+namespace OnlineExam.Domain.Entities
 {
-    public class RefreshToken : IdentityBaseDTO
+    public class RefreshToken : IdentityBaseModel
     {
         public string? Token {  get; set; }
         public DateTime? ExpireDate { get; set; }

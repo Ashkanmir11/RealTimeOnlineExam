@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
 using OnlineExam.Identity.Configuration;
 using OnlineExam.Identity.Model;
+using OnlineExam.Domain.Entities;
+
 namespace OnlineExam.Identity
 {
     public class OnlineExamIdentityDbContext : IdentityDbContext<OnlineExamUser>

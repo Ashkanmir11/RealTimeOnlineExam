@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Common
 {
-    public class BaseDTO
+    public class IdentityBaseModel
     {
-        public int Id { get; set; }
-        public DateTime CreatedDate {  get; set; }
-        public DateTime ModifiedDate { get; set;}
+        public string? Id { get; set; }
     }
 }

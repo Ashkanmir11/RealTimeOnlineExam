@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Entities
 {
-    public class ClassRoom : BaseDTO
+    public class ClassRoom : BaseModel
     {
         public string? ClassName { get; set; }
         public string? TeacherId { get; set; }

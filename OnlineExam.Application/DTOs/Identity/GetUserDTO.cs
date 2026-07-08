@@ -1,14 +1,14 @@
 ﻿using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.DTOs.Identity.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OnlineExam.Domain.Common;
 
 namespace OnlineExam.Application.DTOs.Identity
 {
-    public class GetUserDTO : IdentityBaseDTO
+    public class GetUserDTO : IdentityBaseModel
     {
         public string? UserName { get; set; }
 

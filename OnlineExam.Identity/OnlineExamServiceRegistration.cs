@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OnlineExam.Domain.Entities;
+
 namespace OnlineExam.Identity
 {
     public static class OnlineExamServiceRegistration
