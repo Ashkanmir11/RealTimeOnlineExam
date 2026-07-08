@@ -14,7 +14,8 @@ namespace OnlineExam.Domain.Entities
 
         //Relations
         public string? TeacherId { get; set; }
-        public List<OnlineExamUser>? Students { get; set; }
-        public OnlineExamUser? Teacher { get; set; }
+        public List<Exam>? Exams {  get; set; }
+        //public List<OnlineExamUser>? Students { get; set; }
+        //public OnlineExamUser? Teacher { get; set; }
     }
 }

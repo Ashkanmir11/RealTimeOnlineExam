@@ -3,6 +3,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Api.Middleware;
 using OnlineExam.Identity;
 using OnlineExam.Identity.SeedData;
+using OnlineExam.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.ConfigureIdentityServices(builder.Configuration);
+builder.Services.ConfigurePersistenceServices(builder.Configuration);
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {

@@ -17,5 +17,7 @@ namespace OnlineExam.Domain.Identities
         //Relations
         public List<RefreshToken>? RefreshTokens { get; set; }
         public List<ClassRoom>? classRooms { get; set; }
+        public List<Objection>? StudentObjection { get; set; }
+        public List<Objection>? TeacherObjection { get; set; }
     }
 }

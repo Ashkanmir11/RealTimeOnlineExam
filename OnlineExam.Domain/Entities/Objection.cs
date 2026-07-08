@@ -12,12 +12,15 @@ namespace OnlineExam.Domain.Entities
     {
         public string? Comment {  get; set; }
         public bool Accepted { get; set; } = false;
-        //Relations
-        public string? StudentId {  get; set; }
-        public OnlineExamUser? student {  get; set; }
 
-        public string?TeacherId { get; set; }
-        public OnlineExamUser? Teacher { get; set; }
+        public string? TeacherId {  get; set; }
+        public string? StudentId {  get; set; }
+        //Relations
+        //public string? StudentId {  get; set; }
+        //public OnlineExamUser? student {  get; set; }
+
+        //public string?TeacherId { get; set; }
+        //public OnlineExamUser? Teacher { get; set; }
 
     }
 }

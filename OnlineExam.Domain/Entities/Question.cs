@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using OnlineExam.Domain.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,18 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Entities
 {
-    public class Question
+    public class Question : BaseModel
     {
-        public string? QuestionText {  get; set; }
-        public string? CurrectAnswer {  get; set; }
-        public string? StudentAnswer {  get; set; }
+        public string? QuestionText { get; set; }
+        public string? CorrectAnswer { get; set; }
+        public string? StudentAnswer { get; set; }
         public int? TotalScore { get; set; }
         public int? StudnetScore { get; set; }
         //Relations
-        public int? QuestionTypeId {  get; set; }
+        public int? QuestionTypeId { get; set; }
         public QuestionType? QuestionType { get; set; }
-        //TOdo
-        //add exam realtion
+        public List<QuestionAnswer>? QuestionAnswers { get; set; }
+        public int ExamId { get; set; }
+        public Exam? Exam { get; set; }
     }
 }

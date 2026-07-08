@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OnlineExam.Identity\OnlineExam.Identity.csproj" />
+    <ProjectReference Include="..\OnlineExam.Persistence\OnlineExam.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
