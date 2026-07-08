@@ -75,7 +75,7 @@ namespace OnlineExam.Identity.Services
             return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
         }
 
-        public async Task<string> RefreshTokenAsync(string refreshToken)
+        public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
         {
             var rToken = await _context.RefreshTokens.Where(e => e.Token == refreshToken).FirstOrDefaultAsync();
             if (rToken == null)
@@ -92,8 +92,14 @@ namespace OnlineExam.Identity.Services
 
             var user = await _userManager.FindByIdAsync(rToken.UserId);
             var securityToken = await GenerateAccessTokenAsync(user);
-            return new JwtSecurityTokenHandler().WriteToken(securityToken);
-
+            new JwtSecurityTokenHandler().WriteToken(securityToken);
+            var newRefreshToken = await AddRefreshTokenAsync(user.Id);
+            var result = new GetTokens()
+            {
+                RefreshToken = newRefreshToken.Token,
+                AccessToken = new JwtSecurityTokenHandler().WriteToken(securityToken)
+            };
+            return result;
 
 
         }

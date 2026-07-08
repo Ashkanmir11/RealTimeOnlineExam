@@ -16,7 +16,7 @@
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.None,
-                Expires = DateTimeOffset.Now.AddDays(30),
+                Expires = DateTimeOffset.Now.AddDays(10),
 
             };
 
