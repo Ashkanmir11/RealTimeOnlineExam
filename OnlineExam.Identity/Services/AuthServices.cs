@@ -17,7 +17,8 @@ using System.Data;
 using OnlineExam.Application.Constants;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
- 
+using OnlineExam.Application.Helper;
+
 namespace OnlineExam.Identity.Services
 {
     public class AuthServices : IAuthServices
@@ -86,11 +87,8 @@ namespace OnlineExam.Identity.Services
 
             if (valid.IsValid == false)
             {
-                foreach (var err in valid.Errors)
-                {
-                    errorMassages = errorMassages + err.ErrorMessage + " ";
-                }
-                throw new ValidationException(errorMassages);
+                var errors = ListToStringHelper.CreateString(valid.Errors.Select(e => e.ErrorMessage).ToList());
+                throw new ValidationException(errors);
 
             }
 
@@ -133,7 +131,7 @@ namespace OnlineExam.Identity.Services
         }
         public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
         {
-          return await _tokenServices.RefreshTokenAsync(refreshToken);
+            return await _tokenServices.RefreshTokenAsync(refreshToken);
         }
 
 

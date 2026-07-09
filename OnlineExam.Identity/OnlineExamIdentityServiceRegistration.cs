@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Identity.ErrorDescribers;
 using OnlineExam.Identity.Model;
+using OnlineExam.Identity.Repositories;
 using OnlineExam.Identity.SeedData;
 using OnlineExam.Identity.Services;
 using System;
@@ -67,8 +68,8 @@ namespace OnlineExam.Identity
                   };
               });
 
-      
-            
+            services.AddScoped<IAccountRepository, AccountRepository>();
+
             return services;
         }
     }

@@ -18,10 +18,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.ClassName).IsRequired().HasMaxLength(150);
             
 
-
-            //builder.HasMany(e => e.Students).WithMany(e => e.classRooms);
             builder.HasMany(e => e.Exams).WithOne(e => e.ClassRoom);
-            //builder.HasOne(e => e.Teacher).WithMany(e => e.classRooms).HasForeignKey(e=>e.TeacherId).OnDelete(DeleteBehavior.Restrict);
             
             
 

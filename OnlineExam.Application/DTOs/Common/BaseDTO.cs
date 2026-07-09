@@ -10,8 +10,6 @@ namespace OnlineExam.Application.DTOs.Common
     {
         public int Id { get; set; }
 
-        public DateTime CreateDate {  get; set; }
 
-        public DateTime ModifiedDate {  get; set; }
     }
 }

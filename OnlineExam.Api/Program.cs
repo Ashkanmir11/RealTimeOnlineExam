@@ -7,7 +7,8 @@ using OnlineExam.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
-
+using OnlineExam.Application.Profile;
+using OnlineExam.Application;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,6 +20,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
 

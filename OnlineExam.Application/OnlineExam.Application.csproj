@@ -8,12 +8,15 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Identity\Common\" />
+    <Folder Include="Features\ClassRoom\Handler\Queries\" />
+    <Folder Include="Features\ClassRoom\Request\Queries\" />
     <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="16.2.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
   </ItemGroup>
 
   <ItemGroup>
