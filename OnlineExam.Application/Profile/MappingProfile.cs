@@ -15,6 +15,7 @@ namespace OnlineExam.Application.Profile
         {
             CreateMap<ClassRoom,CreateClassRoomDTO>().ReverseMap();
             CreateMap<ClassRoom,GetClassRoomDTO>().ReverseMap();
+            CreateMap<ClassRoom,UpdateClassRoomDTO>().ReverseMap();
         }
     }
 }

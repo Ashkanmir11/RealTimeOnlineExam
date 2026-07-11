@@ -78,9 +78,11 @@ namespace OnlineExam.Persistence.Repositories
             return result;
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync<TSource>(int Id, TSource source)
         {
-            _context.Entry(entity).State = EntityState.Modified;
+            var entity = await GetAsync(Id);
+            _mapper.Map(source, entity);
+            _context.Update(entity);
             await _context.SaveChangesAsync();
         }
     }

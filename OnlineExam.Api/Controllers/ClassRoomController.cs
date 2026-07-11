@@ -66,5 +66,16 @@ namespace OnlineExam.Api.Controllers
         }
 
 
+        [HttpPut("Put")]
+        [Authorize]
+        public async Task<IActionResult> Put(UpdateClassRoomDTO updateClassRoomDto)
+        {
+            var currentUserId = await _authServices.GetCurrentUserId();
+            await _mediator.Send(new UpdateClassRoomRequest() { UpdateClassRoomDTO = updateClassRoomDto, UserId = currentUserId });
+            return Ok();
+        }
+
+
+
     }
 }

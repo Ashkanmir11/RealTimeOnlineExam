@@ -14,7 +14,7 @@ namespace OnlineExam.Application.Contracts
         Task<PaginateResponse<TResult>> GetAllAsync<TResult>(PaginateRequestDTO paginateRequestDTO);
         Task<bool> ExistAsync(int id);
         Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
+        Task UpdateAsync<TSource>(int Id, TSource source);
         Task DeleteAsync(T entity);
     }
 }
