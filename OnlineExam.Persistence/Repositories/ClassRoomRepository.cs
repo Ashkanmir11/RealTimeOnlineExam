@@ -1,4 +1,5 @@
-﻿using OnlineExam.Application.Contracts.Persistence;
+﻿using AutoMapper;
+using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -11,9 +12,11 @@ namespace OnlineExam.Persistence.Repositories
     public class ClassRoomRepository : GenericRepository<ClassRoom>, IClassRoomRepository
     {
         private readonly OnlineExamDbContext _dbContext;
-        public ClassRoomRepository(OnlineExamDbContext dbContext) : base(dbContext)
+        private readonly IMapper _mapper;
+        public ClassRoomRepository(OnlineExamDbContext dbContext,IMapper mapper) : base(dbContext, mapper)
         {
             _dbContext = dbContext;
+            _mapper = mapper;
         }
     }
 }

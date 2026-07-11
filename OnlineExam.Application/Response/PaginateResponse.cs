@@ -11,6 +11,7 @@ namespace OnlineExam.Application.Response
         public int PageNumber { get; set; }
         public int PageCount { get; set; }
         public int TotalCount { get; set; }
+        public int TotalPage {  get; set; }
         public List<T>? Data { get; set; }
     }
 }

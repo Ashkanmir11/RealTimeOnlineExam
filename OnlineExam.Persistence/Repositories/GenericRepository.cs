@@ -1,20 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.Helper;
+using OnlineExam.Application.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Linq.Dynamic.Core;
+using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Persistence.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         private readonly OnlineExamDbContext _context;
+        private readonly IMapper _mapper;
 
-        public GenericRepository(OnlineExamDbContext context)
+        public GenericRepository(OnlineExamDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<T> AddAsync(T entity)
         {
@@ -40,9 +48,34 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.Set<T>().FindAsync(id);
         }
 
-        public async Task<IReadOnlyList<T>> GetAllAsync()
+        public async Task<PaginateResponse<TResult>> GetAllAsync<TResult>(PaginateRequestDTO paginateRequestDTO)
         {
-            return await _context.Set<T>().ToListAsync();
+            IQueryable<T> query = _context.Set<T>();
+            int totalCount = await query.CountAsync();
+
+
+            int skip = PaginateHelper<T>.GetSkip(paginateRequestDTO);
+            if (paginateRequestDTO.SortBy != null)
+            {
+                try
+                {
+                    query = paginateRequestDTO.Descending == true ? query.OrderBy(paginateRequestDTO.SortBy + " " + "desc") : query.OrderBy(paginateRequestDTO.SortBy);
+                }
+                catch
+                {
+                    throw new BadRequestException($"فیلد {paginateRequestDTO.SortBy} وجود ندارد.");
+                }
+
+            }
+            query = query
+                .Skip(skip)
+                .Take(paginateRequestDTO.PageCount);
+
+
+            var response = await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
+
+            var result = PaginateHelper<TResult>.Paginate(response, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+            return result;
         }
 
         public async Task UpdateAsync(T entity)

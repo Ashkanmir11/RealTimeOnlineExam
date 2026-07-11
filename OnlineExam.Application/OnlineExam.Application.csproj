@@ -8,8 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Identity\Common\" />
-    <Folder Include="Features\ClassRoom\Handler\Queries\" />
-    <Folder Include="Features\ClassRoom\Request\Queries\" />
     <Folder Include="Models\" />
   </ItemGroup>
 

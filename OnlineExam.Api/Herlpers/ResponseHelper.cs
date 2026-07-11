@@ -14,9 +14,8 @@ namespace OnlineExam.Api.Herlpers
                 StatusCode = status
             };
             return result;
-
-
         }
+    
 
     }
 }
