@@ -16,5 +16,7 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginRequest);
         Task<GetTokens> RefreshTokenAsync(string refreshToken);
 
+        Task<string> GetCurrentUserId();
+
     }
 }

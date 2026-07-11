@@ -8,6 +8,10 @@ using OnlineExam.Application.Features.ClassRoom.Request.Queries;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Response;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Identity.Model;
+using System.Security.Claims;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -16,9 +20,11 @@ namespace OnlineExam.Api.Controllers
     public class ClassRoomController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ClassRoomController(IMediator mediator)
+        private readonly IAuthServices _authServices;
+        public ClassRoomController(IMediator mediator, IAuthServices authServices)
         {
             _mediator = mediator;
+            _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
@@ -47,7 +53,18 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok (ResponseHelper<PaginateResponse<GetClassRoomDTO>>.Success(response, 200));
+            return Ok(ResponseHelper<PaginateResponse<GetClassRoomDTO>>.Success(response, 200));
         }
+
+        [HttpDelete("Delete/{Id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var currentUser = await _authServices.GetCurrentUserId();
+            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id, UserId = currentUser });
+            return NoContent();
+        }
+
+
     }
 }

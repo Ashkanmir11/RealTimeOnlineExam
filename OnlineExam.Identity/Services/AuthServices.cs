@@ -18,6 +18,7 @@ using OnlineExam.Application.Constants;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Options;
 using OnlineExam.Application.Helper;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineExam.Identity.Services
 {
@@ -26,11 +27,13 @@ namespace OnlineExam.Identity.Services
         private readonly UserManager<OnlineExamUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenServices _tokenServices;
-        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _tokenServices = tokenServices;
+            _httpContextAccessor = httpContextAccessor;
         }
 
 
@@ -134,7 +137,10 @@ namespace OnlineExam.Identity.Services
             return await _tokenServices.RefreshTokenAsync(refreshToken);
         }
 
+        public async Task<string> GetCurrentUserId()
+        {
+            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.UserId)?.Value;
 
-
+        }
     }
 }
