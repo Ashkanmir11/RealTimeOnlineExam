@@ -7,6 +7,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Features.ClassRoom.Request.Queries;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -20,12 +21,14 @@ namespace OnlineExam.Api.Controllers
             _mediator = mediator;
         }
         [HttpPost("Post")]
+        [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomDTO createClassRoomDTO)
         {
             var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
             return Ok(ResponseHelper<GetClassRoomDTO>.Success(result, 200));
         }
         [HttpGet("Get/{Id}")]
+        [Authorize]
         public async Task<IActionResult> Get(int Id)
         {
             var response = await _mediator.Send(new GetClassRoomByIdRequest() { Id = Id });
@@ -36,6 +39,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(ResponseHelper<GetClassRoomDTO>.Success(response, 200));
         }
         [HttpGet("Get")]
+        [Authorize]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var response = await _mediator.Send(new GetClassRoomRequest() { PaginateRequest = paginateRequestDTO });

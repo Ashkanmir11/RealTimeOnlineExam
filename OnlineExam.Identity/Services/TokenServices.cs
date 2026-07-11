@@ -14,7 +14,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 namespace OnlineExam.Identity.Services
 {
     public class TokenServices
@@ -78,23 +78,25 @@ namespace OnlineExam.Identity.Services
 
         public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
         {
+            var expiredRefeshTokens = await _context.RefreshTokens.Where(e => e.ExpireDate < DateTime.UtcNow).ToListAsync();
+            if (expiredRefeshTokens.Count > 0)
+            {
+                _context.RemoveRange(expiredRefeshTokens);
+                await _context.SaveChangesAsync();
+            }
             var rToken = await _context.RefreshTokens.Where(e => e.Token == refreshToken).FirstOrDefaultAsync();
             if (rToken == null)
             {
-                throw new UnauthorizedAccessException();
+                throw new UnauthorizedAccessException("لطفا ابتدا وارد شوید.");
 
             }
-            if (rToken.ExpireDate < DateTime.UtcNow)
-            {
-                _context.Remove(rToken);
-                await _context.SaveChangesAsync();
-                throw new UnauthorizedAccessException();
-            }
-
             var user = await _userManager.FindByIdAsync(rToken.UserId);
             var securityToken = await GenerateAccessTokenAsync(user);
             new JwtSecurityTokenHandler().WriteToken(securityToken);
+            _context.RefreshTokens.Remove(rToken);
+            await _context.SaveChangesAsync();
             var newRefreshToken = await AddRefreshTokenAsync(user.Id);
+
             var result = new GetTokens()
             {
                 RefreshToken = newRefreshToken.Token,
