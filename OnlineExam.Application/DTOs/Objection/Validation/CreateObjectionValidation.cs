@@ -18,7 +18,7 @@ namespace OnlineExam.Application.DTOs.Objection.Validation
         {
             _accountRepository = accountRepository;
             _examRepository = examRepository;
-            RuleFor(e => e.Comment).MaximumLength(1000).WithMessage("متن اعتراض نباید بیشتر از 1000 کاراکتر باشد.");
+            RuleFor(e => e.StudentText).MaximumLength(1000).WithMessage("متن اعتراض نباید بیشتر از 1000 کاراکتر باشد.");
             RuleFor(e => e.StudentId).MustAsync(async (Id, Token) =>
             {
                 var userExist = await _accountRepository.UserExistAsync(Id);

@@ -9,7 +9,8 @@ namespace OnlineExam.Domain.Entities
 {
     public class Objection : BaseModel
     {
-        public string? Comment {  get; set; }
+        public string? StudentText {  get; set; }
+        public string? TeacherComment {  get; set; }
         public bool Accepted { get; set; } = false;
 
         //Relations

@@ -10,9 +10,7 @@ namespace OnlineExam.Application.DTOs.Objection
 {
     public class CreateObjectionDTO
     {
-        public string? Comment { get; set; }
-
-
+        public string? StudentText { get; set; }
         //Relations
         [JsonIgnore]
         public string? StudentId { get; set; }

@@ -12,7 +12,7 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260712114404_InitOnlineExamDb")]
+    [Migration("20260712150535_InitOnlineExamDb")]
     partial class InitOnlineExamDb
     {
         /// <inheritdoc />
@@ -327,11 +327,6 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<bool>("Accepted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -343,6 +338,15 @@ namespace OnlineExam.Persistence.Migrations
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StudentText")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
+
+                    b.Property<string>("TeacherComment")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.HasKey("Id");
 

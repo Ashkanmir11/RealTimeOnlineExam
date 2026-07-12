@@ -15,7 +15,8 @@ namespace OnlineExam.Persistence.Configuration
         {
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).UseIdentityColumn();
-            builder.Property(e => e.Comment).IsRequired().HasMaxLength(1000);
+            builder.Property(e => e.TeacherComment).HasMaxLength(1000);
+            builder.Property(e => e.StudentText).IsRequired().HasMaxLength(1000);
 
         }
     }

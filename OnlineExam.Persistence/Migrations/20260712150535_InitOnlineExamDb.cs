@@ -168,7 +168,8 @@ namespace OnlineExam.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    StudentText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    TeacherComment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     Accepted = table.Column<bool>(type: "bit", nullable: false),
                     StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: false),

@@ -1,4 +1,5 @@
 ﻿using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace OnlineExam.Application.DTOs.Objection
 {
     public class UpdateObjectionDTO : BaseDTO
     {
-        public string? Comment { get; set; }
+        public string? StudentText { get; set; }
+        public string? TeacherComment { get; set; }
         public bool Accepted { get; set; } = false;
-
 
     }
 }
