@@ -54,24 +54,6 @@ namespace OnlineExam.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Objections",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    Accepted = table.Column<bool>(type: "bit", nullable: false),
-                    TeacherId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Objections", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Exams",
                 columns: table => new
                 {
@@ -174,6 +156,30 @@ namespace OnlineExam.Persistence.Migrations
                     table.PrimaryKey("PK_MultipleChoiceQuestions", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MultipleChoiceQuestions_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Objections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Comment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    Accepted = table.Column<bool>(type: "bit", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Objections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Objections_Exams_ExamId",
                         column: x => x.ExamId,
                         principalTable: "Exams",
                         principalColumn: "Id",
@@ -305,6 +311,11 @@ namespace OnlineExam.Persistence.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_MultipleChoiceQuestions_ExamId",
                 table: "MultipleChoiceQuestions",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Objections_ExamId",
+                table: "Objections",
                 column: "ExamId");
 
             migrationBuilder.CreateIndex(

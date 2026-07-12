@@ -12,7 +12,7 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260708222940_InitOnlineExamDb")]
+    [Migration("20260712114404_InitOnlineExamDb")]
     partial class InitOnlineExamDb
     {
         /// <inheritdoc />
@@ -335,16 +335,18 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("ExamId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TeacherId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("ExamId");
 
                     b.ToTable("Objections");
                 });
@@ -483,6 +485,17 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("MultipleChoiceQuestion");
                 });
 
+            modelBuilder.Entity("OnlineExam.Domain.Entities.Objection", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
+                        .WithMany("Objections")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+                });
+
             modelBuilder.Entity("OnlineExam.Domain.Entities.TrueOrFalseQuestion", b =>
                 {
                     b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
@@ -522,6 +535,8 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("ExamLog");
 
                     b.Navigation("MultipleChoiceQuestions");
+
+                    b.Navigation("Objections");
 
                     b.Navigation("TrueOrFalseQuestions");
                 });

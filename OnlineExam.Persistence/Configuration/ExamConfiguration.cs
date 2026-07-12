@@ -26,7 +26,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.HasMany(e => e.MultipleChoiceQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(e => e.TrueOrFalseQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
             builder.HasMany(e => e.DescriptiveQuestions).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
-
+            builder.HasMany(e => e.Objections).WithOne(e => e.Exam).HasForeignKey(e => e.ExamId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

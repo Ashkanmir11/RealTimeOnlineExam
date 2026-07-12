@@ -12,8 +12,11 @@ namespace OnlineExam.Domain.Entities
         public string? Comment {  get; set; }
         public bool Accepted { get; set; } = false;
 
-        public string? TeacherId {  get; set; }
+        //public string? TeacherId {  get; set; }
         public string? StudentId {  get; set; }
+
+        public int ExamId {  get; set; }
+        public Exam? Exam {  get; set; }
         //Relations
         //public string? StudentId {  get; set; }
         //public OnlineExamUser? student {  get; set; }

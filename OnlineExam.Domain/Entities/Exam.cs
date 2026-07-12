@@ -28,6 +28,7 @@ namespace OnlineExam.Domain.Entities
         public List<MultipleChoiceQuestion>? MultipleChoiceQuestions { get; set; }
 
         public List<ExamLog>? ExamLog { get; set; }
+        public List<Objection>? Objections { get; set; }
 
 
     }
