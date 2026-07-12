@@ -30,7 +30,14 @@ namespace OnlineExam.Persistence.Repositories
             await _context.SaveChangesAsync();
             return entity;
         }
+        public async Task<T> AddAsync<TSource>(TSource source)
+        {
 
+            var entity = _mapper.Map<T>(source);
+            await _context.AddAsync(entity);
+            await _context.SaveChangesAsync();
+            return entity;
+        }
         public async Task DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
@@ -47,7 +54,11 @@ namespace OnlineExam.Persistence.Repositories
         {
             return await _context.Set<T>().FindAsync(id);
         }
-
+        public async Task<TResult> GetAsync<TResult>(int id)
+        {
+            var response= await _context.Set<T>().FindAsync(id);
+            return _mapper.Map<TResult>(response);
+        }
         public async Task<PaginateResponse<TResult>> GetAllAsync<TResult>(PaginateRequestDTO paginateRequestDTO)
         {
             IQueryable<T> query = _context.Set<T>();
@@ -85,5 +96,7 @@ namespace OnlineExam.Persistence.Repositories
             _context.Update(entity);
             await _context.SaveChangesAsync();
         }
+
+      
     }
 }

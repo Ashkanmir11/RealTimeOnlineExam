@@ -39,8 +39,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
                 throw new ValidationException(errors);
             }
 
-            var entity = _mapper.Map<Domain.Entities.ClassRoom>(request.CreateClassRoomDTO);
-            var result = await _classRoomRepository.AddAsync(entity);
+            var result = await _classRoomRepository.AddAsync<CreateClassRoomDTO>(request.CreateClassRoomDTO);
             return _mapper.Map<GetClassRoomDTO>(result);
         }
     }

@@ -23,9 +23,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 
         public async Task<GetClassRoomDTO> Handle(GetClassRoomByIdRequest request, CancellationToken cancellationToken)
         {
-            var response =await _classRoomRepository.GetAsync(request.Id);
-            var result=_mapper.Map<GetClassRoomDTO>(response);
-            return result;
+            return await _classRoomRepository.GetAsync<GetClassRoomDTO>(request.Id);
         }
     }
 }

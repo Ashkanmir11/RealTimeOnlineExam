@@ -24,9 +24,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 
         public async Task<PaginateResponse<GetClassRoomDTO>> Handle(GetClassRoomRequest request, CancellationToken cancellationToken)
         {
-            var response = new PaginateResponse<GetClassRoomDTO>();
-            response = await _classRoomRepository.GetAllAsync<GetClassRoomDTO>(request.PaginateRequest);
-            return response;
+            return await _classRoomRepository.GetAllAsync<GetClassRoomDTO>(request.PaginateRequest);    
         }
     }
 }
