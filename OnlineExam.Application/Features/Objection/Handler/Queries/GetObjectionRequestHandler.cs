@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Application.Features.Objection.handler.Queries
+namespace OnlineExam.Application.Features.Objection.Handler.Queries
 {
     public class GetObjectionRequestHandler : IRequestHandler<GetObjectionRequest, PaginateResponse<GetObjectionDTO>>
     {
