@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OnlineExam.Application.DTOs.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,5 +10,6 @@ namespace OnlineExam.Application.Contracts.Identity
     public interface IAccountRepository
     {
         Task<bool> UserExistAsync(string UserId);
+        Task<List<UserDTO>> GetUsersByIds(List<string> UserId);
     }
 }

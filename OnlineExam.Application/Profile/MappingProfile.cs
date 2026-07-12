@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OnlineExam.Application.DTOs.ClassRoom;
+using OnlineExam.Application.DTOs.ClassRoomMember;
 using OnlineExam.Application.DTOs.Objection;
 using OnlineExam.Domain.Entities;
 using System;
@@ -18,6 +19,13 @@ namespace OnlineExam.Application.Profile
             CreateMap<ClassRoom, CreateClassRoomDTO>().ReverseMap();
             CreateMap<ClassRoom, GetClassRoomDTO>().ReverseMap();
             CreateMap<ClassRoom, UpdateClassRoomDTO>().ReverseMap();
+
+            //Class Room Member
+            CreateMap<ClassRoomMembers,CreateClassRoomMemberDTO>().ReverseMap();
+            CreateMap<ClassRoomMembers, GetClassRoomDTO>().ReverseMap();
+            CreateMap<ClassRoomMembers, UpdateClassRoomDTO>().ReverseMap();
+
+
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();
