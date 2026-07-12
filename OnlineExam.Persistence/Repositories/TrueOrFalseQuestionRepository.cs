@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {
-    public class ClassRoomRepository : GenericRepository<ClassRoom>, IClassRoomRepository
+    public class TrueOrFalseQuestionRepository : GenericRepository<TrueOrFalseQuestion>, ITrueOrFalseQuestionRepository
     {
         private readonly OnlineExamDbContext _context;
         private readonly IMapper _mapper;
-        public ClassRoomRepository(OnlineExamDbContext dbContext,IMapper mapper) : base(dbContext, mapper)
+        public TrueOrFalseQuestionRepository(OnlineExamDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
             _context = dbContext;
             _mapper = mapper;

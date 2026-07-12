@@ -21,6 +21,17 @@ namespace OnlineExam.Persistence
             services.AddDbContext<OnlineExamDbContext>(option => option.UseSqlServer(connectionString));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IClassRoomRepository, ClassRoomRepository>();
+            services.AddScoped<IClassRoomMembersRepository, ClassRoomMembersRepository>();
+            services.AddScoped<IDescriptiveQuestionRepository, DescriptiveQuestionRepository>();
+            services.AddScoped<IDescriptiveQuestionAnswersRepository, DescriptiveQuestionAnswersRepository>();
+            services.AddScoped<IExamRepository, ExamRepository>();
+            services.AddScoped<IExamLogRepository, ExamLogRepository>();
+            services.AddScoped<ILogTypeRepository, LogTypeRepository>();
+            services.AddScoped<IMultipleChoiceQuestionRepository, MultipleChoiceQuestionRepository>();
+            services.AddScoped<IMultipleChoiceQuestionAnswersRepository, MultipleChoiceQuestionAnswersRepository>();
+            services.AddScoped<IObjectionRepository, ObjectionRepository>();
+            services.AddScoped<ITrueOrFalseQuestionRepository, TrueOrFalseQuestionRepository>();
+            services.AddScoped<ITrueOrFalseQuestionAnswersRepository, TrueOrFalseQuestionAnswersRepository>();
             return services;
         }
     }
