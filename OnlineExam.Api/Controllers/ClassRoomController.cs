@@ -30,9 +30,14 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomDTO createClassRoomDTO)
         {
-            createClassRoomDTO.TeacherId=await _authServices.GetCurrentUserId();
+            ////Un comment if need to get added entity
+            //createClassRoomDTO.TeacherId=await _authServices.GetCurrentUserId();
+            //var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
+            //return Ok(ResponseHelper<GetClassRoomDTO>.Success(result, 200));
+
+            createClassRoomDTO.TeacherId = await _authServices.GetCurrentUserId();
             var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
-            return Ok(ResponseHelper<GetClassRoomDTO>.Success(result, 200));
+            return Created();
         }
         [HttpGet("Get/{Id}")]
         [Authorize]
