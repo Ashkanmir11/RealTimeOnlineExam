@@ -68,14 +68,7 @@ namespace OnlineExam.Persistence.Repositories
             int skip = PaginateHelper<T>.GetSkip(paginateRequestDTO);
             if (paginateRequestDTO.SortBy != null)
             {
-                try
-                {
-                    query = paginateRequestDTO.Descending == true ? query.OrderBy(paginateRequestDTO.SortBy + " " + "desc") : query.OrderBy(paginateRequestDTO.SortBy);
-                }
-                catch
-                {
-                    throw new BadRequestException($"فیلد {paginateRequestDTO.SortBy} وجود ندارد.");
-                }
+                query = QuerySortHelper<T>.Sort(query, paginateRequestDTO);
 
             }
             query = query

@@ -17,10 +17,12 @@ namespace OnlineExam.Api.Controllers
     {
         private readonly IAuthServices _authServices;
         private readonly CookieHelper _cookieHelper;
-        public AccountController(IAuthServices authServices, CookieHelper cookieHelper)
+        private readonly IAccountRepository _accountRepository;
+        public AccountController(IAuthServices authServices, CookieHelper cookieHelper, IAccountRepository accountRepository)
         {
             _authServices = authServices;
             _cookieHelper = cookieHelper;
+            _accountRepository = accountRepository;
         }
         [HttpPost("auth/Register")]
         [AllowAnonymous]
@@ -60,10 +62,12 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetAll([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
 
-            var response = await _authServices.GetAllAsync(paginateRequestDTO);
-            var result = ResponseHelper<PaginateResponse<GetUserDTO>>.Success(response, 200);
-            return Ok(result);
-
+            var response = await _accountRepository.GetAllUsersAsync(paginateRequestDTO);
+            if (response.Data.Count == 0)
+            {
+                return NoContent();
+            }
+            return Ok(ResponseHelper<PaginateResponse<UserFullInfoDTO>>.Success(response, 200));
 
         }
 

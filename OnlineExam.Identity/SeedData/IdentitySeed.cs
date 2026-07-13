@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 namespace OnlineExam.Identity.SeedData
 {
     public class IdentitySeed
@@ -46,24 +46,60 @@ namespace OnlineExam.Identity.SeedData
                 new OnlineExamUser()
                 {
                 UserName = "AshkanTest",
-                Email = "ashkan110mir@gmail.com",
+                Email = "AshkanTest@gmail.com",
                 FirstName = "Ashkan",
                 LastName = "Mr",
                 NationalCode = 1111111111,
                 EmailConfirmed = true,
                 PhoneNumber = "09908752252",
                 PhoneNumberConfirmed = true,
-                }
+                PasswordHash="Ashkanpass12!"
+                },
+                new OnlineExamUser()
+                {
+                UserName = "RezaTest",
+                Email = "RezaTest@gmail.com",
+                FirstName = "Reza",
+                LastName = "test",
+                NationalCode = 1111111111,
+                EmailConfirmed = true,
+                PhoneNumber = "09999999999",
+                PhoneNumberConfirmed = true,
+                PasswordHash="Rezapass12!",
+               
+                },
+                 new OnlineExamUser()
+                {
+                UserName = "NaderTest",
+                Email = "NaderTest@gmail.com",
+                FirstName = "Nader",
+                LastName = "test",
+                NationalCode = 1111111111,
+                EmailConfirmed = true,
+                PhoneNumber = "09999999999",
+                PhoneNumberConfirmed = true,
+                PasswordHash="Naderpass12!",
+
+                },
             };
             foreach (var user in users)
             {
                 if (await userManagerService.FindByEmailAsync(user.Email) == null)
                 {
-                    var userCreateResult = await userManagerService.CreateAsync(user, "Ashkanpass12!");
+                    var userCreateResult = await userManagerService.CreateAsync(user, user.PasswordHash);
                     if (userCreateResult.Succeeded)
                     {
-                        var userCreated = await userManagerService.FindByNameAsync("AshkanTest");
-                        await userManagerService.AddToRoleAsync(user, "Admin");
+                        var userCreated = await userManagerService.FindByNameAsync(user.UserName);
+                        if(user.UserName== "AshkanTest")
+                        {
+                            await userManagerService.AddToRoleAsync(user, "Admin");
+
+                        }
+                        else
+                        {
+                            await userManagerService.AddToRoleAsync(user, "User");
+
+                        }
                     }
                 }
             }

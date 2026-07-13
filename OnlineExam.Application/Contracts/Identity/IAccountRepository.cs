@@ -1,4 +1,7 @@
-﻿using OnlineExam.Application.DTOs.Identity;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity;
+using OnlineExam.Application.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +14,7 @@ namespace OnlineExam.Application.Contracts.Identity
     {
         Task<bool> UserExistAsync(string UserId);
         Task<List<UserDTO>> GetUsersByIds(List<string> UserId);
+        Task<PaginateResponse<UserFullInfoDTO>> GetAllUsersAsync(PaginateRequestDTO paginateRequestDTO);
+       
     }
 }
