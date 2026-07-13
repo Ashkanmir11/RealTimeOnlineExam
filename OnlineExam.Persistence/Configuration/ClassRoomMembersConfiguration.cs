@@ -13,7 +13,7 @@ namespace OnlineExam.Persistence.Configuration
     {
         public void Configure(EntityTypeBuilder<ClassRoomMembers> builder)
         {
-            builder.HasNoKey();
+            builder.HasKey(e => new {e.StudentId,e.ClassRomeId});
             builder.Property(e => e.ClassRomeId).IsRequired();
             builder.Property(e => e.StudentId).IsRequired();
         }

@@ -51,12 +51,13 @@ namespace OnlineExam.Persistence.Migrations
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.ClassRoomMembers", b =>
                 {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("ClassRomeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("StudentId", "ClassRomeId");
 
                     b.ToTable("ClassRoomMembers");
                 });

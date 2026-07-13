@@ -12,7 +12,7 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260712150535_InitOnlineExamDb")]
+    [Migration("20260713094916_InitOnlineExamDb")]
     partial class InitOnlineExamDb
     {
         /// <inheritdoc />
@@ -54,12 +54,13 @@ namespace OnlineExam.Persistence.Migrations
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.ClassRoomMembers", b =>
                 {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("ClassRomeId")
                         .HasColumnType("int");
 
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("StudentId", "ClassRomeId");
 
                     b.ToTable("ClassRoomMembers");
                 });

@@ -15,11 +15,12 @@ namespace OnlineExam.Persistence.Migrations
                 name: "ClassRoomMembers",
                 columns: table => new
                 {
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClassRomeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_ClassRoomMembers", x => new { x.StudentId, x.ClassRomeId });
                 });
 
             migrationBuilder.CreateTable(

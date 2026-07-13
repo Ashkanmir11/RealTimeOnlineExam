@@ -56,7 +56,7 @@ namespace OnlineExam.Api.Controllers
         {
             throw new NotImplementedException();
         }
-        [HttpPut("Put/{ClassRoomId}")]
+        [HttpPut("Put")]
         public async Task<IActionResult> Put(UpdateClassRoomMemberDTO updateClassRoomMemberDTO)
         {
             await _mediator.Send(new UpdateClassRoomMemberRequest() { UpdateClassRoomMemberDTO= updateClassRoomMemberDTO });
