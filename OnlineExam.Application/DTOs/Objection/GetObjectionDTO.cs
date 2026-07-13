@@ -15,6 +15,6 @@ namespace OnlineExam.Application.DTOs.Objection
 
         //Relations
         public string? StudentId { get; set; }
-        public Exam? Exam { get; set; }
+        public Domain.Entities.Exam? Exam { get; set; }
     }
 }

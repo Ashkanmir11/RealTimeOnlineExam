@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace OnlineExam.Application.DTOs.ClassRoom
 {
     public class GetClassRoomDTO : BaseDTO
@@ -14,6 +15,6 @@ namespace OnlineExam.Application.DTOs.ClassRoom
 
         //Relations
         public string? TeacherId { get; set; }
-        public List<Exam>? Exams { get; set; }
+        public List<Domain.Entities.Exam>? Exams { get; set; }
     }
 }
