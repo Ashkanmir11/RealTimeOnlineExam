@@ -56,8 +56,8 @@ namespace OnlineExam.Persistence.Repositories
         }
         public async Task<TResult> GetAsync<TResult>(int id)
         {
-            var response= await _context.Set<T>().FindAsync(id);
-            return _mapper.Map<TResult>(response);
+            var result = await _context.Set<T>().Where(e => EF.Property<int>(e, "Id") == id).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+            return _mapper.Map<TResult>(result);
         }
         public async Task<PaginateResponse<TResult>> GetAllAsync<TResult>(PaginateRequestDTO paginateRequestDTO)
         {
