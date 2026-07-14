@@ -1,0 +1,17 @@
+﻿using OnlineExam.Application.DTOs.Common;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OnlineExam.Application.DTOs.DescriptiveQuestion
+{
+    public class UpdateDescriptiveQuestionDTO : BaseDTO
+    {
+        public string? QuestionText { get; set; }
+        public int? TotalScore { get; set; }
+        public string? CorrectAnswer { get; set; }
+
+    }
+}

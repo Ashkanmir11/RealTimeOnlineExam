@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.DTOs.ClassRoomMember;
+using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.DTOs.LogType;
 using OnlineExam.Application.DTOs.Objection;
@@ -31,6 +32,11 @@ namespace OnlineExam.Application.Profile
             CreateMap<Exam, CreateExamDTO>().ReverseMap();
             CreateMap<Exam, GetExamDTO>().ReverseMap();
             CreateMap<Exam, UpdateExamDTO>().ReverseMap();
+
+            //Descriptive Question
+            CreateMap<DescriptiveQuestion, CreateDescriptiveQuestionDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestion, GetDescriptiveQuestionDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestion, UpdateDescriptiveQuestionDTO>().ReverseMap();
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();
