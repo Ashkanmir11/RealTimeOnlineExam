@@ -10,7 +10,7 @@ namespace OnlineExam.Domain.Entities
     public class MultipleChoiceQuestion: CommonQuestionTypeModel
     {
         public List<string>? Choices { get; set; }
-        public int CorrectChoice;
+        public int CorrectChoice {  get; set; }
 
         //Relations
         public List<MultipleChoiceQuestionAnswers>? Answers { get; set; }
