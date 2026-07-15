@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
+using AutoMapper;
 
 namespace OnlineExam.Identity.Repositories
 {
@@ -21,10 +22,12 @@ namespace OnlineExam.Identity.Repositories
     {
         private readonly OnlineExamIdentityDbContext _context;
         private readonly UserManager<OnlineExamUser> _userManager;
-        public AccountRepository(OnlineExamIdentityDbContext context, UserManager<OnlineExamUser> userManager)
+        private readonly IMapper _mapper;
+        public AccountRepository(OnlineExamIdentityDbContext context, UserManager<OnlineExamUser> userManager, IMapper mapper)
         {
             _context = context;
             _userManager = userManager;
+            _mapper = mapper;
         }
         public async Task<PaginateResponse<UserFullInfoDTO>> GetAllUsersAsync(PaginateRequestDTO paginateRequestDTO)
         {
@@ -58,19 +61,16 @@ namespace OnlineExam.Identity.Repositories
             return PaginateHelper<UserFullInfoDTO>.Paginate(userData, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
 
         }
-        public async Task<List<UserDTO>> GetUsersByIds(List<string> UserId)
+
+        public async Task<GetUserDTO> GetUserById(string UserId)
         {
-            var result = new List<UserDTO>();
-            var users = await _context.Users.Where(e => UserId.Contains(e.Id)).ToListAsync();
-            foreach (var user in users)
-            {
-                result.Add(new UserDTO()
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                });
-            }
-            return result;
+            return await _context.Users.ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> UserId)
+        {
+            return await _context.Users.Where(e => UserId.Contains(e.Id)).ProjectTo<UserNameAndLastNameDTO>(_mapper.ConfigurationProvider).ToListAsync();
+
         }
 
         public async Task<bool> UserExistAsync(string UserId)

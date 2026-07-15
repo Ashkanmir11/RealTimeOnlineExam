@@ -13,8 +13,9 @@ namespace OnlineExam.Application.Contracts.Identity
     public interface IAccountRepository
     {
         Task<bool> UserExistAsync(string UserId);
-        Task<List<UserDTO>> GetUsersByIds(List<string> UserId);
+        Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> UserId);
         Task<PaginateResponse<UserFullInfoDTO>> GetAllUsersAsync(PaginateRequestDTO paginateRequestDTO);
+        Task<GetUserDTO> GetUserById(string UserId);
        
     }
 }

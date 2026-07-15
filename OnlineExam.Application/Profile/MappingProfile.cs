@@ -2,6 +2,7 @@
 using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.DTOs.ClassRoomMember;
 using OnlineExam.Application.DTOs.DescriptiveQuestion;
+using OnlineExam.Application.DTOs.DescriptiveQuestionAnswers;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.DTOs.LogType;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
@@ -39,6 +40,12 @@ namespace OnlineExam.Application.Profile
             CreateMap<DescriptiveQuestion, CreateDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, UpdateDescriptiveQuestionDTO>().ReverseMap();
+
+            //Descriptive Question Answer
+            CreateMap<DescriptiveQuestionAnswers, CreateDescriptiveQuestionAnswersDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestionAnswers, GetDescriptiveQuestionAnswersDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestionAnswers, UpdateDescriptiveQuestionAnswersDTO>().ReverseMap();
+
 
             //Multiple Choice Question
             CreateMap<MultipleChoiceQuestion,CreateMultipleChoiceQuestionDTO>().ReverseMap();

@@ -5,8 +5,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.Profile;
 using OnlineExam.Identity.ErrorDescribers;
 using OnlineExam.Identity.Model;
+using OnlineExam.Identity.Profile;
 using OnlineExam.Identity.Repositories;
 using OnlineExam.Identity.SeedData;
 using OnlineExam.Identity.Services;
@@ -69,6 +71,7 @@ namespace OnlineExam.Identity
               });
 
             services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddAutoMapper(cfg => { }, typeof(IdentityMappingProfile).Assembly);
 
             return services;
         }

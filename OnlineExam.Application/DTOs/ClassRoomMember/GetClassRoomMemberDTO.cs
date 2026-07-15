@@ -10,7 +10,7 @@ namespace OnlineExam.Application.DTOs.ClassRoomMember
 {
     public class GetClassRoomMemberDTO
     {
-        public List<UserDTO>? Students { get;set; }
+        public List<UserNameAndLastNameDTO>? Students { get;set; }
         public GetClassRoomDTO? GetClassRoomDTO { get; set; }
     }
 }
