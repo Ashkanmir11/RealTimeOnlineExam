@@ -6,6 +6,7 @@ using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.DTOs.LogType;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
 using OnlineExam.Application.DTOs.Objection;
+using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -54,6 +55,10 @@ namespace OnlineExam.Application.Profile
             CreateMap<LogType, GetLogTypeDTO>().ReverseMap();
             CreateMap<LogType, UpdateLogTypeDTO>().ReverseMap();
 
+            //True or false question
+            CreateMap<TrueOrFalseQuestion,CreateTrueOrFalseQuestionDTO>().ReverseMap();
+            CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionDTO>().ReverseMap();
+            CreateMap<TrueOrFalseQuestion, UpdateTrueOfFalseQuestionDTO>().ReverseMap();
 
 
         }
