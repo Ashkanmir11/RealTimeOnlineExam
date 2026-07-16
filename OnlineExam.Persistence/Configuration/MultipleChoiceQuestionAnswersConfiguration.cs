@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
-    public class MultipleChoiceQuestionAnswersConfiguration : IEntityTypeConfiguration<MultipleChoiceQuestionAnswers>
+    public class MultipleChoiceAnswersConfiguration : IEntityTypeConfiguration<MultipleChoiceAnswers>
     {
-        public void Configure(EntityTypeBuilder<MultipleChoiceQuestionAnswers> builder)
+        public void Configure(EntityTypeBuilder<MultipleChoiceAnswers> builder)
         {
             builder.HasKey(e => e.Id);
             builder.Property(e=>e.Id).UseIdentityColumn();

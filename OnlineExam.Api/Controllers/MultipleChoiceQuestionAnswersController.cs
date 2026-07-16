@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.DTOs.MultipleChoiceQuestionAnswers;
-using OnlineExam.Application.Features.MultipleChoiceQuestionAnswers.Request.Commands;
-using OnlineExam.Application.Features.MultipleChoiceQuestionAnswers.Request.Queries;
+using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
+using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
+using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
 using OnlineExam.Application.Contracts.Identity;
@@ -13,54 +13,54 @@ namespace OnlineExam.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MultipleChoiceQuestionAnswersController : ControllerBase
+    public class MultipleChoiceAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IAuthServices _authServices;
-        public MultipleChoiceQuestionAnswersController(IMediator mediator, IAuthServices authServices)
+        public MultipleChoiceAnswersController(IMediator mediator, IAuthServices authServices)
         {
             _mediator = mediator;
             _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
-        public async Task<IActionResult> Post(CreateMultipleChoiceQuestionAnswerDTO createMultipleChoiceQuestionAnswerDTO)
+        public async Task<IActionResult> Post(CreateMultipleChoiceAnswerDTO createMultipleChoiceQuestionAnswerDTO)
         {
             createMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
-            await _mediator.Send(new CreateMultipleChoiceQuestionAnswerRequest() { CreateMultipleChoiceQuestionAnswerDTO = createMultipleChoiceQuestionAnswerDTO });
+            await _mediator.Send(new CreateMultipleChoiceAnswerRequest() { CreateMultipleChoiceQuestionAnswerDTO = createMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            var result = await _mediator.Send(new GetMultipleChoiceQuestionAnswerByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetMultipleChoiceAnswerByIdRequest() { Id = Id });
             if (result == null)
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetMultipleChoiceQuestionAnswerDTO>.Success(result, 200));
+            return Ok(ResponseHelper<GetMultipleChoiceAnswerDTO>.Success(result, 200));
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            var result = await _mediator.Send(new GetMultipleChoiceQuestionAnswerRequest() { PaginateRequest = paginateRequestDTO });
+            var result = await _mediator.Send(new GetMultipleChoiceAnswerRequest() { PaginateRequest = paginateRequestDTO });
             if (result.Data.Count == 0)
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetMultipleChoiceQuestionAnswerDTO>>.Success(result, 200));
+            return Ok(ResponseHelper<PaginateResponse<GetMultipleChoiceAnswerDTO>>.Success(result, 200));
         }
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            await _mediator.Send(new DeleteMultipleChoiceQuestionAnswerRequest() { Id = Id });
+            await _mediator.Send(new DeleteMultipleChoiceAnswerRequest() { Id = Id });
             return NoContent();
 
         }
         [HttpPut("Put")]
-        public async Task<IActionResult> Put(UpdateMultipleChoiceQuestionAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
+        public async Task<IActionResult> Put(UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateMultipleChoiceQuestionAnswerRequest() { UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
+            await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() { UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
     }

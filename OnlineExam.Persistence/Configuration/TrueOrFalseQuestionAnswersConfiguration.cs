@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
-    public class TrueOrFalseQuestionAnswersConfiguration : IEntityTypeConfiguration<TrueOrFalseQuestionAnswers>
+    public class TrueOrFalseAnswersConfiguration : IEntityTypeConfiguration<TrueOrFalseAnswers>
     {
-        public void Configure(EntityTypeBuilder<TrueOrFalseQuestionAnswers> builder)
+        public void Configure(EntityTypeBuilder<TrueOrFalseAnswers> builder)
         {
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).UseIdentityColumn();

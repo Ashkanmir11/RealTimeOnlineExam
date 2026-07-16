@@ -12,6 +12,6 @@ namespace OnlineExam.Domain.Entities
         public string? CorrectAnswer {  get; set; }
 
         //Relation
-        public List<DescriptiveQuestionAnswers>? Answers { get; set; }
+        public List<DescriptiveAnswers>? Answers { get; set; }
     }
 }

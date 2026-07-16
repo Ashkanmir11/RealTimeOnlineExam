@@ -13,6 +13,6 @@ namespace OnlineExam.Domain.Entities
         public int CorrectChoice {  get; set; }
 
         //Relations
-        public List<MultipleChoiceQuestionAnswers>? Answers { get; set; }
+        public List<MultipleChoiceAnswers>? Answers { get; set; }
     }
 }

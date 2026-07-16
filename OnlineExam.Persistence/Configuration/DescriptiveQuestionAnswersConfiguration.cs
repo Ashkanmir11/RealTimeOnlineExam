@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
-    public class DescriptiveQuestionAnswersConfiguration : IEntityTypeConfiguration<DescriptiveQuestionAnswers>
+    public class DescriptiveAnswersConfiguration : IEntityTypeConfiguration<DescriptiveAnswers>
     {
-        public void Configure(EntityTypeBuilder<DescriptiveQuestionAnswers> builder)
+        public void Configure(EntityTypeBuilder<DescriptiveAnswers> builder)
         {
             builder.HasKey(e => e.Id);
             builder.Property(e=>e.Id).UseIdentityColumn();

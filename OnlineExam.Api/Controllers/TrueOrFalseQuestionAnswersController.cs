@@ -4,32 +4,32 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.DTOs.TrueOrFalseQuestionAnswers;
-using OnlineExam.Application.Features.TrueOrFalseQuestionAnswers.Request.Commands;
-using OnlineExam.Application.Features.TrueOrFalseQuestionAnswers.Request.Queries;
+using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
+using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
+using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Queries;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
 namespace OnlineExam.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TrueOrFalseQuestionAnswersController : ControllerBase
+    public class TrueOrFalseAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly IAuthServices _authServices;
-        public TrueOrFalseQuestionAnswersController(IMediator mediator, IAuthServices authServices)
+        public TrueOrFalseAnswersController(IMediator mediator, IAuthServices authServices)
         {
             _mediator = mediator;
             _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
-        public async Task<IActionResult> Post(CreateTrueOrFalseQuestionAnswerDTO createTrueOrFalseQuestionAnswerDTO)
+        public async Task<IActionResult> Post(CreateTrueOrFalseAnswerDTO createTrueOrFalseQuestionAnswerDTO)
         {
             try
             {
                 createTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
-                await _mediator.Send(new CreateTrueOrFalseQuestionAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
+                await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
                 return NoContent();
             }
             catch(Exception ex)
@@ -40,33 +40,33 @@ namespace OnlineExam.Api.Controllers
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
-            var result = await _mediator.Send(new GetTrueOrFalseQuestionAnswerByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetTrueOrFalseAnswerByIdRequest() { Id = Id });
             if(result==null)
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetTrueOrFalseQuestionAnswerDTO>.Success(result, 200));
+            return Ok(ResponseHelper<GetTrueOrFalseAnswerDTO>.Success(result, 200));
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            var result = await _mediator.Send(new GetTrueOrFalseQuestionAnswerRequest() { PaginateRequest= paginateRequestDTO });
+            var result = await _mediator.Send(new GetTrueOrFalseAnswerRequest() { PaginateRequest= paginateRequestDTO });
             if (result.Data.Count==0)
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetTrueOrFalseQuestionAnswerDTO>>.Success(result, 200));
+            return Ok(ResponseHelper<PaginateResponse<GetTrueOrFalseAnswerDTO>>.Success(result, 200));
         }
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)
         {
-            await _mediator.Send(new DeleteTrueOrFalseQuestionAnswerRequest() { Id = Id });
+            await _mediator.Send(new DeleteTrueOrFalseAnswerRequest() { Id = Id });
             return NoContent();
         }
         [HttpPut("Put")]
-        public async Task<IActionResult> Put(UpdateTrueOrFalseQuestionAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
+        public async Task<IActionResult> Put(UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateTrueOrFalseQuestionAnswerRequest() { UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
+            await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() { UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
     }
