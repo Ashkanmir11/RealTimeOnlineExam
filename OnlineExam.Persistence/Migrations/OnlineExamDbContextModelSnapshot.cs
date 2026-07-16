@@ -403,6 +403,9 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<bool>("StudentAnswer")
                         .HasColumnType("bit");
 
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("TrueOrFalseQuestionId")
                         .HasColumnType("int");
 

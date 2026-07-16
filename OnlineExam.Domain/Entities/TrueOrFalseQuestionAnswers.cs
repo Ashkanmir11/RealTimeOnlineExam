@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Entities
 {
-    public class TrueOrFalseQuestionAnswers : BaseModel
+    public class TrueOrFalseQuestionAnswers : CommonQuestionAnswerModel
     {
         public bool StudentAnswer {  get; set; }
         //Relations

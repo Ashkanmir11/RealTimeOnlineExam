@@ -12,8 +12,8 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260713094916_InitOnlineExamDb")]
-    partial class InitOnlineExamDb
+    [Migration("20260716125810_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -405,6 +405,9 @@ namespace OnlineExam.Persistence.Migrations
 
                     b.Property<bool>("StudentAnswer")
                         .HasColumnType("bit");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TrueOrFalseQuestionId")
                         .HasColumnType("int");
