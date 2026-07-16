@@ -6,6 +6,7 @@ using OnlineExam.Application.DTOs.DescriptiveQuestionAnswers;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.DTOs.LogType;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+using OnlineExam.Application.DTOs.MultipleChoiceQuestionAnswers;
 using OnlineExam.Application.DTOs.Objection;
 using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 using OnlineExam.Domain.Entities;
@@ -51,6 +52,12 @@ namespace OnlineExam.Application.Profile
             CreateMap<MultipleChoiceQuestion,CreateMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion,GetMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, UpdateMultipleChoiceQuestionDTO>().ReverseMap();
+
+            //Multiple Choice Question Answer
+            CreateMap<MultipleChoiceQuestionAnswers, CreateMultipleChoiceQuestionAnswerDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestionAnswers, GetMultipleChoiceQuestionAnswerDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestionAnswers, UpdateMultipleChoiceQuestionAnswerDTO>().ReverseMap();
+
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();

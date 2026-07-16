@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Identity\Common\" />
+    <Folder Include="Features\TrueOrFalseQuestionAnswers\Handler\Commands\" />
+    <Folder Include="Features\TrueOrFalseQuestionAnswers\Handler\Queries\" />
+    <Folder Include="Features\TrueOrFalseQuestionAnswers\Request\Commands\" />
+    <Folder Include="Features\TrueOrFalseQuestionAnswers\Request\Queries\" />
     <Folder Include="Models\" />
   </ItemGroup>
 

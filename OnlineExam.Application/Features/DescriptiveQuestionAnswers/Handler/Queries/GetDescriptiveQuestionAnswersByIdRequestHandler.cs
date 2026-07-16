@@ -22,8 +22,11 @@ namespace OnlineExam.Application.Features.DescriptiveQuestionAnswers.Handler.Que
         }
         public async Task<GetDescriptiveQuestionAnswersDTO> Handle(GetDescriptiveQuestionAnswersByIdRequest request, CancellationToken cancellationToken)
         {
-            //throw new NotImplementedException();
             var answer = await _descriptiveQuestionAnswersRepository.GetAsync<GetDescriptiveQuestionAnswersDTO>(request.Id);
+            if(answer==null)
+            {
+                return null;
+            }
             var user =await _accountRepository.GetUserById(answer.StudentId);
             var result = new GetDescriptiveQuestionAnswersDTO()
             {

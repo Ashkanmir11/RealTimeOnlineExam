@@ -1,0 +1,21 @@
+﻿using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+using OnlineExam.Domain.Entities;
+using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+namespace OnlineExam.Application.DTOs.MultipleChoiceQuestionAnswers
+{
+    public class GetMultipleChoiceQuestionAnswerDTO : BaseDTO
+    {
+        public int? StudentChoice { get; set; }
+        [JsonIgnore]
+        public string? StudentId { get; set; }
+        public GetUserDTO? User { get; set; }
+        public GetMultipleChoiceQuestionDTO? MultipleChoiceQuestion { get; set; }
+    }
+}
