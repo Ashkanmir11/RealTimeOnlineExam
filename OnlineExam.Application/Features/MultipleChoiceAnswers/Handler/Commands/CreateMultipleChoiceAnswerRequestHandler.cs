@@ -19,13 +19,16 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         private readonly IAccountRepository _accountRepository;
         private readonly IMultipleChoiceAnswersRepository _MultipleChoiceAnswersRepository;
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
+        private readonly IAuthServices _authServices;
         public CreateMultipleChoiceAnswerRequestHandler(IAccountRepository accountRepository, 
             IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository,
-            IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository)
+            IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,
+            IAuthServices authServices)
         {
             _accountRepository = accountRepository;
             _MultipleChoiceAnswersRepository = MultipleChoiceAnswersRepository;
             _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
+            _authServices = authServices;
         }
 
         public async Task Handle(CreateMultipleChoiceAnswerRequest request, CancellationToken cancellationToken)
@@ -37,6 +40,8 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new ValidationException(errors);
             }
+           request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
+
             await _MultipleChoiceAnswersRepository.AddAsync<CreateMultipleChoiceAnswerDTO>(request.CreateMultipleChoiceQuestionAnswerDTO);
         }
     }

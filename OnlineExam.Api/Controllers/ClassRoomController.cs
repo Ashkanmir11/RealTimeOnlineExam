@@ -20,22 +20,14 @@ namespace OnlineExam.Api.Controllers
     public class ClassRoomController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthServices _authServices;
-        public ClassRoomController(IMediator mediator, IAuthServices authServices)
+        public ClassRoomController(IMediator mediator)
         {
             _mediator = mediator;
-            _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomDTO createClassRoomDTO)
         {
-            ////Un comment if need to get added entity
-            //createClassRoomDTO.TeacherId=await _authServices.GetCurrentUserId();
-            //var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
-            //return Ok(ResponseHelper<GetClassRoomDTO>.Success(result, 200));
-
-            createClassRoomDTO.TeacherId = await _authServices.GetCurrentUserId();
             var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
             return Created();
         }
@@ -66,8 +58,7 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
-            var currentUser = await _authServices.GetCurrentUserId();
-            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id, UserId = currentUser });
+            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id  });
             return NoContent();
         }
 
@@ -76,8 +67,7 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Put(UpdateClassRoomDTO updateClassRoomDto)
         {
-            var currentUserId = await _authServices.GetCurrentUserId();
-            await _mediator.Send(new UpdateClassRoomRequest() { UpdateClassRoomDTO = updateClassRoomDto, UserId = currentUserId });
+            await _mediator.Send(new UpdateClassRoomRequest() { UpdateClassRoomDTO = updateClassRoomDto });
             return Ok();
         }
 

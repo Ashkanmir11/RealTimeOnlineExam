@@ -11,6 +11,5 @@ namespace OnlineExam.Application.Features.ClassRoom.Request.Command
     public class UpdateClassRoomRequest : IRequest
     {
         public UpdateClassRoomDTO? UpdateClassRoomDTO { get; set; }
-        public required string UserId {  get; set; }
     }
 }

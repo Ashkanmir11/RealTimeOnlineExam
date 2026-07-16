@@ -16,21 +16,22 @@ using OnlineExam.Domain.Entities;
 
 namespace OnlineExam.Application.Features.Objection.Handler.Commands
 {
-    public class CreateObjectionRequestHandler : IRequestHandler<CreateObjectionReqeust, GetObjectionDTO>
+    public class CreateObjectionRequestHandler : IRequestHandler<CreateObjectionReqeust>
     {
         private readonly IObjectionRepository _objectionRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IExamRepository _examRepository;
-        private readonly IMapper _mapper;
-        public CreateObjectionRequestHandler(IObjectionRepository objectionRepository, IAccountRepository accountRepository, IExamRepository examRepository, IMapper mapper)
+        private readonly IAuthServices _authServices;
+        public CreateObjectionRequestHandler(IObjectionRepository objectionRepository, IAccountRepository accountRepository
+            , IExamRepository examRepository, IAuthServices authServices)
         {
             _objectionRepository = objectionRepository;
             _accountRepository = accountRepository;
             _examRepository = examRepository;
-            _mapper = mapper;
+            _authServices= authServices;
         }
 
-        public async Task<GetObjectionDTO> Handle(CreateObjectionReqeust request, CancellationToken cancellationToken)
+        public async Task Handle(CreateObjectionReqeust request, CancellationToken cancellationToken)
         {
             var validator = new CreateObjectionValidation(_accountRepository, _examRepository);
             var validatorResult = await validator.ValidateAsync(request.CreateObjectionDTO);
@@ -38,8 +39,8 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
             {
                 throw new ValidationException(validatorResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            var response = await _objectionRepository.AddAsync<CreateObjectionDTO>(request.CreateObjectionDTO);
-            return _mapper.Map<GetObjectionDTO>(response);
+            request.CreateObjectionDTO.StudentId = await _authServices.GetCurrentUserId();
+            await _objectionRepository.AddAsync<CreateObjectionDTO>(request.CreateObjectionDTO);
 
         }
     }

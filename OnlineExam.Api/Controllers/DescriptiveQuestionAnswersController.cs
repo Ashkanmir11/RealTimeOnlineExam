@@ -17,17 +17,14 @@ namespace OnlineExam.Api.Controllers
     public class DescriptiveAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthServices _authServices;
-        public DescriptiveAnswersController(IMediator mediator, IAuthServices authServices)
+        public DescriptiveAnswersController(IMediator mediator)
         {
             _mediator = mediator;
-            _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
         public async Task<IActionResult> Post(CreateDescriptiveAnswersDTO createDescriptiveAnswersDTO)
         {
-            createDescriptiveAnswersDTO.StudentId = await _authServices.GetCurrentUserId();
             await _mediator.Send(new CreateDescriptiveAnswersRequest() { CreateDescriptiveAnswersDTO = createDescriptiveAnswersDTO });
             return NoContent();
         }

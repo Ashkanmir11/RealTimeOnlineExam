@@ -10,6 +10,7 @@ using OnlineExam.Application.DTOs.Objection;
 using OnlineExam.Application.Features.Objection.Request.Commands;
 using OnlineExam.Application.Features.Objection.Request.Queries;
 using OnlineExam.Application.Response;
+using OnlineExam.Identity.Services;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -18,25 +19,15 @@ namespace OnlineExam.Api.Controllers
     public class ObjectionsController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthServices _authservices;
-        public ObjectionsController(IMediator mediator, IAuthServices authServices)
+        public ObjectionsController(IMediator mediator)
         {
             _mediator = mediator;
-            _authservices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
         public async Task<IActionResult> Post(CreateObjectionDTO createObjectionDTO)
-        {
-            var studentId = await _authservices.GetCurrentUserId();
-            createObjectionDTO.StudentId = studentId;
-
-
-            ////Use if need to get added data
-            //var response=await _mediator.Send(new CreateObjectionReqeust() { CreateObjectionDTO = createObjectionDTO });
-            //return Ok(ResponseHelper<GetObjectionDTO>.Success(response, 201));
-
-
+        { 
+          
             await _mediator.Send(new CreateObjectionReqeust() { CreateObjectionDTO = createObjectionDTO });
             return Created();
         }

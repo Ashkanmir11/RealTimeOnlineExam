@@ -22,14 +22,18 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
         private readonly IClassRoomRepository _classRoomRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
-        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAccountRepository accountRepository)
+        private readonly IAuthServices _authServices;
+
+        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAccountRepository accountRepository, IAuthServices authServices)
         {
             _classRoomRepository = classRoomRepository;
             _mapper = mapper;
             _accountRepository = accountRepository;
+            _authServices = authServices;
         }
         public async Task<GetClassRoomDTO> Handle(CreateClassRoomRequest request, CancellationToken cancellationToken)
         {
+
             var validator = new CreateClassRoomValidation(_accountRepository);
             var validationResult = await validator.ValidateAsync(request.CreateClassRoomDTO);
 
@@ -38,6 +42,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
                 var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new ValidationException(errors);
             }
+            request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserId();
 
             var result = await _classRoomRepository.AddAsync<CreateClassRoomDTO>(request.CreateClassRoomDTO);
             return _mapper.Map<GetClassRoomDTO>(result);

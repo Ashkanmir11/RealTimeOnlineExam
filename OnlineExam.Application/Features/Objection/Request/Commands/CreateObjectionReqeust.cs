@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Objection.Request.Commands
 {
-    public class CreateObjectionReqeust : IRequest<GetObjectionDTO>
+    public class CreateObjectionReqeust : IRequest
     {
         public required CreateObjectionDTO CreateObjectionDTO { get; set; }
     }

@@ -16,17 +16,14 @@ namespace OnlineExam.Api.Controllers
     public class MultipleChoiceAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthServices _authServices;
-        public MultipleChoiceAnswersController(IMediator mediator, IAuthServices authServices)
+        public MultipleChoiceAnswersController(IMediator mediator)
         {
             _mediator = mediator;
-            _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
         public async Task<IActionResult> Post(CreateMultipleChoiceAnswerDTO createMultipleChoiceQuestionAnswerDTO)
         {
-            createMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
             await _mediator.Send(new CreateMultipleChoiceAnswerRequest() { CreateMultipleChoiceQuestionAnswerDTO = createMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }

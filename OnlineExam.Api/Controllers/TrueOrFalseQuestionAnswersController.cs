@@ -16,27 +16,22 @@ namespace OnlineExam.Api.Controllers
     public class TrueOrFalseAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAuthServices _authServices;
-        public TrueOrFalseAnswersController(IMediator mediator, IAuthServices authServices)
+        public TrueOrFalseAnswersController(IMediator mediator)
         {
             _mediator = mediator;
-            _authServices = authServices;
         }
         [HttpPost("Post")]
         [Authorize]
         public async Task<IActionResult> Post(CreateTrueOrFalseAnswerDTO createTrueOrFalseQuestionAnswerDTO)
         {
-
-                createTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
-                await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
-                return NoContent();
-        
+            await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
+            return NoContent();
         }
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
         {
             var result = await _mediator.Send(new GetTrueOrFalseAnswerByIdRequest() { Id = Id });
-            if(result==null)
+            if (result == null)
             {
                 return NoContent();
             }
@@ -45,8 +40,8 @@ namespace OnlineExam.Api.Controllers
         [HttpGet("Get")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            var result = await _mediator.Send(new GetTrueOrFalseAnswerRequest() { PaginateRequest= paginateRequestDTO });
-            if (result.Data.Count==0)
+            var result = await _mediator.Send(new GetTrueOrFalseAnswerRequest() { PaginateRequest = paginateRequestDTO });
+            if (result.Data.Count == 0)
             {
                 return NoContent();
             }
