@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
+using FluentValidation;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class CreateTrueOrFalseAnswerRequestHandler : IRequestHandler<CreateTrueOrFalseAnswerRequest>
@@ -19,24 +20,25 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
         private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthServices _authServices;
+        private readonly IValidator<CreateTrueOrFalseAnswerDTO> _validator;
         public CreateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository
             , ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository
-            , IAccountRepository accountRepository,IAuthServices authServices)
+            , IAccountRepository accountRepository,IAuthServices authServices, IValidator<CreateTrueOrFalseAnswerDTO> validator)
         {
             _TrueOrFalseAnswersRepository = TrueOrFalseAnswersRepository;
             _trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
             _accountRepository = accountRepository;
             _authServices = authServices;
+            _validator = validator;
         }
 
         public async Task Handle(CreateTrueOrFalseAnswerRequest request, CancellationToken cancellationToken)
         {
-            var validator = new CreateTrueOrFalseAnswerValidation(_trueOrFalseQuestionRepository, _accountRepository);
-            var validationResult = await validator.ValidateAsync(request.CreateTrueOrFalseQuestionAnswerDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateTrueOrFalseQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
             }
             request.CreateTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
             await _TrueOrFalseAnswersRepository.AddAsync<CreateTrueOrFalseAnswerDTO>(request.CreateTrueOrFalseQuestionAnswerDTO);

@@ -11,6 +11,7 @@ using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
+using FluentValidation;
 
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 {
@@ -20,26 +21,27 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
         private readonly IDescriptiveQuestionRepository _descriptiveQuestionRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthServices _authServices;
+        private readonly IValidator<CreateDescriptiveAnswersDTO> _validator;
 
         public CreateDescriptiveAnswersRequestHandler(IDescriptiveAnswersRepository DescriptiveAnswersRepository,
             IDescriptiveQuestionRepository descriptiveQuestionRepository,
             IAccountRepository accountRepository,
-            IAuthServices authServices)
+            IAuthServices authServices, IValidator<CreateDescriptiveAnswersDTO> validator)
         {
             _accountRepository = accountRepository;
             _DescriptiveAnswersRepository = DescriptiveAnswersRepository;
             _descriptiveQuestionRepository = descriptiveQuestionRepository;
             _authServices = authServices;
+            _validator = validator;
         }
 
         public async Task Handle(CreateDescriptiveAnswersRequest request, CancellationToken cancellationToken)
         {
-            var validator = new CreateDescriptiveAnswersValidation(_accountRepository, _descriptiveQuestionRepository);
-            var validationResult = await validator.ValidateAsync(request.CreateDescriptiveAnswersDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateDescriptiveAnswersDTO);
             if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
             }
             request.CreateDescriptiveAnswersDTO.StudentId = await _authServices.GetCurrentUserId();
             await _DescriptiveAnswersRepository.AddAsync<CreateDescriptiveAnswersDTO>(request.CreateDescriptiveAnswersDTO);

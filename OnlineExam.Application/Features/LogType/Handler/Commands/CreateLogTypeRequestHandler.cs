@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.LogType;
 using OnlineExam.Application.DTOs.LogType.Validation;
@@ -16,17 +17,18 @@ namespace OnlineExam.Application.Features.LogType.Handler.Commands
     public class CreateLogTypeRequestHandler : IRequestHandler<CreateLogTypeRequest>
     {
         private readonly ILogTypeRepository _logTypeRepository;
-        public CreateLogTypeRequestHandler(ILogTypeRepository logTypeRepository)
+        private readonly IValidator<CreateLogTypeDTO> _validator;
+        public CreateLogTypeRequestHandler(ILogTypeRepository logTypeRepository, IValidator<CreateLogTypeDTO> validator)
         {
             _logTypeRepository = logTypeRepository;
+            _validator = validator;
         }
         public async Task Handle(CreateLogTypeRequest request, CancellationToken cancellationToken)
         {
-            var validation = new CreateLogTypeValidation();
-            var validationResult = await validation.ValidateAsync(request.CreateLogTypeDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateLogTypeDTO);
             if(validationResult.IsValid==false)
             {
-                throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
            await _logTypeRepository.AddAsync<CreateLogTypeDTO>(request.CreateLogTypeDTO);

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
+using FluentValidation;
 
 namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
 {
@@ -20,25 +21,26 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         private readonly IMultipleChoiceAnswersRepository _MultipleChoiceAnswersRepository;
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
         private readonly IAuthServices _authServices;
+        private readonly IValidator<CreateMultipleChoiceAnswerDTO> _validator;
         public CreateMultipleChoiceAnswerRequestHandler(IAccountRepository accountRepository, 
             IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository,
             IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,
-            IAuthServices authServices)
+            IAuthServices authServices, IValidator<CreateMultipleChoiceAnswerDTO> validator)
         {
             _accountRepository = accountRepository;
             _MultipleChoiceAnswersRepository = MultipleChoiceAnswersRepository;
             _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
             _authServices = authServices;
+            _validator = validator;
         }
 
         public async Task Handle(CreateMultipleChoiceAnswerRequest request, CancellationToken cancellationToken)
         {
-            var validator = new CreateMultipleChoiceAnswerValidation(_accountRepository,_multipleChoiceQuestionRepository);
-            var validationResult = await validator.ValidateAsync(request.CreateMultipleChoiceQuestionAnswerDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateMultipleChoiceQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
             }
            request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
 

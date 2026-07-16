@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+using FluentValidation;
 
 namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Commands
 {
@@ -18,19 +19,21 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
     {
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
         private readonly IExamRepository _examRepository;
-        public CreateMultipleChoiceQuestionRequestHandler(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, IExamRepository examRepository)
+        private readonly IValidator<CreateMultipleChoiceQuestionDTO> _validator;
+        public CreateMultipleChoiceQuestionRequestHandler(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, IExamRepository examRepository,
+            IValidator<CreateMultipleChoiceQuestionDTO> validator)
         {
             _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
             _examRepository = examRepository;
+            _validator = validator;
         }
         public async Task Handle(CreateMultipleChoiceQuestionRequest request, CancellationToken cancellationToken)
         {
-            var validtor = new CreateMultipleChoiceQuestionValidation(_examRepository);
-            var validationResult = await validtor.ValidateAsync(request.CreateMultipleChoiceQuestionDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateMultipleChoiceQuestionDTO);
             if (validationResult.IsValid == false)
             {
                 var validtionErrors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(validtionErrors);
+                throw new Application.Exceptions.ValidationException(validtionErrors);
             }
 
             await _multipleChoiceQuestionRepository.AddAsync<CreateMultipleChoiceQuestionDTO>(request.CreateMultipleChoiceQuestionDTO);

@@ -13,6 +13,7 @@ using OnlineExam.Application.Helper;
 using OnlineExam.Application.DTOs.Objection;
 using AutoMapper;
 using OnlineExam.Domain.Entities;
+using FluentValidation;
 
 namespace OnlineExam.Application.Features.Objection.Handler.Commands
 {
@@ -22,22 +23,23 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
         private readonly IAccountRepository _accountRepository;
         private readonly IExamRepository _examRepository;
         private readonly IAuthServices _authServices;
+        private readonly IValidator<CreateObjectionDTO> _validator;
         public CreateObjectionRequestHandler(IObjectionRepository objectionRepository, IAccountRepository accountRepository
-            , IExamRepository examRepository, IAuthServices authServices)
+            , IExamRepository examRepository, IAuthServices authServices, IValidator<CreateObjectionDTO> validator)
         {
             _objectionRepository = objectionRepository;
             _accountRepository = accountRepository;
             _examRepository = examRepository;
             _authServices= authServices;
+            _validator = validator;
         }
 
         public async Task Handle(CreateObjectionReqeust request, CancellationToken cancellationToken)
         {
-            var validator = new CreateObjectionValidation(_accountRepository, _examRepository);
-            var validatorResult = await validator.ValidateAsync(request.CreateObjectionDTO);
+            var validatorResult = await _validator.ValidateAsync(request.CreateObjectionDTO);
             if (validatorResult.IsValid == false)
             {
-                throw new ValidationException(validatorResult.Errors.Select(e => e.ErrorMessage).ToList());
+                throw new Application.Exceptions.ValidationException(validatorResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
             request.CreateObjectionDTO.StudentId = await _authServices.GetCurrentUserId();
             await _objectionRepository.AddAsync<CreateObjectionDTO>(request.CreateObjectionDTO);

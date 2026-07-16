@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using MediatR.Pipeline;
 using OnlineExam.Application.Contracts.Identity;
@@ -23,24 +24,26 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
         private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
         private readonly IAuthServices _authServices;
+        private readonly IValidator<CreateClassRoomDTO> _validator;
 
-        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAccountRepository accountRepository, IAuthServices authServices)
+        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, 
+            IAccountRepository accountRepository, IAuthServices authServices,IValidator<CreateClassRoomDTO> validator)
         {
             _classRoomRepository = classRoomRepository;
             _mapper = mapper;
             _accountRepository = accountRepository;
             _authServices = authServices;
+            _validator = validator;
         }
         public async Task<GetClassRoomDTO> Handle(CreateClassRoomRequest request, CancellationToken cancellationToken)
         {
 
-            var validator = new CreateClassRoomValidation(_accountRepository);
-            var validationResult = await validator.ValidateAsync(request.CreateClassRoomDTO);
+            var validationResult = await _validator.ValidateAsync(request.CreateClassRoomDTO);
 
             if (validationResult.IsValid == false)
             {
                 var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
             }
             request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserId();
 
