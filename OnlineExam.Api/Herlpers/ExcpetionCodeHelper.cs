@@ -23,7 +23,7 @@ namespace OnlineExam.Api.Herlpers
                     }
                 case ValidationException:
                     {
-                        return 403;
+                        return 400;
                     }
                 default:
                     {
