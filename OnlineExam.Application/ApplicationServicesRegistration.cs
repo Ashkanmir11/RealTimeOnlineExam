@@ -8,11 +8,11 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
-
+using FluentValidation;
 using System.Linq;
 using System;
 using OnlineExam.Application.Features.ClassRoom.Request.Command;
-
+using OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation;
 namespace OnlineExam.Application
 {
     public static class ApplicationServicesRegistration
@@ -27,6 +27,7 @@ namespace OnlineExam.Application
                 //cfg.RegisterServicesFromAssembly(typeof(AssemblyReference).Assembly);
                 cfg.RegisterServicesFromAssembly(typeof(CreateClassRoomRequest).Assembly);
             });
+            services.AddValidatorsFromAssemblyContaining<CreateTrueOrFalseAnswerValidation>();
         }
 
     }
