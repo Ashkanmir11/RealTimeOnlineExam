@@ -27,10 +27,6 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             {
                 throw new BadRequestException($"آیدی {request.Id} یافت نشد.");
             }
-            if (classRoom.TeacherId != request.UserId)
-            {
-                throw new UnauthorizedAccessException($"شما دسترسی این عمل را ندارید.");
-            }
             await _classRoomRepository.DeleteAsync(classRoom);
             return Unit.Value;
         }

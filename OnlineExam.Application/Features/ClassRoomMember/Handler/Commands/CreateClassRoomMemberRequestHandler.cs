@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using MediatR;
+﻿using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoomMember.Validation;
@@ -10,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
 {
     public class CreateClassRoomMemberRequestHandler : IRequestHandler<CreateClassRoomMemberRequest>
@@ -29,7 +28,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             var validatioResult = await validator.ValidateAsync(request.CreateClassRoomMemberDTO);
             if(validatioResult.IsValid==false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validatioResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validatioResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
            await _classRoomMembersRepository.AddMembersAsync(request.CreateClassRoomMemberDTO);

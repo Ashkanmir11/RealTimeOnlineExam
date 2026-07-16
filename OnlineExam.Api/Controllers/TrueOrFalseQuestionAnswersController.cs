@@ -26,16 +26,11 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Post(CreateTrueOrFalseAnswerDTO createTrueOrFalseQuestionAnswerDTO)
         {
-            try
-            {
+
                 createTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
                 await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
                 return NoContent();
-            }
-            catch(Exception ex)
-            {
-                throw;
-            }
+        
         }
         [HttpGet("Get/{Id}")]
         public async Task<IActionResult> Get(int Id)
@@ -45,7 +40,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetTrueOrFalseAnswerDTO>.Success(result, 200));
+            return Ok(result);
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
@@ -55,7 +50,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetTrueOrFalseAnswerDTO>>.Success(result, 200));
+            return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)

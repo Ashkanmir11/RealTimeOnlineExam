@@ -29,7 +29,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.CreateExamDTO);
             if (validationResult.IsValid == false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
             await _examRepository.AddAsync<CreateExamDTO>(request.CreateExamDTO);
         }

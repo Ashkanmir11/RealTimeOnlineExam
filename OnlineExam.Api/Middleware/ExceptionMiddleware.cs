@@ -1,5 +1,6 @@
 ﻿using OnlineExam.Application.Response;
 using OnlineExam.Api.Herlpers;
+using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Api.Middleware
 {
     public class ExceptionMiddleware
@@ -19,10 +20,18 @@ namespace OnlineExam.Api.Middleware
             {
                 httpContext.Response.StatusCode = ExceptionCodeHelper.ExceptionMap(ex);
 
-                await httpContext.Response.WriteAsJsonAsync(new CommonResponse<object>
+                if (ex is ValidationException validationException)
                 {
-                    IsSuccess = false,
-                    StatusCode = httpContext.Response.StatusCode,
+                    await httpContext.Response.WriteAsJsonAsync(new ErrorResponse
+                    {
+                        Errors = validationException.Errors
+                    });
+
+                    return;
+                }
+
+                await httpContext.Response.WriteAsJsonAsync(new ErrorResponse
+                {
                     Errors = new List<string> { ex.Message }
                 });
             }

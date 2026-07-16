@@ -32,16 +32,11 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             {
                 throw new BadRequestException($"آیدی {request.UpdateClassRoomDTO.Id} یافت نشد.");
             }
-            if (classRoom.TeacherId != request.UserId)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             var validator = new UpdateClassRoomValidation(_classRoomRepository);
             var validationResult = await validator.ValidateAsync(request.UpdateClassRoomDTO);
             if (validationResult.IsValid == false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }          
             await _classRoomRepository.UpdateAsync(request.UpdateClassRoomDTO.Id, request.UpdateClassRoomDTO);
         }

@@ -36,7 +36,7 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
             var validatorResult = await validator.ValidateAsync(request.CreateObjectionDTO);
             if (validatorResult.IsValid == false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validatorResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validatorResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
             var response = await _objectionRepository.AddAsync<CreateObjectionDTO>(request.CreateObjectionDTO);
             return _mapper.Map<GetObjectionDTO>(response);

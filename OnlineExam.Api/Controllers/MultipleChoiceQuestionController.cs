@@ -34,7 +34,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetMultipleChoiceQuestionDTO>.Success(result, 200));
+            return Ok(result);
         }
 
         [HttpGet("Get")]
@@ -45,7 +45,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetMultipleChoiceQuestionDTO>>.Success(result, 200));
+            return Ok(result);
         }
 
         [HttpDelete("Delete/{Id}")]

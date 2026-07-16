@@ -26,7 +26,7 @@ namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.UpdateDescriptiveQuestionDTO);
             if (validationResult.IsValid == false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
             await _descriptiveQuestionRepository.UpdateAsync(request.UpdateDescriptiveQuestionDTO.Id, request.UpdateDescriptiveQuestionDTO);
         }

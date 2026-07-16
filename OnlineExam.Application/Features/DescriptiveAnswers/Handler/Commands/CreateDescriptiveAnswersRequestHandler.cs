@@ -34,8 +34,8 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.CreateDescriptiveAnswersDTO);
             if (validationResult.IsValid == false)
             {
-                string massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new ValidationException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _DescriptiveAnswersRepository.AddAsync<CreateDescriptiveAnswersDTO>(request.CreateDescriptiveAnswersDTO);
         }

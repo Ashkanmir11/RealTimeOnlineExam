@@ -28,13 +28,8 @@ namespace OnlineExam.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
-
-            var response = await _authServices.RegisterAsync(registerDTO);
-            var result = ResponseHelper<GetUserDTO>.Success(response, 201);
-            return StatusCode(201, result);
-
-
-
+            await _authServices.RegisterAsync(registerDTO);
+            return Created();
         }
         [HttpPost("auth/Login")]
         [AllowAnonymous]
@@ -43,7 +38,7 @@ namespace OnlineExam.Api.Controllers
             var loginReslt = await _authServices.LoginAsync(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
             _cookieHelper.SetRefreshToken(loginReslt.RefreshToken);
-            return StatusCode(200, ResponseHelper<SuccessLoginResultDTO>.Success(loginReslt, 200));
+            return Ok(loginReslt);
 
         }
 
@@ -55,7 +50,7 @@ namespace OnlineExam.Api.Controllers
             var response = await _authServices.RefreshTokenAsync(refreshToken);
             _cookieHelper.SetAccessToken(response.AccessToken);
             _cookieHelper.SetRefreshToken(response.RefreshToken);
-            return Ok();
+            return NoContent();
         }
         [HttpGet("Account/GetAll")]
         [Authorize(Roles = "Admin")]
@@ -67,7 +62,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<UserFullInfoDTO>>.Success(response, 200));
+            return Ok(response);
 
         }
 
@@ -77,7 +72,7 @@ namespace OnlineExam.Api.Controllers
         {
             _cookieHelper.DeleteCookie(Response, "accessToken");
             _cookieHelper.DeleteCookie(Response, "refreshToken");
-            return StatusCode(204, ResponseHelper<bool>.Success(true, 204));
+            return NoContent();
         }
 
     }

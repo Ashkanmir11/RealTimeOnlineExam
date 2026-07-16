@@ -25,8 +25,8 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
             var validationResult =await validator.ValidateAsync(request.UpdateTrueOfFalseQuestionDTO);
             if(validationResult.IsValid==false)
             {
-                string massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new ValidationException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _trueOrFalseQuestionRepository.UpdateAsync(request.UpdateTrueOfFalseQuestionDTO.Id, request.UpdateTrueOfFalseQuestionDTO);
         }

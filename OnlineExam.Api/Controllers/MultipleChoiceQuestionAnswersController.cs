@@ -38,7 +38,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetMultipleChoiceAnswerDTO>.Success(result, 200));
+            return Ok(result);
         }
         [HttpGet("Get")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
@@ -48,7 +48,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetMultipleChoiceAnswerDTO>>.Success(result, 200));
+            return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)

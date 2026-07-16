@@ -36,7 +36,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetExamDTO>.Success(result, 200));
+            return Ok(result);
         }
         [HttpGet("Get")]
         [Authorize(Roles = "Admin")]
@@ -47,7 +47,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetExamDTO>>.Success(pagedResult, 200));
+            return Ok(pagedResult);
 
         }
 

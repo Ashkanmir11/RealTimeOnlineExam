@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+﻿using OnlineExam.Application.Exceptions;
 using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
@@ -30,7 +30,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             var validatResult = await validator.ValidateAsync(request.UpdateClassRoomMemberDTO);
             if (validatResult.IsValid == false)
             {
-                throw new ValidationException(ListToStringHelper.CreateString(validatResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new ValidationException(validatResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
             await _classRoomMembersRepository.UpdateClassRoomAsync(request.UpdateClassRoomMemberDTO);

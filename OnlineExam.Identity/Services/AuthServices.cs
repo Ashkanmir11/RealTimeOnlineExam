@@ -90,7 +90,7 @@ namespace OnlineExam.Identity.Services
 
             if (valid.IsValid == false)
             {
-                var errors = ListToStringHelper.CreateString(valid.Errors.Select(e => e.ErrorMessage).ToList());
+                var errors = valid.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new ValidationException(errors);
 
             }

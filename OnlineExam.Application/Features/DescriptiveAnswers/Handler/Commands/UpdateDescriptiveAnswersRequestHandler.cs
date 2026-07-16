@@ -27,8 +27,8 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.UpdateDescriptiveAnswersDTO);
             if(validationResult.IsValid==false)
             {
-                var massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new BadRequestException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _DescriptiveAnswersRepository.UpdateAsync(request.UpdateDescriptiveAnswersDTO.Id, request.UpdateDescriptiveAnswersDTO);
         }

@@ -37,7 +37,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetLogTypeDTO>>.Success(result, 200));
+            return Ok(result);
         }
 
         [HttpGet("Get/{Id}")]
@@ -49,7 +49,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetLogTypeDTO>.Success(result, 200));
+            return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
         [Authorize(Roles = "Admin")]

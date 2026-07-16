@@ -28,8 +28,8 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.CreateTrueOrFalseQuestionDTO);
             if(validationResult.IsValid==false)
             {
-                string massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new ValidationException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _trueOrFalseQuestionRepository.AddAsync(request.CreateTrueOrFalseQuestionDTO);
 

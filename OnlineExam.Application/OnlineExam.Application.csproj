@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="DTOs\Identity\Common\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

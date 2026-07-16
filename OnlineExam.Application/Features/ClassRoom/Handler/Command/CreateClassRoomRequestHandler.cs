@@ -35,7 +35,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
 
             if (validationResult.IsValid == false)
             {
-                var errors = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new ValidationException(errors);
             }
 

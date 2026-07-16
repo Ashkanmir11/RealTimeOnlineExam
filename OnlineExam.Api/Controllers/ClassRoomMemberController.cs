@@ -36,7 +36,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetClassRoomMemberDTO>.Success(result, 200));
+            return Ok(result);
         }
 
         [HttpGet("Get")]
@@ -48,7 +48,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<List<GetClassRoomMemberDTO>>.Success(result, 200));
+            return Ok(result);
         }
 
         [HttpDelete("Delete/{Id}")]

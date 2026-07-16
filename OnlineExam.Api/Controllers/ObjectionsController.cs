@@ -49,7 +49,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<PaginateResponse<GetObjectionDTO>>.Success(response, 200));
+            return Ok(response);
         }
         [HttpGet("Get/{Id}")]
         [Authorize]
@@ -61,7 +61,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(ResponseHelper<GetObjectionDTO>.Success(response, 200));
+            return Ok(response);
 
         }
         [HttpDelete("Delete/{Id}")]

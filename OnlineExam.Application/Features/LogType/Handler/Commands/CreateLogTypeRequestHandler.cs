@@ -26,7 +26,7 @@ namespace OnlineExam.Application.Features.LogType.Handler.Commands
             var validationResult = await validation.ValidateAsync(request.CreateLogTypeDTO);
             if(validationResult.IsValid==false)
             {
-                throw (new ValidationException(ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList())));
+                throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
            await _logTypeRepository.AddAsync<CreateLogTypeDTO>(request.CreateLogTypeDTO);

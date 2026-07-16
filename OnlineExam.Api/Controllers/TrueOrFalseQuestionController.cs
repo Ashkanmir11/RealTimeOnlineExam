@@ -36,7 +36,7 @@ namespace OnlineExam.Api.Controllers
                 return NoContent();
             }
 
-            return Ok(ResponseHelper<GetTrueOrFalseQuestionDTO>.Success(result,200));
+            return Ok(result);
         }
 
         [HttpGet("Get")]
@@ -48,7 +48,7 @@ namespace OnlineExam.Api.Controllers
                 return NoContent();
             }
 
-            return Ok(ResponseHelper<PaginateResponse<GetTrueOrFalseQuestionDTO>>.Success(result, 200));
+            return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
         public async Task<IActionResult> Delete(int Id)

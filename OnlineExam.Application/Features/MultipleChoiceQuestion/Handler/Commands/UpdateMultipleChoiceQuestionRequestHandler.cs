@@ -28,7 +28,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
             if(validationResult.IsValid==false)
             {
                 var validtionErrors=validationResult.Errors.Select(e=>e.ErrorMessage).ToList();
-                throw new ValidationException(ListToStringHelper.CreateString(validtionErrors));
+                throw new ValidationException(validtionErrors);
             }
 
             await _multipleChoiceQuestionRepository.UpdateAsync(request.UpdateMultipleChoiceQuestionDTO.Id, request.UpdateMultipleChoiceQuestionDTO);

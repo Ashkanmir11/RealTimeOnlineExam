@@ -34,8 +34,8 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.CreateMultipleChoiceQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
-                string massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new ValidationException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _MultipleChoiceAnswersRepository.AddAsync<CreateMultipleChoiceAnswerDTO>(request.CreateMultipleChoiceQuestionAnswerDTO);
         }

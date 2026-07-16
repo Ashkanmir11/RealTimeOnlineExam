@@ -26,8 +26,8 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var validationResult = await validator.ValidateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
-                var massage = ListToStringHelper.CreateString(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-                throw new ValidationException(massage);
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new ValidationException(errors);
             }
             await _TrueOrFalseAnswersRepository.UpdateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id, request.UpdateTrueOrFalseQuestionAnswerDTO);
         }
