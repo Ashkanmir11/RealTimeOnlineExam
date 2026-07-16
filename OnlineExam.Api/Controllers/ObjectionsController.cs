@@ -32,7 +32,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
         [HttpGet("Get")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var response = await _mediator.Send(new GetObjectionRequest() { PaginateRequest = paginateRequestDTO });
@@ -43,7 +43,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(response);
         }
         [HttpGet("Get/{Id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
 

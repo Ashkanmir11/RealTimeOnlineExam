@@ -6,6 +6,7 @@ using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
 using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Queries;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -20,6 +21,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPost("Post")]
+        [Authorize]
         public async Task<IActionResult> Post(CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO)
         {
             await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = createMultipleChoiceQuestionDTO });
@@ -27,6 +29,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("Get/{Id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
             var result = await _mediator.Send(new GetMultipleChoiceQuestionByIdRequest() { Id = Id });
@@ -38,6 +41,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("Get")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetMultipleChoiceQuestionRequest() { paginateRequestDTO = paginateRequestDTO });
@@ -49,13 +53,14 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpDelete("Delete/{Id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
             await _mediator.Send(new DeleteMultipleChoiceQuestionRequest() { Id = Id });
             return NoContent();
         }
         [HttpPut("Put")]
-
+        [Authorize]
         public async Task<IActionResult> Put(UpdateMultipleChoiceQuestionDTO updateMultipleChoiceQuestionDTO)
         {
             await _mediator.Send(new UpdateMultipleChoiceQuestionRequest() { UpdateMultipleChoiceQuestionDTO = updateMultipleChoiceQuestionDTO });

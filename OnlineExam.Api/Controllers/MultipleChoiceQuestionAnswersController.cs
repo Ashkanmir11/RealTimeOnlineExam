@@ -28,6 +28,7 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
         }
         [HttpGet("Get/{Id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
             var result = await _mediator.Send(new GetMultipleChoiceAnswerByIdRequest() { Id = Id });
@@ -38,6 +39,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
         [HttpGet("Get")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetMultipleChoiceAnswerRequest() { PaginateRequest = paginateRequestDTO });
@@ -48,6 +50,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
             await _mediator.Send(new DeleteMultipleChoiceAnswerRequest() { Id = Id });
@@ -55,6 +58,7 @@ namespace OnlineExam.Api.Controllers
 
         }
         [HttpPut("Put")]
+        [Authorize]
         public async Task<IActionResult> Put(UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
         {
             await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() { UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });

@@ -45,7 +45,7 @@ namespace OnlineExam.Identity.SeedData
             {
                 new OnlineExamUser()
                 {
-                UserName = "AshkanTest",
+                UserName = "09908752252",
                 Email = "AshkanTest@gmail.com",
                 FirstName = "Ashkan",
                 LastName = "Mr",
@@ -57,26 +57,26 @@ namespace OnlineExam.Identity.SeedData
                 },
                 new OnlineExamUser()
                 {
-                UserName = "RezaTest",
+                UserName = "09908752253",
                 Email = "RezaTest@gmail.com",
                 FirstName = "Reza",
                 LastName = "test",
                 NationalCode = 1111111111,
                 EmailConfirmed = true,
-                PhoneNumber = "09999999999",
+                PhoneNumber = "09908752253",
                 PhoneNumberConfirmed = true,
                 PasswordHash="Rezapass12!",
                
                 },
                  new OnlineExamUser()
                 {
-                UserName = "NaderTest",
+                UserName = "09908752254",
                 Email = "NaderTest@gmail.com",
                 FirstName = "Nader",
                 LastName = "test",
                 NationalCode = 1111111111,
                 EmailConfirmed = true,
-                PhoneNumber = "09999999999",
+                PhoneNumber = "09908752254",
                 PhoneNumberConfirmed = true,
                 PasswordHash="Naderpass12!",
 

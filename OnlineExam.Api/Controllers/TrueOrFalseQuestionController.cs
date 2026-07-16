@@ -8,6 +8,7 @@ using OnlineExam.Application.Features.TrueOrFalseQuestion;
 using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
 using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Queries;
 using OnlineExam.Api.Herlpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineExam.Api.Controllers
 {
@@ -21,6 +22,7 @@ namespace OnlineExam.Api.Controllers
             _mediator = mediator;
         }
         [HttpPost("Post")]
+        [Authorize]
         public async Task<IActionResult> Post(CreateTrueOrFalseQuestionDTO createTrueOrFalseQuestionDTO)
         {
             await _mediator.Send(new CreateTrueOrFalseQuestionRequest() { CreateTrueOrFalseQuestionDTO = createTrueOrFalseQuestionDTO });
@@ -28,6 +30,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("Get/{Id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
             var result = await _mediator.Send(new GetTrueOrFalseQuestionByIdRequest() { Id = Id });
@@ -40,6 +43,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("Get")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetTrueOrFalseQuestionRequest() { PaginateRequest= paginateRequestDTO });
@@ -51,6 +55,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
             await _mediator.Send(new DeleteTrueOrFalseQuestionRequest() { Id = Id });   
@@ -58,6 +63,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPut("Put")]
+        [Authorize]
         public async Task<IActionResult> Put(UpdateTrueOfFalseQuestionDTO updateTrueOfFalseQuestionDTO)
         {
             await _mediator.Send(new UpdateTrueOrFalseQuestionRequest() { UpdateTrueOfFalseQuestionDTO = updateTrueOfFalseQuestionDTO });

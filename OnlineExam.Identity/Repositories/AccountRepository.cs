@@ -73,6 +73,11 @@ namespace OnlineExam.Identity.Repositories
 
         }
 
+        public async Task<bool> PhoneExist(string Phone)
+        {
+            return await _context.Users.AnyAsync(e => e.PhoneNumber == Phone);
+        }
+
         public async Task<bool> UserExistAsync(string UserId)
         {
             return await _context.Users.AnyAsync(e => e.Id == UserId);

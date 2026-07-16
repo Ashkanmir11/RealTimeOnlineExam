@@ -28,7 +28,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
         [HttpGet("Get/{Id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
             var result = await _mediator.Send(new GetExamByIdRequest() { Id = Id });

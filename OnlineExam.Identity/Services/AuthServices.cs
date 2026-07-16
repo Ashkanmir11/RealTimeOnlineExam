@@ -30,17 +30,20 @@ namespace OnlineExam.Identity.Services
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly TokenServices _tokenServices;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IValidator<LoginDTO> _validator;
+        private readonly IValidator<LoginDTO> _loginValidator;
+        private readonly IValidator<RegisterDTO> _registerValidation;
         private readonly OnlineExamIdentityDbContext _context;
         public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices
-            , IHttpContextAccessor httpContextAccessor,IValidator<LoginDTO> validator, OnlineExamIdentityDbContext context)
+            , IHttpContextAccessor httpContextAccessor,IValidator<LoginDTO> loginValidator, OnlineExamIdentityDbContext context
+            , IValidator<RegisterDTO> registerValidator)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _tokenServices = tokenServices;
             _httpContextAccessor = httpContextAccessor;
-            _validator = validator;
             _context = context;
+            _loginValidator=loginValidator;
+            _registerValidation = registerValidator;
         }
 
 
@@ -50,13 +53,13 @@ namespace OnlineExam.Identity.Services
         }
         public async Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginDto)
         {
-            var validationResult = await _validator.ValidateAsync(loginDto);
+            var validationResult = await _loginValidator.ValidateAsync(loginDto);
             if (validationResult.IsValid == false)
             {
                 throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e=>e.ErrorMessage).ToList());
             }
             //var role = await _roleManager.FindByNameAsync("User");
-            var user = await _context.Users.Where(e=>e.PhoneNumber==loginDto.PhoneNumber).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(e=>e.PhoneNumber==loginDto.PhoneNumber).SingleOrDefaultAsync();
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if (isPasswordValid)
             {
@@ -90,8 +93,7 @@ namespace OnlineExam.Identity.Services
 
         public async Task<GetUserDTO> RegisterAsync(RegisterDTO registerDTO)
         {
-            var validation = new RegisterDtoValidation();
-            var valid = await validation.ValidateAsync(registerDTO, CancellationToken.None);
+            var valid = await _registerValidation.ValidateAsync(registerDTO, CancellationToken.None);
 
             if (valid.IsValid == false)
             {
@@ -99,7 +101,7 @@ namespace OnlineExam.Identity.Services
                 throw new Application.Exceptions.ValidationException(errors);
 
             }
-
+            
             var identityUser = new OnlineExamUser()
             {
                 NationalCode = registerDTO.NationCode,
@@ -108,13 +110,13 @@ namespace OnlineExam.Identity.Services
                 PhoneNumber = registerDTO.PhoneNumber,
                 FirstName = registerDTO.FirstName,
                 LastName = registerDTO.LastName,
-                UserName = registerDTO.UserName,
+                UserName = registerDTO.PhoneNumber,
                 PhoneNumberConfirmed = true,
             };
             var result = await _userManager.CreateAsync(identityUser, registerDTO.Password);
             if (result.Succeeded)
             {
-                var response = await _userManager.FindByEmailAsync(registerDTO.Email);
+                var response = await _userManager.FindByNameAsync(registerDTO.UserName);
                 var role = await _userManager.AddToRoleAsync(response, "User");
                 return new GetUserDTO()
                 {

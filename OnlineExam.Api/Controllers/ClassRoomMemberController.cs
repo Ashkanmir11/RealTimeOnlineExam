@@ -22,6 +22,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPost("Post")]
+        [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomMemberDTO createClassRoomMemberDTO)
         {
             await _mediator.Send(new CreateClassRoomMemberRequest() { CreateClassRoomMemberDTO = createClassRoomMemberDTO });
@@ -29,6 +30,7 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("Get/{ClassId}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int ClassId)
         {
             var result = await _mediator.Send(new GetClassRoomMemberByClassIdRequest() { ClassRoomId = ClassId });
@@ -52,11 +54,13 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpDelete("Delete/{Id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
             throw new NotImplementedException();
         }
         [HttpPut("Put")]
+        [Authorize]
         public async Task<IActionResult> Put(UpdateClassRoomMemberDTO updateClassRoomMemberDTO)
         {
             await _mediator.Send(new UpdateClassRoomMemberRequest() { UpdateClassRoomMemberDTO= updateClassRoomMemberDTO });

@@ -37,6 +37,7 @@ namespace OnlineExam.Identity
                 e.Password.RequireUppercase = true;
                 e.Password.RequireDigit = true;
                 e.Password.RequireLowercase = true;
+                
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddDefaultTokenProviders().AddErrorDescriber<ErrorToFarsi>(); ;
             services.AddScoped<IAuthServices, AuthServices>();
             services.AddScoped<TokenServices>();
