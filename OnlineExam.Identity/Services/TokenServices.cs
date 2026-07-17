@@ -40,7 +40,7 @@ namespace OnlineExam.Identity.Services
             }
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName,onlineExamUser.UserName),
+                new Claim(CustomClaimTypes.PhoneNumber,onlineExamUser.PhoneNumber),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,onlineExamUser.Email),
                 new Claim(CustomClaimTypes.UserId,onlineExamUser.Id),
