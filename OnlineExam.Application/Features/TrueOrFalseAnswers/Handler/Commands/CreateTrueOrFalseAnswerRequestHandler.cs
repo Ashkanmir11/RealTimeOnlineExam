@@ -40,7 +40,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            request.CreateTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
+            request.CreateTrueOrFalseQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
             await _TrueOrFalseAnswersRepository.AddAsync<CreateTrueOrFalseAnswerDTO>(request.CreateTrueOrFalseQuestionAnswerDTO);
         }
     }

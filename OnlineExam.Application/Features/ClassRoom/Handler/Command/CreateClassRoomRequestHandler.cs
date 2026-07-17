@@ -45,7 +45,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
                 var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserId();
+            request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserIdAsync();
 
             var result = await _classRoomRepository.AddAsync<CreateClassRoomDTO>(request.CreateClassRoomDTO);
             return _mapper.Map<GetClassRoomDTO>(result);

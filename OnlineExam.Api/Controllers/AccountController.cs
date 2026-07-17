@@ -68,8 +68,10 @@ namespace OnlineExam.Api.Controllers
 
         [HttpPost("auth/Logout")]
         [Authorize]
-        public IActionResult Logout()
+        public async Task <IActionResult> Logout()
         {
+            var refreshToken = _cookieHelper.GetCookieValue("refreshToken");
+            await _authServices.LogoutAsync(refreshToken);
             _cookieHelper.DeleteCookie(Response, "accessToken");
             _cookieHelper.DeleteCookie(Response, "refreshToken");
             return NoContent();

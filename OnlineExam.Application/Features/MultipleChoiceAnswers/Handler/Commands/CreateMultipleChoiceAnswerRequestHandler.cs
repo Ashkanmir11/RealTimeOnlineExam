@@ -42,7 +42,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-           request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserId();
+           request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
 
             await _MultipleChoiceAnswersRepository.AddAsync<CreateMultipleChoiceAnswerDTO>(request.CreateMultipleChoiceQuestionAnswerDTO);
         }

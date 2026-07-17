@@ -43,7 +43,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            request.CreateDescriptiveAnswersDTO.StudentId = await _authServices.GetCurrentUserId();
+            request.CreateDescriptiveAnswersDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
             await _DescriptiveAnswersRepository.AddAsync<CreateDescriptiveAnswersDTO>(request.CreateDescriptiveAnswersDTO);
         }
     }

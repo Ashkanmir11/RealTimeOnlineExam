@@ -15,8 +15,8 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<PaginateResponse<GetUserDTO>> GetAllAsync(PaginateRequestDTO paginateRequestDTO);
         Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginRequest);
         Task<GetTokens> RefreshTokenAsync(string refreshToken);
-
-        Task<string> GetCurrentUserId();
+        Task LogoutAsync(string refreshToken);
+        Task<string> GetCurrentUserIdAsync();
 
     }
 }

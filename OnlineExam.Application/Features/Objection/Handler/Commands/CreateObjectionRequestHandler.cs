@@ -41,7 +41,7 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
             {
                 throw new Application.Exceptions.ValidationException(validatorResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            request.CreateObjectionDTO.StudentId = await _authServices.GetCurrentUserId();
+            request.CreateObjectionDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
             await _objectionRepository.AddAsync<CreateObjectionDTO>(request.CreateObjectionDTO);
 
         }

@@ -139,10 +139,15 @@ namespace OnlineExam.Identity.Services
             return await _tokenServices.RefreshTokenAsync(refreshToken);
         }
 
-        public async Task<string> GetCurrentUserId()
+        public async Task<string> GetCurrentUserIdAsync()
         {
             return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.UserId)?.Value;
 
+        }
+
+        public async Task LogoutAsync(string refreshToken)
+        {
+            await _tokenServices.DeleteRefreshToken(refreshToken);
         }
     }
 }

@@ -107,6 +107,16 @@ namespace OnlineExam.Identity.Services
 
         }
 
+        public async Task DeleteRefreshToken(string refreshToken)
+        {
+            var token = _context.RefreshTokens.Where(e => e.Token == refreshToken).FirstOrDefault();
+            if (token == null)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            _context.RefreshTokens.Remove(token);
+            await _context.SaveChangesAsync();
+        }
 
     }
 }
