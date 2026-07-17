@@ -35,6 +35,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
+            request.CreateTrueOrFalseQuestionDTO.QuestionNumber = await _examRepository.GetCurrentQuestionNumber(request.CreateTrueOrFalseQuestionDTO.ExamId);
             await _trueOrFalseQuestionRepository.AddAsync(request.CreateTrueOrFalseQuestionDTO);
 
         }

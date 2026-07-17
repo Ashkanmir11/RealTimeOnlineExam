@@ -9,5 +9,6 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IExamRepository : IGenericRepository<Exam>
     {
+        Task<int> GetCurrentQuestionNumber(int examId);
     }
 }

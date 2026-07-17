@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.TrueOrFalseQuestion
@@ -12,6 +13,8 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseQuestion
         public int? TotalScore { get; set; }
         public int ExamId { get; set; }
         public bool CorrectAnswer { get; set; }
+        [JsonIgnore]
+        public int QuestionNumber { get; set; }
 
     }
 }

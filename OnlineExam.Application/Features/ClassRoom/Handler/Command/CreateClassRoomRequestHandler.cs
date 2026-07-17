@@ -37,15 +37,13 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
         }
         public async Task<GetClassRoomDTO> Handle(CreateClassRoomRequest request, CancellationToken cancellationToken)
         {
-
+            request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserIdAsync();
             var validationResult = await _validator.ValidateAsync(request.CreateClassRoomDTO);
-
             if (validationResult.IsValid == false)
             {
                 var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            request.CreateClassRoomDTO.TeacherId = await _authServices.GetCurrentUserIdAsync();
 
             var result = await _classRoomRepository.AddAsync<CreateClassRoomDTO>(request.CreateClassRoomDTO);
             return _mapper.Map<GetClassRoomDTO>(result);

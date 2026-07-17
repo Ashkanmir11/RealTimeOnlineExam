@@ -11,6 +11,7 @@ namespace OnlineExam.Domain.Common
     {
         public string? QuestionText { get; set; }
         public int? TotalScore { get; set; }
+        public int QuestionNumber { get; set; }
         //Relations
         public int ExamId { get; set; }
         public Exam? Exam { get; set; }

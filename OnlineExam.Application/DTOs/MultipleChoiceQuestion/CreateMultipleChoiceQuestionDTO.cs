@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion
@@ -14,6 +15,8 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion
         public int ExamId { get; set; }
         public List<string>? Choices { get; set; }
         public int CorrectChoice { get; set; }
+        [JsonIgnore]
+        public int QuestionNumber { get; set; }
 
     }
 }

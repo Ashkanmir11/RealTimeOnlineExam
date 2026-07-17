@@ -18,6 +18,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.QuestionText).IsRequired().HasMaxLength(300);
             builder.Property(e => e.TotalScore).IsRequired();
             builder.Property(e=>e.CorrectAnswer).HasMaxLength(1000);
+            builder.Property(e => e.QuestionNumber).IsRequired();
 
             builder.HasMany(e=>e.Answers).WithOne(e=>e.DescriptiveQuestion).HasForeignKey(e=>e.DescriptiveAnswersId).OnDelete(DeleteBehavior.Cascade);
 

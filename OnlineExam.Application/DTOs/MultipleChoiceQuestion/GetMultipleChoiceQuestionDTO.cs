@@ -10,6 +10,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion
     public class GetMultipleChoiceQuestionDTO : CommonQuestionTypeModel
     {
         public List<string>? Choices { get; set; }
+        public int QuestionNumber { get; set; }
         public int CorrectChoice { get; set; }
 
     }
