@@ -29,6 +29,7 @@ namespace OnlineExam.Domain.Entities
 
         public List<ExamLog>? ExamLog { get; set; }
         public List<Objection>? Objections { get; set; }
+        public List<ExamAttampt>? ExamAttampts { get; set; }
 
 
     }

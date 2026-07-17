@@ -20,6 +20,7 @@ namespace OnlineExam.Persistence
         public DbSet<DescriptiveQuestion> DescriptiveQuestions { get; set; }
         public DbSet<DescriptiveAnswers> DescriptiveAnswers { get; set; }
         public DbSet<Exam> Exams { get; set; }
+        public DbSet<ExamAttampt> ExamAttampts { get; set; }
         public DbSet<ExamLog> ExamsLogs { get; set; }
         public DbSet<LogType> LogTypes { get; set; }
         public DbSet<MultipleChoiceQuestion> MultipleChoiceQuestions { get; set; }
@@ -42,6 +43,7 @@ namespace OnlineExam.Persistence
             builder.ApplyConfiguration(new ObjectionConfiguration());
             builder.ApplyConfiguration(new TrueOrFalseAnswersConfiguration());
             builder.ApplyConfiguration(new TrueOrFalseQuestionConfiguration());
+            builder.ApplyConfiguration(new ExamAttamptConfiguration());
 
             base.OnModelCreating(builder);
         }

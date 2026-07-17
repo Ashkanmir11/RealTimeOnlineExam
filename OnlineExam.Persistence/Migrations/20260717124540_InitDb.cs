@@ -112,6 +112,27 @@ namespace OnlineExam.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ExamAttampts",
+                columns: table => new
+                {
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    IsEnded = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamAttampts", x => new { x.StudentId, x.ExamId });
+                    table.ForeignKey(
+                        name: "FK_ExamAttampts_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ExamsLogs",
                 columns: table => new
                 {
@@ -303,6 +324,11 @@ namespace OnlineExam.Persistence.Migrations
                 column: "ExamId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ExamAttampts_ExamId",
+                table: "ExamAttampts",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Exams_ClassId",
                 table: "Exams",
                 column: "ClassId");
@@ -351,6 +377,9 @@ namespace OnlineExam.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "DescriptiveAnswers");
+
+            migrationBuilder.DropTable(
+                name: "ExamAttampts");
 
             migrationBuilder.DropTable(
                 name: "ExamsLogs");

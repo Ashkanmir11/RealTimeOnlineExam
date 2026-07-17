@@ -67,8 +67,17 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
-        [HttpPost("Start")]
+        [HttpPost("Start/{ExamId}")]
         public async Task<IActionResult> Start(int ExamId)
+        {
+            //TODO 
+            //check user is in exam
+            //check exam time
+
+            throw new NotImplementedException();
+        }
+        [HttpPost("End/{ExamId}")]
+        public async Task<IActionResult> End(int ExamId)
         {
             throw new NotImplementedException();
         }

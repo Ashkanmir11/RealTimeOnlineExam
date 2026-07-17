@@ -12,7 +12,7 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260717121645_InitDb")]
+    [Migration("20260717124540_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -191,6 +191,30 @@ namespace OnlineExam.Persistence.Migrations
                     b.HasIndex("ClassId");
 
                     b.ToTable("Exams");
+                });
+
+            modelBuilder.Entity("OnlineExam.Domain.Entities.ExamAttampt", b =>
+                {
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ExamId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsEnded")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("StudentId", "ExamId");
+
+                    b.HasIndex("ExamId");
+
+                    b.ToTable("ExamAttampts");
                 });
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.ExamLog", b =>
@@ -467,6 +491,17 @@ namespace OnlineExam.Persistence.Migrations
                     b.Navigation("ClassRoom");
                 });
 
+            modelBuilder.Entity("OnlineExam.Domain.Entities.ExamAttampt", b =>
+                {
+                    b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
+                        .WithMany("ExamAttampts")
+                        .HasForeignKey("ExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Exam");
+                });
+
             modelBuilder.Entity("OnlineExam.Domain.Entities.ExamLog", b =>
                 {
                     b.HasOne("OnlineExam.Domain.Entities.Exam", "Exam")
@@ -554,6 +589,8 @@ namespace OnlineExam.Persistence.Migrations
             modelBuilder.Entity("OnlineExam.Domain.Entities.Exam", b =>
                 {
                     b.Navigation("DescriptiveQuestions");
+
+                    b.Navigation("ExamAttampts");
 
                     b.Navigation("ExamLog");
 
