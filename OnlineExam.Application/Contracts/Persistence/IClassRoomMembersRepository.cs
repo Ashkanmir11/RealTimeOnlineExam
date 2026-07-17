@@ -14,7 +14,7 @@ namespace OnlineExam.Application.Contracts.Persistence
         Task<bool> AddMembersAsync(CreateClassRoomMemberDTO createClassRoomMemberDTO);
 
         Task<List<string>> GetStudentByClassIdAsync(int ClassId);
-
+        Task<bool> StudentIsInClassAsync(string StudentId, int ClassId);
         Task<bool> UpdateClassRoomAsync(UpdateClassRoomMemberDTO updateClassRoomMemberDTO);
         Task<bool> DeleteAllClassRoomIds(List<string> studentIds, int classRoomId);
 

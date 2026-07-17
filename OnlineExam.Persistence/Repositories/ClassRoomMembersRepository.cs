@@ -69,5 +69,10 @@ namespace OnlineExam.Persistence.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> StudentIsInClassAsync(string StudentId, int ClassId)
+        {
+           return await _context.ClassRoomMembers.AnyAsync(e=>e.ClassRomeId==ClassId&& e.StudentId==StudentId);
+        }
     }
 }
