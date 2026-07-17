@@ -90,7 +90,7 @@ namespace OnlineExam.Identity.SeedData
                     if (userCreateResult.Succeeded)
                     {
                         var userCreated = await userManagerService.FindByNameAsync(user.UserName);
-                        if(user.UserName== "AshkanTest")
+                        if(user.UserName== "09908752252")
                         {
                             await userManagerService.AddToRoleAsync(user, "Admin");
 

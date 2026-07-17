@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace OnlineExam.Persistence.Migrations
 {
     /// <inheritdoc />
@@ -279,6 +281,15 @@ namespace OnlineExam.Persistence.Migrations
                         principalTable: "TrueOrFalseQuestions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "LogTypes",
+                columns: new[] { "Id", "CreatedDate", "ModifiedDate", "Name" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "خروج از صفحه" },
+                    { 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "تلاش برای کپی و پیست" }
                 });
 
             migrationBuilder.CreateIndex(

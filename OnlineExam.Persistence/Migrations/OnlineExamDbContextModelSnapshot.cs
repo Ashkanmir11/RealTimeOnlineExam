@@ -245,6 +245,22 @@ namespace OnlineExam.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LogTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "خروج از صفحه"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "تلاش برای کپی و پیست"
+                        });
                 });
 
             modelBuilder.Entity("OnlineExam.Domain.Entities.MultipleChoiceAnswers", b =>
