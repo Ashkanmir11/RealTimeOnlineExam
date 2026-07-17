@@ -142,9 +142,8 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<bool>("AllowedCopy")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("AllowedDelay")
-                        .IsRequired()
-                        .HasColumnType("datetimeoffset");
+                    b.Property<int>("AllowedDelay")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");

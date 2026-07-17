@@ -29,7 +29,24 @@ namespace OnlineExam.Application.DTOs.Exam.Validation
                     return false;
                 }
                 return true;
-            }).WithMessage("تاریخ شروع نباید قبل از تاریخ الان باشد.");
+            }).WithMessage("تاریخ شروع نباید قبل از تاریخ الان باشد.").Must((Model, date) =>
+            {
+                date = date.Value.AddMinutes(5);
+                if (date > Model.EndDate)
+                {
+                    return false;
+                }
+                return true;
+            }).WithMessage("زمان آزمون باید بیشتر از 5 دقیقه باشد.");
+            RuleFor(e => e.AllowedDelay).GreaterThanOrEqualTo(1).WithMessage("زمان مجاز تاخیر باید 1 یا بیشتر باشد.").Must((Model, Delay) =>
+            {
+                var totalWithDelay = Model.StartDate.Value.AddMinutes(Delay);
+                if (totalWithDelay > Model.EndDate)
+                {
+                    return false;
+                }
+                return true;
+            }).WithMessage("میزان زمان مجاز تاخیر نباید بیشتر از ساعت پایان باشد.");
             //RuleFor(e => e.AllowedDelay).GreaterThan(DateTimeOffset.Now);
         }
     }

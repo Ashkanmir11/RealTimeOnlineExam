@@ -12,7 +12,7 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260717093329_InitDb")]
+    [Migration("20260717121645_InitDb")]
     partial class InitDb
     {
         /// <inheritdoc />
@@ -145,9 +145,8 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<bool>("AllowedCopy")
                         .HasColumnType("bit");
 
-                    b.Property<DateTimeOffset?>("AllowedDelay")
-                        .IsRequired()
-                        .HasColumnType("datetimeoffset");
+                    b.Property<int>("AllowedDelay")
+                        .HasColumnType("int");
 
                     b.Property<int>("ClassId")
                         .HasColumnType("int");

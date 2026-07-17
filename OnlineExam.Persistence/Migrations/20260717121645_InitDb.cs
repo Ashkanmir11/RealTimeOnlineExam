@@ -67,7 +67,7 @@ namespace OnlineExam.Persistence.Migrations
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AllowedDelay = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    AllowedDelay = table.Column<int>(type: "int", nullable: false),
                     Ended = table.Column<bool>(type: "bit", nullable: false),
                     AllowedCopy = table.Column<bool>(type: "bit", nullable: false),
                     LogStudent = table.Column<bool>(type: "bit", nullable: false),

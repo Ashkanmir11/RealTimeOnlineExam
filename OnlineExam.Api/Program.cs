@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineExam.Application.Profile;
 using OnlineExam.Application;
+using OnlineExam.Api.Hubs;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,7 +24,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
-
+builder.Services.AddSignalR();
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
@@ -48,5 +49,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ExceptionMiddleware>();
+app.MapHub<ExamHub>("/StartExam");
 app.Run();
 

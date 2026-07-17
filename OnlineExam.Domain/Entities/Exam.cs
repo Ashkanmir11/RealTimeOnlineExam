@@ -14,7 +14,7 @@ namespace OnlineExam.Domain.Entities
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public DateTimeOffset? AllowedDelay { get; set; }
+        public int AllowedDelay { get; set; }
         public bool Ended {  get; set; }= false;
         public bool AllowedCopy { get; set; } = false;
 

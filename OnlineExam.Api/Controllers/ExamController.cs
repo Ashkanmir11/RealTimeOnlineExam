@@ -67,5 +67,10 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
+        [HttpPost("Start")]
+        public async Task<IActionResult> Start(int ExamId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
