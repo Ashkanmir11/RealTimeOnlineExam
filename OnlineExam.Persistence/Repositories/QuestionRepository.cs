@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Helper;
+using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -39,6 +44,26 @@ namespace OnlineExam.Persistence.Repositories
                 var questionDetail = await _context.DescriptiveQuestions.FindAsync(question.DescriptiveQuestionId);
                 _context.DescriptiveQuestions.Remove(questionDetail);
             }
+        }
+
+        public async Task<PaginateResponse<GetQuestionDTO>> GetByExamId(int ExamId, bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO)
+        {
+            var query = _context.Questions.AsQueryable();
+
+            query = query.Where(e => e.ExamId == ExamId);
+            var totalCount = query.Count();
+            var questions = await query.Include(e => e.DescriptiveQuestion).Include(e => e.MultipleChoiceQuestion)
+                .Include(e => e.TrueOrFalseQuestion).ProjectTo<GetQuestionDTO>(_mapper.ConfigurationProvider).ToListAsync();
+
+            if (RandomQuestions)
+            {
+                questions = questions.OrderBy(q => HashCode.Combine(StudentId, q.Id)).ToList();
+            }
+            var skip = PaginateHelper<GetQuestionDTO>.GetSkip(paginateRequestDTO);
+            questions = questions.Skip(skip).Take(paginateRequestDTO.PageCount).ToList();
+            var result = PaginateHelper<GetQuestionDTO>.Paginate(questions, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+            return result;
+
         }
     }
 }

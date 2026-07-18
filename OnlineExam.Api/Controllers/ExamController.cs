@@ -68,13 +68,14 @@ namespace OnlineExam.Api.Controllers
 
         }
         [HttpPost("Start/{ExamId}")]
-        public async Task<IActionResult> Start(int ExamId)
+        public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO,int ExamId)
         {
-            //TODO 
-            //check user is in exam
-            //check exam time
-
-            throw new NotImplementedException();
+            var result = await _mediator.Send(new StartExamRequest() { ExamId = ExamId ,paginateRequestDTO=paginateRequestDTO});
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
         [HttpPost("End/{ExamId}")]
         public async Task<IActionResult> End(int ExamId)

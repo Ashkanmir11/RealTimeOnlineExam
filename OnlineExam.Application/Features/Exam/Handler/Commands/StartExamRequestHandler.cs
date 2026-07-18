@@ -9,21 +9,26 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.Features.Question.Request.Queries;
+using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Response;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
-    public class StartExamRequestHandler : IRequestHandler<StartExamRequest>
+    public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionDTO>>
     {
         private readonly IExamRepository _examRepository;
         private readonly IClassRoomMembersRepository _classRoomMembersRepository;
         private readonly IAuthServices _authServices;
-        public StartExamRequestHandler(IExamRepository examRepository, IClassRoomMembersRepository classRoomMembersRepository, IAuthServices authServices)
+        private readonly IMediator _meditor;
+        public StartExamRequestHandler(IExamRepository examRepository, IClassRoomMembersRepository classRoomMembersRepository, IAuthServices authServices, IMediator meditor)
         {
             _examRepository = examRepository;
             _classRoomMembersRepository = classRoomMembersRepository;
             _authServices = authServices;
+            _meditor = meditor;
         }
 
-        public async Task Handle(StartExamRequest request, CancellationToken cancellationToken)
+        public async Task<PaginateResponse<GetQuestionDTO>> Handle(StartExamRequest request, CancellationToken cancellationToken)
         {
             //Check User Is In class
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
@@ -33,24 +38,21 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                 throw new UnauthorizedAccessException("شما دسترسی به این آزمون ندارید.");
             }
             //Check Time
-            var exam =await _examRepository.GetAsync(request.ExamId);
+            var exam = await _examRepository.GetAsync(request.ExamId);
             var startWIthDelay = exam.StartDate.Value.AddMinutes(exam.AllowedDelay);
-            if(DateTime.Now<exam.StartDate)
+            if (DateTime.Now < exam.StartDate)
             {
                 throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
             }
-            if(DateTime.Now >startWIthDelay)
+            if (DateTime.Now > startWIthDelay)
             {
                 throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
             }
 
-            throw new NotImplementedException();
-
-            //TODO create random get questions
-            //var question=new QuestionDTO()
-            //{
-            //    var 
-            //}
+            //throw new NotImplementedException();
+            
+            var questions =await _meditor.Send(new GetQuestionForExamRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions ,StudentId= currentUserId,PaginateRequestDTO=request.paginateRequestDTO });
+            return questions;
         }
     }
 }
