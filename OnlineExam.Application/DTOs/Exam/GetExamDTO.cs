@@ -14,11 +14,8 @@ namespace OnlineExam.Application.DTOs.Exam
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public DateTimeOffset? AllowedDelay { get; set; }
-        public bool Ended { get; set; } = false;
+        public int AllowedDelay { get; set; }
         public bool AllowedCopy { get; set; } = false;
-
-        public bool LogStudent { get; set; } = true;
         public bool RandomQuestions { get; set; } = false;
 
         //Relation
