@@ -14,10 +14,12 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IDescriptiveQuestionRepository _descriptiveQuestionRepository;
+        private readonly IExamRepository _examRepository;
 
-        public CreateDescriptiveAnswersValidation(IAccountRepository accountRepository, IDescriptiveQuestionRepository descriptiveQuestionRepository)
+        public CreateDescriptiveAnswersValidation(IAccountRepository accountRepository, IDescriptiveQuestionRepository descriptiveQuestionRepository,IExamRepository examRepository)
         {
             _accountRepository = accountRepository;
+            _examRepository=examRepository;
             _descriptiveQuestionRepository = descriptiveQuestionRepository;
             RuleFor(e => e.StudentAnswer).MaximumLength(1000).WithMessage("پاسخ نباید بیشتر از 1000 کاراکتر باشد.");
             RuleFor(e => e.StudentId).MustAsync(async (Id, Token) =>
@@ -28,6 +30,10 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
             {
                 return await _descriptiveQuestionRepository.ExistAsync(Id);
             }).WithMessage((Model) => $"سوالی با آیدی {Model.DescriptiveAnswersId} یافت نشد.");
+            RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
+            {
+                return await _examRepository.ExistAsync(Id);
+            }).WithMessage((Model)=>$"آزمون با آیدی {Model.ExamId} یافت نشد.");
         }
     }
 }

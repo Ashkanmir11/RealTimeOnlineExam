@@ -13,11 +13,13 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
+        private readonly IExamRepository _examRepository;
         
-        public CreateMultipleChoiceAnswerValidation(IAccountRepository accountRepository, IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository)
+        public CreateMultipleChoiceAnswerValidation(IAccountRepository accountRepository, IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,IExamRepository examRepository)
         {
             _accountRepository = accountRepository;
             _multipleChoiceQuestionRepository= multipleChoiceQuestionRepository;
+            _examRepository = examRepository;
             RuleFor(e => e.StudentId).MustAsync(async (Id, Token) =>
             {
                 return await _accountRepository.UserExistAsync(Id);
@@ -26,6 +28,10 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
             {
                 return await _multipleChoiceQuestionRepository.ExistAsync(Id);
             }).WithMessage((Model)=>$"سوالی با آیدی {Model.MultipleChoiceQuestionId} یافت نشد.");
+            RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
+            {
+                return await _examRepository.ExistAsync(Id);
+            }).WithMessage((Model) => $"آزمون با آیدی {Model.ExamId} یافت نشد.");
         }
     }
 }

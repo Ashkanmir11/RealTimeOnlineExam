@@ -13,5 +13,6 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers
         [JsonIgnore]
         public string? StudentId { get; set; }
         public int DescriptiveAnswersId { get; set; }
+        public int ExamId {  get; set; }
     }
 }

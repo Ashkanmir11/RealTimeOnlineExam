@@ -22,28 +22,36 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateMultipleChoiceAnswerDTO> _validator;
-        public CreateMultipleChoiceAnswerRequestHandler(IAccountRepository accountRepository, 
+        private readonly IExamAttamptRepository _examAttamptRepository;
+        public CreateMultipleChoiceAnswerRequestHandler(IAccountRepository accountRepository,
             IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository,
             IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,
-            IAuthServices authServices, IValidator<CreateMultipleChoiceAnswerDTO> validator)
+            IAuthServices authServices, IValidator<CreateMultipleChoiceAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
         {
             _accountRepository = accountRepository;
             _MultipleChoiceAnswersRepository = MultipleChoiceAnswersRepository;
             _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
             _authServices = authServices;
             _validator = validator;
+            _examAttamptRepository = examAttamptRepository;
         }
 
         public async Task Handle(CreateMultipleChoiceAnswerRequest request, CancellationToken cancellationToken)
         {
+            request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
             var validationResult = await _validator.ValidateAsync(request.CreateMultipleChoiceQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-           request.CreateMultipleChoiceQuestionAnswerDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
 
+
+            var ExamEnded = await _examAttamptRepository.ExamEndedAsync(request.CreateMultipleChoiceQuestionAnswerDTO.ExamId, request.CreateMultipleChoiceQuestionAnswerDTO.StudentId);
+            if (ExamEnded)
+            {
+                throw new UnauthorizedAccessException("آزمون به پایان رسیده است.");
+            }
             await _MultipleChoiceAnswersRepository.AddAsync<CreateMultipleChoiceAnswerDTO>(request.CreateMultipleChoiceQuestionAnswerDTO);
         }
     }

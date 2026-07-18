@@ -14,5 +14,6 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers
         public string? StudentId { get; set; }
         public bool StudentAnswer { get; set; }
         public int TrueOrFalseQuestionId { get; set; }
+        public int ExamId {  get; set; }
     }
 }

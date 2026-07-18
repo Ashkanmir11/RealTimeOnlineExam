@@ -13,19 +13,25 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation
     {
         private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
         private readonly IAccountRepository _accountRepository;
+        private readonly IExamRepository _examRepository;
 
-        public CreateTrueOrFalseAnswerValidation(ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository, IAccountRepository accountRepository)
+        public CreateTrueOrFalseAnswerValidation(ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository, IAccountRepository accountRepository, IExamRepository examRepository)
         {
-            _accountRepository=accountRepository;
+            _accountRepository = accountRepository;
             _trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
-            RuleFor(e => e.StudentId).NotEmpty().WithMessage("یوزر نباید خالی باشد.").MustAsync(async(Id,Token)=>
+            _examRepository = examRepository;
+            RuleFor(e => e.StudentId).NotEmpty().WithMessage("یوزر نباید خالی باشد.").MustAsync(async (Id, Token) =>
             {
                 return await _accountRepository.UserExistAsync(Id);
-            }).WithMessage((Model)=>$"کاربر با آیدی {Model.StudentId} یافت نشد.");
+            }).WithMessage((Model) => $"کاربر با آیدی {Model.StudentId} یافت نشد.");
             RuleFor(e => e.TrueOrFalseQuestionId).MustAsync(async (Id, Token) =>
             {
                 return await _trueOrFalseQuestionRepository.ExistAsync(Id);
             }).WithMessage((Model) => $"سوالی با آیدی {Model.TrueOrFalseQuestionId} یافت نشد.");
+            RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
+            {
+                return await _examRepository.ExistAsync(Id);
+            }).WithMessage((Model) => $"آزمون با آیدی {Model.ExamId} یافت نشد.");
         }
     }
 }

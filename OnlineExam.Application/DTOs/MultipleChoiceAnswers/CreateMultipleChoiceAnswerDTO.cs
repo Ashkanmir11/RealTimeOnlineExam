@@ -13,5 +13,6 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers
         [JsonIgnore]
         public string? StudentId { get; set; }
         public int MultipleChoiceQuestionId { get; set; }
+        public int ExamId {  get; set; }
     }
 }

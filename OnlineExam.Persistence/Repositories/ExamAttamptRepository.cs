@@ -22,6 +22,13 @@ namespace OnlineExam.Persistence.Repositories
 
         public async Task<bool> ExamEndedAsync(int ExamId, string UserId)
         {
+            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).SingleOrDefaultAsync();
+            if (DateTime.Now > examAttampt.EndDate)
+            {
+                examAttampt.IsEnded = true;
+                await _context.SaveChangesAsync();
+            }
+
             return await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).Select(e => e.IsEnded).SingleOrDefaultAsync();
         }
 
