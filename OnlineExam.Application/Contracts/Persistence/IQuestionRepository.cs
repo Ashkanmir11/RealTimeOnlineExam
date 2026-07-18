@@ -9,5 +9,6 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IQuestionRepository : IGenericRepository<Question>
     {
+        Task DeleteQuestionDetailAsync(int questionId);
     }
 }

@@ -17,7 +17,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.Id).UseIdentityColumn();
             builder.Property(e => e.QuestionText).IsRequired().HasMaxLength(300);
             builder.Property(e => e.TotalScore).IsRequired();
-            builder.Property(e => e.QuestionNumber).IsRequired();
+           // builder.Property(e => e.QuestionNumber).IsRequired();
             builder.HasOne(e=>e.TrueOrFalseQuestion).WithMany(e=>e.Question).HasForeignKey(e=>e.TrueOrFalseQuestionId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(e => e.DescriptiveQuestion).WithMany(e => e.Question).HasForeignKey(e => e.DescriptiveQuestionId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(e => e.MultipleChoiceQuestion).WithMany(e => e.Question).HasForeignKey(e => e.MultipleChoiceQuestionId).OnDelete(DeleteBehavior.Cascade);

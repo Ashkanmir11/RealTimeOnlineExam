@@ -15,7 +15,6 @@ namespace OnlineExam.Application.DTOs.Question
     {
         public string? QuestionText { get; set; }
         public int? TotalScore { get; set; }
-        public int QuestionNumber { get; set; }
         public int ExamId { get; set; }
         [JsonIgnore]
         public int? TrueOrFalseQuestionId { get; set; }

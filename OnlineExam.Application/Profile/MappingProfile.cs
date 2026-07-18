@@ -62,6 +62,8 @@ namespace OnlineExam.Application.Profile
 
             //Question
             CreateMap<Question, CreateQuestionDTO>().ReverseMap();
+            CreateMap<Question, GetQuestionDTO>().ReverseMap();
+            CreateMap<Question, UpdateQuestionDTO>().ReverseMap();
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();
