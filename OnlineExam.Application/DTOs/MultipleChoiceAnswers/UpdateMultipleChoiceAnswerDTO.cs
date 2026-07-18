@@ -12,5 +12,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers
     public class UpdateMultipleChoiceAnswerDTO : BaseDTO
     {
         public int? StudentChoice { get; set; }
+        public int ExamId { get; set; }
+
     }
 }

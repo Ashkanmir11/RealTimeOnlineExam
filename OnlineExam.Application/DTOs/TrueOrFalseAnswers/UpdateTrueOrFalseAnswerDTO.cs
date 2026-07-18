@@ -12,5 +12,7 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers
     public class UpdateTrueOrFalseAnswerDTO : BaseDTO
     {
         public bool StudentAnswer { get; set; }
+        public int ExamId { get; set; }
+
     }
 }

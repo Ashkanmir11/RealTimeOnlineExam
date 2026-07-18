@@ -11,23 +11,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using FluentValidation;
+using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class UpdateTrueOrFalseAnswerRequestHandler : IRequestHandler<UpdateTrueOrFalseAnswerRequest>
     {
         private readonly ITrueOrFalseAnswersRepository _TrueOrFalseAnswersRepository;
-        public UpdateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository)
+        private readonly IExamAttamptRepository _examAttamptRepository;
+        private readonly IAuthServices _authServices;
+        private readonly IValidator<UpdateTrueOrFalseAnswerDTO> _validator;
+
+        public UpdateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository, IExamAttamptRepository examAttamptRepository
+            , IAuthServices authServices, IValidator<UpdateTrueOrFalseAnswerDTO> validator)
         {
             _TrueOrFalseAnswersRepository = TrueOrFalseAnswersRepository;
+            _authServices=authServices;
+            _examAttamptRepository = examAttamptRepository;
+            _validator = validator;
         }
         public async Task Handle(UpdateTrueOrFalseAnswerRequest request, CancellationToken cancellationToken)
         {
-            var validator = new UpdateTrueOrFalseAnswerValidation(_TrueOrFalseAnswersRepository);
-            var validationResult = await validator.ValidateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO);
+            var validationResult = await _validator.ValidateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO);
             if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
+            }
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.ExamId, currentUser);
+            if (examEnded)
+            {
+                throw new UnauthorizedAccessException("آزمون به پایان رسیده.");
             }
             await _TrueOrFalseAnswersRepository.UpdateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id, request.UpdateTrueOrFalseQuestionAnswerDTO);
         }

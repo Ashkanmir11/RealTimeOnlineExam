@@ -42,15 +42,15 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             //Check Time
             var exam = await _examRepository.GetAsync(request.ExamId);
             var startWIthDelay = exam.StartDate.Value.AddMinutes(exam.AllowedDelay);
-            //Uncomment when done
-            //if (DateTime.Now < exam.StartDate)
-            //{
-            //    throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
-            //}
-            //if (DateTime.Now > startWIthDelay)
-            //{
-            //    throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
-            //}
+
+            if (DateTime.Now < exam.StartDate)
+            {
+                throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
+            }
+            if (DateTime.Now > startWIthDelay)
+            {
+                throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
+            }
 
 
             //Exam Attampt

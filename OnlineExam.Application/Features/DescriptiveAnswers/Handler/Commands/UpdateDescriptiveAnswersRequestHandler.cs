@@ -11,24 +11,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using FluentValidation;
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 {
-    public class UpdateDescriptiveAnswersRequestHandler:IRequestHandler<UpdateDescriptiveAnswersRequest>
+    public class UpdateDescriptiveAnswersRequestHandler : IRequestHandler<UpdateDescriptiveAnswersRequest>
     {
         private readonly IDescriptiveAnswersRepository _DescriptiveAnswersRepository;
-        public UpdateDescriptiveAnswersRequestHandler(IDescriptiveAnswersRepository DescriptiveAnswersRepository)
+        private readonly IExamAttamptRepository _examAttamptRepository;
+        private readonly IAuthServices _authServices;
+        private readonly IValidator<UpdateDescriptiveAnswersDTO> _validator;
+        public UpdateDescriptiveAnswersRequestHandler(IAuthServices authServices, IDescriptiveAnswersRepository DescriptiveAnswersRepository
+            , IExamAttamptRepository examAttamptRepository, IValidator<UpdateDescriptiveAnswersDTO> validator)
         {
             _DescriptiveAnswersRepository = DescriptiveAnswersRepository;
+            _examAttamptRepository = examAttamptRepository;
+            _authServices = authServices;
+            _validator = validator;
         }
 
         public async Task Handle(UpdateDescriptiveAnswersRequest request, CancellationToken cancellationToken)
         {
-            var validator = new UpdateDescriptiveAnswersValidation(_DescriptiveAnswersRepository);
-            var validationResult = await validator.ValidateAsync(request.UpdateDescriptiveAnswersDTO);
-            if(validationResult.IsValid==false)
+            var validationResult = await _validator.ValidateAsync(request.UpdateDescriptiveAnswersDTO);
+            if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new ValidationException(errors);
+                throw new Application.Exceptions.ValidationException(errors);
+            }
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateDescriptiveAnswersDTO.ExamId,currentUser);
+            if(examEnded)
+            {
+                throw new UnauthorizedAccessException("آزمون به پایان رسیده.");
             }
             await _DescriptiveAnswersRepository.UpdateAsync(request.UpdateDescriptiveAnswersDTO.Id, request.UpdateDescriptiveAnswersDTO);
         }
