@@ -35,7 +35,6 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
                 var validtionErrors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(validtionErrors);
             }
-            request.CreateMultipleChoiceQuestionDTO.QuestionNumber =await _examRepository.GetCurrentQuestionNumber(request.CreateMultipleChoiceQuestionDTO.ExamId);
             await _multipleChoiceQuestionRepository.AddAsync<CreateMultipleChoiceQuestionDTO>(request.CreateMultipleChoiceQuestionDTO);
         }
     }

@@ -14,57 +14,57 @@ namespace OnlineExam.Api.Controllers
     [ApiController]
     public class MultipleChoiceQuestionController : ControllerBase
     {
-        private readonly IMediator _mediator;
-        public MultipleChoiceQuestionController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        //private readonly IMediator _mediator;
+        //public MultipleChoiceQuestionController(IMediator mediator)
+        //{
+        //    _mediator = mediator;
+        //}
 
-        [HttpPost("Post")]
-        [Authorize]
-        public async Task<IActionResult> Post(CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO)
-        {
-            await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = createMultipleChoiceQuestionDTO });
-            return NoContent();
-        }
+        //[HttpPost("Post")]
+        //[Authorize]
+        //public async Task<IActionResult> Post(CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO)
+        //{
+        //    await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = createMultipleChoiceQuestionDTO });
+        //    return NoContent();
+        //}
 
-        [HttpGet("Get/{Id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
-        {
-            var result = await _mediator.Send(new GetMultipleChoiceQuestionByIdRequest() { Id = Id });
-            if (result == null)
-            {
-                return NoContent();
-            }
-            return Ok(result);
-        }
+        //[HttpGet("Get/{Id}")]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> Get(int Id)
+        //{
+        //    var result = await _mediator.Send(new GetMultipleChoiceQuestionByIdRequest() { Id = Id });
+        //    if (result == null)
+        //    {
+        //        return NoContent();
+        //    }
+        //    return Ok(result);
+        //}
 
-        [HttpGet("Get")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
-        {
-            var result = await _mediator.Send(new GetMultipleChoiceQuestionRequest() { paginateRequestDTO = paginateRequestDTO });
-            if (result.Data.Count == 0)
-            {
-                return NoContent();
-            }
-            return Ok(result);
-        }
+        //[HttpGet("Get")]
+        //[Authorize(Roles = "Admin")]
+        //public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
+        //{
+        //    var result = await _mediator.Send(new GetMultipleChoiceQuestionRequest() { paginateRequestDTO = paginateRequestDTO });
+        //    if (result.Data.Count == 0)
+        //    {
+        //        return NoContent();
+        //    }
+        //    return Ok(result);
+        //}
 
-        [HttpDelete("Delete/{Id}")]
-        [Authorize]
-        public async Task<IActionResult> Delete(int Id)
-        {
-            await _mediator.Send(new DeleteMultipleChoiceQuestionRequest() { Id = Id });
-            return NoContent();
-        }
-        [HttpPut("Put")]
-        [Authorize]
-        public async Task<IActionResult> Put(UpdateMultipleChoiceQuestionDTO updateMultipleChoiceQuestionDTO)
-        {
-            await _mediator.Send(new UpdateMultipleChoiceQuestionRequest() { UpdateMultipleChoiceQuestionDTO = updateMultipleChoiceQuestionDTO });
-            return NoContent();
-        }
+        //[HttpDelete("Delete/{Id}")]
+        //[Authorize]
+        //public async Task<IActionResult> Delete(int Id)
+        //{
+        //    await _mediator.Send(new DeleteMultipleChoiceQuestionRequest() { Id = Id });
+        //    return NoContent();
+        //}
+        //[HttpPut("Put")]
+        //[Authorize]
+        //public async Task<IActionResult> Put(UpdateMultipleChoiceQuestionDTO updateMultipleChoiceQuestionDTO)
+        //{
+        //    await _mediator.Send(new UpdateMultipleChoiceQuestionRequest() { UpdateMultipleChoiceQuestionDTO = updateMultipleChoiceQuestionDTO });
+        //    return NoContent();
+        //}
     }
 }

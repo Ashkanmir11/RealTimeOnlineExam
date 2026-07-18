@@ -35,8 +35,6 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion.Validation
                 }
                 return true;
             }).WithMessage((Model) => $"انتخاب ها نباید خالی باشند.");
-            RuleFor(e => e.QuestionText).NotEmpty().WithMessage("متن سوال نباید خالی باشد.");
-            RuleFor(e => e.TotalScore).GreaterThan(0).WithMessage("نمره باید بیشتر از 0 باشد");
         }
     }
 }

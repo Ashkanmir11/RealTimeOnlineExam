@@ -1,0 +1,22 @@
+﻿using AutoMapper;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Domain.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace OnlineExam.Persistence.Repositories
+{
+    public class QuestionRepository : GenericRepository<Question>, IQuestionRepository
+    {
+        private readonly OnlineExamDbContext _context;
+        private readonly IMapper _mapper;
+        public QuestionRepository(OnlineExamDbContext context, IMapper mapper) : base(context, mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+    }
+}

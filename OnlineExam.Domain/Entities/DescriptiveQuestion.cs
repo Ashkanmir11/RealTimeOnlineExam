@@ -7,11 +7,12 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Domain.Entities
 {
-    public class DescriptiveQuestion : CommonQuestionTypeModel
+    public class DescriptiveQuestion : BaseModel
     {
-        public string? CorrectAnswer {  get; set; }
+        public string? CorrectAnswer { get; set; }
 
         //Relation
         public List<DescriptiveAnswers>? Answers { get; set; }
+        public List<Question>? Question { get; set; }
     }
 }

@@ -10,13 +10,6 @@ namespace OnlineExam.Application.DTOs.DescriptiveQuestion
 {
     public class CreateDescriptiveQuestionDTO
     {
-        public string? QuestionText { get; set; }
-        public int TotalScore { get; set; }
-        [JsonIgnore]
-        public int QuestionNumber { get; set; }
-
-        public int ExamId { get; set; }
         public string? CorrectAnswer { get; set; }
-
     }
 }

@@ -9,12 +9,7 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseQuestion
 {
     public class CreateTrueOrFalseQuestionDTO
     {
-        public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
-        public int ExamId { get; set; }
         public bool CorrectAnswer { get; set; }
-        [JsonIgnore]
-        public int QuestionNumber { get; set; }
 
     }
 }

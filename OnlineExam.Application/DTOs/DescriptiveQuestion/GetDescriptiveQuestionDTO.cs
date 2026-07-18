@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.DescriptiveQuestion
 {
-    public class GetDescriptiveQuestionDTO : CommonQuestionTypeModel
+    public class GetDescriptiveQuestionDTO 
     {
         public string? CorrectAnswer { get; set; }
     }

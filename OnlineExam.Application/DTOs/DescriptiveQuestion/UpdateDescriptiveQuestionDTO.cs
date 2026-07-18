@@ -9,8 +9,6 @@ namespace OnlineExam.Application.DTOs.DescriptiveQuestion
 {
     public class UpdateDescriptiveQuestionDTO : BaseDTO
     {
-        public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
         public string? CorrectAnswer { get; set; }
 
     }

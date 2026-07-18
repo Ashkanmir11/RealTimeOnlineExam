@@ -32,6 +32,7 @@ namespace OnlineExam.Persistence
             services.AddScoped<IObjectionRepository, ObjectionRepository>();
             services.AddScoped<ITrueOrFalseQuestionRepository, TrueOrFalseQuestionRepository>();
             services.AddScoped<ITrueOrFalseAnswersRepository, TrueOrFalseAnswersRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
             return services;
         }
     }

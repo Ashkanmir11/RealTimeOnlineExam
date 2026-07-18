@@ -9,8 +9,6 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseQuestion
 {
     public class UpdateTrueOfFalseQuestionDTO : BaseDTO
     {
-        public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
         public bool CorrectAnswer { get; set; }
     }
 }

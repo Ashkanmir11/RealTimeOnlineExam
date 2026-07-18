@@ -18,26 +18,15 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
     {
         private readonly IExamRepository _examRepository;
         private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
-        private readonly IValidator<CreateTrueOrFalseQuestionDTO> _validator;
-        public CreateTrueOrFalseQuestionRequestHandler(IExamRepository examRepository, ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository
-            , IValidator<CreateTrueOrFalseQuestionDTO> validator)
+        public CreateTrueOrFalseQuestionRequestHandler(IExamRepository examRepository, ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository)
         {
             _examRepository = examRepository;
             _trueOrFalseQuestionRepository= trueOrFalseQuestionRepository;
-            _validator = validator;
         }
 
         public async Task Handle(CreateTrueOrFalseQuestionRequest request, CancellationToken cancellationToken)
         {
-            var validationResult = await _validator.ValidateAsync(request.CreateTrueOrFalseQuestionDTO);
-            if(validationResult.IsValid==false)
-            {
-                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new Application.Exceptions.ValidationException(errors);
-            }
-            request.CreateTrueOrFalseQuestionDTO.QuestionNumber = await _examRepository.GetCurrentQuestionNumber(request.CreateTrueOrFalseQuestionDTO.ExamId);
             await _trueOrFalseQuestionRepository.AddAsync(request.CreateTrueOrFalseQuestionDTO);
-
         }
     }
 }

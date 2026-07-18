@@ -17,7 +17,6 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.Id).UseIdentityColumn();
             builder.Property(e => e.Choices).IsRequired();
             builder.Property(e=>e.CorrectChoice).IsRequired();
-            builder.Property(e => e.QuestionNumber).IsRequired();
 
             builder.HasMany(e => e.Answers).WithOne(e => e.MultipleChoiceQuestion).HasForeignKey(e => e.MultipleChoiceQuestionId).OnDelete(DeleteBehavior.Cascade);
         }

@@ -23,10 +23,7 @@ namespace OnlineExam.Domain.Entities
         //Relation
         public int ClassId {  get; set; }
         public ClassRoom? ClassRoom { get; set; }
-        public List<DescriptiveQuestion>? DescriptiveQuestions { get; set; }
-        public List<TrueOrFalseQuestion>? TrueOrFalseQuestions { get; set; }
-        public List<MultipleChoiceQuestion>? MultipleChoiceQuestions { get; set; }
-
+        public List<Question>? Questions { get; set; }
         public List<ExamLog>? ExamLog { get; set; }
         public List<Objection>? Objections { get; set; }
         public List<ExamAttampt>? ExamAttampts { get; set; }

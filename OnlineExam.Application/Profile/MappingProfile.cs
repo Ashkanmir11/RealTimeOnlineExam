@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OnlineExam.Application.DTOs.Question;
 
 namespace OnlineExam.Application.Profile
 {
@@ -50,8 +51,8 @@ namespace OnlineExam.Application.Profile
 
 
             //Multiple Choice Question
-            CreateMap<MultipleChoiceQuestion,CreateMultipleChoiceQuestionDTO>().ReverseMap();
-            CreateMap<MultipleChoiceQuestion,GetMultipleChoiceQuestionDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestion, CreateMultipleChoiceQuestionDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, UpdateMultipleChoiceQuestionDTO>().ReverseMap();
 
             //Multiple Choice Question Answer
@@ -59,6 +60,8 @@ namespace OnlineExam.Application.Profile
             CreateMap<MultipleChoiceAnswers, GetMultipleChoiceAnswerDTO>().ReverseMap();
             CreateMap<MultipleChoiceAnswers, UpdateMultipleChoiceAnswerDTO>().ReverseMap();
 
+            //Question
+            CreateMap<Question, CreateQuestionDTO>().ReverseMap();
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();
@@ -71,7 +74,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<LogType, UpdateLogTypeDTO>().ReverseMap();
 
             //True or false question
-            CreateMap<TrueOrFalseQuestion,CreateTrueOrFalseQuestionDTO>().ReverseMap();
+            CreateMap<TrueOrFalseQuestion, CreateTrueOrFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, UpdateTrueOfFalseQuestionDTO>().ReverseMap();
 

@@ -28,7 +28,7 @@ namespace OnlineExam.Persistence
         public DbSet<Objection> Objections { get; set; }
         public DbSet<TrueOrFalseQuestion> TrueOrFalseQuestions { get; set; }
         public DbSet<TrueOrFalseAnswers> TrueOrFalseAnswers { get; set; }
-
+        public DbSet<Question> Questions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ClassRoomConfiguration());

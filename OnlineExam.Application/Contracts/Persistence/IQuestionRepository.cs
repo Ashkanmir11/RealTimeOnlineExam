@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Contracts.Persistence
 {
-    public interface IExamRepository : IGenericRepository<Exam>
+    public interface IQuestionRepository : IGenericRepository<Question>
     {
-        //Task<int> GetCurrentQuestionNumber(int examId);
     }
 }

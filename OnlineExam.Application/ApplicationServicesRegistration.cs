@@ -13,6 +13,7 @@ using System.Linq;
 using System;
 using OnlineExam.Application.Features.ClassRoom.Request.Command;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation;
+using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 namespace OnlineExam.Application
 {
     public static class ApplicationServicesRegistration
@@ -28,6 +29,7 @@ namespace OnlineExam.Application
                 cfg.RegisterServicesFromAssembly(typeof(CreateClassRoomRequest).Assembly);
             });
             services.AddValidatorsFromAssemblyContaining<CreateTrueOrFalseAnswerValidation>();
+            services.AddValidatorsFromAssemblyContaining<CreateTrueOrFalseQuestionDTO>();
         }
 
     }

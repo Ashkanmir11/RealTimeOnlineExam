@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineExam.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDb : Migration
+    public partial class InitDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -42,6 +42,21 @@ namespace OnlineExam.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DescriptiveQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CorrectAnswer = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DescriptiveQuestions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LogTypes",
                 columns: table => new
                 {
@@ -54,6 +69,37 @@ namespace OnlineExam.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LogTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MultipleChoiceQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Choices = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CorrectChoice = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MultipleChoiceQuestions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TrueOrFalseQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CorrectAnswer = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TrueOrFalseQuestions", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,154 +129,6 @@ namespace OnlineExam.Persistence.Migrations
                         name: "FK_Exams_ClassRooms_ClassId",
                         column: x => x.ClassId,
                         principalTable: "ClassRooms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DescriptiveQuestions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CorrectAnswer = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    QuestionText = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
-                    TotalScore = table.Column<int>(type: "int", nullable: false),
-                    ExamId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DescriptiveQuestions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DescriptiveQuestions_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExamAttampts",
-                columns: table => new
-                {
-                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ExamId = table.Column<int>(type: "int", nullable: false),
-                    IsEnded = table.Column<bool>(type: "bit", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExamAttampts", x => new { x.StudentId, x.ExamId });
-                    table.ForeignKey(
-                        name: "FK_ExamAttampts_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ExamsLogs",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    LogDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExamId = table.Column<int>(type: "int", nullable: false),
-                    LogTypeId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExamsLogs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExamsLogs_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ExamsLogs_LogTypes_LogTypeId",
-                        column: x => x.LogTypeId,
-                        principalTable: "LogTypes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "MultipleChoiceQuestions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Choices = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CorrectChoice = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalScore = table.Column<int>(type: "int", nullable: true),
-                    ExamId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_MultipleChoiceQuestions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_MultipleChoiceQuestions_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Objections",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
-                    TeacherComment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    Accepted = table.Column<bool>(type: "bit", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ExamId = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Objections", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Objections_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "TrueOrFalseQuestions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CorrectAnswer = table.Column<bool>(type: "bit", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalScore = table.Column<int>(type: "int", nullable: true),
-                    ExamId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TrueOrFalseQuestions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TrueOrFalseQuestions_Exams_ExamId",
-                        column: x => x.ExamId,
-                        principalTable: "Exams",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -304,6 +202,123 @@ namespace OnlineExam.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ExamAttampts",
+                columns: table => new
+                {
+                    StudentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    IsEnded = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamAttampts", x => new { x.StudentId, x.ExamId });
+                    table.ForeignKey(
+                        name: "FK_ExamAttampts_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExamsLogs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    LogDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    LogTypeId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExamsLogs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ExamsLogs_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ExamsLogs_LogTypes_LogTypeId",
+                        column: x => x.LogTypeId,
+                        principalTable: "LogTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Objections",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StudentText = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: false),
+                    TeacherComment = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Accepted = table.Column<bool>(type: "bit", nullable: false),
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Objections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Objections_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TotalScore = table.Column<int>(type: "int", nullable: true),
+                    QuestionNumber = table.Column<int>(type: "int", nullable: false),
+                    ExamId = table.Column<int>(type: "int", nullable: false),
+                    TrueOrFalseQuestionId = table.Column<int>(type: "int", nullable: true),
+                    DescriptiveQuestionId = table.Column<int>(type: "int", nullable: true),
+                    MultipleChoiceQuestionId = table.Column<int>(type: "int", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Questions_DescriptiveQuestions_DescriptiveQuestionId",
+                        column: x => x.DescriptiveQuestionId,
+                        principalTable: "DescriptiveQuestions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Questions_Exams_ExamId",
+                        column: x => x.ExamId,
+                        principalTable: "Exams",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Questions_MultipleChoiceQuestions_MultipleChoiceQuestionId",
+                        column: x => x.MultipleChoiceQuestionId,
+                        principalTable: "MultipleChoiceQuestions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Questions_TrueOrFalseQuestions_TrueOrFalseQuestionId",
+                        column: x => x.TrueOrFalseQuestionId,
+                        principalTable: "TrueOrFalseQuestions",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "LogTypes",
                 columns: new[] { "Id", "CreatedDate", "ModifiedDate", "Name" },
@@ -317,11 +332,6 @@ namespace OnlineExam.Persistence.Migrations
                 name: "IX_DescriptiveAnswers_DescriptiveAnswersId",
                 table: "DescriptiveAnswers",
                 column: "DescriptiveAnswersId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DescriptiveQuestions_ExamId",
-                table: "DescriptiveQuestions",
-                column: "ExamId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamAttampts_ExamId",
@@ -349,24 +359,34 @@ namespace OnlineExam.Persistence.Migrations
                 column: "MultipleChoiceQuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MultipleChoiceQuestions_ExamId",
-                table: "MultipleChoiceQuestions",
-                column: "ExamId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Objections_ExamId",
                 table: "Objections",
                 column: "ExamId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TrueOrFalseAnswers_TrueOrFalseQuestionId",
-                table: "TrueOrFalseAnswers",
+                name: "IX_Questions_DescriptiveQuestionId",
+                table: "Questions",
+                column: "DescriptiveQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_ExamId",
+                table: "Questions",
+                column: "ExamId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_MultipleChoiceQuestionId",
+                table: "Questions",
+                column: "MultipleChoiceQuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Questions_TrueOrFalseQuestionId",
+                table: "Questions",
                 column: "TrueOrFalseQuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TrueOrFalseQuestions_ExamId",
-                table: "TrueOrFalseQuestions",
-                column: "ExamId");
+                name: "IX_TrueOrFalseAnswers_TrueOrFalseQuestionId",
+                table: "TrueOrFalseAnswers",
+                column: "TrueOrFalseQuestionId");
         }
 
         /// <inheritdoc />
@@ -391,22 +411,25 @@ namespace OnlineExam.Persistence.Migrations
                 name: "Objections");
 
             migrationBuilder.DropTable(
+                name: "Questions");
+
+            migrationBuilder.DropTable(
                 name: "TrueOrFalseAnswers");
+
+            migrationBuilder.DropTable(
+                name: "LogTypes");
 
             migrationBuilder.DropTable(
                 name: "DescriptiveQuestions");
 
             migrationBuilder.DropTable(
-                name: "LogTypes");
+                name: "Exams");
 
             migrationBuilder.DropTable(
                 name: "MultipleChoiceQuestions");
 
             migrationBuilder.DropTable(
                 name: "TrueOrFalseQuestions");
-
-            migrationBuilder.DropTable(
-                name: "Exams");
 
             migrationBuilder.DropTable(
                 name: "ClassRooms");

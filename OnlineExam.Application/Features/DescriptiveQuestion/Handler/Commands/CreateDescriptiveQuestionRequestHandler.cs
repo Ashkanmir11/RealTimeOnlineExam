@@ -32,7 +32,6 @@ namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
             {
                 throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            request.CreateDescriptiveQuestionDTO.QuestionNumber = await _examRepository.GetCurrentQuestionNumber(request.CreateDescriptiveQuestionDTO.ExamId);
             await _descriptiveQuestionRepository.AddAsync<CreateDescriptiveQuestionDTO>(request.CreateDescriptiveQuestionDTO);
         }
     }
