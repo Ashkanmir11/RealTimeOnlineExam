@@ -13,7 +13,7 @@ using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using FluentValidation;
 namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
 {
-    public class CreateDescriptiveQuestionRequestHandler : IRequestHandler<CreateDescriptiveQuestionRequest>
+    public class CreateDescriptiveQuestionRequestHandler : IRequestHandler<CreateDescriptiveQuestionRequest, int>
     {
         private readonly IExamRepository _examRepository;
         private readonly IDescriptiveQuestionRepository _descriptiveQuestionRepository;
@@ -25,14 +25,15 @@ namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
             _validator = validator;
         }
 
-        public async Task Handle(CreateDescriptiveQuestionRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateDescriptiveQuestionRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request.CreateDescriptiveQuestionDTO);
-            if(validationResult.IsValid==false)
+            if (validationResult.IsValid == false)
             {
                 throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            await _descriptiveQuestionRepository.AddAsync<CreateDescriptiveQuestionDTO>(request.CreateDescriptiveQuestionDTO);
+            var result = await _descriptiveQuestionRepository.AddAsync<CreateDescriptiveQuestionDTO>(request.CreateDescriptiveQuestionDTO);
+            return result.Id;
         }
     }
 }

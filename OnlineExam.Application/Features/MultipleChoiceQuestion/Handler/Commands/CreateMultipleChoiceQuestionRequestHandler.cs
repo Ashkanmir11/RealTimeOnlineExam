@@ -15,7 +15,7 @@ using FluentValidation;
 
 namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Commands
 {
-    public class CreateMultipleChoiceQuestionRequestHandler : IRequestHandler<CreateMultipleChoiceQuestionRequest>
+    public class CreateMultipleChoiceQuestionRequestHandler : IRequestHandler<CreateMultipleChoiceQuestionRequest, int>
     {
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
         private readonly IExamRepository _examRepository;
@@ -27,7 +27,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
             _examRepository = examRepository;
             _validator = validator;
         }
-        public async Task Handle(CreateMultipleChoiceQuestionRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateMultipleChoiceQuestionRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request.CreateMultipleChoiceQuestionDTO);
             if (validationResult.IsValid == false)
@@ -35,7 +35,8 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
                 var validtionErrors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(validtionErrors);
             }
-            await _multipleChoiceQuestionRepository.AddAsync<CreateMultipleChoiceQuestionDTO>(request.CreateMultipleChoiceQuestionDTO);
+            var result = await _multipleChoiceQuestionRepository.AddAsync<CreateMultipleChoiceQuestionDTO>(request.CreateMultipleChoiceQuestionDTO);
+            return result.Id;
         }
     }
 }

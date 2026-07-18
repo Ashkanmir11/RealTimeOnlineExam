@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands
 {
-    public class CreateMultipleChoiceQuestionRequest : IRequest
+    public class CreateMultipleChoiceQuestionRequest : IRequest<int>
     {
         public required CreateMultipleChoiceQuestionDTO CreateMultipleChoiceQuestionDTO{ get; set; }
     }

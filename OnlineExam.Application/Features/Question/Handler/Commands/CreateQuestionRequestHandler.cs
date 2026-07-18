@@ -36,6 +36,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
 
         public async Task Handle(CreateQuestionRequest request, CancellationToken cancellationToken)
         {
+
             var questionValidator = await _validatorQuestion.ValidateAsync(request.CreateQuestionDTO);
             if (questionValidator.IsValid == false)
             {
@@ -43,24 +44,27 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
                 throw new Application.Exceptions.ValidationException(errors);
 
             }
+
+
             if (request.CreateQuestionDTO.TrueOrFalseQuestion != null)
             {
                 var questionDetail = _mapper.Map<CreateTrueOrFalseQuestionDTO>(request.CreateQuestionDTO.TrueOrFalseQuestion);
-                await _mediator.Send(new CreateTrueOrFalseQuestionRequest() { CreateTrueOrFalseQuestionDTO = questionDetail });
-
+                request.CreateQuestionDTO.TrueOrFalseQuestionId = await _mediator.Send(new CreateTrueOrFalseQuestionRequest() { CreateTrueOrFalseQuestionDTO = questionDetail });
             }
             else if (request.CreateQuestionDTO.DescriptiveQuestion != null)
             {
                 var questionDetail = _mapper.Map<CreateDescriptiveQuestionDTO>(request.CreateQuestionDTO.DescriptiveQuestion);
-                await _mediator.Send(new CreateDescriptiveQuestionRequest() { CreateDescriptiveQuestionDTO = questionDetail });
-
+                request.CreateQuestionDTO.DescriptiveQuestionId = await _mediator.Send(new CreateDescriptiveQuestionRequest() { CreateDescriptiveQuestionDTO = questionDetail });
             }
             else
             {
                 var questionDetail = _mapper.Map<CreateMultipleChoiceQuestionDTO>(request.CreateQuestionDTO.MultipleChoiceQuestion);
-                await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = questionDetail });
+                request.CreateQuestionDTO.MultipleChoiceQuestionId = await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = questionDetail });
             }
-            var quesiton = _questionRepository.AddAsync<CreateQuestionDTO>(request.CreateQuestionDTO);
+            request.CreateQuestionDTO.DescriptiveQuestion = null;
+            request.CreateQuestionDTO.TrueOrFalseQuestion = null;
+            request.CreateQuestionDTO.MultipleChoiceQuestion = null;
+            var quesiton = await _questionRepository.AddAsync<CreateQuestionDTO>(request.CreateQuestionDTO);
 
         }
     }

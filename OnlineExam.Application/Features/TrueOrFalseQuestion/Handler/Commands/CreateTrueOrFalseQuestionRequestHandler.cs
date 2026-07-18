@@ -14,19 +14,20 @@ using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 
 namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
 {
-    public class CreateTrueOrFalseQuestionRequestHandler : IRequestHandler<CreateTrueOrFalseQuestionRequest>
+    public class CreateTrueOrFalseQuestionRequestHandler : IRequestHandler<CreateTrueOrFalseQuestionRequest, int>
     {
         private readonly IExamRepository _examRepository;
         private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
         public CreateTrueOrFalseQuestionRequestHandler(IExamRepository examRepository, ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository)
         {
             _examRepository = examRepository;
-            _trueOrFalseQuestionRepository= trueOrFalseQuestionRepository;
+            _trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
         }
 
-        public async Task Handle(CreateTrueOrFalseQuestionRequest request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateTrueOrFalseQuestionRequest request, CancellationToken cancellationToken)
         {
-            await _trueOrFalseQuestionRepository.AddAsync(request.CreateTrueOrFalseQuestionDTO);
+            var result = await _trueOrFalseQuestionRepository.AddAsync(request.CreateTrueOrFalseQuestionDTO);
+            return result.Id;
         }
     }
 }
