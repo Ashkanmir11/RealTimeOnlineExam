@@ -12,6 +12,8 @@ using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.Response;
+using OnlineExam.Application.Features.ExamAttampt.Request.Commands;
+using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionDTO>>
@@ -40,18 +42,33 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             //Check Time
             var exam = await _examRepository.GetAsync(request.ExamId);
             var startWIthDelay = exam.StartDate.Value.AddMinutes(exam.AllowedDelay);
-            if (DateTime.Now < exam.StartDate)
+            //Uncomment when done
+            //if (DateTime.Now < exam.StartDate)
+            //{
+            //    throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
+            //}
+            //if (DateTime.Now > startWIthDelay)
+            //{
+            //    throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
+            //}
+
+
+            //Exam Attampt
+            var examStarted = await _meditor.Send(new ExamAttamptStartedRequest() { UserId = currentUserId, ExamId = request.ExamId });
+            var examEnded = await _meditor.Send(new ExamAttamptEndedRequest() { ExamId = request.ExamId, UserId = currentUserId });
+            if (examEnded)
             {
-                throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
+                throw new UnauthorizedAccessException("شما قبلا در این آزمون شرکت کرده اید.");
             }
-            if (DateTime.Now > startWIthDelay)
+            if (examStarted == false)
             {
-                throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
+                var difference = (exam.StartDate - exam.EndDate);
+                var totalMinute = difference.Value.TotalMinutes;
+                int minute = Convert.ToInt32(totalMinute);
+                await _meditor.Send(new CreateExamAttamptRequest() { ExamId = request.ExamId, ExamMinute = minute, UserId = currentUserId });
             }
 
-            //throw new NotImplementedException();
-            
-            var questions =await _meditor.Send(new GetQuestionForExamRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions ,StudentId= currentUserId,PaginateRequestDTO=request.paginateRequestDTO });
+            var questions = await _meditor.Send(new GetQuestionForExamRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
             return questions;
         }
     }

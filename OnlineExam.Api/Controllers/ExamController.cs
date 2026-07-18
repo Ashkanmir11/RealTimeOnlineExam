@@ -68,6 +68,7 @@ namespace OnlineExam.Api.Controllers
 
         }
         [HttpPost("Start/{ExamId}")]
+        [Authorize]
         public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO,int ExamId)
         {
             var result = await _mediator.Send(new StartExamRequest() { ExamId = ExamId ,paginateRequestDTO=paginateRequestDTO});
