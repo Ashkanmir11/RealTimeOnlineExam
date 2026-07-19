@@ -9,5 +9,7 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IDescriptiveAnswersRepository : IGenericRepository<DescriptiveAnswers>
     {
+        Task<DescriptiveAnswers> GetByQuestionIdAsync(int questionId);
+
     }
 }

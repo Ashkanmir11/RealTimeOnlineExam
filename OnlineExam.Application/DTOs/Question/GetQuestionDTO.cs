@@ -14,7 +14,7 @@ namespace OnlineExam.Application.DTOs.Question
     public class GetQuestionDTO : BaseDTO
     {
         public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
+        public decimal TotalScore { get; set; }
         public GetTrueOrFalseQuestionDTO? TrueOrFalseQuestion { get; set; }
         public GetDescriptiveQuestionDTO? DescriptiveQuestion { get; set; }
         public GetMultipleChoiceQuestionDTO? MultipleChoiceQuestion { get; set; }

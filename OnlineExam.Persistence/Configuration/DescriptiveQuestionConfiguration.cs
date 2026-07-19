@@ -17,7 +17,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e=>e.Id).UseIdentityColumn();
             builder.Property(e=>e.CorrectAnswer).HasMaxLength(1000);
 
-            builder.HasMany(e=>e.Answers).WithOne(e=>e.DescriptiveQuestion).HasForeignKey(e=>e.DescriptiveAnswersId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasMany(e=>e.Answers).WithOne(e=>e.DescriptiveQuestion).HasForeignKey(e=>e.DescriptiveQuestionId).OnDelete(DeleteBehavior.Cascade);
 
         }
     }

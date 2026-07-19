@@ -10,7 +10,7 @@ namespace OnlineExam.Domain.Entities
     public class Question : BaseModel
     {
         public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
+        public decimal? TotalScore { get; set; }
         public int ExamId { get; set; }
         public Exam? Exam { get; set; }
 

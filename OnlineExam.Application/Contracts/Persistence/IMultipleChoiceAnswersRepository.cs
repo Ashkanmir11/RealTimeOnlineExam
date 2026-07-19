@@ -9,5 +9,7 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IMultipleChoiceAnswersRepository:IGenericRepository<MultipleChoiceAnswers>
     {
+        Task<MultipleChoiceAnswers> GetByQuestionIdAsync(int questionId);
+
     }
 }

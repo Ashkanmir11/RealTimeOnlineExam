@@ -12,7 +12,7 @@ namespace OnlineExam.Domain.Entities
         public string? StudentAnswer {  get; set; }
 
         //Relations
-        public int DescriptiveAnswersId { get; set; }
+        public int DescriptiveQuestionId { get; set; }
         public DescriptiveQuestion? DescriptiveQuestion { get; set; }
     }
 }

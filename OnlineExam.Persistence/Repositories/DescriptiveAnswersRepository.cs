@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Domain.Entities;
 using System;
@@ -17,6 +18,11 @@ namespace OnlineExam.Persistence.Repositories
         {
             _context = dbContext;
             _mapper = mapper;
+        }
+
+        public async Task<DescriptiveAnswers> GetByQuestionIdAsync(int questionId)
+        {
+            return await _context.DescriptiveAnswers.Where(e => e.DescriptiveQuestionId == questionId).SingleOrDefaultAsync();
         }
     }
 }

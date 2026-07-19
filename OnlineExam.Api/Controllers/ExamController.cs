@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Api.Herlpers;
+using OnlineExam.Application.Contracts.AIServices;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.Features.Exam.Request.Commands;
@@ -16,9 +17,11 @@ namespace OnlineExam.Api.Controllers
     public class ExamController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ExamController(IMediator mediator)
+        private readonly IAiServices _aiServices;
+        public ExamController(IMediator mediator, IAiServices aiServices)
         {
             _mediator = mediator;
+            _aiServices = aiServices;
         }
         [HttpPost("Post")]
         [Authorize]
@@ -69,9 +72,9 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPost("Start/{ExamId}")]
         [Authorize]
-        public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO,int ExamId)
+        public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO, int ExamId)
         {
-            var result = await _mediator.Send(new StartExamRequest() { ExamId = ExamId ,paginateRequestDTO=paginateRequestDTO});
+            var result = await _mediator.Send(new StartExamRequest() { ExamId = ExamId, paginateRequestDTO = paginateRequestDTO });
             if (result == null)
             {
                 return NoContent();
@@ -81,7 +84,9 @@ namespace OnlineExam.Api.Controllers
         [HttpPost("End/{ExamId}")]
         public async Task<IActionResult> End(int ExamId)
         {
-            throw new NotImplementedException();
+            // await _mediator.Send(new EndExamRequest() { ExamId = ExamId });
+            var aiServices = _aiServices.GetScore("موتور هواپیما سوخت مخصوص دارد.", "هواپیما سوخت مخصوص دارد.", 2);
+            return NoContent();
         }
     }
 }

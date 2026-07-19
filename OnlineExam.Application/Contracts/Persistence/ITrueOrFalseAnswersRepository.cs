@@ -9,5 +9,6 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface ITrueOrFalseAnswersRepository : IGenericRepository<TrueOrFalseAnswers>
     {
+        Task<TrueOrFalseAnswers> GetByQuestionIdAsync(int questionId);
     }
 }
