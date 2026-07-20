@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OnlineExam.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitDB : Migration
+    public partial class InitDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -114,7 +114,6 @@ namespace OnlineExam.Persistence.Migrations
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AllowedDelay = table.Column<int>(type: "int", nullable: false),
-                    Ended = table.Column<bool>(type: "bit", nullable: false),
                     AllowedCopy = table.Column<bool>(type: "bit", nullable: false),
                     LogStudent = table.Column<bool>(type: "bit", nullable: false),
                     RandomQuestions = table.Column<bool>(type: "bit", nullable: false),
@@ -140,17 +139,18 @@ namespace OnlineExam.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentAnswer = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    DescriptiveAnswersId = table.Column<int>(type: "int", nullable: false),
+                    DescriptiveQuestionId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentScore = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DescriptiveAnswers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DescriptiveAnswers_DescriptiveQuestions_DescriptiveAnswersId",
-                        column: x => x.DescriptiveAnswersId,
+                        name: "FK_DescriptiveAnswers_DescriptiveQuestions_DescriptiveQuestionId",
+                        column: x => x.DescriptiveQuestionId,
                         principalTable: "DescriptiveQuestions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -166,7 +166,8 @@ namespace OnlineExam.Persistence.Migrations
                     MultipleChoiceQuestionId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StudentScore = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -189,7 +190,8 @@ namespace OnlineExam.Persistence.Migrations
                     TrueOrFalseQuestionId = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StudentScore = table.Column<decimal>(type: "decimal(6,2)", precision: 6, scale: 2, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -284,8 +286,7 @@ namespace OnlineExam.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionText = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TotalScore = table.Column<int>(type: "int", nullable: true),
-                    QuestionNumber = table.Column<int>(type: "int", nullable: false),
+                    TotalScore = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ExamId = table.Column<int>(type: "int", nullable: false),
                     TrueOrFalseQuestionId = table.Column<int>(type: "int", nullable: true),
                     DescriptiveQuestionId = table.Column<int>(type: "int", nullable: true),
@@ -329,9 +330,9 @@ namespace OnlineExam.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_DescriptiveAnswers_DescriptiveAnswersId",
+                name: "IX_DescriptiveAnswers_DescriptiveQuestionId",
                 table: "DescriptiveAnswers",
-                column: "DescriptiveAnswersId");
+                column: "DescriptiveQuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExamAttampts_ExamId",

@@ -10,11 +10,10 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Request.Queries
 {
-    public class GetQuestionForExamRequest : IRequest<PaginateResponse<GetQuestionDTO>>
+    public class GetQuestionWithAnswerRequest : IRequest<PaginateResponse<GetQuestionTeacherDTO>>
     {
-        public int ExamId {  get; set; }
-        public bool RandomQuesiton {  get; set; }
-        public string? StudentId {  get; set; }
+        public int ExamId { get; set; }
+        public required string StudentId { get; set; }
         public required PaginateRequestDTO PaginateRequestDTO { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using OnlineExam.Persistence;
 namespace OnlineExam.Persistence.Migrations
 {
     [DbContext(typeof(OnlineExamDbContext))]
-    [Migration("20260718124427_InitDB")]
-    partial class InitDB
+    [Migration("20260720100202_InitDb")]
+    partial class InitDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,7 +76,7 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DescriptiveAnswersId")
+                    b.Property<int>("DescriptiveQuestionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -90,9 +90,13 @@ namespace OnlineExam.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("StudentScore")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DescriptiveAnswersId");
+                    b.HasIndex("DescriptiveQuestionId");
 
                     b.ToTable("DescriptiveAnswers");
                 });
@@ -147,9 +151,6 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<DateTime?>("EndDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("Ended")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("LogStudent")
                         .HasColumnType("bit");
@@ -298,6 +299,10 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("StudentScore")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("MultipleChoiceQuestionId");
@@ -393,14 +398,11 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<int?>("MultipleChoiceQuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionNumber")
-                        .HasColumnType("int");
-
                     b.Property<string>("QuestionText")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("TotalScore")
-                        .HasColumnType("int");
+                    b.Property<decimal?>("TotalScore")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("TrueOrFalseQuestionId")
                         .HasColumnType("int");
@@ -438,6 +440,10 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<string>("StudentId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("StudentScore")
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
+
                     b.Property<int>("TrueOrFalseQuestionId")
                         .HasColumnType("int");
 
@@ -474,7 +480,7 @@ namespace OnlineExam.Persistence.Migrations
                 {
                     b.HasOne("OnlineExam.Domain.Entities.DescriptiveQuestion", "DescriptiveQuestion")
                         .WithMany("Answers")
-                        .HasForeignKey("DescriptiveAnswersId")
+                        .HasForeignKey("DescriptiveQuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -46,22 +46,22 @@ namespace OnlineExam.Persistence.Repositories
             }
         }
 
-        public async Task<PaginateResponse<GetQuestionDTO>> GetByExamId(int ExamId, bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId, bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Questions.AsQueryable();
 
             query = query.Where(e => e.ExamId == ExamId);
             var totalCount = query.Count();
             var questions = await query.Include(e => e.DescriptiveQuestion).Include(e => e.MultipleChoiceQuestion)
-                .Include(e => e.TrueOrFalseQuestion).ProjectTo<GetQuestionDTO>(_mapper.ConfigurationProvider).ToListAsync();
+                .Include(e => e.TrueOrFalseQuestion).ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
 
             if (RandomQuestions)
             {
-                questions = questions.OrderBy(q => HashCode.Combine(StudentId, q.Id)).ToList();
+                questions = questions.OrderBy(q => HashCode.Combine(StudentId, q.GetType().GetProperty("Id").GetValue(q))).ToList();
             }
-            var skip = PaginateHelper<GetQuestionDTO>.GetSkip(paginateRequestDTO);
+            var skip = PaginateHelper<TResult>.GetSkip(paginateRequestDTO);
             questions = questions.Skip(skip).Take(paginateRequestDTO.PageCount).ToList();
-            var result = PaginateHelper<GetQuestionDTO>.Paginate(questions, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+            var result = PaginateHelper<TResult>.Paginate(questions, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
             return result;
 
         }

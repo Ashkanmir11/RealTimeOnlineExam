@@ -34,7 +34,7 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
-            return Ok(result);  
+            return Ok(result);
         }
         [HttpGet("Get")]
         [Authorize(Roles = "Admin")]
@@ -60,6 +60,13 @@ namespace OnlineExam.Api.Controllers
         {
             await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO });
             return NoContent();
+        }
+
+        [HttpGet("GetWithAnswers")]
+        public async Task<IActionResult> GetStudentScore([FromQuery] int ExamId, [FromQuery] string StudentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = ExamId, StudentId = StudentId, PaginateRequestDTO = paginateRequestDTO });
+            return Ok(result);
         }
 
     }

@@ -15,30 +15,30 @@ namespace OnlineExam.Application.Serviecs
 {
     public class AiServices : IAiServices
     {
-        //private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public AiServices(/*HttpClient httpClient,*/ IConfiguration configuration)
+        public AiServices(IConfiguration configuration)
         {
-            //_httpClient = httpClient;
             _configuration = configuration;
         }
 
         public async Task<decimal> GetScore(string StudentText, string CorrectText, decimal Score)
         {
-            var apiKey = _configuration["AiKey"];
-            if (string.IsNullOrWhiteSpace(apiKey))
-                throw new InvalidOperationException("AiKey is missing.");
-
-            using var httpClient = new HttpClient();
-
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue("Bearer", apiKey);
-
-            var requestData = new
+            try
             {
-                model = "gapgpt-qwen-3.6",
-                messages = new[]
+                var apiKey = _configuration["AiKey"];
+                if (string.IsNullOrWhiteSpace(apiKey))
+                    throw new InvalidOperationException("AiKey is missing.");
+
+                using var httpClient = new HttpClient();
+
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", apiKey);
+
+                var requestData = new
                 {
+                    model = "gapgpt-qwen-3.6",
+                    messages = new[]
+                    {
                     new { role = "system", content = "You are a scoring assistant. Return only one decimal number." },
                     new
                     {
@@ -48,25 +48,30 @@ namespace OnlineExam.Application.Serviecs
                                   "فقط یک عدد decimal برگردان."
                     }
                 }
-            };
+                };
 
-            var jsonContent = JsonConvert.SerializeObject(requestData);
-            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                var jsonContent = JsonConvert.SerializeObject(requestData);
+                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-            var apiUrl = "https://api.gapgpt.app/v1/chat/completions";
-            var response = await httpClient.PostAsync(apiUrl, content);
+                var apiUrl = "https://api.gapgpt.app/v1/chat/completions";
+                var response = await httpClient.PostAsync(apiUrl, content);
 
-            var responseBody = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)
-                throw new Exception($"API error: {response.StatusCode} - {responseBody}");
+                var responseBody = await response.Content.ReadAsStringAsync();
+                if (!response.IsSuccessStatusCode)
+                    throw new Exception($"API error: {response.StatusCode} - {responseBody}");
 
-            var json = JObject.Parse(responseBody);
-            string resultText = json["choices"]?[0]?["message"]?["content"]?.ToString();
-            if (decimal.TryParse(resultText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal scoreResult))
-            {
-                return scoreResult; 
+                var json = JObject.Parse(responseBody);
+                string resultText = json["choices"]?[0]?["message"]?["content"]?.ToString();
+                if (decimal.TryParse(resultText, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal scoreResult))
+                {
+                    return scoreResult;
+                }
+                return 0;
             }
-            throw new NotImplementedException();
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

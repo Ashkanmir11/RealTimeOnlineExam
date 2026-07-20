@@ -16,7 +16,7 @@ using OnlineExam.Application.Features.ExamAttampt.Request.Commands;
 using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
-    public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionDTO>>
+    public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionStudentDTO>>
     {
         private readonly IExamRepository _examRepository;
         private readonly IClassRoomMembersRepository _classRoomMembersRepository;
@@ -30,11 +30,11 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             _meditor = meditor;
         }
 
-        public async Task<PaginateResponse<GetQuestionDTO>> Handle(StartExamRequest request, CancellationToken cancellationToken)
+        public async Task<PaginateResponse<GetQuestionStudentDTO>> Handle(StartExamRequest request, CancellationToken cancellationToken)
         {
             //Check User Is In class
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
-            var studentExist = await _classRoomMembersRepository.StudentIsInClassAsync(currentUserId, request.ExamId);
+            var studentExist = await _classRoomMembersRepository.StudentIsInclassByExamId(currentUserId, request.ExamId);
             if (studentExist == false)
             {
                 throw new UnauthorizedAccessException("شما دسترسی به این آزمون ندارید.");
@@ -69,7 +69,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             {
                 throw new UnauthorizedAccessException("شما قبلا در این آزمون شرکت کرده اید.");
             }
-            var questions = await _meditor.Send(new GetQuestionForExamRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
+            var questions = await _meditor.Send(new GetQuestionExamStudentRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
             return questions;
         }
     }

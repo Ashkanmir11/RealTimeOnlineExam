@@ -73,7 +73,7 @@ namespace OnlineExam.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DescriptiveAnswersId")
+                    b.Property<int>("DescriptiveQuestionId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ModifiedDate")
@@ -88,11 +88,12 @@ namespace OnlineExam.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("StudentScore")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DescriptiveAnswersId");
+                    b.HasIndex("DescriptiveQuestionId");
 
                     b.ToTable("DescriptiveAnswers");
                 });
@@ -296,7 +297,8 @@ namespace OnlineExam.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("StudentScore")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.HasKey("Id");
 
@@ -436,7 +438,8 @@ namespace OnlineExam.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("StudentScore")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(6, 2)
+                        .HasColumnType("decimal(6,2)");
 
                     b.Property<int>("TrueOrFalseQuestionId")
                         .HasColumnType("int");
@@ -474,7 +477,7 @@ namespace OnlineExam.Persistence.Migrations
                 {
                     b.HasOne("OnlineExam.Domain.Entities.DescriptiveQuestion", "DescriptiveQuestion")
                         .WithMany("Answers")
-                        .HasForeignKey("DescriptiveAnswersId")
+                        .HasForeignKey("DescriptiveQuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

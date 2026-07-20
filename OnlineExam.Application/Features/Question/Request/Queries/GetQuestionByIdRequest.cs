@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Request.Queries
 {
-    public class GetQuestionByIdRequest : IRequest<GetQuestionDTO>
+    public class GetQuestionByIdRequest : IRequest<GetQuestionTeacherDTO>
     {
         public int Id {  get; set; }
     }

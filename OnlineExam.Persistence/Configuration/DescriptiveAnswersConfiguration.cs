@@ -17,6 +17,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e=>e.Id).UseIdentityColumn();
             builder.Property(e => e.StudentAnswer).HasMaxLength(1000);
             builder.Property(e => e.StudentId).IsRequired();
+            builder.Property(e => e.StudentScore).HasPrecision(6, 2);
         }
     }
 }

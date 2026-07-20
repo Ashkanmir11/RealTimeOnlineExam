@@ -13,6 +13,6 @@ namespace OnlineExam.Application.Contracts.Persistence
     public interface IQuestionRepository : IGenericRepository<Question>
     {
         Task DeleteQuestionDetailAsync(int questionId);
-        Task<PaginateResponse<GetQuestionDTO>> GetByExamId(int ExamId,bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO);
+        Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId,bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO);
     }
 }

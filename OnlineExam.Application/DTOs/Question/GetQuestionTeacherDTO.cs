@@ -8,10 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace OnlineExam.Application.DTOs.Question
 {
-    public class GetQuestionDTO : BaseDTO
+    public class GetQuestionTeacherDTO : BaseDTO
     {
         public string? QuestionText { get; set; }
         public decimal TotalScore { get; set; }

@@ -26,10 +26,10 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
             {
                 return await _accountRepository.UserExistAsync(Id);
             }).WithMessage((Model)=>$"کاربری با آیدی {Model.StudentId} یافت نشد.");
-            RuleFor(e => e.DescriptiveAnswersId).MustAsync(async (Id, Token) =>
+            RuleFor(e => e.DescriptiveQuestionId).MustAsync(async (Id, Token) =>
             {
                 return await _descriptiveQuestionRepository.ExistAsync(Id);
-            }).WithMessage((Model) => $"سوالی با آیدی {Model.DescriptiveAnswersId} یافت نشد.");
+            }).WithMessage((Model) => $"سوالی با آیدی {Model.DescriptiveQuestionId} یافت نشد.");
             RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
             {
                 return await _examRepository.ExistAsync(Id);

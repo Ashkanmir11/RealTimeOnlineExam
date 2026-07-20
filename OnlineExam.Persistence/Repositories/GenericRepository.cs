@@ -33,11 +33,18 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<T> AddAsync<TSource>(TSource source)
         {
 
+            try
+            {
+                var entity = _mapper.Map<T>(source);
+                await _context.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
 
-            var entity = _mapper.Map<T>(source);
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            {
+                throw ex;
+            }
 
         }
         public async Task DeleteAsync(T entity)

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Handler.Queries
 {
-    public class GetQuestionRequestHandler : IRequestHandler<GetQuestionRequest, PaginateResponse<GetQuestionDTO>>
+    public class GetQuestionRequestHandler : IRequestHandler<GetQuestionRequest, PaginateResponse<GetQuestionTeacherDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
         public GetQuestionRequestHandler(IQuestionRepository questionRepository)
@@ -19,9 +19,9 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
             _questionRepository = questionRepository;
         }
 
-        public async Task<PaginateResponse<GetQuestionDTO>> Handle(GetQuestionRequest request, CancellationToken cancellationToken)
+        public async Task<PaginateResponse<GetQuestionTeacherDTO>> Handle(GetQuestionRequest request, CancellationToken cancellationToken)
         {
-            return await _questionRepository.GetAllAsync<GetQuestionDTO>(request.PaginateRequest);
+            return await _questionRepository.GetAllAsync<GetQuestionTeacherDTO>(request.PaginateRequest);
         }
     }
 }

@@ -11,18 +11,17 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Handler.Queries
 {
-    public class GetQuestionForExamRequestHandler : IRequestHandler<GetQuestionForExamRequest, PaginateResponse<GetQuestionDTO>>
+    public class GetQuestionExamStudentRequestHandler : IRequestHandler<GetQuestionExamStudentRequest, PaginateResponse<GetQuestionStudentDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
-        public GetQuestionForExamRequestHandler(IQuestionRepository questionRepository)
+        public GetQuestionExamStudentRequestHandler(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
         }
 
-        public async Task<PaginateResponse<GetQuestionDTO>> Handle(GetQuestionForExamRequest request, CancellationToken cancellationToken)
+        public async Task<PaginateResponse<GetQuestionStudentDTO>> Handle(GetQuestionExamStudentRequest request, CancellationToken cancellationToken)
         {
-            //throw new NotImplementedException();
-            return await _questionRepository.GetByExamId(request.ExamId, request.RandomQuesiton,request.StudentId,request.PaginateRequestDTO);
+            return await _questionRepository.GetByExamId<GetQuestionStudentDTO>(request.ExamId, request.RandomQuesiton,request.StudentId,request.PaginateRequestDTO);
         }
     }
 }

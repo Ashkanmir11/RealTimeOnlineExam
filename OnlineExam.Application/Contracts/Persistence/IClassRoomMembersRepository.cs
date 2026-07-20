@@ -12,7 +12,7 @@ namespace OnlineExam.Application.Contracts.Persistence
     public interface IClassRoomMembersRepository : IGenericRepository<ClassRoomMembers>
     {
         Task<bool> AddMembersAsync(CreateClassRoomMemberDTO createClassRoomMemberDTO);
-
+        Task<bool> StudentIsInclassByExamId(string studentId, int examId);
         Task<List<string>> GetStudentByClassIdAsync(int ClassId);
         Task<bool> StudentIsInClassAsync(string StudentId, int ClassId);
         Task<bool> UpdateClassRoomAsync(UpdateClassRoomMemberDTO updateClassRoomMemberDTO);

@@ -16,6 +16,7 @@ namespace OnlineExam.Persistence.Configuration
         {
             builder.HasKey(e => e.Id);
             builder.Property(e=>e.Id).UseIdentityColumn();
+            builder.Property(e => e.StudentScore).HasPrecision(6, 2);
 
         }
     }

@@ -20,15 +20,11 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        //public async Task<int> GetCurrentQuestionNumber(int examId)
-        //{
-        //    var exam = await _context.Exams.Where(e => e.Id == examId).SingleOrDefaultAsync();
-        //    int multipleQuestionMax =await _context.MultipleChoiceQuestions.AnyAsync()? await _context.MultipleChoiceQuestions.Where(e => e.ExamId == examId).Select(e => e.QuestionNumber).MaxAsync():0;
-        //    int descpritiveQuestionMax = await _context.DescriptiveQuestions.AnyAsync() ? await _context.DescriptiveQuestions.Where(e => e.ExamId == examId).Select(e => e.QuestionNumber).MaxAsync():0;
-        //    int trueOrFalseQuestionMax = await _context.TrueOrFalseQuestions.AnyAsync() ? await _context.TrueOrFalseQuestions.Where(e=>e.ExamId==examId).Select(e => e.QuestionNumber).MaxAsync():0;
+        public async Task<bool> IsUserTeacher(string UserId, int ExamId)
+        {
+            var exam=await _context.Exams.Where(e=>e.Id== ExamId).SingleOrDefaultAsync();
+            return await _context.ClassRooms.AnyAsync(e => e.Id == exam.ClassId && e.TeacherId == UserId);
+        }
 
-        //    int max= Math.Max(multipleQuestionMax, Math.Max(descpritiveQuestionMax, trueOrFalseQuestionMax));
-        //    return max + 1;
-        //}
     }
 }

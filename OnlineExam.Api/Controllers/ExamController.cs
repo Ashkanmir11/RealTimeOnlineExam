@@ -84,9 +84,9 @@ namespace OnlineExam.Api.Controllers
         [HttpPost("End/{ExamId}")]
         public async Task<IActionResult> End(int ExamId)
         {
-            // await _mediator.Send(new EndExamRequest() { ExamId = ExamId });
-            var aiServices = _aiServices.GetScore("موتور هواپیما سوخت مخصوص دارد.", "هواپیما سوخت مخصوص دارد.", 2);
+            await _mediator.Send(new EndExamRequest() { ExamId = ExamId });
             return NoContent();
         }
+        
     }
 }

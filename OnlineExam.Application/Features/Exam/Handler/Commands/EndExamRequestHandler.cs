@@ -10,6 +10,7 @@ using OpenAI.Responses;
 using OnlineExam.Application.Contracts.Identity;
 using OpenAI.Realtime;
 using OnlineExam.Application.Contracts.AIServices;
+using OnlineExam.Application.DTOs.Question;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class EndExamRequestHandler : IRequestHandler<EndExamRequest>
@@ -39,7 +40,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         {
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
             var user = await _accountRepository.GetUserById(currentUserId);
-            var questionList = await _questionRepository.GetByExamId(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 9999 });
+            var questionList = await _questionRepository.GetByExamId<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
             foreach (var question in questionList.Data)
             {
                 if (question.TrueOrFalseQuestion != null)
@@ -60,9 +61,9 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                     }
                     await _multipleChoiceAnswersRepository.UpdateAsync(answer.Id, answer);
                 }
-                else
+                else if(question.DescriptiveQuestion != null) 
                 {
-                    var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.MultipleChoiceQuestion.Id);
+                    var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.DescriptiveQuestion.Id);
                     var score =await _aiServices.GetScore(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
                     answer.StudentScore = score;
                     await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);

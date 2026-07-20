@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Exam.Request.Commands
 {
-    public class StartExamRequest : IRequest<PaginateResponse<GetQuestionDTO>>
+    public class StartExamRequest : IRequest<PaginateResponse<GetQuestionStudentDTO>>
     {
 
         public int ExamId {  get; set; }
