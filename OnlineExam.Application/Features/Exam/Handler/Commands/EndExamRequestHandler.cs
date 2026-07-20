@@ -23,9 +23,11 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         private readonly IMultipleChoiceAnswersRepository _multipleChoiceAnswersRepository;
         private readonly IDescriptiveAnswersRepository _descriptiveAnswersRepository;
         private readonly IAiServices _aiServices;
+        private readonly IExamAttamptRepository _examAttamptRepository;
         public EndExamRequestHandler(IExamRepository examRepository, IAccountRepository accountRepository
             , IQuestionRepository questionRepository, IAuthServices authServices, ITrueOrFalseAnswersRepository trueOrFalseAnswersRepository
-            , IMultipleChoiceAnswersRepository multipleChoiceAnswersRepository, IDescriptiveAnswersRepository descriptiveAnswersRepository, IAiServices aiServices)
+            , IMultipleChoiceAnswersRepository multipleChoiceAnswersRepository, IDescriptiveAnswersRepository descriptiveAnswersRepository
+            , IAiServices aiServices, IExamAttamptRepository examAttamptRepository)
         {
             _examRepository = examRepository;
             _accountRepository = accountRepository;
@@ -35,11 +37,14 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             _multipleChoiceAnswersRepository = multipleChoiceAnswersRepository;
             _descriptiveAnswersRepository = descriptiveAnswersRepository;
             _aiServices = aiServices;
+            _examAttamptRepository = examAttamptRepository;
         }
         public async Task Handle(EndExamRequest request, CancellationToken cancellationToken)
         {
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
             var user = await _accountRepository.GetUserById(currentUserId);
+            await _examAttamptRepository.EndExam(request.ExamId, currentUserId);
+
             var questionList = await _questionRepository.GetByExamId<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
             foreach (var question in questionList.Data)
             {
@@ -69,7 +74,6 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                     await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);
                 }
             }
-
 
         }
     }

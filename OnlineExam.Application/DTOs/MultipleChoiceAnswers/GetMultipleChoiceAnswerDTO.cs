@@ -17,6 +17,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers
         [JsonIgnore]
         public string? StudentId { get; set; }
         public GetUserDTO? User { get; set; }
+        public decimal StudentScore { get; set; } 
         public GetMultipleChoiceQuestionDTO? MultipleChoiceQuestion { get; set; }
     }
 }

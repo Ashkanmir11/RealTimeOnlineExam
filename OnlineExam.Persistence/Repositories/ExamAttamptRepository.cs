@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Persistence.Repositories
 {
     public class ExamAttamptRepository : GenericRepository<ExamAttampt>, IExamAttamptRepository
@@ -18,6 +18,17 @@ namespace OnlineExam.Persistence.Repositories
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task EndExam(int ExamId, string UserId)
+        {
+            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).SingleOrDefaultAsync();
+            if (examAttampt == null)
+            {
+                throw new BadRequestException("کاربر به آزمون وارد نشده.");
+            }
+            examAttampt.IsEnded = true;
+            await _context.SaveChangesAsync();
         }
 
         public async Task<bool> ExamEndedAsync(int ExamId, string UserId)

@@ -11,5 +11,6 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task<bool> ExamEndedAsync(int ExamId, string UserId);
         Task<bool> ExamStartedAsync(int ExamId, string UserId);
+        Task EndExam(int ExamId , string UserId);
     }
 }

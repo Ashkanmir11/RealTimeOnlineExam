@@ -44,23 +44,26 @@ namespace OnlineExam.Application.Profile
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, UpdateDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionStudentDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestion, GetDescriptiveQuestionTeacherDTO>().ReverseMap();
 
             //Descriptive Answer
             CreateMap<DescriptiveAnswers, CreateDescriptiveAnswersDTO>().ReverseMap();
             CreateMap<DescriptiveAnswers, GetDescriptiveAnswersDTO>().ReverseMap();
             CreateMap<DescriptiveAnswers, UpdateDescriptiveAnswersDTO>().ReverseMap();
-
+            CreateMap<DescriptiveAnswers, GetDescriptiveAnswersTeacherDTO>().ReverseMap();
 
             //Multiple Choice Question
             CreateMap<MultipleChoiceQuestion, CreateMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, UpdateMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionStudentDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionTeacherDTO>().ReverseMap();
 
             //Multiple Choice Answer
             CreateMap<MultipleChoiceAnswers, CreateMultipleChoiceAnswerDTO>().ReverseMap();
             CreateMap<MultipleChoiceAnswers, GetMultipleChoiceAnswerDTO>().ReverseMap();
             CreateMap<MultipleChoiceAnswers, UpdateMultipleChoiceAnswerDTO>().ReverseMap();
+            CreateMap<MultipleChoiceAnswers, GetMultipleChoiceAnswerTeacherDTO>().ReverseMap();
 
             //Question
             CreateMap<Question, CreateQuestionDTO>().ReverseMap();
@@ -83,11 +86,13 @@ namespace OnlineExam.Application.Profile
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, UpdateTrueOfFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionStudentDTO>().ReverseMap();
+            CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionTeacherDTO>().ReverseMap();
 
             //True or false Answer
             CreateMap<TrueOrFalseAnswers, CreateTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, UpdateTrueOrFalseAnswerDTO>().ReverseMap();
+            CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerTeacherDTO>().ReverseMap();
 
         }
     }
