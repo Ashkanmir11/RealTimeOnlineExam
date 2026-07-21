@@ -95,7 +95,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, UpdateTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerTeacherDTO>().ReverseMap();
-
+            CreateMap<TrueOrFalseAnswers, UpdateTrueOrFalseAnswerTeacherDTO>().ReverseMap();
         }
     }
 }

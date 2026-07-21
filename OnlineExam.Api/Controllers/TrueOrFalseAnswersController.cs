@@ -63,5 +63,13 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() { UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
+
+        [HttpPut("Grading")]
+        [Authorize]
+        public async Task<IActionResult> Grading(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO ,int examId)
+        {
+            await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() { UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO, ExamId = examId });
+            return NoContent();
+        }
     }
 }
