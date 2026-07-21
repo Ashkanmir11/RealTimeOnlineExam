@@ -32,7 +32,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
             foreach (var clasRoom in classRooms.Data)
             {
                 var classRoomStudents = await _classRoomMembersRepository.GetStudentByClassIdAsync(clasRoom.Id);
-                var students = await _accountRepository.GetUsersByIds(classRoomStudents);
+                var students = await _accountRepository.GetUsersByIdsAsync(classRoomStudents);
                 result.Add(new GetClassRoomMemberDTO()
                 {
                     Students= students,

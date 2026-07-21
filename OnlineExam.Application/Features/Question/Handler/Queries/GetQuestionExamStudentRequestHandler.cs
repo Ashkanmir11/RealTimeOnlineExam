@@ -21,7 +21,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
 
         public async Task<PaginateResponse<GetQuestionStudentDTO>> Handle(GetQuestionExamStudentRequest request, CancellationToken cancellationToken)
         {
-            return await _questionRepository.GetByExamId<GetQuestionStudentDTO>(request.ExamId, request.RandomQuesiton,request.StudentId,request.PaginateRequestDTO);
+            return await _questionRepository.GetByExamIdAsync<GetQuestionStudentDTO>(request.ExamId, request.RandomQuesiton,request.StudentId,request.PaginateRequestDTO);
         }
     }
 }

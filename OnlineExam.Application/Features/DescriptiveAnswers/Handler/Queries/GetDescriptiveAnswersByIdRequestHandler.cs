@@ -27,7 +27,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries
             {
                 return null;
             }
-            var user =await _accountRepository.GetUserById(answer.StudentId);
+            var user =await _accountRepository.GetUserByIdAsync(answer.StudentId);
             var result = new GetDescriptiveAnswersDTO()
             {
                 Id=answer.Id,

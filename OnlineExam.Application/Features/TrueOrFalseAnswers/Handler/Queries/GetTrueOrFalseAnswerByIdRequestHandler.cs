@@ -29,7 +29,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Queries
             {
                 return null;
             }
-            var user = await _accountRepository.GetUserById(answer.StudentId);
+            var user = await _accountRepository.GetUserByIdAsync(answer.StudentId);
             var result = new GetTrueOrFalseAnswerDTO()
             {
                 Id = answer.Id,

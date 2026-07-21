@@ -42,10 +42,10 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         public async Task Handle(EndExamRequest request, CancellationToken cancellationToken)
         {
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
-            var user = await _accountRepository.GetUserById(currentUserId);
-            await _examAttamptRepository.EndExam(request.ExamId, currentUserId);
+            var user = await _accountRepository.GetUserByIdAsync(currentUserId);
+            await _examAttamptRepository.EndExamAsync(request.ExamId, currentUserId);
 
-            var questionList = await _questionRepository.GetByExamId<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
+            var questionList = await _questionRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
             foreach (var question in questionList.Data)
             {
                 if (question.TrueOrFalseQuestion != null)
@@ -69,7 +69,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                 else if(question.DescriptiveQuestion != null) 
                 {
                     var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.DescriptiveQuestion.Id);
-                    var score =await _aiServices.GetScore(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
+                    var score =await _aiServices.GetScoreAsync(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
                     answer.StudentScore = score;
                     await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);
                 }

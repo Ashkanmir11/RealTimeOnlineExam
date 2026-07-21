@@ -20,7 +20,7 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task EndExam(int examId, string userId)
+        public async Task EndExamAsync(int examId, string userId)
         {
             var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
             if (examAttampt == null)

@@ -21,7 +21,7 @@ namespace OnlineExam.Application.Serviecs
             _configuration = configuration;
         }
 
-        public async Task<decimal> GetScore(string StudentText, string CorrectText, decimal Score)
+        public async Task<decimal> GetScoreAsync(string StudentText, string CorrectText, decimal Score)
         {
             try
             {

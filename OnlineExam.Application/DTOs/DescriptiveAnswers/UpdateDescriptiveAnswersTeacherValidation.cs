@@ -22,7 +22,7 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers
             }).WithMessage("پاسخ یافت نشد.");
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
             {
-                var question = await _questionRepository.GetByQuestionDetailId(false, false, true, Model.Id);
+                var question = await _questionRepository.GetByQuestionDetailIdAsync(false, false, true, Model.Id);
                 if (Score > question.TotalScore)
                 {
                     return false;

@@ -32,7 +32,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Queries
                 {
                     Id = answer.Id,
                     StudentAnswer = answer.StudentAnswer,
-                    User = await _accountRepository.GetUserById(answer.StudentId),
+                    User = await _accountRepository.GetUserByIdAsync(answer.StudentId),
                     TrueOrFalseQuestion = answer.TrueOrFalseQuestion
 
                 });

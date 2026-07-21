@@ -26,7 +26,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
             }).WithMessage("پاسخ یافت نشد.");
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
                 {
-                    var question = await _questionRepository.GetByQuestionDetailId(false, true, false, Model.Id);
+                    var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, Model.Id);
                     if (Score > question.TotalScore)
                     {
                         return false;

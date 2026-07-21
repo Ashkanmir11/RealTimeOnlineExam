@@ -21,7 +21,7 @@ namespace OnlineExam.Application.DTOs.Identity.Validation
             RuleFor(e => e.Email).EmailAddress().WithMessage("ایمیل معتبر نیست");
             RuleFor(e => e.PhoneNumber).Length(11).WithMessage("شماره تلفن باید 11 رقم باشد.").MustAsync(async(Phone,Token)=>
             {
-                return !await _accountRepository.PhoneExist(Phone);
+                return !await _accountRepository.PhoneExistAsync(Phone);
             }).WithMessage((Model)=>$"شماره تلفن {Model.PhoneNumber} تکراری است.");
             
         }

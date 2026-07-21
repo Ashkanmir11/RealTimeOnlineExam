@@ -46,7 +46,7 @@ namespace OnlineExam.Persistence.Repositories
             }
         }
 
-        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int examId, bool randomQuestions, string? studentId, PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<TResult>> GetByExamIdAsync<TResult>(int examId, bool randomQuestions, string? studentId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Questions.AsQueryable();
 
@@ -66,7 +66,7 @@ namespace OnlineExam.Persistence.Repositories
 
         }
 
-        public async Task<Question> GetByQuestionDetailId(bool trueOrFalse, bool multipleChoice, bool descriptive, int id)
+        public async Task<Question> GetByQuestionDetailIdAsync(bool trueOrFalse, bool multipleChoice, bool descriptive, int id)
         {
             if (trueOrFalse)
             {

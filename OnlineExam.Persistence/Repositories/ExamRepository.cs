@@ -20,7 +20,7 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task<bool> IsUserTeacher(string userId, int examId)
+        public async Task<bool> IsUserTeacherAsync(string userId, int examId)
         {
             var exam=await _context.Exams.Where(e=>e.Id== examId).SingleOrDefaultAsync();
             return await _context.ClassRooms.AnyAsync(e => e.Id == exam.ClassId && e.TeacherId == userId);

@@ -45,13 +45,13 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
         public async Task<PaginateResponse<GetQuestionTeacherDTO>> Handle(GetQuestionWithAnswerRequest request, CancellationToken cancellationToken)
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var access = await _examRepository.IsUserTeacher(currentUser, request.ExamId);
+            var access = await _examRepository.IsUserTeacherAsync(currentUser, request.ExamId);
             if (access == false)
             {
                 throw new UnauthorizedAccessException("شما دسترسی به سوالات و پاسخ های این آزمون ندارید.");
             }
 
-            var questions = await _quesitonRepository.GetByExamId<GetQuestionTeacherDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);
+            var questions = await _quesitonRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);
             if (questions == null)
             {
                 return null;

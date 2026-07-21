@@ -32,7 +32,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries
                 {
                     Id = answer.Id,
                     StudentAnswer = answer.StudentAnswer,
-                    UserDTO = await _accountRepository.GetUserById(answer.StudentId),
+                    UserDTO = await _accountRepository.GetUserByIdAsync(answer.StudentId),
                     DescriptiveQuestion = answer.DescriptiveQuestion
 
                 });

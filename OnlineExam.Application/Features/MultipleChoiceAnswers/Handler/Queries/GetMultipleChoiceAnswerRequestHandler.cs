@@ -33,7 +33,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Queries
                 {
                     Id = answer.Id,
                     StudentChoice = answer.StudentChoice,
-                    User = await _accountRepository.GetUserById(answer.StudentId),
+                    User = await _accountRepository.GetUserByIdAsync(answer.StudentId),
                     MultipleChoiceQuestion = answer.MultipleChoiceQuestion
 
                 });

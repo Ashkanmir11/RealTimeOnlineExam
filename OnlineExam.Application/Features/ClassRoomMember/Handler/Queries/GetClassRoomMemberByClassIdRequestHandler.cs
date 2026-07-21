@@ -29,7 +29,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
             var result = new GetClassRoomMemberDTO()
             {
                 GetClassRoomDTO = await _classRoomRepository.GetAsync<GetClassRoomDTO>(request.ClassRoomId),
-                Students =await _accountRepository.GetUsersByIds(studentsId)
+                Students =await _accountRepository.GetUsersByIdsAsync(studentsId)
             };
             return result;
         }
