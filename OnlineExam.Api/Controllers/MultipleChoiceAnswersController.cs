@@ -64,5 +64,12 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() { UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
+        [HttpPut("Grading")]
+        [Authorize]
+        public async Task<IActionResult> Grading(int examId, UpdateMultipleChoiceAnswerTeacherDTO updateMultipleChoiceAnswerTeacherDTO)
+        {
+            await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() { UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO, ExamId = examId });
+            return NoContent();
+        }
     }
 }

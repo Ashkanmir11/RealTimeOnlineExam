@@ -30,7 +30,6 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 
         public async Task Handle(UpdateDescriptiveAnswersTeacherRequest request, CancellationToken cancellationToken)
         {
-            //Check User is teacher
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isTeacher = await _classRepository.IsUserTeacherByExamIdAsync(request.ExamId, currentUser);
             if (isTeacher == false)
