@@ -12,11 +12,11 @@ namespace OnlineExam.Application.Contracts.Identity
 {
     public interface IAccountRepository
     {
-        Task<bool> UserExistAsync(string UserId);
-        Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> UserId);
+        Task<bool> UserExistAsync(string userId);
+        Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> userId);
         Task<PaginateResponse<UserFullInfoDTO>> GetAllUsersAsync(PaginateRequestDTO paginateRequestDTO);
-        Task<GetUserDTO> GetUserById(string UserId);
-        Task<bool> PhoneExist(string Phone);
+        Task<GetUserDTO> GetUserById(string userId);
+        Task<bool> PhoneExist(string phone);
        
     }
 }

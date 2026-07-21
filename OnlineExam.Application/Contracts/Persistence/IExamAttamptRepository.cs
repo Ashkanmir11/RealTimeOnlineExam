@@ -9,8 +9,8 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IExamAttamptRepository : IGenericRepository<ExamAttampt>
     {
-        Task<bool> ExamEndedAsync(int ExamId, string UserId);
-        Task<bool> ExamStartedAsync(int ExamId, string UserId);
-        Task EndExam(int ExamId , string UserId);
+        Task<bool> ExamEndedAsync(int examId, string userId);
+        Task<bool> ExamStartedAsync(int examId, string userId);
+        Task EndExam(int examId , string userId);
     }
 }

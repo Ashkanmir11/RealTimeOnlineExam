@@ -62,25 +62,25 @@ namespace OnlineExam.Identity.Repositories
 
         }
 
-        public async Task<GetUserDTO> GetUserById(string UserId)
+        public async Task<GetUserDTO> GetUserById(string userId)
         {
-            return await _context.Users.ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+            return await _context.Users.Where(e=>e.Id==userId).ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
 
-        public async Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> UserId)
+        public async Task<List<UserNameAndLastNameDTO>> GetUsersByIds(List<string> userId)
         {
-            return await _context.Users.Where(e => UserId.Contains(e.Id)).ProjectTo<UserNameAndLastNameDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _context.Users.Where(e => userId.Contains(e.Id)).ProjectTo<UserNameAndLastNameDTO>(_mapper.ConfigurationProvider).ToListAsync();
 
         }
 
-        public async Task<bool> PhoneExist(string Phone)
+        public async Task<bool> PhoneExist(string phone)
         {
-            return await _context.Users.AnyAsync(e => e.PhoneNumber == Phone);
+            return await _context.Users.AnyAsync(e => e.PhoneNumber == phone);
         }
 
-        public async Task<bool> UserExistAsync(string UserId)
+        public async Task<bool> UserExistAsync(string userId)
         {
-            return await _context.Users.AnyAsync(e => e.Id == UserId);
+            return await _context.Users.AnyAsync(e => e.Id == userId);
         }
     }
 }

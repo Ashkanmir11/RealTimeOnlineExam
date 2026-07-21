@@ -8,6 +8,6 @@ namespace OnlineExam.Application.Contracts.AIServices
 {
     public interface IAiServices
     {
-        Task<decimal> GetScore(string StudentText, string CorrectText, decimal Score);
+        Task<decimal> GetScore(string studentText, string correctText, decimal score);
     }
 }

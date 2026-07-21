@@ -13,8 +13,8 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task<bool> AddMembersAsync(CreateClassRoomMemberDTO createClassRoomMemberDTO);
         Task<bool> StudentIsInClassByExamId(string studentId, int examId);
-        Task<List<string>> GetStudentByClassIdAsync(int ClassId);
-        Task<bool> StudentIsInClassAsync(string StudentId, int ClassId);
+        Task<List<string>> GetStudentByClassIdAsync(int classId);
+        Task<bool> StudentIsInClassAsync(string studentId, int classId);
         Task<bool> UpdateClassRoomAsync(UpdateClassRoomMemberDTO updateClassRoomMemberDTO);
         Task<bool> DeleteAllClassRoomIds(List<string> studentIds, int classRoomId);
     }

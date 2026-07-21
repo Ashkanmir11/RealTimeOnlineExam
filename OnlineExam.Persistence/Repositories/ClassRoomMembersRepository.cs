@@ -41,9 +41,9 @@ namespace OnlineExam.Persistence.Repositories
 
 
 
-        public async Task<List<string>> GetStudentByClassIdAsync(int ClassId)
+        public async Task<List<string>> GetStudentByClassIdAsync(int classId)
         {
-            var classMembers = await _context.ClassRoomMembers.Where(e => e.ClassRomeId == ClassId).Select(e => e.StudentId).ToListAsync();
+            var classMembers = await _context.ClassRoomMembers.Where(e => e.ClassRomeId == classId).Select(e => e.StudentId).ToListAsync();
             return classMembers;
         }
 
@@ -58,7 +58,7 @@ namespace OnlineExam.Persistence.Repositories
             });
             return true;
         }
-        public Task<bool> DeleleAsync(int Id)
+        public Task<bool> DeleleAsync(int id)
         {
             throw new NotImplementedException();
         }
@@ -74,9 +74,9 @@ namespace OnlineExam.Persistence.Repositories
             var examClassId =await _context.Exams.Where(e => e.Id == examId).Select(e => e.ClassId).SingleOrDefaultAsync();
             return await _context.ClassRoomMembers.AnyAsync(e => e.ClassRomeId == examClassId && e.StudentId == studentId);
         }
-        public async Task<bool> StudentIsInClassAsync(string StudentId, int ClassId)
+        public async Task<bool> StudentIsInClassAsync(string studentId, int classId)
         {
-           return await _context.ClassRoomMembers.AnyAsync(e=>e.ClassRomeId==ClassId&& e.StudentId==StudentId);
+           return await _context.ClassRoomMembers.AnyAsync(e=>e.ClassRomeId==classId&& e.StudentId==studentId);
         }
     }
 }

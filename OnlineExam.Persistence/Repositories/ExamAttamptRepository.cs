@@ -20,9 +20,9 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task EndExam(int ExamId, string UserId)
+        public async Task EndExam(int examId, string userId)
         {
-            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).SingleOrDefaultAsync();
+            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
             if (examAttampt == null)
             {
                 throw new BadRequestException("کاربر به آزمون وارد نشده.");
@@ -31,21 +31,21 @@ namespace OnlineExam.Persistence.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> ExamEndedAsync(int ExamId, string UserId)
+        public async Task<bool> ExamEndedAsync(int examId, string userId)
         {
-            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).SingleOrDefaultAsync();
+            var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
             if (DateTime.Now > examAttampt.EndDate)
             {
                 examAttampt.IsEnded = true;
                 await _context.SaveChangesAsync();
             }
 
-            return await _context.ExamAttampts.Where(e => e.ExamId == ExamId && e.StudentId == UserId).Select(e => e.IsEnded).SingleOrDefaultAsync();
+            return await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).Select(e => e.IsEnded).SingleOrDefaultAsync();
         }
 
-        public async Task<bool> ExamStartedAsync(int ExamId, string UserId)
+        public async Task<bool> ExamStartedAsync(int examId, string userId)
         {
-            return await _context.ExamAttampts.AnyAsync(e => e.ExamId == ExamId && e.StudentId == UserId);
+            return await _context.ExamAttampts.AnyAsync(e => e.ExamId == examId && e.StudentId == userId);
         }
     }
 }

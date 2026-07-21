@@ -46,18 +46,18 @@ namespace OnlineExam.Persistence.Repositories
             }
         }
 
-        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId, bool RandomQuestions, string? StudentId, PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int examId, bool randomQuestions, string? studentId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Questions.AsQueryable();
 
-            query = query.Where(e => e.ExamId == ExamId);
+            query = query.Where(e => e.ExamId == examId);
             var totalCount = query.Count();
             var questions = await query.Include(e => e.DescriptiveQuestion).Include(e => e.MultipleChoiceQuestion)
                 .Include(e => e.TrueOrFalseQuestion).ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
 
-            if (RandomQuestions)
+            if (randomQuestions)
             {
-                questions = questions.OrderBy(q => HashCode.Combine(StudentId, q.GetType().GetProperty("Id").GetValue(q))).ToList();
+                questions = questions.OrderBy(q => HashCode.Combine(studentId, q.GetType().GetProperty("Id").GetValue(q))).ToList();
             }
             var skip = PaginateHelper<TResult>.GetSkip(paginateRequestDTO);
             questions = questions.Skip(skip).Take(paginateRequestDTO.PageCount).ToList();
@@ -66,17 +66,17 @@ namespace OnlineExam.Persistence.Repositories
 
         }
 
-        public async Task<Question> GetByQuestionDetailId(bool TrueOrFalse, bool MultipleChoice, bool Descriptive, int Id)
+        public async Task<Question> GetByQuestionDetailId(bool trueOrFalse, bool multipleChoice, bool descriptive, int id)
         {
-            if (TrueOrFalse)
+            if (trueOrFalse)
             {
-                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == Id).FirstOrDefaultAsync();
+                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == id).FirstOrDefaultAsync();
             }
-            if (MultipleChoice)
+            if (multipleChoice)
             {
-                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == Id).FirstOrDefaultAsync();
+                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == id).FirstOrDefaultAsync();
             }
-            return await _context.Questions.Where(e => e.DescriptiveQuestionId == Id).FirstOrDefaultAsync();
+            return await _context.Questions.Where(e => e.DescriptiveQuestionId == id).FirstOrDefaultAsync();
 
         }
     }

@@ -9,6 +9,6 @@ namespace OnlineExam.Application.Contracts.Persistence
 {
     public interface IExamRepository : IGenericRepository<Exam>
     {
-        Task<bool> IsUserTeacher(string UserId, int ExamId);
+        Task<bool> IsUserTeacher(string userId, int examId);
     }
 }
