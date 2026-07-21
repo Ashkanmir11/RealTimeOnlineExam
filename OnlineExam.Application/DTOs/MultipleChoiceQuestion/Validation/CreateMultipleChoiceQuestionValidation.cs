@@ -10,11 +10,9 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion.Validation
 {
     public class CreateMultipleChoiceQuestionValidation : AbstractValidator<CreateMultipleChoiceQuestionDTO>
     {
-        private readonly IExamRepository _examRepository;
 
-        public CreateMultipleChoiceQuestionValidation(IExamRepository examRepository)
+        public CreateMultipleChoiceQuestionValidation()
         {
-            _examRepository = examRepository;
 
             RuleFor(e => e.Choices).Must(Model =>
             {

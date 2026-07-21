@@ -22,7 +22,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
             _questionRepository = questionRepository;
             RuleFor(e => e.Id).MustAsync(async (Id, Token) =>
             {
-                return await multipleChoiceAnswersRepository.ExistAsync(Id);
+                return await _multipleChoiceAnswersRepository.ExistAsync(Id);
             }).WithMessage("پاسخ یافت نشد.");
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
                 {

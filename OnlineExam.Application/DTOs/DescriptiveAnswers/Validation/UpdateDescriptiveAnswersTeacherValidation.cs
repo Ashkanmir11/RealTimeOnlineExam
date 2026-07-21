@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Application.DTOs.DescriptiveAnswers
+namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
 {
     public class UpdateDescriptiveAnswersTeacherValidation : AbstractValidator<UpdateDescriptiveAnswersTeacherDTO>
     {

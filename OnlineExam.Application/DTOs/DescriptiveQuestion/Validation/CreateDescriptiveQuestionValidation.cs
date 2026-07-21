@@ -11,10 +11,8 @@ namespace OnlineExam.Application.DTOs.DescriptiveQuestion.Validation
 {
     public class CreateDescriptiveQuestionValidation : AbstractValidator<CreateDescriptiveQuestionDTO>
     {
-        private readonly IExamRepository _examRepository;
-        public CreateDescriptiveQuestionValidation(IExamRepository examRepository)
+        public CreateDescriptiveQuestionValidation()
         {
-            _examRepository = examRepository;
             RuleFor(e => e.CorrectAnswer).MaximumLength(1000).WithMessage("پاسخ درست نباید بیشتر از 1000 کاراکتر باشد.");
 
         }
