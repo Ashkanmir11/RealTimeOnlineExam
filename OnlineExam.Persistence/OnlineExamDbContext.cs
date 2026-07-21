@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OnlineExam.Domain.Common;
 using OnlineExam.Domain.Entities;
 using OnlineExam.Persistence.Configuration;
 using System;
@@ -46,6 +47,38 @@ namespace OnlineExam.Persistence
             builder.ApplyConfiguration(new ExamAttamptConfiguration());
 
             base.OnModelCreating(builder);
+        }
+
+        public override int SaveChanges()
+        {
+            var entries = ChangeTracker.Entries().Where(e => e.Entity is BaseModel && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                ((BaseModel)entityEntry.Entity).ModifiedDate = DateTime.Now;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((BaseModel)entityEntry.Entity).CreatedDate = DateTime.Now;
+                }
+            }
+            return base.SaveChanges();
+        }
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker.Entries().Where(e => e.Entity is BaseModel && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                ((BaseModel)entityEntry.Entity).ModifiedDate = DateTime.Now;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    ((BaseModel)entityEntry.Entity).CreatedDate = DateTime.Now;
+                }
+            }
+
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         }
     }
 }
