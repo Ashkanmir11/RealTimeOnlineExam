@@ -10,7 +10,7 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
 {
-    public class GetMultipleChoiceAnswerTeacherValidation : AbstractValidator<GetMultipleChoiceAnswerTeacherDTO>
+    public class GetMultipleChoiceAnswerTeacherValidation : AbstractValidator<UpdateMultipleChoiceAnswerTeacherDTO>
     {
 
         private readonly IMultipleChoiceAnswersRepository _multipleChoiceAnswersRepository;

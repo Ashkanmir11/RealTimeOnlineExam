@@ -21,15 +21,19 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
             _accountRepository = accountRepository;
             _examRepository=examRepository;
             _descriptiveQuestionRepository = descriptiveQuestionRepository;
+
             RuleFor(e => e.StudentAnswer).MaximumLength(1000).WithMessage("پاسخ نباید بیشتر از 1000 کاراکتر باشد.");
+
             RuleFor(e => e.StudentId).MustAsync(async (Id, Token) =>
             {
                 return await _accountRepository.UserExistAsync(Id);
             }).WithMessage((Model)=>$"کاربری با آیدی {Model.StudentId} یافت نشد.");
+
             RuleFor(e => e.DescriptiveQuestionId).MustAsync(async (Id, Token) =>
             {
                 return await _descriptiveQuestionRepository.ExistAsync(Id);
             }).WithMessage((Model) => $"سوالی با آیدی {Model.DescriptiveQuestionId} یافت نشد.");
+
             RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
             {
                 return await _examRepository.ExistAsync(Id);

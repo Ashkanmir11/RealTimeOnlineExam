@@ -34,6 +34,10 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> ExamEndedAsync(int examId, string userId)
         {
             var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
+            if(examAttampt == null)
+            {
+                throw new BadRequestException("آزمون شروع نشده.");
+            }
             if (DateTime.Now > examAttampt.EndDate)
             {
                 examAttampt.IsEnded = true;
