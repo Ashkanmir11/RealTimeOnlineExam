@@ -34,7 +34,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         {
             //Check User Is In class
             var currentUserId = await _authServices.GetCurrentUserIdAsync();
-            var studentExist = await _classRoomMembersRepository.StudentIsInclassByExamId(currentUserId, request.ExamId);
+            var studentExist = await _classRoomMembersRepository.StudentIsInClassByExamId(currentUserId, request.ExamId);
             if (studentExist == false)
             {
                 throw new UnauthorizedAccessException("شما دسترسی به این آزمون ندارید.");

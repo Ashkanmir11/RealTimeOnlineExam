@@ -41,7 +41,7 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpGet("Get")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get([FromQuery]PaginateRequestDTO paginateRequestDTO)
+        public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetDescriptiveAnswersRequest() { PaginateRequest = paginateRequestDTO });
             if (result.Data.Count == 0)
@@ -63,6 +63,14 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> Put(UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
         {
             await _mediator.Send(new UpdateDescriptiveAnswersRequest() { UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPut("Grading")]
+        public async Task<IActionResult> Grading(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO, int ExamId)
+        {
+            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO, ExamId = ExamId });
             return NoContent();
         }
     }

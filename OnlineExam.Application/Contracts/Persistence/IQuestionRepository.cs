@@ -14,5 +14,6 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task DeleteQuestionDetailAsync(int questionId);
         Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId,bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO);
+        Task<Question> GetByQuestionDetailId(bool TrueOrFalse, bool MultipleChoice, bool Descriptive, int Id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Domain.Entities;
 using System;
@@ -13,10 +14,16 @@ namespace OnlineExam.Persistence.Repositories
     {
         private readonly OnlineExamDbContext _context;
         private readonly IMapper _mapper;
-        public ClassRoomRepository(OnlineExamDbContext dbContext,IMapper mapper) : base(dbContext, mapper)
+        public ClassRoomRepository(OnlineExamDbContext dbContext, IMapper mapper) : base(dbContext, mapper)
         {
             _context = dbContext;
             _mapper = mapper;
+        }
+
+        public async Task<bool> IsUserTeacherByExamIdAsync(int examId,string teacherId)
+        {
+            var classId = await _context.Exams.Where(e => e.Id == examId).Select(e => e.ClassId).SingleOrDefaultAsync();
+            return await _context.ClassRooms.AnyAsync(e => e.Id == classId && e.TeacherId == teacherId);
         }
     }
 }

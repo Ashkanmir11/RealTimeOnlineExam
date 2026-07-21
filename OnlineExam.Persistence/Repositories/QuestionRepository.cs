@@ -46,7 +46,7 @@ namespace OnlineExam.Persistence.Repositories
             }
         }
 
-        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId, bool RandomQuestions, string? StudentId,PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<TResult>> GetByExamId<TResult>(int ExamId, bool RandomQuestions, string? StudentId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Questions.AsQueryable();
 
@@ -63,6 +63,20 @@ namespace OnlineExam.Persistence.Repositories
             questions = questions.Skip(skip).Take(paginateRequestDTO.PageCount).ToList();
             var result = PaginateHelper<TResult>.Paginate(questions, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
             return result;
+
+        }
+
+        public async Task<Question> GetByQuestionDetailId(bool TrueOrFalse, bool MultipleChoice, bool Descriptive, int Id)
+        {
+            if (TrueOrFalse)
+            {
+                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == Id).FirstOrDefaultAsync();
+            }
+            if (MultipleChoice)
+            {
+                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == Id).FirstOrDefaultAsync();
+            }
+            return await _context.Questions.Where(e => e.DescriptiveQuestionId == Id).FirstOrDefaultAsync();
 
         }
     }
