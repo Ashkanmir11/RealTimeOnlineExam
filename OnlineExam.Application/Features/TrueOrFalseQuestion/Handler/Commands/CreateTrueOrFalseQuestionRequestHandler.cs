@@ -16,11 +16,9 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
 {
     public class CreateTrueOrFalseQuestionRequestHandler : IRequestHandler<CreateTrueOrFalseQuestionRequest, int>
     {
-        private readonly IExamRepository _examRepository;
         private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
-        public CreateTrueOrFalseQuestionRequestHandler(IExamRepository examRepository, ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository)
+        public CreateTrueOrFalseQuestionRequestHandler(ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository)
         {
-            _examRepository = examRepository;
             _trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
         }
 

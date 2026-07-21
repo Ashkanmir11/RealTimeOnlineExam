@@ -18,11 +18,9 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
     public class UpdateClassRoomRequestHandler : IRequestHandler<UpdateClassRoomRequest>
     {
         private readonly IClassRoomRepository _classRoomRepository;
-        private readonly IMapper _mapper;
-        public UpdateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper)
+        public UpdateClassRoomRequestHandler(IClassRoomRepository classRoomRepository)
         {
             _classRoomRepository = classRoomRepository;
-            _mapper = mapper;
         }
 
         public async Task Handle(UpdateClassRoomRequest request, CancellationToken cancellationToken)

@@ -15,12 +15,10 @@ namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
 {
     public class CreateDescriptiveQuestionRequestHandler : IRequestHandler<CreateDescriptiveQuestionRequest, int>
     {
-        private readonly IExamRepository _examRepository;
         private readonly IDescriptiveQuestionRepository _descriptiveQuestionRepository;
         private readonly IValidator<CreateDescriptiveQuestionDTO> _validator;
-        public CreateDescriptiveQuestionRequestHandler(IExamRepository examRepository, IDescriptiveQuestionRepository descriptiveQuestionRepository, IValidator<CreateDescriptiveQuestionDTO> validator)
+        public CreateDescriptiveQuestionRequestHandler(IDescriptiveQuestionRepository descriptiveQuestionRepository, IValidator<CreateDescriptiveQuestionDTO> validator)
         {
-            _examRepository = examRepository;
             _descriptiveQuestionRepository = descriptiveQuestionRepository;
             _validator = validator;
         }

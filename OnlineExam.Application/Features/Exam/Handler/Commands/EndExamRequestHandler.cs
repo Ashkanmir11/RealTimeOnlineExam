@@ -15,7 +15,6 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class EndExamRequestHandler : IRequestHandler<EndExamRequest>
     {
-        private readonly IExamRepository _examRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAuthServices _authServices;
@@ -24,12 +23,11 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         private readonly IDescriptiveAnswersRepository _descriptiveAnswersRepository;
         private readonly IAiServices _aiServices;
         private readonly IExamAttamptRepository _examAttamptRepository;
-        public EndExamRequestHandler(IExamRepository examRepository, IAccountRepository accountRepository
+        public EndExamRequestHandler(IAccountRepository accountRepository
             , IQuestionRepository questionRepository, IAuthServices authServices, ITrueOrFalseAnswersRepository trueOrFalseAnswersRepository
             , IMultipleChoiceAnswersRepository multipleChoiceAnswersRepository, IDescriptiveAnswersRepository descriptiveAnswersRepository
             , IAiServices aiServices, IExamAttamptRepository examAttamptRepository)
         {
-            _examRepository = examRepository;
             _accountRepository = accountRepository;
             _questionRepository = questionRepository;
             _authServices = authServices;

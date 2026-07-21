@@ -19,25 +19,17 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
     public class CreateDescriptiveAnswersRequestHandler : IRequestHandler<CreateDescriptiveAnswersRequest>
     {
         private readonly IDescriptiveAnswersRepository _DescriptiveAnswersRepository;
-        private readonly IDescriptiveQuestionRepository _descriptiveQuestionRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateDescriptiveAnswersDTO> _validator;
-        private readonly IMediator _mediator;
         private readonly IExamAttamptRepository _examAttamptRepository;
 
         public CreateDescriptiveAnswersRequestHandler(IDescriptiveAnswersRepository DescriptiveAnswersRepository,
-            IDescriptiveQuestionRepository descriptiveQuestionRepository,
-            IAccountRepository accountRepository, IMediator mediator,
             IAuthServices authServices, IValidator<CreateDescriptiveAnswersDTO> validator
             , IExamAttamptRepository examAttamptRepository)
         {
-            _accountRepository = accountRepository;
             _DescriptiveAnswersRepository = DescriptiveAnswersRepository;
-            _descriptiveQuestionRepository = descriptiveQuestionRepository;
             _authServices = authServices;
             _validator = validator;
-            _mediator = mediator;
             _examAttamptRepository = examAttamptRepository;
         }
 

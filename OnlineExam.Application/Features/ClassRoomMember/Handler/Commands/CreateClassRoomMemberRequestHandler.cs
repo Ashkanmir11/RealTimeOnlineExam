@@ -17,12 +17,10 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
     public class CreateClassRoomMemberRequestHandler : IRequestHandler<CreateClassRoomMemberRequest>
     {
         private readonly IClassRoomMembersRepository _classRoomMembersRepository;
-        private readonly IClassRoomRepository _classRoomRepository;
         private readonly IValidator<CreateClassRoomMemberDTO> _validator;
-        public CreateClassRoomMemberRequestHandler(IClassRoomMembersRepository classRoomMembersRepository, IClassRoomRepository classRoomRepository, IValidator<CreateClassRoomMemberDTO> validator)
+        public CreateClassRoomMemberRequestHandler(IClassRoomMembersRepository classRoomMembersRepository, IValidator<CreateClassRoomMemberDTO> validator)
         {
             _classRoomMembersRepository = classRoomMembersRepository;
-            _classRoomRepository = classRoomRepository;
             _validator = validator;
         }
 

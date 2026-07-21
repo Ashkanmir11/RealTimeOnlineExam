@@ -17,18 +17,12 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
     public class CreateTrueOrFalseAnswerRequestHandler : IRequestHandler<CreateTrueOrFalseAnswerRequest>
     {
         private readonly ITrueOrFalseAnswersRepository _TrueOrFalseAnswersRepository;
-        private readonly ITrueOrFalseQuestionRepository _trueOrFalseQuestionRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateTrueOrFalseAnswerDTO> _validator;
         private readonly IExamAttamptRepository _examAttamptRepository;
-        public CreateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository
-            , ITrueOrFalseQuestionRepository trueOrFalseQuestionRepository
-            , IAccountRepository accountRepository,IAuthServices authServices, IValidator<CreateTrueOrFalseAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
+        public CreateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository,IAuthServices authServices, IValidator<CreateTrueOrFalseAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
         {
             _TrueOrFalseAnswersRepository = TrueOrFalseAnswersRepository;
-            _trueOrFalseQuestionRepository = trueOrFalseQuestionRepository;
-            _accountRepository = accountRepository;
             _authServices = authServices;
             _validator = validator;
             _examAttamptRepository = examAttamptRepository;

@@ -17,20 +17,14 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
 {
     public class CreateMultipleChoiceAnswerRequestHandler : IRequestHandler<CreateMultipleChoiceAnswerRequest>
     {
-        private readonly IAccountRepository _accountRepository;
         private readonly IMultipleChoiceAnswersRepository _MultipleChoiceAnswersRepository;
-        private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateMultipleChoiceAnswerDTO> _validator;
         private readonly IExamAttamptRepository _examAttamptRepository;
-        public CreateMultipleChoiceAnswerRequestHandler(IAccountRepository accountRepository,
-            IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository,
-            IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,
+        public CreateMultipleChoiceAnswerRequestHandler(IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository,
             IAuthServices authServices, IValidator<CreateMultipleChoiceAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
         {
-            _accountRepository = accountRepository;
             _MultipleChoiceAnswersRepository = MultipleChoiceAnswersRepository;
-            _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
             _authServices = authServices;
             _validator = validator;
             _examAttamptRepository = examAttamptRepository;

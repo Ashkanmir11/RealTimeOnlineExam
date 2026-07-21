@@ -14,7 +14,6 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
     public class DeleteClassRoomRequstHandler : IRequestHandler<DeleteClassRoomRequest, Unit>
     {
         private readonly IClassRoomRepository _classRoomRepository;
-        //private readonly UserManager<onlineExamuse>
         public DeleteClassRoomRequstHandler(IClassRoomRepository classRoomRepository)
         {
             _classRoomRepository = classRoomRepository;

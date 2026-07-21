@@ -14,11 +14,9 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
     public class GetClassRoomByIdRequestHandler : IRequestHandler<GetClassRoomByIdRequest, GetClassRoomDTO>
     {
         private readonly IClassRoomRepository _classRoomRepository;
-        private readonly IMapper _mapper;
-        public GetClassRoomByIdRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper)
+        public GetClassRoomByIdRequestHandler(IClassRoomRepository classRoomRepository)
         {
             _classRoomRepository = classRoomRepository;
-            _mapper = mapper;
         }
 
         public async Task<GetClassRoomDTO> Handle(GetClassRoomByIdRequest request, CancellationToken cancellationToken)

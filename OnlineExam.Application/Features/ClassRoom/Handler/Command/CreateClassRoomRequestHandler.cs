@@ -21,17 +21,14 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
     public class CreateClassRoomRequestHandler : IRequestHandler<CreateClassRoomRequest, GetClassRoomDTO>
     {
         private readonly IClassRoomRepository _classRoomRepository;
-        private readonly IAccountRepository _accountRepository;
         private readonly IMapper _mapper;
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateClassRoomDTO> _validator;
 
-        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, 
-            IAccountRepository accountRepository, IAuthServices authServices,IValidator<CreateClassRoomDTO> validator)
+        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAuthServices authServices,IValidator<CreateClassRoomDTO> validator)
         {
             _classRoomRepository = classRoomRepository;
             _mapper = mapper;
-            _accountRepository = accountRepository;
             _authServices = authServices;
             _validator = validator;
         }

@@ -18,13 +18,11 @@ namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Command
     public class CreateMultipleChoiceQuestionRequestHandler : IRequestHandler<CreateMultipleChoiceQuestionRequest, int>
     {
         private readonly IMultipleChoiceQuestionRepository _multipleChoiceQuestionRepository;
-        private readonly IExamRepository _examRepository;
         private readonly IValidator<CreateMultipleChoiceQuestionDTO> _validator;
-        public CreateMultipleChoiceQuestionRequestHandler(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository, IExamRepository examRepository,
+        public CreateMultipleChoiceQuestionRequestHandler(IMultipleChoiceQuestionRepository multipleChoiceQuestionRepository,
             IValidator<CreateMultipleChoiceQuestionDTO> validator)
         {
             _multipleChoiceQuestionRepository = multipleChoiceQuestionRepository;
-            _examRepository = examRepository;
             _validator = validator;
         }
         public async Task<int> Handle(CreateMultipleChoiceQuestionRequest request, CancellationToken cancellationToken)

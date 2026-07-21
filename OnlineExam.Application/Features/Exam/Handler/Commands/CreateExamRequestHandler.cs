@@ -17,12 +17,10 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class CreateExamRequestHandler : IRequestHandler<CreateExamRequest>
     {
-        private readonly IClassRoomRepository _classRepository;
         private readonly IExamRepository _examRepository;
         private readonly IValidator<CreateExamDTO> _validator;
-        public CreateExamRequestHandler(IClassRoomRepository classRepository, IExamRepository examRepository, IValidator<CreateExamDTO> validator)
+        public CreateExamRequestHandler( IExamRepository examRepository, IValidator<CreateExamDTO> validator)
         {
-            _classRepository = classRepository;
             _examRepository = examRepository;
             _validator = validator;
         }
