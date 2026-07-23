@@ -10,5 +10,6 @@ namespace OnlineExam.Application.Contracts.Persistence
     public interface IClassRoomRepository : IGenericRepository<ClassRoom>
     {
         Task<bool> IsUserTeacherByExamIdAsync(int examId,string teacherId);
+        Task<bool> IsUserTeacherAsync(int classId,string userId);
     }
 }

@@ -53,17 +53,18 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int classId, string studentId)
         {
-            throw new NotImplementedException();
+            await _mediator.Send(new DeleteClassRoomMemeberRequest() { ClassId = classId, StudentId = studentId });
+            return NoContent();
         }
         [HttpPut("Put")]
         [Authorize]
         public async Task<IActionResult> Put(UpdateClassRoomMemberDTO updateClassRoomMemberDTO)
         {
-            await _mediator.Send(new UpdateClassRoomMemberRequest() { UpdateClassRoomMemberDTO= updateClassRoomMemberDTO });
+            await _mediator.Send(new UpdateClassRoomMemberRequest() { UpdateClassRoomMemberDTO = updateClassRoomMemberDTO });
             return NoContent();
         }
     }
