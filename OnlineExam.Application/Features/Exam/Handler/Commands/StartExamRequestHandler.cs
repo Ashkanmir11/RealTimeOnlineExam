@@ -37,7 +37,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             var studentExist = await _classRoomMembersRepository.StudentIsInClassByExamIdAsync(currentUserId, request.ExamId);
             if (studentExist == false)
             {
-                throw new UnauthorizedAccessException("شما دسترسی به این آزمون ندارید.");
+                throw new AccessForbiddenException("شما دسترسی به این آزمون ندارید.");
             }
             //Check Time
             var exam = await _examRepository.GetAsync(request.ExamId);
@@ -45,11 +45,11 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 
             if (DateTime.Now < exam.StartDate)
             {
-                throw new UnauthorizedAccessException("این آزمون هنوز شروع نشده است.");
+                throw new AccessForbiddenException("این آزمون هنوز شروع نشده است.");
             }
             if (DateTime.Now > startWIthDelay)
             {
-                throw new UnauthorizedAccessException("مهلت شروع آزمون گذشته است.");
+                throw new AccessForbiddenException("مهلت شروع آزمون گذشته است.");
             }
 
 
@@ -67,7 +67,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             var examEnded = await _meditor.Send(new ExamAttamptEndedRequest() { ExamId = request.ExamId, UserId = currentUserId });
             if (examEnded)
             {
-                throw new UnauthorizedAccessException("شما قبلا در این آزمون شرکت کرده اید.");
+                throw new AccessForbiddenException("شما قبلا در این آزمون شرکت کرده اید.");
             }
             var questions = await _meditor.Send(new GetQuestionExamStudentRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
             return questions;

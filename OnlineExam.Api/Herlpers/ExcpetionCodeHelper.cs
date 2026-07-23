@@ -25,6 +25,10 @@ namespace OnlineExam.Api.Herlpers
                     {
                         return 400;
                     }
+                case AccessForbiddenException:
+                    {
+                        return 403;
+                    }
                 default:
                     {
                         return 500;

@@ -44,7 +44,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var ExamEnded = await _examAttamptRepository.ExamEndedAsync(request.CreateMultipleChoiceQuestionAnswerDTO.ExamId, request.CreateMultipleChoiceQuestionAnswerDTO.StudentId);
             if (ExamEnded)
             {
-                throw new UnauthorizedAccessException("آزمون به پایان رسیده است.");
+                throw new AccessForbiddenException("آزمون به پایان رسیده است.");
             }
             await _MultipleChoiceAnswersRepository.AddAsync<CreateMultipleChoiceAnswerDTO>(request.CreateMultipleChoiceQuestionAnswerDTO);
         }

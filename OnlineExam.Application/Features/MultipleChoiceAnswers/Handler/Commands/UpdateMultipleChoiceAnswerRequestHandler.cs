@@ -41,7 +41,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.ExamId, currentUser);
             if (examEnded)
             {
-                throw new UnauthorizedAccessException("آزمون به پایان رسیده.");
+                throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
 
             await _MultipleChoiceAnswersRepository.UpdateAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.Id, request.UpdateMultipleChoiceQuestionAnswerDTO);

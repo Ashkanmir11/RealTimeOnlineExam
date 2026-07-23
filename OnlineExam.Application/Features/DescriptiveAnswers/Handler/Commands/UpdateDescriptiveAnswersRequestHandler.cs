@@ -41,7 +41,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateDescriptiveAnswersDTO.ExamId,currentUser);
             if(examEnded)
             {
-                throw new UnauthorizedAccessException("آزمون به پایان رسیده.");
+                throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
             await _DescriptiveAnswersRepository.UpdateAsync(request.UpdateDescriptiveAnswersDTO.Id, request.UpdateDescriptiveAnswersDTO);
         }

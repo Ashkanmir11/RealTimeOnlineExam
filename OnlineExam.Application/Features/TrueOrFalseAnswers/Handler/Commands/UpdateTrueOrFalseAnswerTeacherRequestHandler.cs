@@ -2,14 +2,9 @@
 using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.DescriptiveAnswers;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
@@ -34,7 +29,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var isTeacher = await _classRepository.IsUserTeacherByExamIdAsync(request.ExamId, currentUser);
             if (isTeacher == false)
             {
-                throw new UnauthorizedAccessException("شما دسترسی به این سوالات ندارید.");
+                throw new AccessForbiddenException("شما دسترسی به این سوالات ندارید.");
             }
             var validationResult = await _validator.ValidateAsync(request.UpdateTrueOrFalseAnswerTeacherDTO);
             if (validationResult.IsValid == false)

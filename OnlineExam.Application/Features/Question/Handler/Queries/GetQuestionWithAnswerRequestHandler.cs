@@ -9,6 +9,7 @@ using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
 using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
 using OpenAI.Realtime;
@@ -48,7 +49,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
             var access = await _examRepository.IsUserTeacherAsync(currentUser, request.ExamId);
             if (access == false)
             {
-                throw new UnauthorizedAccessException("شما دسترسی به سوالات و پاسخ های این آزمون ندارید.");
+                throw new AccessForbiddenException("شما دسترسی به سوالات و پاسخ های این آزمون ندارید.");
             }
 
             var questions = await _quesitonRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);

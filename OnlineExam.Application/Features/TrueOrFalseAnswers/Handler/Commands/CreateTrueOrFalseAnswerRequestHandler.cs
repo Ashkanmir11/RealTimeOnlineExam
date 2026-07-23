@@ -41,7 +41,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var ExamEnded = await _examAttamptRepository.ExamEndedAsync(request.CreateTrueOrFalseQuestionAnswerDTO.ExamId, request.CreateTrueOrFalseQuestionAnswerDTO.StudentId);
             if (ExamEnded)
             {
-                throw new UnauthorizedAccessException("آزمون به پایان رسیده است.");
+                throw new AccessForbiddenException("آزمون به پایان رسیده است.");
             }
             await _TrueOrFalseAnswersRepository.AddAsync<CreateTrueOrFalseAnswerDTO>(request.CreateTrueOrFalseQuestionAnswerDTO);
         }

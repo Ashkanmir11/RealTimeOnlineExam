@@ -42,7 +42,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.ExamId, currentUser);
             if (examEnded)
             {
-                throw new UnauthorizedAccessException("آزمون به پایان رسیده.");
+                throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
             await _TrueOrFalseAnswersRepository.UpdateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id, request.UpdateTrueOrFalseQuestionAnswerDTO);
         }
