@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
 using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.DescriptiveQuestion.Request.Commands;
 using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
 using OnlineExam.Application.Features.Question.Request.Commands;
 using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
+using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,16 +27,31 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
         private readonly IValidator<UpdateQuestionDTO> _validator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        public UpdateQuestionRequestHandler(IQuestionRepository questionRepository, IValidator<UpdateQuestionDTO> validator, IMediator mediator, IMapper mapper)
+        private readonly IExamRepository _examRepository;
+        private readonly IAuthServices _authServices;
+        public UpdateQuestionRequestHandler(IQuestionRepository questionRepository
+            , IValidator<UpdateQuestionDTO> validator, IMediator mediator, IMapper mapper, IExamRepository examRepository, IAuthServices authServices)
         {
             _questionRepository = questionRepository;
             _validator = validator;
             _mediator = mediator;
             _mapper = mapper;
+            _examRepository = examRepository;
+            _authServices = authServices;
         }
 
         public async Task Handle(UpdateQuestionRequest request, CancellationToken cancellationToken)
         {
+            var question = await _questionRepository.GetAsync(request.UpdateQuestionDTO.Id);
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, question.ExamId);
+            bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+
+            if (!isTeacher && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این عملیات ندارید.");
+            }
+
             var validitonResult = await _validator.ValidateAsync(request.UpdateQuestionDTO);
             if (validitonResult.IsValid == false)
             {

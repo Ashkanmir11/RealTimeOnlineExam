@@ -21,7 +21,7 @@ namespace OnlineExam.Api.Controllers
             _meditor = mediator;
         }
         [HttpPost("Post")]
-        [Authorize]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Post(CreateLogTypeDTO createLogTypeDTO)
         {
             await _meditor.Send(new CreateLogTypeRequest() { CreateLogTypeDTO = createLogTypeDTO });
@@ -52,14 +52,14 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
         [HttpDelete("Delete/{Id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int Id)
         {
             await _meditor.Send(new DeleteLogTypeRequest() { Id = Id });
             return NoContent();
         }
         [HttpPut("Put")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(UpdateLogTypeDTO updateLogTypeDTO)
         {
             await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO });

@@ -7,24 +7,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Contracts.Identity;
 namespace OnlineExam.Application.Features.Question.Handler.Commands
 {
     public class DeleteQuestionRequestHandler : IRequestHandler<DeleteQuestionRequest>
     {
         private readonly IQuestionRepository _questionRepository;
-        public DeleteQuestionRequestHandler(IQuestionRepository questionRepository)
+        private readonly IAuthServices _authServices;
+        private readonly IExamRepository _examRepository;
+        public DeleteQuestionRequestHandler(IQuestionRepository questionRepository,IAuthServices authServices, IExamRepository examRepository)
         {
             _questionRepository = questionRepository;
+            _authServices = authServices;
+            _examRepository = examRepository;
         }
         public async Task Handle(DeleteQuestionRequest request, CancellationToken cancellationToken)
         {
-            var qeustion = await _questionRepository.GetAsync(request.Id);
-            if (qeustion == null)
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            var question = await _questionRepository.GetAsync(request.Id);
+            bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, question.ExamId);
+            bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+
+            if(!isTeacher && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این عملیات ندارید.");
+            }
+            if (question == null)
             {
                 throw new NotFoundException($"سوالی با آیدی {request.Id} یافت نشد.");
             }
             await _questionRepository.DeleteQuestionDetailAsync(request.Id);
-            await _questionRepository.DeleteAsync(qeustion);
+            await _questionRepository.DeleteAsync(question);
         }
     }
 }
