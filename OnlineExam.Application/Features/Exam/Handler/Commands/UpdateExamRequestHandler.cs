@@ -9,19 +9,31 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Helper;
+using OnlineExam.Application.Contracts.Identity;
 
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class UpdateExamRequestHandler : IRequestHandler<UpdateExamRequest>
     {
         private readonly IExamRepository _examRepository;
-        public UpdateExamRequestHandler(IExamRepository examRepository)
+        private readonly IAuthServices _authServices;
+        public UpdateExamRequestHandler(IExamRepository examRepository, IAuthServices authServices)
         {
             _examRepository = examRepository;
+            _authServices = authServices;
         }
 
         public async Task Handle(UpdateExamRequest request, CancellationToken cancellationToken)
         {
+
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, request.UpdateExamDTO.Id);
+            bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+            if (!isTeacher && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
+            }
+
             var validator = new UpdateExamValidation(_examRepository);
             var validationResult = await validator.ValidateAsync(request.UpdateExamDTO);
             if(validationResult.IsValid==false)

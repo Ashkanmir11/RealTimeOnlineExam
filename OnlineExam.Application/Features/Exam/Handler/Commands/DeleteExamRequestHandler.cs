@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Exam.Request.Commands;
@@ -13,12 +14,22 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
     public class DeleteExamRequestHandler : IRequestHandler<DeleteExamRequest>
     {
         private readonly IExamRepository _examRepository;
-        public DeleteExamRequestHandler(IExamRepository examRepository)
+        private readonly IAuthServices _authServices;
+        public DeleteExamRequestHandler(IExamRepository examRepository,IAuthServices authServices)
         {
             _examRepository = examRepository;
+            _authServices = authServices;
         }
         public async Task Handle(DeleteExamRequest request, CancellationToken cancellationToken)
         {
+            var currentUser=await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher =await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
+            bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+            if(!isTeacher && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
+            }
+
             var exam = await _examRepository.GetAsync(request.Id);
             if (exam == null)
             {

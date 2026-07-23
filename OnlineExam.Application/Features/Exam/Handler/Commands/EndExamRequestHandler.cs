@@ -44,6 +44,8 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             await _examAttamptRepository.EndExamAsync(request.ExamId, currentUserId);
 
             var questionList = await _questionRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
+            
+            //Automatic Grading
             foreach (var question in questionList.Data)
             {
                 if (question.TrueOrFalseQuestion != null)
