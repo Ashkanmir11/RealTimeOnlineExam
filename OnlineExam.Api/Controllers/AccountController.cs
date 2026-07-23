@@ -43,7 +43,6 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpPost("auth/RefreshToken")]
-        //[Authorize]
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = _cookieHelper.GetCookieValue("refreshToken");

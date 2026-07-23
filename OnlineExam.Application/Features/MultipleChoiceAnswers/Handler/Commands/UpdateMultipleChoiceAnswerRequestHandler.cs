@@ -31,13 +31,21 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         }
         public async Task Handle(UpdateMultipleChoiceAnswerRequest request, CancellationToken cancellationToken)
         {
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+            var questionAnswer = await _MultipleChoiceAnswersRepository.GetAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.Id);
+
+            if (questionAnswer.StudentId != currentUser && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
+            }
+
             var validationResult = await _validator.ValidateAsync(request.UpdateMultipleChoiceQuestionAnswerDTO);
             if(validationResult.IsValid==false)
             {
                 var errors = validationResult.Errors.Select(e=>e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            var currentUser = await _authServices.GetCurrentUserIdAsync();
             var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.ExamId, currentUser);
             if (examEnded)
             {

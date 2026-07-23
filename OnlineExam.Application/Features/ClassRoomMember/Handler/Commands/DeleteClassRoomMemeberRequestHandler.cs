@@ -29,7 +29,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             bool isTeacher = await _classRoomRepository.IsUserTeacherAsync(request.ClassId, currentUser);
             if(isTeacher==false)
             {
-                throw new AccessForbiddenException("شما دسترسی به این کلاس را ندار");
+                throw new AccessForbiddenException("شما دسترسی به این کلاس را ندارید");
             }
 
 

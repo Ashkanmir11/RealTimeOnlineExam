@@ -21,6 +21,7 @@ using OnlineExam.Application.Helper;
 using Microsoft.AspNetCore.Http;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace OnlineExam.Identity.Services
 {
@@ -34,7 +35,7 @@ namespace OnlineExam.Identity.Services
         private readonly IValidator<RegisterDTO> _registerValidation;
         private readonly OnlineExamIdentityDbContext _context;
         public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices
-            , IHttpContextAccessor httpContextAccessor,IValidator<LoginDTO> loginValidator, OnlineExamIdentityDbContext context
+            , IHttpContextAccessor httpContextAccessor, IValidator<LoginDTO> loginValidator, OnlineExamIdentityDbContext context
             , IValidator<RegisterDTO> registerValidator)
         {
             _userManager = userManager;
@@ -42,7 +43,7 @@ namespace OnlineExam.Identity.Services
             _tokenServices = tokenServices;
             _httpContextAccessor = httpContextAccessor;
             _context = context;
-            _loginValidator=loginValidator;
+            _loginValidator = loginValidator;
             _registerValidation = registerValidator;
         }
 
@@ -56,10 +57,10 @@ namespace OnlineExam.Identity.Services
             var validationResult = await _loginValidator.ValidateAsync(loginDto);
             if (validationResult.IsValid == false)
             {
-                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e=>e.ErrorMessage).ToList());
+                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
             //var role = await _roleManager.FindByNameAsync("User");
-            var user = await _context.Users.Where(e=>e.PhoneNumber==loginDto.PhoneNumber).SingleOrDefaultAsync();
+            var user = await _context.Users.Where(e => e.PhoneNumber == loginDto.PhoneNumber).SingleOrDefaultAsync();
             var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if (isPasswordValid)
             {
@@ -101,7 +102,7 @@ namespace OnlineExam.Identity.Services
                 throw new Application.Exceptions.ValidationException(errors);
 
             }
-            
+
             var identityUser = new OnlineExamUser()
             {
                 NationalCode = registerDTO.NationCode,
@@ -131,7 +132,7 @@ namespace OnlineExam.Identity.Services
             }
             else
             {
-                throw new Application.Exceptions.ValidationException(result.Errors.Select(e=>e.Description).ToList());
+                throw new Application.Exceptions.ValidationException(result.Errors.Select(e => e.Description).ToList());
             }
         }
         public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
@@ -148,6 +149,17 @@ namespace OnlineExam.Identity.Services
         public async Task LogoutAsync(string refreshToken)
         {
             await _tokenServices.DeleteRefreshToken(refreshToken);
+        }
+
+        public async Task<bool> IsUserAdminAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if(userRoles.Contains("Admin"))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

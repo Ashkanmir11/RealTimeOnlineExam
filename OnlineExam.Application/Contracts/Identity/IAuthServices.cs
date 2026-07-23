@@ -17,6 +17,7 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<GetTokens> RefreshTokenAsync(string refreshToken);
         Task LogoutAsync(string refreshToken);
         Task<string> GetCurrentUserIdAsync();
+        Task<bool> IsUserAdminAsync(string userId);
 
     }
 }
