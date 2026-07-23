@@ -26,10 +26,17 @@ namespace OnlineExam.Persistence.Repositories
         }
         public async Task<T> AddAsync(T entity)
         {
-            await _context.AddAsync(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+                await _context.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
         }
+            catch (Exception ex)
+            {
+                throw;
+            }
+}
         public async Task<T> AddAsync<TSource>(TSource source)
         {
 
@@ -43,60 +50,102 @@ namespace OnlineExam.Persistence.Repositories
             catch (Exception ex)
 
             {
-                throw ex;
+                throw;
             }
 
         }
         public async Task DeleteAsync(T entity)
         {
-            _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                _context.Set<T>().Remove(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<bool> ExistAsync(int id)
         {
-            var entity = await GetAsync(id);
-            return entity != null;
+            try
+            {
+                var entity = await GetAsync(id);
+                return entity != null;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task<T> GetAsync(int id)
         {
-            return await _context.Set<T>().FindAsync(id);
+            try
+            {
+                return await _context.Set<T>().FindAsync(id);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
         public async Task<TResult> GetAsync<TResult>(int id)
         {
-            var result = await _context.Set<T>().Where(e => EF.Property<int>(e, "Id") == id).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
-            return _mapper.Map<TResult>(result);
+            try
+            {
+                var result = await _context.Set<T>().Where(e => EF.Property<int>(e, "Id") == id).ProjectTo<TResult>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+                return _mapper.Map<TResult>(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
         public async Task<PaginateResponse<TResult>> GetAllAsync<TResult>(PaginateRequestDTO paginateRequestDTO)
         {
-            IQueryable<T> query = _context.Set<T>();
-            int totalCount = await query.CountAsync();
-
-
-            int skip = PaginateHelper<T>.GetSkip(paginateRequestDTO);
-            if (paginateRequestDTO.SortBy != null)
+            try
             {
-                query = QuerySortHelper<T>.Sort(query, paginateRequestDTO);
+                IQueryable<T> query = _context.Set<T>();
+                int totalCount = await query.CountAsync();
 
+
+                int skip = PaginateHelper<T>.GetSkip(paginateRequestDTO);
+                if (paginateRequestDTO.SortBy != null)
+                {
+                    query = QuerySortHelper<T>.Sort(query, paginateRequestDTO);
+
+                }
+                query = query
+                    .Skip(skip)
+                    .Take(paginateRequestDTO.PageCount);
+
+
+                var response = await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
+
+                var result = PaginateHelper<TResult>.Paginate(response, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+                return result;
             }
-            query = query
-                .Skip(skip)
-                .Take(paginateRequestDTO.PageCount);
-
-
-            var response = await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
-
-            var result = PaginateHelper<TResult>.Paginate(response, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
-            return result;
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
         public async Task UpdateAsync<TSource>(int Id, TSource source)
         {
-            var entity = await GetAsync(Id);
-            _mapper.Map(source, entity);
-            _context.Update(entity);
-            await _context.SaveChangesAsync();
+            try
+            {
+                var entity = await GetAsync(Id);
+                _mapper.Map(source, entity);
+                _context.Update(entity);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
 
