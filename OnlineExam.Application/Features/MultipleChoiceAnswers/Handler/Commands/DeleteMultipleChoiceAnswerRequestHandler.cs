@@ -22,7 +22,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var answer = await _MultipleChoiceAnswersRepository.GetAsync(request.Id);
             if (answer == null)
             {
-                throw new BadRequestException($"پاسخ با آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"پاسخ با آیدی {request.Id} یافت نشد.");
             }
             await _MultipleChoiceAnswersRepository.DeleteAsync(answer);
         }

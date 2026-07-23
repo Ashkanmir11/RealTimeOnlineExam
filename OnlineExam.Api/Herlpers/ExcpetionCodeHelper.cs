@@ -29,6 +29,10 @@ namespace OnlineExam.Api.Herlpers
                     {
                         return 403;
                     }
+                case NotFoundException:
+                    {
+                        return 404;
+                    }
                 default:
                     {
                         return 500;

@@ -22,7 +22,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             var exam = await _examRepository.GetAsync(request.Id);
             if (exam == null)
             {
-                throw new BadRequestException($"آزمون با آیدی {exam.Id} یافت نشد.");
+                throw new NotFoundException($"آزمون با آیدی {exam.Id} یافت نشد.");
             }
             await _examRepository.DeleteAsync(exam);
         }

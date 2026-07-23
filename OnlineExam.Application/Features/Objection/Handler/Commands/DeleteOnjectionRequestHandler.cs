@@ -22,7 +22,7 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
             var objection = await _objectionRepository.GetAsync(request.Id);
             if (objection == null)
             {
-                throw new BadRequestException($"آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"آیدی {request.Id} یافت نشد.");
             }
             await _objectionRepository.DeleteAsync(objection);
         }

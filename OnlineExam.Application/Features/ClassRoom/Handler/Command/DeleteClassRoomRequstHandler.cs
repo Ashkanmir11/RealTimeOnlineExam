@@ -24,7 +24,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             var classRoom = await _classRoomRepository.GetAsync(request.Id);
             if (classRoom == null)
             {
-                throw new BadRequestException($"آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"آیدی {request.Id} یافت نشد.");
             }
             await _classRoomRepository.DeleteAsync(classRoom);
             return Unit.Value;

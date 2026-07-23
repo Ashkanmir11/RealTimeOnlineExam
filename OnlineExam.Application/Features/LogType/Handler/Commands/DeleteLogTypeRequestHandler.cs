@@ -22,7 +22,7 @@ namespace OnlineExam.Application.Features.LogType.Handler.Commands
             var logType = await _logTypeRepository.GetAsync(request.Id);
             if(logType == null)
             {
-                throw new BadRequestException($"نوع لاگ با آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"نوع لاگ با آیدی {request.Id} یافت نشد.");
             }
             await _logTypeRepository.DeleteAsync(logType);
         }

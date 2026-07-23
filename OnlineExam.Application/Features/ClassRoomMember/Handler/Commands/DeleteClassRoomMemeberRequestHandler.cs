@@ -36,7 +36,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             var classRoomMember = await _classRoomMemberRepository.GetAsync(request.ClassId, request.StudentId);
             if (classRoomMember == null)
             {
-                throw new BadRequestException("عضو کلاسی یافت نشد.");
+                throw new NotFoundException("عضو کلاسی یافت نشد.");
             }
 
             await _classRoomMemberRepository.DeleleAsync(classRoomMember);

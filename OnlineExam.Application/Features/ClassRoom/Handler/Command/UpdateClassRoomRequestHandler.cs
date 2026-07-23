@@ -28,7 +28,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             var classRoom = await _classRoomRepository.GetAsync(request.UpdateClassRoomDTO.Id);
             if (classRoom == null)
             {
-                throw new BadRequestException($"آیدی {request.UpdateClassRoomDTO.Id} یافت نشد.");
+                throw new NotFoundException($"آیدی {request.UpdateClassRoomDTO.Id} یافت نشد.");
             }
             var validator = new UpdateClassRoomValidation(_classRoomRepository);
             var validationResult = await validator.ValidateAsync(request.UpdateClassRoomDTO);

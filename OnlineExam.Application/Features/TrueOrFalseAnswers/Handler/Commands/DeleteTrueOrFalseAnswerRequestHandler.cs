@@ -22,7 +22,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var answer = await _TrueOrFalseAnswersRepository.GetAsync(request.Id);
             if(answer==null)
             {
-                throw new BadRequestException($"پاسخی با آیدی {request.Id} .یافت نشد");
+                throw new NotFoundException($"پاسخی با آیدی {request.Id} .یافت نشد");
             }
             await _TrueOrFalseAnswersRepository.DeleteAsync(answer);
         }

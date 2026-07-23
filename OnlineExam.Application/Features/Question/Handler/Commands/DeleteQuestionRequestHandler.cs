@@ -21,7 +21,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
             var qeustion = await _questionRepository.GetAsync(request.Id);
             if (qeustion == null)
             {
-                throw new BadRequestException($"سوالی با آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"سوالی با آیدی {request.Id} یافت نشد.");
             }
             await _questionRepository.DeleteQuestionDetailAsync(request.Id);
             await _questionRepository.DeleteAsync(qeustion);

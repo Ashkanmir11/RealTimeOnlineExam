@@ -24,7 +24,7 @@ namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
             var question = await _descriptiveQuestionRepository.GetAsync(request.Id);
             if (question==null)
             {
-                throw new BadRequestException($"سوال با آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"سوال با آیدی {request.Id} یافت نشد.");
             }
             await _descriptiveQuestionRepository.DeleteAsync(question);
         }

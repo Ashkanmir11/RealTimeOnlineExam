@@ -23,7 +23,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             var questionAnswer = await _DescriptiveAnswersRepository.GetAsync(request.Id);
             if(questionAnswer == null)
             {
-                throw new BadRequestException($"پاسخی با آیدی {request.Id} یافت نشد.");
+                throw new NotFoundException($"پاسخی با آیدی {request.Id} یافت نشد.");
             }
             await _DescriptiveAnswersRepository.DeleteAsync(questionAnswer);
         }
