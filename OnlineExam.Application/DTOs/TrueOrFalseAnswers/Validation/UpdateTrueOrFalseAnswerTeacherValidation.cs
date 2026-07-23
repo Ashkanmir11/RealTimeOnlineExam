@@ -28,7 +28,7 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation
                     return false;
                 }
                 return true;
-            }).WithMessage($"نمره درج شده از نمره آزمون نباید بزرگتر باشد.");
+            }).WithMessage($"نمره درج شده از نمره آزمون نباید بزرگتر باشد.").PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
         }
     }
 }

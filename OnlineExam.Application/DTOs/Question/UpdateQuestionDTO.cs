@@ -14,7 +14,7 @@ namespace OnlineExam.Application.DTOs.Question
     public class UpdateQuestionDTO : BaseDTO
     {
         public string? QuestionText { get; set; }
-        public int? TotalScore { get; set; }
+        public decimal? TotalScore { get; set; }
         [JsonIgnore]
         public int? TrueOrFalseQuestionId { get; set; }
         [JsonIgnore]

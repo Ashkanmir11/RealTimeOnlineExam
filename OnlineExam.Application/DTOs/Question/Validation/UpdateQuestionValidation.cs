@@ -19,7 +19,7 @@ namespace OnlineExam.Application.DTOs.Question.Validation
                 return await _questionRepository.ExistAsync(Id);
             }).WithMessage((Model) => $"سوالی با آیدی {Model.Id} یافت نشد.");
             RuleFor(e => e.QuestionText).NotEmpty().WithMessage("متن سوال نباید خالی باشد.");
-            RuleFor(e => e.TotalScore).GreaterThan(0).WithMessage("نمره باید بیشتر از 0 باشد");
+            RuleFor(e => e.TotalScore).GreaterThan(0).WithMessage("نمره باید بیشتر از 0 باشد").PrecisionScale(5,2,true).WithMessage("نمره بیش از حد مجار است.");
             RuleFor(e => e.MultipleChoiceQuestion).Must((Model, MultipleChoiceQuestion) =>
             {
                 if (MultipleChoiceQuestion != null && Model.DescriptiveQuestion != null)
