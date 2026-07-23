@@ -18,6 +18,14 @@ namespace OnlineExam.Application.DTOs.ClassRoomMember.Validation
             _accountRepository = accountRepository;
             _classRoomRepository = classRoomRepository;
 
+            RuleFor(e => e.StudentIDs).MustAsync(async (Model, Id, Token) =>
+            {
+                if (Model.StudentIDs.Count != Model.Phones.Count)
+                {
+                    return false;
+                }
+                return true;
+            }).WithMessage("برخی از کاربران یافت نشدند.");
             RuleFor(e => e.StudentIDs).MustAsync(async (Ids, Token) =>
             {
                 foreach (var id in Ids)
@@ -33,7 +41,7 @@ namespace OnlineExam.Application.DTOs.ClassRoomMember.Validation
             {
                 var classRoomExist = await _classRoomRepository.ExistAsync(Id);
                 return classRoomExist;
-            }).WithMessage((Id)=>$"کلاس با آیدی {Id} یافت نشد.");
+            }).WithMessage((Id) => $"کلاس با آیدی {Id} یافت نشد.");
         }
     }
 }

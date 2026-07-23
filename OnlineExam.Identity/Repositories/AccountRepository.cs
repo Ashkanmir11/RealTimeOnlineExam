@@ -67,10 +67,21 @@ namespace OnlineExam.Identity.Repositories
             return await _context.Users.Where(e=>e.Id==userId).ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
 
+        public async Task<string> GetUserIdByPhoneAsync(string phone)
+        {
+            return await _context.Users.Where(e => e.PhoneNumber == phone).Select(e => e.Id).SingleOrDefaultAsync();
+        }
+
         public async Task<List<UserNameAndLastNameDTO>> GetUsersByIdsAsync(List<string> userId)
         {
             return await _context.Users.Where(e => userId.Contains(e.Id)).ProjectTo<UserNameAndLastNameDTO>(_mapper.ConfigurationProvider).ToListAsync();
 
+        }
+
+        public async Task<List<string>> GetUsersIdByPhonesAsync(List<string> phone)
+        {
+            var result= await _context.Users.Where(e => phone.Contains(e.PhoneNumber)).Select(e => e.Id).ToListAsync();
+            return result;
         }
 
         public async Task<bool> PhoneExistAsync(string phone)

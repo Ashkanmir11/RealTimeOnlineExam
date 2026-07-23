@@ -18,14 +18,17 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
     {
         private readonly IClassRoomMembersRepository _classRoomMembersRepository;
         private readonly IValidator<CreateClassRoomMemberDTO> _validator;
-        public CreateClassRoomMemberRequestHandler(IClassRoomMembersRepository classRoomMembersRepository, IValidator<CreateClassRoomMemberDTO> validator)
+        private readonly IAccountRepository _accountRepository;
+        public CreateClassRoomMemberRequestHandler(IClassRoomMembersRepository classRoomMembersRepository, IValidator<CreateClassRoomMemberDTO> validator,IAccountRepository accountRepository)
         {
             _classRoomMembersRepository = classRoomMembersRepository;
             _validator = validator;
+            _accountRepository = accountRepository;
         }
 
         public async Task Handle(CreateClassRoomMemberRequest request, CancellationToken cancellationToken)
         {
+            request.CreateClassRoomMemberDTO.StudentIDs = await _accountRepository.GetUsersIdByPhonesAsync(request.CreateClassRoomMemberDTO.Phones);
             var validatioResult = await _validator.ValidateAsync(request.CreateClassRoomMemberDTO);
             if(validatioResult.IsValid==false)
             {

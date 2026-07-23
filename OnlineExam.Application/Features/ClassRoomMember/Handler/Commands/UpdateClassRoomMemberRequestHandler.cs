@@ -26,6 +26,8 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
         }
         public async Task Handle(UpdateClassRoomMemberRequest request, CancellationToken cancellationToken)
         {
+            request.UpdateClassRoomMemberDTO.StudentIDs = await _accountRepository.GetUsersIdByPhonesAsync(request.UpdateClassRoomMemberDTO.Phones);
+
             var validator = new UpdateClassRoomMemberValidation(_accountRepository, _classRoomRepository);
             var validatResult = await validator.ValidateAsync(request.UpdateClassRoomMemberDTO);
             if (validatResult.IsValid == false)

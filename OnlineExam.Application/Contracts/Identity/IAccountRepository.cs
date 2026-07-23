@@ -17,6 +17,8 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<PaginateResponse<UserFullInfoDTO>> GetAllUsersAsync(PaginateRequestDTO paginateRequestDTO);
         Task<GetUserDTO> GetUserByIdAsync(string userId);
         Task<bool> PhoneExistAsync(string phone);
+        Task<string> GetUserIdByPhoneAsync(string phone);
+        Task<List<string>> GetUsersIdByPhonesAsync(List<string> phone);
        
     }
 }

@@ -20,6 +20,7 @@ namespace OnlineExam.Application.Contracts.Persistence
         Task<bool> ExistAsync(int classId, string UserId);
         Task DeleleAsync(ClassRoomMembers classRoomMembers);
         Task<ClassRoomMembers> GetAsync(int  classId,string userId);
+        
 
     }
 
