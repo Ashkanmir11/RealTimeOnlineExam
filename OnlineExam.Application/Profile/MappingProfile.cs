@@ -56,6 +56,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<DescriptiveAnswers, UpdateDescriptiveAnswersDTO>().ReverseMap();
             CreateMap<DescriptiveAnswers, GetDescriptiveAnswersTeacherDTO>().ReverseMap();
             CreateMap<DescriptiveAnswers, UpdateDescriptiveAnswersTeacherDTO>().ReverseMap();
+            CreateMap<DescriptiveAnswers, GetDescriptiveAnswerStudentDTO>().ReverseMap();
 
             //Multiple Choice Question
             CreateMap<MultipleChoiceQuestion, CreateMultipleChoiceQuestionDTO>().ReverseMap();

@@ -35,7 +35,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _DescriptiveAnswersRepository.GetAsync(request.UpdateDescriptiveAnswersDTO.Id);
 
-            if (questionAnswer.StudentId != currentUser && !isAdmin)
+            if (questionAnswer == null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }
@@ -46,8 +46,8 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateDescriptiveAnswersDTO.ExamId,currentUser);
-            if(examEnded)
+            var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateDescriptiveAnswersDTO.ExamId, currentUser);
+            if (examEnded)
             {
                 throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }

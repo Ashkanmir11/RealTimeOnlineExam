@@ -6,6 +6,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
+using OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
 using OnlineExam.Application.Response;
@@ -72,6 +73,17 @@ namespace OnlineExam.Api.Controllers
         {
             await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO, ExamId = ExamId });
             return NoContent();
+        }
+        [Authorize]
+        [HttpGet("GetMyAnswer/{descriptiveQuestionId}")]
+        public async Task<IActionResult> GetMyAnswer(int descriptiveQuestionId)
+        {
+            var result = await _mediator.Send(new GetMyDescriptiveAnswerRequest() { descriptiveQuestionId = descriptiveQuestionId });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
     }
 }

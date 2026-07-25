@@ -36,7 +36,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _TrueOrFalseAnswersRepository.GetAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id);
 
-            if (questionAnswer.StudentId != currentUser && !isAdmin)
+            if (questionAnswer==null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }

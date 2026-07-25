@@ -86,7 +86,7 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new EndExamRequest() { ExamId = examId });
             return NoContent();
         }
-        [HttpPost("Summery/{examId}")]
+        [HttpGet("Summery/{examId}")]
         [Authorize]
         public async Task<IActionResult> ExamSummery(int examId)
         {
