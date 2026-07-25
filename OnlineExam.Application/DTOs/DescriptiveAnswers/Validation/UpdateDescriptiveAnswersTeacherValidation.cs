@@ -20,9 +20,15 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
             {
                 return await _descriptiveAnswersRepository.ExistAsync(Id);
             }).WithMessage("پاسخ یافت نشد.");
+
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
             {
                 var question = await _questionRepository.GetByQuestionDetailIdAsync(false, false, true, Model.Id);
+                if(question==null)
+                {
+                    return false;
+                }
+
                 if (Score > question.TotalScore)
                 {
                     return false;

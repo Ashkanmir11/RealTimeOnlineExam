@@ -15,7 +15,6 @@ namespace OnlineExam.Application.DTOs.Exam
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int AllowedDelay { get; set; }
-        public bool Ended { get; set; } = false;
         public bool AllowedCopy { get; set; } = false;
 
         public bool LogStudent { get; set; } = true;

@@ -68,15 +68,19 @@ namespace OnlineExam.Persistence.Repositories
 
         public async Task<Question> GetByQuestionDetailIdAsync(bool trueOrFalse, bool multipleChoice, bool descriptive, int id)
         {
+            int questionDetailId;
             if (trueOrFalse)
             {
-                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == id).FirstOrDefaultAsync();
+                questionDetailId = await _context.TrueOrFalseAnswers.Where(e=>e.Id == id).Select(e=>e.TrueOrFalseQuestionId).FirstOrDefaultAsync();
+                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == questionDetailId).FirstOrDefaultAsync();
             }
             if (multipleChoice)
             {
-                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == id).FirstOrDefaultAsync();
+                questionDetailId = await _context.MultipleChoiceAnswers.Where(e => e.Id == id).Select(e => e.MultipleChoiceQuestionId).FirstOrDefaultAsync();
+                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == questionDetailId).FirstOrDefaultAsync();
             }
-            return await _context.Questions.Where(e => e.DescriptiveQuestionId == id).FirstOrDefaultAsync();
+            questionDetailId =await _context.DescriptiveAnswers.Where(e => e.Id == id).Select(e => e.DescriptiveQuestionId).FirstOrDefaultAsync();
+            return await _context.Questions.Where(e => e.DescriptiveQuestionId == questionDetailId).FirstOrDefaultAsync();
 
         }
     }

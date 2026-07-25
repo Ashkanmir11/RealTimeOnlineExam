@@ -25,16 +25,16 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _TrueOrFalseAnswersRepository.GetAsync(request.Id);
-
+            if (answer == null)
+            {
+                throw new NotFoundException($"پاسخی با آیدی {request.Id} .یافت نشد");
+            }
             if (questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }
 
-            if (answer==null)
-            {
-                throw new NotFoundException($"پاسخی با آیدی {request.Id} .یافت نشد");
-            }
+           
             await _TrueOrFalseAnswersRepository.DeleteAsync(answer);
         }
     }

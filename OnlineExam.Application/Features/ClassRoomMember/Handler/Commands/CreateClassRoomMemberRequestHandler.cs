@@ -34,6 +34,13 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
         public async Task Handle(CreateClassRoomMemberRequest request, CancellationToken cancellationToken)
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
+            request.CreateClassRoomMemberDTO.StudentIDs = await _accountRepository.GetUsersIdByPhonesAsync(request.CreateClassRoomMemberDTO.Phones);
+            var validatioResult = await _validator.ValidateAsync(request.CreateClassRoomMemberDTO);
+            if (validatioResult.IsValid == false)
+            {
+                throw new Application.Exceptions.ValidationException(validatioResult.Errors.Select(e => e.ErrorMessage).ToList());
+            }
+
             var classRoom = await _classRoomRepository.GetAsync(request.CreateClassRoomMemberDTO.ClassRomeId);
 
             bool isUserAdmin = await _authServices.IsUserAdminAsync(currentUser);
@@ -43,12 +50,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             }
 
 
-            request.CreateClassRoomMemberDTO.StudentIDs = await _accountRepository.GetUsersIdByPhonesAsync(request.CreateClassRoomMemberDTO.Phones);
-            var validatioResult = await _validator.ValidateAsync(request.CreateClassRoomMemberDTO);
-            if(validatioResult.IsValid==false)
-            {
-                throw new Application.Exceptions.ValidationException(validatioResult.Errors.Select(e => e.ErrorMessage).ToList());
-            }
+           
 
            await _classRoomMembersRepository.AddMembersAsync(request.CreateClassRoomMemberDTO);
         }

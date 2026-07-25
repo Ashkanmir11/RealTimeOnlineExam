@@ -86,7 +86,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetStudentClass([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetClassRoomStudentRequest() { PaginateRequestDTO = paginateRequestDTO });
-            if (result.Data.Count == 0)
+            if (result == null || result.Data.Count == 0)
             {
                 return NoContent();
             }

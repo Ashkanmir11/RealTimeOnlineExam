@@ -20,19 +20,24 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
         {
             _multipleChoiceAnswersRepository = multipleChoiceAnswersRepository;
             _questionRepository = questionRepository;
+
             RuleFor(e => e.Id).MustAsync(async (Id, Token) =>
             {
                 return await _multipleChoiceAnswersRepository.ExistAsync(Id);
             }).WithMessage("پاسخ یافت نشد.");
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
+            {
+                var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, Model.Id);
+                if (question == null)
                 {
-                    var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, Model.Id);
-                    if (Score > question.TotalScore)
-                    {
-                        return false;
-                    }
-                    return true;
-                }).WithMessage($"نمره درج شده از نمره آزمون نباید بزرگتر باشد.").PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
+                    return false;
+                }
+                if (Score > question.TotalScore)
+                {
+                    return false;
+                }
+                return true;
+            }).WithMessage($"نمره درج شده از نمره آزمون نباید بزرگتر باشد.").PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
         }
     }
 }

@@ -68,7 +68,7 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
-        [HttpPost("Start/{ExamId}")]
+        [HttpPost("Start/{examId}")]
         [Authorize]
         public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO, int examId)
         {

@@ -23,6 +23,10 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation
             RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
             {
                 var question = await _questionRepository.GetByQuestionDetailIdAsync(true, false, false, Model.Id);
+                if (question == null)
+                {
+                    return false;
+                }
                 if (Score > question.TotalScore)
                 {
                     return false;

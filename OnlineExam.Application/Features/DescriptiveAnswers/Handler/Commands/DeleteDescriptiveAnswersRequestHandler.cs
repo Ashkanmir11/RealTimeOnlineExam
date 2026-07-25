@@ -27,16 +27,15 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 
             var currentUser =await _authServices.GetCurrentUserIdAsync();
             var isAdmin=await _authServices.IsUserAdminAsync(currentUser);
-
-            if(answer.StudentId!=currentUser && !isAdmin)
-            {
-                throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
-            }
-
-            if(answer == null)
+            if (answer == null)
             {
                 throw new NotFoundException($"پاسخی با آیدی {request.Id} یافت نشد.");
             }
+
+            if (answer.StudentId!=currentUser && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
+            }        
             await _DescriptiveAnswersRepository.DeleteAsync(answer);
         }
     }
