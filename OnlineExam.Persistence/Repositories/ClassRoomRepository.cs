@@ -25,7 +25,7 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClasses(string studentId, PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClassesAsync(string studentId, PaginateRequestDTO paginateRequestDTO)
         {
             var studentClasses = await _context.ClassRoomMembers.Where(e => e.StudentId == studentId).Select(e => e.ClassRomeId).ToListAsync();
             if(studentClasses.Count==0)
@@ -42,7 +42,7 @@ namespace OnlineExam.Persistence.Repositories
             return result;
         }
 
-        public async Task<PaginateResponse<GetClassRoomTeacherDTO>> GetTeacherClass(string teacherId, PaginateRequestDTO paginateRequestDTO)
+        public async Task<PaginateResponse<GetClassRoomTeacherDTO>> GetTeacherClassAsync(string teacherId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.ClassRooms.Where(e => e.TeacherId == teacherId).AsQueryable();
             var totalCount = _context.ClassRooms.Count();

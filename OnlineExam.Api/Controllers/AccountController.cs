@@ -38,7 +38,7 @@ namespace OnlineExam.Api.Controllers
             var currentUser=await _authServices.GetCurrentUserIdAsync();
             if(currentUser!=null)
             {
-                return Ok(await _accountRepository.GetMyInfo(currentUser));
+                return Ok(await _accountRepository.GetMyInfoAsync(currentUser));
             }
             var loginReslt = await _authServices.LoginAsync(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
@@ -85,7 +85,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetMyInfo()
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            return Ok(await _accountRepository.GetMyInfo(currentUser));
+            return Ok(await _accountRepository.GetMyInfoAsync(currentUser));
         }
 
 

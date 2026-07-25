@@ -14,8 +14,8 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task<bool> IsUserTeacherByExamIdAsync(int examId,string teacherId);
         Task<bool> IsUserTeacherAsync(int classId,string userId);
-        Task<PaginateResponse<GetClassRoomTeacherDTO>> GetTeacherClass(string teacherId ,PaginateRequestDTO paginateRequestDTO);
-        Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClasses(string studentId, PaginateRequestDTO paginateRequestDTO);
+        Task<PaginateResponse<GetClassRoomTeacherDTO>> GetTeacherClassAsync(string teacherId ,PaginateRequestDTO paginateRequestDTO);
+        Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClassesAsync(string studentId, PaginateRequestDTO paginateRequestDTO);
     }
 
 }
