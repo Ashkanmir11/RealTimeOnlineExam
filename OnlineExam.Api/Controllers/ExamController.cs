@@ -17,11 +17,9 @@ namespace OnlineExam.Api.Controllers
     public class ExamController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IAiServices _aiServices;
-        public ExamController(IMediator mediator, IAiServices aiServices)
+        public ExamController(IMediator mediator)
         {
             _mediator = mediator;
-            _aiServices = aiServices;
         }
         [HttpPost("Post")]
         [Authorize]
@@ -30,11 +28,11 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new CreateExamRequest() { CreateExamDTO = createExamDTO });
             return Created();
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _mediator.Send(new GetExamByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetExamByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
@@ -54,11 +52,11 @@ namespace OnlineExam.Api.Controllers
 
         }
 
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteExamRequest() { Id = Id });
+            await _mediator.Send(new DeleteExamRequest() { Id = id });
             return NoContent();
         }
 
@@ -72,21 +70,33 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPost("Start/{ExamId}")]
         [Authorize]
-        public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO, int ExamId)
+        public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO, int examId)
         {
-            var result = await _mediator.Send(new StartExamRequest() { ExamId = ExamId, paginateRequestDTO = paginateRequestDTO });
+            var result = await _mediator.Send(new StartExamRequest() { ExamId = examId, paginateRequestDTO = paginateRequestDTO });
             if (result == null)
             {
                 return NoContent();
             }
             return Ok(result);
         }
-        [HttpPost("End/{ExamId}")]
-        public async Task<IActionResult> End(int ExamId)
+        [HttpPost("End/{examId}")]
+        [Authorize]
+        public async Task<IActionResult> End(int examId)
         {
-            await _mediator.Send(new EndExamRequest() { ExamId = ExamId });
+            await _mediator.Send(new EndExamRequest() { ExamId = examId });
             return NoContent();
         }
-        
+        [HttpPost("Summery/{examId}")]
+        [Authorize]
+        public async Task<IActionResult> ExamDetail(int examId)
+        {
+            var result = await _mediator.Send(new GetExamSummeryRequest() { ExamId = examId });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+
     }
 }

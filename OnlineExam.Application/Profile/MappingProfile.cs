@@ -38,6 +38,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<Exam, CreateExamDTO>().ReverseMap();
             CreateMap<Exam, GetExamDTO>().ReverseMap();
             CreateMap<Exam, UpdateExamDTO>().ReverseMap();
+            CreateMap<Exam, GetExamSummeryDTO>().ReverseMap();
 
             //Descriptive Question
             CreateMap<DescriptiveQuestion, CreateDescriptiveQuestionDTO>().ReverseMap();
