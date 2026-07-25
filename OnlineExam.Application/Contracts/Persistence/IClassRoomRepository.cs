@@ -1,4 +1,7 @@
-﻿using OnlineExam.Domain.Entities;
+﻿using OnlineExam.Application.DTOs.ClassRoom;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.Response;
+using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +14,8 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task<bool> IsUserTeacherByExamIdAsync(int examId,string teacherId);
         Task<bool> IsUserTeacherAsync(int classId,string userId);
+        Task<PaginateResponse<GetClassRoomTeacherDTO>> GetTeacherClass(string teacherId ,PaginateRequestDTO paginateRequestDTO);
+        Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClasses(string studentId, PaginateRequestDTO paginateRequestDTO);
     }
+
 }

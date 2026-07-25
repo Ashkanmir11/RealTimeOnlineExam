@@ -14,17 +14,17 @@ namespace OnlineExam.Application.Helper
         {
             return (paginateRequestDTO.PageNumber - 1) * paginateRequestDTO.PageCount;
         }
-        public static PaginateResponse<T> Paginate(List<T> Data, int TotalCount, int PageCount, int PageNumber)
+        public static PaginateResponse<T> Paginate(List<T> data, int totalCount, PaginateRequestDTO paginateRequestDTO)
         {
-            int TotalPage = TotalCount % PageCount == 0 ? TotalCount / PageCount : (TotalCount / PageCount) + 1;
+            int TotalPage = totalCount % paginateRequestDTO.PageCount == 0 ? totalCount / paginateRequestDTO.PageCount : (totalCount / paginateRequestDTO.PageCount) + 1;
 
             var result = new PaginateResponse<T>()
             {
-                PageCount = PageCount,
-                TotalCount = TotalCount,
+                PageCount = paginateRequestDTO.PageCount,
+                TotalCount = totalCount,
                 TotalPage = TotalPage,
-                PageNumber = PageNumber,
-                Data = Data
+                PageNumber = paginateRequestDTO.PageNumber,
+                Data = data
 
             };
             return result;

@@ -28,6 +28,8 @@ namespace OnlineExam.Application.Profile
             CreateMap<ClassRoom, CreateClassRoomDTO>().ReverseMap();
             CreateMap<ClassRoom, GetClassRoomDTO>().ReverseMap();
             CreateMap<ClassRoom, UpdateClassRoomDTO>().ReverseMap();
+            CreateMap<ClassRoom, GetClassRoomTeacherDTO>().ReverseMap();
+            CreateMap<ClassRoom, GetClassRoomStudentDTO>().ReverseMap();
 
             //Class Room Member
             CreateMap<ClassRoomMembers, CreateClassRoomMemberDTO>().ReverseMap();

@@ -61,7 +61,7 @@ namespace OnlineExam.Persistence.Repositories
             }
             var skip = PaginateHelper<TResult>.GetSkip(paginateRequestDTO);
             questions = questions.Skip(skip).Take(paginateRequestDTO.PageCount).ToList();
-            var result = PaginateHelper<TResult>.Paginate(questions, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+            var result = PaginateHelper<TResult>.Paginate(questions, totalCount, paginateRequestDTO);
             return result;
 
         }

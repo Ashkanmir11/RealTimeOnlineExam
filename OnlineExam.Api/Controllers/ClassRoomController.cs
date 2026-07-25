@@ -32,7 +32,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
         [HttpGet("Get/{Id}")]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int Id)
         {
             var response = await _mediator.Send(new GetClassRoomByIdRequest() { Id = Id });
@@ -58,7 +58,7 @@ namespace OnlineExam.Api.Controllers
         [Authorize]
         public async Task<IActionResult> Delete(int Id)
         {
-            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id  });
+            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id });
             return NoContent();
         }
 
@@ -70,7 +70,28 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new UpdateClassRoomRequest() { UpdateClassRoomDTO = updateClassRoomDto });
             return Ok();
         }
-
+        [HttpGet("Teacher/Me")]
+        [Authorize]
+        public async Task<IActionResult> GetTeacherClass([FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetClassRoomTeacherRequest() { PaginateRequestDTO = paginateRequestDTO });
+            if (result.Data.Count == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+        [HttpGet("Student/Me")]
+        [Authorize]
+        public async Task<IActionResult> GetStudentClass([FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetClassRoomStudentRequest() { PaginateRequestDTO = paginateRequestDTO });
+            if (result.Data.Count == 0)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
 
 
     }

@@ -58,7 +58,7 @@ namespace OnlineExam.Identity.Repositories
                     Roles = roleNames
                 });
             }
-            return PaginateHelper<UserFullInfoDTO>.Paginate(userData, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+            return PaginateHelper<UserFullInfoDTO>.Paginate(userData, totalCount, paginateRequestDTO);
 
         }
 

@@ -11,11 +11,20 @@ namespace OnlineExam.Application.Helper
 {
     public static class QuerySortHelper<T>
     {
-        public static IQueryable<T> Sort(IQueryable<T> query,PaginateRequestDTO paginateRequest)
+        public static IQueryable<T> Sort(IQueryable<T> query, PaginateRequestDTO paginateRequest)
         {
             try
             {
-                return paginateRequest.Descending == true ? query.OrderBy(paginateRequest.SortBy + " " + "desc") : query.OrderBy(paginateRequest.SortBy);
+                if (paginateRequest.SortBy == null || paginateRequest.SortBy == "")
+                {
+                    return query;
+
+                }
+                else
+                {
+                    return paginateRequest.Descending == true ? query.OrderBy(paginateRequest.SortBy + " " + "desc") : query.OrderBy(paginateRequest.SortBy);
+
+                }
             }
             catch
             {

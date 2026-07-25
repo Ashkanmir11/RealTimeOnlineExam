@@ -31,12 +31,12 @@ namespace OnlineExam.Persistence.Repositories
                 await _context.AddAsync(entity);
                 await _context.SaveChangesAsync();
                 return entity;
-        }
+            }
             catch (Exception ex)
             {
                 throw;
             }
-}
+        }
         public async Task<T> AddAsync<TSource>(TSource source)
         {
 
@@ -112,11 +112,8 @@ namespace OnlineExam.Persistence.Repositories
 
 
                 int skip = PaginateHelper<T>.GetSkip(paginateRequestDTO);
-                if (paginateRequestDTO.SortBy != null)
-                {
-                    query = QuerySortHelper<T>.Sort(query, paginateRequestDTO);
+                query = QuerySortHelper<T>.Sort(query, paginateRequestDTO);
 
-                }
                 query = query
                     .Skip(skip)
                     .Take(paginateRequestDTO.PageCount);
@@ -124,7 +121,7 @@ namespace OnlineExam.Persistence.Repositories
 
                 var response = await query.ProjectTo<TResult>(_mapper.ConfigurationProvider).ToListAsync();
 
-                var result = PaginateHelper<TResult>.Paginate(response, totalCount, paginateRequestDTO.PageCount, paginateRequestDTO.PageNumber);
+                var result = PaginateHelper<TResult>.Paginate(response, totalCount, paginateRequestDTO);
                 return result;
             }
             catch (Exception ex)
