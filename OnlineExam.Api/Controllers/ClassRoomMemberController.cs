@@ -67,5 +67,17 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new UpdateClassRoomMemberRequest() { UpdateClassRoomMemberDTO = updateClassRoomMemberDTO });
             return NoContent();
         }
+
+        [HttpGet("GetStudents")]
+        [Authorize]
+        public async Task<IActionResult> GetStudents(int classId)
+        {
+            var result = await _mediator.Send(new GetClassRoomMemberTeacherRequest() { ClassId = classId });
+            if(result==null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
     }
 }
