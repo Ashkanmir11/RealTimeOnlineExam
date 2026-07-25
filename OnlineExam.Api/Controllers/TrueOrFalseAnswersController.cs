@@ -9,6 +9,7 @@ using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Queries;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
+using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
 namespace OnlineExam.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -66,10 +67,21 @@ namespace OnlineExam.Api.Controllers
 
         [HttpPut("Grading")]
         [Authorize]
-        public async Task<IActionResult> Grading(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO ,int examId)
+        public async Task<IActionResult> Grading(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO, int examId)
         {
             await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() { UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO, ExamId = examId });
             return NoContent();
+        }
+        [Authorize]
+        [HttpGet("GetMyAnswer/{trueOrFalseQuestionId}")]
+        public async Task<IActionResult> GetMyAnswer(int trueOrFalseQuestionId)
+        {
+            var result = await _mediator.Send(new GetMyTrueOrFalseAnswerRequest() { TrueOrFalseQuestionId = trueOrFalseQuestionId });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
     }
 }

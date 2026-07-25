@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
 using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -23,6 +25,12 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<MultipleChoiceAnswers> GetByQuestionIdAsync(int questionId)
         {
             return await _context.MultipleChoiceAnswers.Where(e => e.MultipleChoiceQuestionId == questionId).SingleOrDefaultAsync();
+        }
+
+        public async Task<GetMultipleChoiceAnswerStudentDTO> GetForStudent(string studentId, int questionId)
+        {
+            return await _context.MultipleChoiceAnswers.Where(e => e.StudentId == studentId && e.MultipleChoiceQuestionId == questionId)
+                            .ProjectTo<GetMultipleChoiceAnswerStudentDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
     }
 }

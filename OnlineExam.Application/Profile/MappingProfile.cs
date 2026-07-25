@@ -71,6 +71,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<MultipleChoiceAnswers, UpdateMultipleChoiceAnswerDTO>().ReverseMap();
             CreateMap<MultipleChoiceAnswers, GetMultipleChoiceAnswerTeacherDTO>().ReverseMap();
             CreateMap<MultipleChoiceAnswers, UpdateMultipleChoiceAnswerTeacherDTO>().ReverseMap();
+            CreateMap<MultipleChoiceAnswers, GetMultipleChoiceAnswerStudentDTO>().ReverseMap();
 
             //Question
             CreateMap<Question, CreateQuestionDTO>().ReverseMap();
@@ -94,13 +95,14 @@ namespace OnlineExam.Application.Profile
             CreateMap<TrueOrFalseQuestion, UpdateTrueOfFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionStudentDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionTeacherDTO>().ReverseMap();
-
             //True or false Answer
             CreateMap<TrueOrFalseAnswers, CreateTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, UpdateTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerTeacherDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, UpdateTrueOrFalseAnswerTeacherDTO>().ReverseMap();
+            CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerStudentDTO>().ReverseMap();
+
         }
     }
 }

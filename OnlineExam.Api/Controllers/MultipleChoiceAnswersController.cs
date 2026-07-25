@@ -9,6 +9,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
 using OnlineExam.Application.Contracts.Identity;
 using Microsoft.AspNetCore.Authorization;
+using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
 namespace OnlineExam.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -70,6 +71,17 @@ namespace OnlineExam.Api.Controllers
         {
             await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() { UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO, ExamId = examId });
             return NoContent();
+        }
+        [Authorize]
+        [HttpGet("GetMyAnswer/{multiChoiceQuestionId}")]
+        public async Task<IActionResult> GetMyAnswer(int multiChoiceQuestionId)
+        {
+            var result = await _mediator.Send(new GetMyMultipleChoiceAnswerRequest() { MultipleChoiceQuestionId = multiChoiceQuestionId });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
     }
 }
