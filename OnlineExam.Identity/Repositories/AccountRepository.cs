@@ -62,6 +62,11 @@ namespace OnlineExam.Identity.Repositories
 
         }
 
+        public async Task<GetMyUserInfoDTO> GetMyInfo(string userId)
+        {
+            return await _context.Users.Where(e => e.Id == userId).ProjectTo<GetMyUserInfoDTO>(_mapper.ConfigurationProvider).SingleOrDefaultAsync();
+        }
+
         public async Task<GetUserDTO> GetUserByIdAsync(string userId)
         {
             return await _context.Users.Where(e=>e.Id==userId).ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();

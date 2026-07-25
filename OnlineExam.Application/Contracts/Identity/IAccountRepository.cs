@@ -19,6 +19,7 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<bool> PhoneExistAsync(string phone);
         Task<string> GetUserIdByPhoneAsync(string phone);
         Task<List<string>> GetUsersIdByPhonesAsync(List<string> phone);
+        Task <GetMyUserInfoDTO> GetMyInfo(string userId);
        
     }
 }

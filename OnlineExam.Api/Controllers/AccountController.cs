@@ -35,6 +35,11 @@ namespace OnlineExam.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
+            var currentUser=await _authServices.GetCurrentUserIdAsync();
+            if(currentUser!=null)
+            {
+                return Ok(await _accountRepository.GetMyInfo(currentUser));
+            }
             var loginReslt = await _authServices.LoginAsync(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
             _cookieHelper.SetRefreshToken(loginReslt.RefreshToken);
@@ -67,7 +72,7 @@ namespace OnlineExam.Api.Controllers
 
         [HttpPost("auth/Logout")]
         [Authorize]
-        public async Task <IActionResult> Logout()
+        public async Task<IActionResult> Logout()
         {
             var refreshToken = _cookieHelper.GetCookieValue("refreshToken");
             await _authServices.LogoutAsync(refreshToken);
@@ -75,6 +80,14 @@ namespace OnlineExam.Api.Controllers
             _cookieHelper.DeleteCookie(Response, "refreshToken");
             return NoContent();
         }
+        [HttpGet("Account/My")]
+        [Authorize]
+        public async Task<IActionResult> GetMyInfo()
+        {
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            return Ok(await _accountRepository.GetMyInfo(currentUser));
+        }
+
 
     }
 }

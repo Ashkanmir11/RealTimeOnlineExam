@@ -15,6 +15,7 @@ namespace OnlineExam.Identity.Profile
         {
             CreateMap<OnlineExamUser, GetUserDTO>().ReverseMap();
             CreateMap<OnlineExamUser,UserNameAndLastNameDTO>().ReverseMap();
+            CreateMap<OnlineExamUser, GetMyUserInfoDTO>().ReverseMap();
         }
     }
 }
