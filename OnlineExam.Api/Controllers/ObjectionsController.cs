@@ -42,12 +42,12 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
 
-            var response = await _mediator.Send(new GetObjectionByIdRequest() { Id = Id });
+            var response = await _mediator.Send(new GetObjectionByIdRequest() { Id = id });
             if (response == null)
             {
                 return NoContent();
@@ -57,9 +57,9 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpDelete("Delete/{Id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteOnjectionRequest() { Id = Id });
+            await _mediator.Send(new DeleteOnjectionRequest() { Id = id });
             return NoContent();
 
         }

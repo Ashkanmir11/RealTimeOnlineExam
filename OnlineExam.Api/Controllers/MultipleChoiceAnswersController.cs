@@ -28,11 +28,11 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new CreateMultipleChoiceAnswerRequest() { CreateMultipleChoiceQuestionAnswerDTO = createMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _mediator.Send(new GetMultipleChoiceAnswerByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetMultipleChoiceAnswerByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
@@ -50,11 +50,11 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteMultipleChoiceAnswerRequest() { Id = Id });
+            await _mediator.Send(new DeleteMultipleChoiceAnswerRequest() { Id = id });
             return NoContent();
 
         }

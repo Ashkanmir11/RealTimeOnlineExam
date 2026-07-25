@@ -40,22 +40,22 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _meditor.Send(new GetLogTypeByIdRequest() { Id = Id });
+            var result = await _meditor.Send(new GetLogTypeByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _meditor.Send(new DeleteLogTypeRequest() { Id = Id });
+            await _meditor.Send(new DeleteLogTypeRequest() { Id = id });
             return NoContent();
         }
         [HttpPut("Put")]

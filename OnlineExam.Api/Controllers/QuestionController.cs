@@ -26,10 +26,10 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
         [Authorize(Roles = "Admin")]
-        [HttpGet("Get/{Id}")]
-        public async Task<IActionResult> Get(int Id)
+        [HttpGet("Get/{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _mediator.Send(new GetQuestionByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetQuestionByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
@@ -47,11 +47,11 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteQuestionRequest() { Id = Id });
+            await _mediator.Send(new DeleteQuestionRequest() { Id = id });
             return NoContent();
         }
         [HttpPut("Put")]
@@ -63,9 +63,9 @@ namespace OnlineExam.Api.Controllers
         }
 
         [HttpGet("GetWithAnswers")]
-        public async Task<IActionResult> GetStudentScore([FromQuery] int ExamId, [FromQuery] string StudentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+        public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = ExamId, StudentId = StudentId, PaginateRequestDTO = paginateRequestDTO });
+            var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
             return Ok(result);
         }
 

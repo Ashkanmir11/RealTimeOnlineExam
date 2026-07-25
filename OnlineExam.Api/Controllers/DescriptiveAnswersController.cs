@@ -29,11 +29,11 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new CreateDescriptiveAnswersRequest() { CreateDescriptiveAnswersDTO = createDescriptiveAnswersDTO });
             return NoContent();
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _mediator.Send(new GetDescriptiveAnswersByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetDescriptiveAnswersByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
@@ -51,11 +51,11 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteDescriptiveAnswersRequest() { Id = Id });
+            await _mediator.Send(new DeleteDescriptiveAnswersRequest() { Id = id });
             return NoContent();
 
         }
@@ -69,9 +69,9 @@ namespace OnlineExam.Api.Controllers
 
         [Authorize]
         [HttpPut("Grading")]
-        public async Task<IActionResult> Grading(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO, int ExamId)
+        public async Task<IActionResult> Grading(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO, int examId)
         {
-            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO, ExamId = ExamId });
+            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO, ExamId = examId });
             return NoContent();
         }
         [Authorize]

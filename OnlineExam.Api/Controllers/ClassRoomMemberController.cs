@@ -29,11 +29,11 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
 
-        [HttpGet("Get/{ClassId}")]
+        [HttpGet("Get/{classId}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int ClassId)
+        public async Task<IActionResult> Get(int classId)
         {
-            var result = await _mediator.Send(new GetClassRoomMemberByClassIdRequest() { ClassRoomId = ClassId });
+            var result = await _mediator.Send(new GetClassRoomMemberByClassIdRequest() { ClassRoomId = classId });
             if (result == null)
             {
                 return NoContent();

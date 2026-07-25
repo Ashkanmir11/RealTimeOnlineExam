@@ -28,11 +28,11 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var result = await _mediator.Send(new GetTrueOrFalseAnswerByIdRequest() { Id = Id });
+            var result = await _mediator.Send(new GetTrueOrFalseAnswerByIdRequest() { Id = id });
             if (result == null)
             {
                 return NoContent();
@@ -50,11 +50,11 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteTrueOrFalseAnswerRequest() { Id = Id });
+            await _mediator.Send(new DeleteTrueOrFalseAnswerRequest() { Id = id });
             return NoContent();
         }
         [HttpPut("Put")]

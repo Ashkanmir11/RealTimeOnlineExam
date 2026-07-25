@@ -31,11 +31,11 @@ namespace OnlineExam.Api.Controllers
             var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
             return Created();
         }
-        [HttpGet("Get/{Id}")]
+        [HttpGet("Get/{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(int Id)
+        public async Task<IActionResult> Get(int id)
         {
-            var response = await _mediator.Send(new GetClassRoomByIdRequest() { Id = Id });
+            var response = await _mediator.Send(new GetClassRoomByIdRequest() { Id = id });
             if (response == null)
             {
                 return NoContent();
@@ -54,11 +54,11 @@ namespace OnlineExam.Api.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("Delete/{id}")]
         [Authorize]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
-            await _mediator.Send(new DeleteClassRoomRequest() { Id = Id });
+            await _mediator.Send(new DeleteClassRoomRequest() { Id = id });
             return NoContent();
         }
 
