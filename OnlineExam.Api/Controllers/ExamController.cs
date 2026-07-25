@@ -97,6 +97,17 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("Class/{classId}")]
+        [Authorize]
+        public async Task<IActionResult> GetByClassId(int classId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetExamByClassIdRequest() { ClassId = classId, PaginateRequestDTO = paginateRequestDTO });
+            if(result.Data.Count==0)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
 
     }
 }
