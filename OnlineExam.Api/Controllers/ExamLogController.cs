@@ -39,10 +39,10 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpGet("Get")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get(PaginateRequestDTO paginateRequestDTO)
+        public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
-            var result=await _mediator.Send(new GetExamLogRequest() { PaginateRequestDTO = paginateRequestDTO });
-            if(result.Data.Count==0)
+            var result = await _mediator.Send(new GetExamLogRequest() { PaginateRequestDTO = paginateRequestDTO });
+            if (result.Data.Count == 0)
             {
                 return NoContent();
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Persistence.Exceptions;
 
 namespace OnlineExam.Api.Herlpers
 {
@@ -32,6 +33,10 @@ namespace OnlineExam.Api.Herlpers
                 case NotFoundException:
                     {
                         return 404;
+                    }
+                case ConflictException:
+                    {
+                        return 400;
                     }
                 default:
                     {

@@ -53,7 +53,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             }
 
 
-            Exam Attampt
+            //Exam Attampt
             var examStarted = await _meditor.Send(new ExamAttamptStartedRequest() { UserId = currentUserId, ExamId = request.ExamId });
 
             if (examStarted == false)
