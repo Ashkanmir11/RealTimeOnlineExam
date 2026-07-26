@@ -83,5 +83,28 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.Questions.Where(e => e.DescriptiveQuestionId == questionDetailId).FirstOrDefaultAsync();
 
         }
+
+        public async Task RemoveNoRelationQuestionDetail()
+        {
+            try
+            {
+                var unusedTrueOrFalseQuestions = await _context.TrueOrFalseQuestions.Where(tf => !_context.Questions.Any(q => q.TrueOrFalseQuestionId == tf.Id)).ToListAsync();
+                _context.TrueOrFalseQuestions.RemoveRange(unusedTrueOrFalseQuestions);
+
+                var unusedDescriptiveQuestions = await _context.DescriptiveQuestions.Where(tf => !_context.Questions.Any(q => q.DescriptiveQuestionId == tf.Id)).ToListAsync();
+                _context.DescriptiveQuestions.RemoveRange(unusedDescriptiveQuestions);
+
+                var unusedMultipleChoiceQuestions = await _context.MultipleChoiceQuestions.Where(tf => !_context.Questions.Any(q => q.MultipleChoiceQuestionId == tf.Id)).ToListAsync();
+                _context.MultipleChoiceQuestions.RemoveRange(unusedMultipleChoiceQuestions);
+
+
+
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

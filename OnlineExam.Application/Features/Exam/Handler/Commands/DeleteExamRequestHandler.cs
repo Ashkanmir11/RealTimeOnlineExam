@@ -15,10 +15,12 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
     {
         private readonly IExamRepository _examRepository;
         private readonly IAuthServices _authServices;
-        public DeleteExamRequestHandler(IExamRepository examRepository,IAuthServices authServices)
+        private readonly IQuestionRepository _questionRepository;
+        public DeleteExamRequestHandler(IExamRepository examRepository,IAuthServices authServices, IQuestionRepository questionRepository)
         {
             _examRepository = examRepository;
             _authServices = authServices;
+            _questionRepository = questionRepository;
         }
         public async Task Handle(DeleteExamRequest request, CancellationToken cancellationToken)
         {
@@ -36,6 +38,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                 throw new NotFoundException($"آزمون با آیدی {exam.Id} یافت نشد.");
             }
             await _examRepository.DeleteAsync(exam);
+            await _questionRepository.RemoveNoRelationQuestionDetail();
         }
     }
 }

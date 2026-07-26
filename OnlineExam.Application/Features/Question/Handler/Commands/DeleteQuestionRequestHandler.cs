@@ -38,6 +38,8 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
             }
             await _questionRepository.DeleteQuestionDetailAsync(request.Id);
             await _questionRepository.DeleteAsync(question);
+            await _questionRepository.RemoveNoRelationQuestionDetail();
+
         }
     }
 }
