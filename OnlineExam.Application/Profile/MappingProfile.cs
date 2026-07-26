@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.DTOs.ExamLog;
 
 namespace OnlineExam.Application.Profile
 {
@@ -42,6 +43,10 @@ namespace OnlineExam.Application.Profile
             CreateMap<Exam, UpdateExamDTO>().ReverseMap();
             CreateMap<Exam, GetExamSummeryDTO>().ReverseMap();
             CreateMap<Exam, GetExamDetailDTO>().ReverseMap();
+
+            //Exam Log
+            CreateMap<ExamLog,CreateExamLogDTO>().ReverseMap();
+            CreateMap<ExamLog,GetExamLogDTO>().ReverseMap();
 
             //Descriptive Question
             CreateMap<DescriptiveQuestion, CreateDescriptiveQuestionDTO>().ReverseMap();

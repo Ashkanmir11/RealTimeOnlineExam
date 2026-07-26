@@ -15,7 +15,7 @@ namespace OnlineExam.Persistence.Configuration
         {
             builder.HasKey(e => e.Id);
             builder.Property(e => e.Id).UseIdentityColumn();
-
+            builder.Property(e => e.StudentId).IsRequired();
             builder.HasOne(e=>e.LogType).WithMany(e=>e.examLogs).HasForeignKey(e=>e.LogTypeId).OnDelete(DeleteBehavior.Restrict);
         }
     }

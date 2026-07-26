@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.ExamLog;
 using OnlineExam.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -17,6 +20,11 @@ namespace OnlineExam.Persistence.Repositories
         {
             _context = dbContext;
             _mapper = mapper;
+        }
+
+        public async Task<List<GetExamLogDTO>> GetForTeacher(string studentId,int examId)
+        {
+            return await _context.ExamsLogs.Where(e => e.StudentId == studentId && e.ExamId==examId).ProjectTo<GetExamLogDTO>(_mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }
