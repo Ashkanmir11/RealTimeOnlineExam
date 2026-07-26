@@ -12,5 +12,7 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task<TrueOrFalseAnswers> GetByQuestionIdAsync(int questionId);
         Task<GetTrueOrFalseAnswerStudentDTO> GetForStudent(string studentId, int questionId);
+        Task<bool> IsAnswerExist(string studentId, int questionId);
+
     }
 }

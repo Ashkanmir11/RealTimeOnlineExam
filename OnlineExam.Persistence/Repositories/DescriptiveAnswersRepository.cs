@@ -32,5 +32,10 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.DescriptiveAnswers.Where(e => e.StudentId == studentId && e.DescriptiveQuestionId == questionId)
                 .ProjectTo<GetDescriptiveAnswerStudentDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> IsAnswerExist(string studentId, int questionId)
+        {
+            return await _context.DescriptiveAnswers.AnyAsync(e => e.StudentId == studentId && e.DescriptiveQuestionId == questionId);
+        }
     }
 }

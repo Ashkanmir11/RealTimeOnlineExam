@@ -32,6 +32,11 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.TrueOrFalseAnswers.Where(e => e.StudentId == studentId && e.TrueOrFalseQuestionId == questionId)
                             .ProjectTo<GetTrueOrFalseAnswerStudentDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
+
+        public async Task<bool> IsAnswerExist(string studentId, int questionId)
+        {
+            return await _context.TrueOrFalseAnswers.AnyAsync(e => e.StudentId == studentId && e.TrueOrFalseQuestionId == questionId);
+        }
     }
 
 }
