@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.LogType
 {
-    public class UpdateLogTypeDTO : BaseDTO
+    public class UpdateLogTypeDTO 
     {
         public string? Name { get; set; }
 

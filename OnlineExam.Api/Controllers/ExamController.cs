@@ -13,7 +13,7 @@ using OnlineExam.Application.Response;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/exams")]
     [ApiController]
     public class ExamController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateExamDTO createExamDTO)
         {
             await _mediator.Send(new CreateExamRequest() { CreateExamDTO = createExamDTO });
             return Created();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -40,7 +40,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -53,7 +53,7 @@ namespace OnlineExam.Api.Controllers
 
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -61,15 +61,15 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
         }
 
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateExamDTO updateExamDTO)
+        public async Task<IActionResult> Put(int id,UpdateExamDTO updateExamDTO)
         {
             await _mediator.Send(new UpdateExamRequest() { UpdateExamDTO = updateExamDTO });
             return NoContent();
 
         }
-        [HttpPost("Start/{examId}")]
+        [HttpPost("{examId}/start")]
         [Authorize]
         public async Task<IActionResult> Start([FromQuery] PaginateRequestDTO paginateRequestDTO, int examId)
         {
@@ -80,14 +80,14 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpPost("End/{examId}")]
+        [HttpPost("{examId}/end")]
         [Authorize]
         public async Task<IActionResult> End(int examId)
         {
             await _mediator.Send(new EndExamRequest() { ExamId = examId });
             return NoContent();
         }
-        [HttpGet("Summery/{examId}")]
+        [HttpGet("{examId}/summary")]
         [Authorize]
         public async Task<IActionResult> ExamSummery(int examId)
         {
@@ -98,7 +98,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Class/{classId}")]
+        [HttpGet("class-room/{classId}")]
         [Authorize]
         public async Task<IActionResult> GetByClassId(int classId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -109,7 +109,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("{examId}/GetAnswer/{studentId}")]
+        [HttpGet("{examId}/answers/{studentId}")]
         public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });

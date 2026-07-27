@@ -11,7 +11,7 @@ using OnlineExam.Application.Response;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/log-types")]
     [ApiController]
     public class LogTypeController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace OnlineExam.Api.Controllers
         {
             _meditor = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Post(CreateLogTypeDTO createLogTypeDTO)
         {
@@ -28,7 +28,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
 
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -40,7 +40,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -51,16 +51,16 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             await _meditor.Send(new DeleteLogTypeRequest() { Id = id });
             return NoContent();
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(UpdateLogTypeDTO updateLogTypeDTO)
+        public async Task<IActionResult> Put(int id,UpdateLogTypeDTO updateLogTypeDTO)
         {
             await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO });
             return NoContent();

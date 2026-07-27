@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.Exam
 {
-    public class UpdateExamDTO : BaseDTO
+    public class UpdateExamDTO 
     {
         public int QuestionCount { get; set; }
         public string? Name { get; set; }

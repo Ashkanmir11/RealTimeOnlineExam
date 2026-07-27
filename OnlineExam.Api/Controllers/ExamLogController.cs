@@ -10,7 +10,7 @@ using OnlineExam.Application.Features.ExamLog.Request.Queries;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/exam-logs")]
     [ApiController]
     public class ExamLogController : ControllerBase
     {
@@ -19,14 +19,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateExamLogDTO createExamLogDTO)
         {
             await _mediator.Send(new CreateExamLogRequest() { CreateExamLogDTO = createExamLogDTO });
             return NoContent();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -37,7 +37,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -48,9 +48,9 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("GetByStudentId/{StudentId}")]
+        [HttpGet("students/{studentId}")]
         [Authorize]
-        public async Task<IActionResult> GetByStudentId(string StudentId)
+        public async Task<IActionResult> GetByStudentId(string studentId)
         {
             throw new NotImplementedException();
         }

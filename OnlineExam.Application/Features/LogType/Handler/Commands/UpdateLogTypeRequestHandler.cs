@@ -22,6 +22,11 @@ namespace OnlineExam.Application.Features.LogType.Handler.Commands
         }
         public async Task Handle(UpdateLogTypeRequest request, CancellationToken cancellationToken)
         {
+            var logTypeExist =await _logTypeRepository.ExistAsync(request.Id);
+            if(logTypeExist==false)
+            {
+                throw new NotFoundException("نوع لاگ یافت نشد.");
+            }
             var validation = new UpdateLogTypeValidation(_logTypeRepository);
             var validationResult = await validation.ValidateAsync(request.UpdateLogTypeDTO);
             if (validationResult.IsValid == false)
@@ -29,7 +34,7 @@ namespace OnlineExam.Application.Features.LogType.Handler.Commands
                 throw (new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList()));
             }
 
-            await _logTypeRepository.UpdateAsync<UpdateLogTypeDTO>(request.UpdateLogTypeDTO.Id, request.UpdateLogTypeDTO);
+            await _logTypeRepository.UpdateAsync<UpdateLogTypeDTO>(request.Id, request.UpdateLogTypeDTO);
         }
     }
 }

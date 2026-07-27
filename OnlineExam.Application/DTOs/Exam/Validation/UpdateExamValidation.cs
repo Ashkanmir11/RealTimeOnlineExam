@@ -10,15 +10,9 @@ namespace OnlineExam.Application.DTOs.Exam.Validation
 {
     public class UpdateExamValidation : AbstractValidator<UpdateExamDTO>
     {
-        private readonly IExamRepository _examRepository;
 
-        public UpdateExamValidation(IExamRepository examRepository)
+        public UpdateExamValidation()
         {
-            _examRepository = examRepository;
-            RuleFor(e => e.Id).MustAsync(async (Id, Token) =>
-            {
-                return await _examRepository.ExistAsync(Id);
-            }).WithMessage((Model)=>$"آزمون با آیدی {Model.Id} یافت نشد.");
             RuleFor(e => e.QuestionCount).GreaterThan(0).WithMessage("تعداد سوال باید بیشتر از 0 باشد.");
             RuleFor(e => e.Name).NotEmpty().WithMessage("نام آزمون نباید خالی باشد.").MaximumLength(150).WithMessage("نام آزمون نباید بیشتر از 150 کاراکتر باشد");
             RuleFor(e => e.Description).MaximumLength(500).WithMessage("توضیحات آزمون نباید بیشتر از 500 کاراکتر باشد.");
