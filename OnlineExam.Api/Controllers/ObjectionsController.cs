@@ -14,7 +14,7 @@ using OnlineExam.Identity.Services;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/objections")]
     [ApiController]
     public class ObjectionsController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateObjectionDTO createObjectionDTO)
         { 
@@ -31,7 +31,7 @@ namespace OnlineExam.Api.Controllers
             await _mediator.Send(new CreateObjectionReqeust() { CreateObjectionDTO = createObjectionDTO });
             return Created();
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -42,7 +42,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -55,7 +55,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(response);
 
         }
-        [HttpDelete("Delete/{Id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -63,9 +63,9 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateObjectionDTO updateObjectionDTO)
+        public async Task<IActionResult> Put(int id,UpdateObjectionDTO updateObjectionDTO)
         {
             await _mediator.Send(new UpdateObjectionRequest() { UpdateObjectionDTO = updateObjectionDTO });
             return NoContent();

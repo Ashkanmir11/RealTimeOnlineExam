@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/multiple-choice-answers")]
     [ApiController]
     public class MultipleChoiceAnswersController : ControllerBase
     {
@@ -21,14 +21,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateMultipleChoiceAnswerDTO createMultipleChoiceQuestionAnswerDTO)
         {
             await _mediator.Send(new CreateMultipleChoiceAnswerRequest() { CreateMultipleChoiceQuestionAnswerDTO = createMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -39,7 +39,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -50,7 +50,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -58,22 +58,22 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
+        public async Task<IActionResult> Put(int id,UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() { UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
+            await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() {Id=id, UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
-        [HttpPut("Grading")]
+        [HttpPut("{id}/grade")]
         [Authorize]
-        public async Task<IActionResult> Grading(int examId, UpdateMultipleChoiceAnswerTeacherDTO updateMultipleChoiceAnswerTeacherDTO)
+        public async Task<IActionResult> Grade(int id, UpdateMultipleChoiceAnswerTeacherDTO updateMultipleChoiceAnswerTeacherDTO)
         {
-            await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() { UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO, ExamId = examId });
+            await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() {Id=id, UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO });
             return NoContent();
         }
         [Authorize]
-        [HttpGet("GetMyAnswer/{multiChoiceQuestionId}")]
+        [HttpGet("my/{multiChoiceQuestionId}")]
         public async Task<IActionResult> GetMyAnswer(int multiChoiceQuestionId)
         {
             var result = await _mediator.Send(new GetMyMultipleChoiceAnswerRequest() { MultipleChoiceQuestionId = multiChoiceQuestionId });

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
 {
@@ -20,18 +21,32 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         private readonly IAuthServices _authServices;
         private readonly IClassRoomRepository _classRepository;
         private readonly IMultipleChoiceAnswersRepository _multipleChoiceAnswerRepository;
-        public UpdateMultipleChoiceAnswerTeacherRequestHandler(IValidator<UpdateMultipleChoiceAnswerTeacherDTO> validator, IAuthServices authServices, IClassRoomRepository classRepository, IMultipleChoiceAnswersRepository multipleChoiceAnswerRepository)
+        private readonly IQuestionRepository _questionRepository;
+        public UpdateMultipleChoiceAnswerTeacherRequestHandler(IValidator<UpdateMultipleChoiceAnswerTeacherDTO> validator, IAuthServices authServices
+            , IClassRoomRepository classRepository, IMultipleChoiceAnswersRepository multipleChoiceAnswerRepository, IQuestionRepository questionRepository)
         {
             _validator = validator;
             _authServices = authServices;
             _classRepository = classRepository;
             _multipleChoiceAnswerRepository = multipleChoiceAnswerRepository;
+            _questionRepository = questionRepository;
         }
 
         public async Task Handle(UpdateMultipleChoiceAnswerTeacherRequest request, CancellationToken cancellationToken)
         {
+            var errors = new List<string>();
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var isTeacher = await _classRepository.IsUserTeacherByExamIdAsync(request.ExamId, currentUser);
+            var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, request.Id);
+            if (question == null)
+            {
+                throw new NotFoundException("سوال یافت نشد.");
+            }
+            if (request.UpdateMultipleChoiceAnswerTeacherDTO.StudentScore > question.TotalScore)
+            {
+                errors.Add("نمره نباید بیشتر از نمره سوال باشد.");
+            }
+
+            var isTeacher = await _classRepository.IsUserTeacherByExamIdAsync(request.UpdateMultipleChoiceAnswerTeacherDTO.ExamId, currentUser);
             if (isTeacher == false)
             {
                 throw new AccessForbiddenException("شما دسترسی به این سوالات ندارید.");
@@ -39,10 +54,10 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var validationResult = await _validator.ValidateAsync(request.UpdateMultipleChoiceAnswerTeacherDTO);
             if (validationResult.IsValid == false)
             {
-                var errprs = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
-                throw new Application.Exceptions.ValidationException(errprs);
+                errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                throw new Application.Exceptions.ValidationException(errors);
             }
-            await _multipleChoiceAnswerRepository.UpdateAsync(request.UpdateMultipleChoiceAnswerTeacherDTO.Id, request.UpdateMultipleChoiceAnswerTeacherDTO);
+            await _multipleChoiceAnswerRepository.UpdateAsync(request.Id, request.UpdateMultipleChoiceAnswerTeacherDTO);
         }
     }
 }

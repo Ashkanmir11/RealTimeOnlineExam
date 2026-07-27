@@ -69,7 +69,7 @@ namespace OnlineExam.Api.Controllers
 
         [Authorize]
         [HttpPut("{id}/grade")]
-        public async Task<IActionResult> Grading(int id,UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
+        public async Task<IActionResult> Grade(int id,UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
         {
             await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO });
             return NoContent();

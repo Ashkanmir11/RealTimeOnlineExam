@@ -12,32 +12,16 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
 {
     public class GetMultipleChoiceAnswerTeacherValidation : AbstractValidator<UpdateMultipleChoiceAnswerTeacherDTO>
     {
+        private readonly IExamRepository _examRepository;
 
-        private readonly IMultipleChoiceAnswersRepository _multipleChoiceAnswersRepository;
-        private readonly IQuestionRepository _questionRepository;
-
-        public GetMultipleChoiceAnswerTeacherValidation(IMultipleChoiceAnswersRepository multipleChoiceAnswersRepository, IQuestionRepository questionRepository)
+        public GetMultipleChoiceAnswerTeacherValidation(IExamRepository examRepository)
         {
-            _multipleChoiceAnswersRepository = multipleChoiceAnswersRepository;
-            _questionRepository = questionRepository;
-
-            RuleFor(e => e.Id).MustAsync(async (Id, Token) =>
+            _examRepository = examRepository;
+            RuleFor(e => e.StudentScore).PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
+            RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
             {
-                return await _multipleChoiceAnswersRepository.ExistAsync(Id);
-            }).WithMessage("پاسخ یافت نشد.");
-            RuleFor(e => e.StudentScore).MustAsync(async (Model, Score, Token) =>
-            {
-                var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, Model.Id);
-                if (question == null)
-                {
-                    return false;
-                }
-                if (Score > question.TotalScore)
-                {
-                    return false;
-                }
-                return true;
-            }).WithMessage($"نمره درج شده از نمره آزمون نباید بزرگتر باشد.").PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
+                return await _examRepository.ExistAsync(Id);
+            }).WithMessage((Model)=>$"آزمون با آیدی  {Model.ExamId} یافت نشد.");
         }
     }
 }

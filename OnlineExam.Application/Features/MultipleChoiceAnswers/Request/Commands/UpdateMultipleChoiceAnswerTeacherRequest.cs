@@ -11,6 +11,6 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands
     public class UpdateMultipleChoiceAnswerTeacherRequest : IRequest
     {
         public required UpdateMultipleChoiceAnswerTeacherDTO UpdateMultipleChoiceAnswerTeacherDTO { get; set; }
-        public int ExamId { get; set; }
+        public int Id { get; set; }
     }
 }

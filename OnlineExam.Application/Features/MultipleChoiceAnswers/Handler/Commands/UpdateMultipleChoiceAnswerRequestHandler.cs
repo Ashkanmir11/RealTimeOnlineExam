@@ -33,7 +33,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
-            var questionAnswer = await _MultipleChoiceAnswersRepository.GetAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.Id);
+            var questionAnswer = await _MultipleChoiceAnswersRepository.GetAsync(request.Id);
 
             if (questionAnswer==null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
@@ -52,7 +52,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
                 throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
 
-            await _MultipleChoiceAnswersRepository.UpdateAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.Id, request.UpdateMultipleChoiceQuestionAnswerDTO);
+            await _MultipleChoiceAnswersRepository.UpdateAsync(request.Id, request.UpdateMultipleChoiceQuestionAnswerDTO);
         }
     }
 }
