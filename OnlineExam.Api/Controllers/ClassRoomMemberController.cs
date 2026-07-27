@@ -11,7 +11,7 @@ using OnlineExam.Application.Features.ClassRoomMember.Request.Queries;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/class-room-members")]
     [ApiController]
     public class ClassRoomMemberController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace OnlineExam.Api.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomMemberDTO createClassRoomMemberDTO)
         {
@@ -29,7 +29,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
 
-        [HttpGet("Get/{classId}")]
+        [HttpGet("{classId}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int classId)
         {
@@ -41,7 +41,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -53,14 +53,14 @@ namespace OnlineExam.Api.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("Delete")]
+        [HttpDelete("{classId}/{studentId}")]
         [Authorize]
         public async Task<IActionResult> Delete(int classId, string studentId)
         {
             await _mediator.Send(new DeleteClassRoomMemeberRequest() { ClassId = classId, StudentId = studentId });
             return NoContent();
         }
-        [HttpPut("Put")]
+        [HttpPut]
         [Authorize]
         public async Task<IActionResult> Put(UpdateClassRoomMemberDTO updateClassRoomMemberDTO)
         {
@@ -68,7 +68,7 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetStudents")]
+        [HttpGet("{classId}/students")]
         [Authorize]
         public async Task<IActionResult> GetStudents(int classId)
         {

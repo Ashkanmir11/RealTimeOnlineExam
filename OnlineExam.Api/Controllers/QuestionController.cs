@@ -62,12 +62,12 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("GetWithAnswers")]
-        public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
-        {
-            var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
-            return Ok(result);
-        }
+        //[HttpGet("GetWithAnswers")]
+        //public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+        //{
+        //    var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
+        //    return Ok(result);
+        //}
 
     }
 }

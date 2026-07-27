@@ -28,25 +28,25 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
 
         public async Task Handle(UpdateClassRoomRequest request, CancellationToken cancellationToken)
         {
+            var classRoom = await _classRoomRepository.GetAsync(request.Id);
+            if (classRoom == null)
+            {
+                throw new NotFoundException($"آیدی {request.Id} یافت نشد.");
+            }
+
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var classRoom = await _classRoomRepository.GetAsync(request.UpdateClassRoomDTO.Id);
             bool isUserAdmin = await _authServices.IsUserAdminAsync(currentUser);
             if (classRoom.TeacherId != currentUser && !isUserAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
-            }
-
-            if (classRoom == null)
-            {
-                throw new NotFoundException($"آیدی {request.UpdateClassRoomDTO.Id} یافت نشد.");
-            }
+            }   
             var validator = new UpdateClassRoomValidation(_classRoomRepository);
             var validationResult = await validator.ValidateAsync(request.UpdateClassRoomDTO);
             if (validationResult.IsValid == false)
             {
                 throw new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }          
-            await _classRoomRepository.UpdateAsync(request.UpdateClassRoomDTO.Id, request.UpdateClassRoomDTO);
+            await _classRoomRepository.UpdateAsync(request.Id, request.UpdateClassRoomDTO);
         }
     }
 }

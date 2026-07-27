@@ -18,10 +18,7 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
             _DescriptiveAnswersRepository = DescriptiveAnswersRepository;
             _examRepository = examRepository;
             RuleFor(e => e.StudentAnswer).MaximumLength(1000).WithMessage("پاسخ نباید بیشتر از 1000 کاراکتر باشد.");
-            RuleFor(e => e.Id).MustAsync(async (Id, Token) =>
-            {
-                return await _DescriptiveAnswersRepository.ExistAsync(Id);
-            }).WithMessage((Model) => $"پاسخ سوال با آیدی {Model.Id} یافت نشد.");
+           
             RuleFor(e => e.ExamId).MustAsync(async (Id, Token) =>
             {
                 return await _examRepository.ExistAsync(Id);

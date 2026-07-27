@@ -10,7 +10,8 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands
 {
     public class UpdateDescriptiveAnswersTeacherRequest : IRequest
     {
-        public required UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO {  get; set; }
-        public int ExamId {  get; set; }
+        public required UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO { get; set; }
+        public int Id { get; set; }
     }
+
 }

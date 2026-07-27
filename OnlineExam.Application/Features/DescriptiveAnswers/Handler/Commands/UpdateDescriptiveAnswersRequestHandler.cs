@@ -31,10 +31,14 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 
         public async Task Handle(UpdateDescriptiveAnswersRequest request, CancellationToken cancellationToken)
         {
+            var questionAnswer = await _DescriptiveAnswersRepository.GetAsync(request.Id);
+            if(questionAnswer==null)
+            {
+                throw new NotFoundException("پاسخ پیدا نشد.");
+            }
+
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
-            var questionAnswer = await _DescriptiveAnswersRepository.GetAsync(request.UpdateDescriptiveAnswersDTO.Id);
-
             if (questionAnswer == null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
@@ -51,7 +55,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             {
                 throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
-            await _DescriptiveAnswersRepository.UpdateAsync(request.UpdateDescriptiveAnswersDTO.Id, request.UpdateDescriptiveAnswersDTO);
+            await _DescriptiveAnswersRepository.UpdateAsync(request.Id, request.UpdateDescriptiveAnswersDTO);
         }
     }
 }

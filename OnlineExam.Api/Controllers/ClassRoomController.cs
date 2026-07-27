@@ -15,7 +15,7 @@ using System.Security.Claims;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/class-rooms")]
     [ApiController]
     public class ClassRoomController : ControllerBase
     {
@@ -24,14 +24,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateClassRoomDTO createClassRoomDTO)
         {
             var result = await _mediator.Send(new CreateClassRoomRequest() { CreateClassRoomDTO = createClassRoomDTO });
             return Created();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -42,7 +42,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(response);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -54,7 +54,7 @@ namespace OnlineExam.Api.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -63,14 +63,14 @@ namespace OnlineExam.Api.Controllers
         }
 
 
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateClassRoomDTO updateClassRoomDto)
+        public async Task<IActionResult> Put(UpdateClassRoomDTO updateClassRoomDto, int id)
         {
-            await _mediator.Send(new UpdateClassRoomRequest() { UpdateClassRoomDTO = updateClassRoomDto });
+            await _mediator.Send(new UpdateClassRoomRequest() { Id = id, UpdateClassRoomDTO = updateClassRoomDto });
             return Ok();
         }
-        [HttpGet("Teacher/Me")]
+        [HttpGet("my/as-teacher")]
         [Authorize]
         public async Task<IActionResult> GetTeacherClass([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -81,7 +81,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Student/Me")]
+        [HttpGet("my/as-student")]
         [Authorize]
         public async Task<IActionResult> GetStudentClass([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {

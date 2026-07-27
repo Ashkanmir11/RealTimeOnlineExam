@@ -8,6 +8,7 @@ using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.Features.Exam.Request.Commands;
 using OnlineExam.Application.Features.Exam.Request.Queries;
+using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
 
 namespace OnlineExam.Api.Controllers
@@ -106,6 +107,12 @@ namespace OnlineExam.Api.Controllers
             {
                 return NoContent();
             }
+            return Ok(result);
+        }
+        [HttpGet("{examId}/GetAnswer/{studentId}")]
+        public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
             return Ok(result);
         }
 

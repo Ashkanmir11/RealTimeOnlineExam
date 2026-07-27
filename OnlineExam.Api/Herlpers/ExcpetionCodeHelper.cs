@@ -36,7 +36,7 @@ namespace OnlineExam.Api.Herlpers
                     }
                 case ConflictException:
                     {
-                        return 400;
+                        return 409;
                     }
                 default:
                     {

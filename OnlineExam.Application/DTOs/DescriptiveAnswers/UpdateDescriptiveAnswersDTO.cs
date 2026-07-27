@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.DescriptiveAnswers
 {
-    public class UpdateDescriptiveAnswersDTO : BaseDTO
+    public class UpdateDescriptiveAnswersDTO 
     {
         public string? StudentAnswer { get; set; }
         public int ExamId { get; set; }

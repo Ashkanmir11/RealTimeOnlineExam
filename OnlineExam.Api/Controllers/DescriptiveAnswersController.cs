@@ -13,7 +13,7 @@ using OnlineExam.Application.Response;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/descriptive-answers")]
     [ApiController]
     public class DescriptiveAnswersController : ControllerBase
     {
@@ -22,14 +22,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateDescriptiveAnswersDTO createDescriptiveAnswersDTO)
         {
             await _mediator.Send(new CreateDescriptiveAnswersRequest() { CreateDescriptiveAnswersDTO = createDescriptiveAnswersDTO });
             return NoContent();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -40,7 +40,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -51,7 +51,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -59,23 +59,23 @@ namespace OnlineExam.Api.Controllers
             return NoContent();
 
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
+        public async Task<IActionResult> Put(int id,UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
         {
-            await _mediator.Send(new UpdateDescriptiveAnswersRequest() { UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
+            await _mediator.Send(new UpdateDescriptiveAnswersRequest() {Id=id, UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
             return NoContent();
         }
 
         [Authorize]
-        [HttpPut("Grading")]
-        public async Task<IActionResult> Grading(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO, int examId)
+        [HttpPut("{id}/grade")]
+        public async Task<IActionResult> Grading(int id,UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
         {
-            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO, ExamId = examId });
+            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO });
             return NoContent();
         }
         [Authorize]
-        [HttpGet("GetMyAnswer/{descriptiveQuestionId}")]
+        [HttpGet("my/{descriptiveQuestionId}")]
         public async Task<IActionResult> GetMyAnswer(int descriptiveQuestionId)
         {
             var result = await _mediator.Send(new GetMyDescriptiveAnswerRequest() { descriptiveQuestionId = descriptiveQuestionId });
