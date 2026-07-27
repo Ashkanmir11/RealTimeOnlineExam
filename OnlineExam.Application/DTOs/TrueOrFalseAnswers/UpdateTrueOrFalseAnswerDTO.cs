@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers
 {
-    public class UpdateTrueOrFalseAnswerDTO : BaseDTO
+    public class UpdateTrueOrFalseAnswerDTO 
     {
         public bool StudentAnswer { get; set; }
         public int ExamId { get; set; }

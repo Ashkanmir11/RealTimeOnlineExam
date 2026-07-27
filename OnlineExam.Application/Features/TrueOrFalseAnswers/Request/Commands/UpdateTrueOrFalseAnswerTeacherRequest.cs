@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,6 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands
     public class UpdateTrueOrFalseAnswerTeacherRequest : IRequest
     {
         public required UpdateTrueOrFalseAnswerTeacherDTO? UpdateTrueOrFalseAnswerTeacherDTO { get; set; }
-        public int ExamId {  get; set; }
+        public int Id {  get; set; }
     }
 }

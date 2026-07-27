@@ -42,7 +42,11 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
 
         public async Task Handle(UpdateQuestionRequest request, CancellationToken cancellationToken)
         {
-            var question = await _questionRepository.GetAsync(request.UpdateQuestionDTO.Id);
+            var question = await _questionRepository.GetAsync(request.Id);
+            if(question==null)
+            {
+                throw new NotFoundException("سوال یافت نشد.");
+            }
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, question.ExamId);
             bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
@@ -58,7 +62,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
                 var errors = validitonResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
-            await _questionRepository.DeleteQuestionDetailAsync(request.UpdateQuestionDTO.Id);
+            await _questionRepository.DeleteQuestionDetailAsync(request.Id);
 
 
             if (request.UpdateQuestionDTO.TrueOrFalseQuestion != null)
@@ -76,7 +80,8 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
                 var questionDetail = _mapper.Map<CreateMultipleChoiceQuestionDTO>(request.UpdateQuestionDTO.MultipleChoiceQuestion);
                 request.UpdateQuestionDTO.MultipleChoiceQuestionId = await _mediator.Send(new CreateMultipleChoiceQuestionRequest() { CreateMultipleChoiceQuestionDTO = questionDetail });
             }
-            await _questionRepository.UpdateAsync(request.UpdateQuestionDTO.Id, request.UpdateQuestionDTO);
+
+            await _questionRepository.UpdateAsync(request.Id, request.UpdateQuestionDTO);
         }
     }
 }

@@ -9,7 +9,7 @@ using OnlineExam.Application.Features.Question.Request.Queries;
 
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/questions")]
     [ApiController]
     public class QuestionController : ControllerBase
     {
@@ -18,7 +18,7 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateQuestionDTO createQuestionDTO)
         {
@@ -26,7 +26,7 @@ namespace OnlineExam.Api.Controllers
             return Created();
         }
         [Authorize(Roles = "Admin")]
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _mediator.Send(new GetQuestionByIdRequest() { Id = id });
@@ -36,7 +36,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -47,27 +47,22 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             await _mediator.Send(new DeleteQuestionRequest() { Id = id });
             return NoContent();
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateQuestionDTO updateQuestionDTO)
+        public async Task<IActionResult> Put(int Id,UpdateQuestionDTO updateQuestionDTO)
         {
             await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO });
             return NoContent();
         }
 
-        //[HttpGet("GetWithAnswers")]
-        //public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
-        //{
-        //    var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
-        //    return Ok(result);
-        //}
+
 
     }
 }

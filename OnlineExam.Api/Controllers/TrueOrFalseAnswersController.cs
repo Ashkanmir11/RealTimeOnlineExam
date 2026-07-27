@@ -12,7 +12,7 @@ using OnlineExam.Application.Response;
 using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
 namespace OnlineExam.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/true-or-false-answers")]
     [ApiController]
     public class TrueOrFalseAnswersController : ControllerBase
     {
@@ -21,14 +21,14 @@ namespace OnlineExam.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("Post")]
+        [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateTrueOrFalseAnswerDTO createTrueOrFalseQuestionAnswerDTO)
         {
             await _mediator.Send(new CreateTrueOrFalseAnswerRequest() { CreateTrueOrFalseQuestionAnswerDTO = createTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
-        [HttpGet("Get/{id}")]
+        [HttpGet("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get(int id)
         {
@@ -39,7 +39,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("Get")]
+        [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -50,7 +50,7 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpDelete("Delete/{id}")]
+        [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
@@ -59,21 +59,21 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("Put")]
         [Authorize]
-        public async Task<IActionResult> Put(UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
+        public async Task<IActionResult> Put(int id,UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() { UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
+            await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() {Id=id, UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
 
-        [HttpPut("Grading")]
+        [HttpPut("{id}/Grade")]
         [Authorize]
-        public async Task<IActionResult> Grading(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO, int examId)
+        public async Task<IActionResult> Grade(int id,UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO)
         {
-            await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() { UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO, ExamId = examId });
+            await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() {Id=id, UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO });
             return NoContent();
         }
         [Authorize]
-        [HttpGet("GetMyAnswer/{trueOrFalseQuestionId}")]
+        [HttpGet("my/{trueOrFalseQuestionId}")]
         public async Task<IActionResult> GetMyAnswer(int trueOrFalseQuestionId)
         {
             var result = await _mediator.Send(new GetMyTrueOrFalseAnswerRequest() { TrueOrFalseQuestionId = trueOrFalseQuestionId });

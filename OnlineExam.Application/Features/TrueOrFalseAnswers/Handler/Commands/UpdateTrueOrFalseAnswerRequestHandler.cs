@@ -34,9 +34,12 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
-            var questionAnswer = await _TrueOrFalseAnswersRepository.GetAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id);
-
-            if (questionAnswer==null || questionAnswer.StudentId != currentUser && !isAdmin)
+            var questionAnswer = await _TrueOrFalseAnswersRepository.GetAsync(request.Id);
+            if(questionAnswer==null)
+            {
+                throw new NotFoundException("پاسخ یافت نشد.");
+            }
+            if (questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }
@@ -52,7 +55,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             {
                 throw new AccessForbiddenException("آزمون به پایان رسیده.");
             }
-            await _TrueOrFalseAnswersRepository.UpdateAsync(request.UpdateTrueOrFalseQuestionAnswerDTO.Id, request.UpdateTrueOrFalseQuestionAnswerDTO);
+            await _TrueOrFalseAnswersRepository.UpdateAsync(request.Id, request.UpdateTrueOrFalseQuestionAnswerDTO);
         }
     }
 }

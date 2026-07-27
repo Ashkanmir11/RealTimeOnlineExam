@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.Question
 {
-    public class UpdateQuestionDTO : BaseDTO
+    public class UpdateQuestionDTO 
     {
         public string? QuestionText { get; set; }
         public decimal? TotalScore { get; set; }
