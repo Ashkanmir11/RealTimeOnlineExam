@@ -10,28 +10,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using FluentValidation;
 
 namespace OnlineExam.Application.Features.LogType.Handler.Commands
 {
     public class UpdateLogTypeRequestHandler : IRequestHandler<UpdateLogTypeRequest>
     {
         private readonly ILogTypeRepository _logTypeRepository;
-        public UpdateLogTypeRequestHandler(ILogTypeRepository logTypeRepository)
+        private readonly IValidator<UpdateLogTypeDTO> _validator;
+        public UpdateLogTypeRequestHandler(ILogTypeRepository logTypeRepository, IValidator<UpdateLogTypeDTO> validator)
         {
             _logTypeRepository = logTypeRepository;
+            _validator = validator;
         }
         public async Task Handle(UpdateLogTypeRequest request, CancellationToken cancellationToken)
         {
-            var logTypeExist =await _logTypeRepository.ExistAsync(request.Id);
-            if(logTypeExist==false)
+            var logTypeExist = await _logTypeRepository.ExistAsync(request.Id);
+            if (logTypeExist == false)
             {
                 throw new NotFoundException("نوع لاگ یافت نشد.");
             }
-            var validation = new UpdateLogTypeValidation(_logTypeRepository);
-            var validationResult = await validation.ValidateAsync(request.UpdateLogTypeDTO);
+            var validationResult = await _validator.ValidateAsync(request.UpdateLogTypeDTO);
             if (validationResult.IsValid == false)
             {
-                throw (new ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList()));
+                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
 
             await _logTypeRepository.UpdateAsync<UpdateLogTypeDTO>(request.Id, request.UpdateLogTypeDTO);

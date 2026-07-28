@@ -41,7 +41,6 @@ namespace OnlineExam.Application.DTOs.Exam.Validation
                 }
                 return true;
             }).WithMessage("میزان زمان مجاز تاخیر نباید بیشتر از ساعت پایان باشد.");
-            //RuleFor(e => e.AllowedDelay).GreaterThan(DateTimeOffset.Now);
         }
     }
 }

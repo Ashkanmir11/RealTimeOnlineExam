@@ -10,15 +10,8 @@ namespace OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation
 {
     public class UpdateTrueOrFalseAnswerTeacherValidation : AbstractValidator<UpdateTrueOrFalseAnswerTeacherDTO>
     {
-        private readonly ITrueOrFalseAnswersRepository _trueOrFalseAnswersRepository;
-        private readonly IQuestionRepository _questionRepository;
-        public UpdateTrueOrFalseAnswerTeacherValidation(ITrueOrFalseAnswersRepository trueOrFalseAnswersRepository
-            , IQuestionRepository questionRepository
-              )
+        public UpdateTrueOrFalseAnswerTeacherValidation()
         {
-            _trueOrFalseAnswersRepository = trueOrFalseAnswersRepository;
-            _questionRepository = questionRepository;
-
             RuleFor(e => e.StudentScore).PrecisionScale(5, 2, true).WithMessage("نمره بیش از حد مجاز است.");
         }
     }

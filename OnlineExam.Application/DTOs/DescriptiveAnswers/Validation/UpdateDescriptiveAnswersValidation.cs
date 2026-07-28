@@ -11,11 +11,9 @@ namespace OnlineExam.Application.DTOs.DescriptiveAnswers.Validation
 {
     public class UpdateDescriptiveAnswersValidation : AbstractValidator<UpdateDescriptiveAnswersDTO>
     {
-        private readonly IDescriptiveAnswersRepository _DescriptiveAnswersRepository;
         private readonly IExamRepository _examRepository;
-        public UpdateDescriptiveAnswersValidation(IDescriptiveAnswersRepository DescriptiveAnswersRepository, IExamRepository examRepository)
+        public UpdateDescriptiveAnswersValidation(IExamRepository examRepository)
         {
-            _DescriptiveAnswersRepository = DescriptiveAnswersRepository;
             _examRepository = examRepository;
             RuleFor(e => e.StudentAnswer).MaximumLength(1000).WithMessage("پاسخ نباید بیشتر از 1000 کاراکتر باشد.");
            

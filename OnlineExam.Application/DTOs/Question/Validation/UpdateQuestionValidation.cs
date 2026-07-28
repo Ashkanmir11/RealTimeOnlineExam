@@ -10,7 +10,7 @@ namespace OnlineExam.Application.DTOs.Question.Validation
 {
     public class UpdateQuestionValidation : AbstractValidator<UpdateQuestionDTO>
     {
-        public UpdateQuestionValidation(IQuestionRepository questionRepository)
+        public UpdateQuestionValidation()
         {
             RuleFor(e => e.QuestionText).NotEmpty().WithMessage("متن سوال نباید خالی باشد.");
             RuleFor(e => e.TotalScore).GreaterThan(0).WithMessage("نمره باید بیشتر از 0 باشد").PrecisionScale(5,2,true).WithMessage("نمره بیش از حد مجار است.");

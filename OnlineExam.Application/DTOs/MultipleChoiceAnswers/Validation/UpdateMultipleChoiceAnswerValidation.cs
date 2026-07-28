@@ -12,7 +12,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
     {
         private readonly IExamRepository _examRepository;
 
-        public UpdateMultipleChoiceAnswerValidation(IMultipleChoiceAnswersRepository MultipleChoiceAnswersRepository, IExamRepository examRepository)
+        public UpdateMultipleChoiceAnswerValidation(IExamRepository examRepository)
         {
             _examRepository = examRepository;
 

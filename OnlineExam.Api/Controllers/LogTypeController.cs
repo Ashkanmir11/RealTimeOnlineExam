@@ -62,7 +62,7 @@ namespace OnlineExam.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(int id,UpdateLogTypeDTO updateLogTypeDTO)
         {
-            await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO });
+            await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO ,Id=id});
             return NoContent();
         }
 
