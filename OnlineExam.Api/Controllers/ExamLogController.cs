@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.ExamLog;
+using OnlineExam.Application.Features.ExamLog.Handler.Queries;
 using OnlineExam.Application.Features.ExamLog.Request.Commands;
 using OnlineExam.Application.Features.ExamLog.Request.Queries;
 
@@ -48,11 +49,16 @@ namespace OnlineExam.Api.Controllers
             }
             return Ok(result);
         }
-        [HttpGet("students/{studentId}")]
+        [HttpGet("{examId}/{studentId}")]
         [Authorize]
-        public async Task<IActionResult> GetByStudentId(string studentId)
+        public async Task<IActionResult> GetByStudentId(int examId,string studentId)
         {
-            throw new NotImplementedException();
+            var result = await _mediator.Send(new GetExamLogForTeacherRequest() { ExamId = examId, StudentId = studentId });
+            if(result==null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
         }
     }
 }

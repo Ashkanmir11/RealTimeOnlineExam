@@ -44,7 +44,7 @@ namespace OnlineExam.Identity.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Email,onlineExamUser.Email),
                 new Claim(CustomClaimTypes.UserId,onlineExamUser.Id),
-            }.Union(roleClaims).Union(roleClaims);
+            }.Union(roleClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
