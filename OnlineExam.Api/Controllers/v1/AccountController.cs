@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
@@ -9,10 +10,12 @@ using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Application.Response;
 using OnlineExam.Identity.Services;
 
-namespace OnlineExam.Api.Controllers
+
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api")]
+    [Route("api/v{version:apiVersion}/account")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class AccountController : ControllerBase
     {
         private readonly IAuthServices _authServices;
@@ -35,8 +38,8 @@ namespace OnlineExam.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
-            var currentUser=await _authServices.GetCurrentUserIdAsync();
-            if(currentUser!=null)
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            if (currentUser != null)
             {
                 return Ok(await _accountRepository.GetMyInfoAsync(currentUser));
             }

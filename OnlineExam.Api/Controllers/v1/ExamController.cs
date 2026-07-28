@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,11 @@ using OnlineExam.Application.Features.Exam.Request.Queries;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/exams")]
+    [Route("api/v{version:apiVersion}/exams")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ExamController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -63,9 +65,9 @@ namespace OnlineExam.Api.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int id,UpdateExamDTO updateExamDTO)
+        public async Task<IActionResult> Put(int id, UpdateExamDTO updateExamDTO)
         {
-            await _mediator.Send(new UpdateExamRequest() { UpdateExamDTO = updateExamDTO ,Id=id});
+            await _mediator.Send(new UpdateExamRequest() { UpdateExamDTO = updateExamDTO, Id = id });
             return NoContent();
 
         }
@@ -103,7 +105,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetByClassId(int classId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetExamByClassIdRequest() { ClassId = classId, PaginateRequestDTO = paginateRequestDTO });
-            if(result.Data.Count==0)
+            if (result.Data.Count == 0)
             {
                 return NoContent();
             }

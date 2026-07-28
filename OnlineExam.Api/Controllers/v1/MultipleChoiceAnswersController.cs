@@ -10,10 +10,12 @@ using OnlineExam.Application.Response;
 using OnlineExam.Application.Contracts.Identity;
 using Microsoft.AspNetCore.Authorization;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
-namespace OnlineExam.Api.Controllers
+using Asp.Versioning;
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/multiple-choice-answers")]
+    [Route("api/v{version:apiVersion}/multiple-choice-answers")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class MultipleChoiceAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -60,16 +62,16 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int id,UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
+        public async Task<IActionResult> Put(int id, UpdateMultipleChoiceAnswerDTO updateMultipleChoiceQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() {Id=id, UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
+            await _mediator.Send(new UpdateMultipleChoiceAnswerRequest() { Id = id, UpdateMultipleChoiceQuestionAnswerDTO = updateMultipleChoiceQuestionAnswerDTO });
             return NoContent();
         }
         [HttpPut("{id}/grade")]
         [Authorize]
         public async Task<IActionResult> Grade(int id, UpdateMultipleChoiceAnswerTeacherDTO updateMultipleChoiceAnswerTeacherDTO)
         {
-            await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() {Id=id, UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO });
+            await _mediator.Send(new UpdateMultipleChoiceAnswerTeacherRequest() { Id = id, UpdateMultipleChoiceAnswerTeacherDTO = updateMultipleChoiceAnswerTeacherDTO });
             return NoContent();
         }
         [Authorize]

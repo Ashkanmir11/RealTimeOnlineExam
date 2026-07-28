@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -7,10 +8,11 @@ using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.Features.Question.Request.Commands;
 using OnlineExam.Application.Features.Question.Request.Queries;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/questions")]
+    [Route("api/v{version:apiVersion}/questions")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class QuestionController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -56,9 +58,9 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int Id,UpdateQuestionDTO updateQuestionDTO)
+        public async Task<IActionResult> Put(int Id, UpdateQuestionDTO updateQuestionDTO)
         {
-            await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO ,Id=Id});
+            await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO, Id = Id });
             return NoContent();
         }
 

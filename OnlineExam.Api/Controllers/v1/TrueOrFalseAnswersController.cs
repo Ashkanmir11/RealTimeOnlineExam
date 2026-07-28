@@ -10,10 +10,12 @@ using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Queries;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Response;
 using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
-namespace OnlineExam.Api.Controllers
+using Asp.Versioning;
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/true-or-false-answers")]
+    [Route("api/v{version:apiVersion}/true-or-false-answers")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class TrueOrFalseAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -59,17 +61,17 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("Put")]
         [Authorize]
-        public async Task<IActionResult> Put(int id,UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
+        public async Task<IActionResult> Put(int id, UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
         {
-            await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() {Id=id, UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
+            await _mediator.Send(new UpdateTrueOrFalseAnswerRequest() { Id = id, UpdateTrueOrFalseQuestionAnswerDTO = updateTrueOrFalseQuestionAnswerDTO });
             return NoContent();
         }
 
         [HttpPut("{id}/Grade")]
         [Authorize]
-        public async Task<IActionResult> Grade(int id,UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO)
+        public async Task<IActionResult> Grade(int id, UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO)
         {
-            await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() {Id=id, UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO });
+            await _mediator.Send(new UpdateTrueOrFalseAnswerTeacherRequest() { Id = id, UpdateTrueOrFalseAnswerTeacherDTO = updateTrueOrFalseAnswerTeacherDTO });
             return NoContent();
         }
         [Authorize]

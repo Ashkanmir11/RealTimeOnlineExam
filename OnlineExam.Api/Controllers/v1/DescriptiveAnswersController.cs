@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,11 @@ using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
 using OnlineExam.Application.Response;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/descriptive-answers")]
+    [Route("api/v{version:apiVersion}/descriptive-answers")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class DescriptiveAnswersController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -61,17 +63,17 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int id,UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
+        public async Task<IActionResult> Put(int id, UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
         {
-            await _mediator.Send(new UpdateDescriptiveAnswersRequest() {Id=id, UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
+            await _mediator.Send(new UpdateDescriptiveAnswersRequest() { Id = id, UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
             return NoContent();
         }
 
         [Authorize]
         [HttpPut("{id}/grade")]
-        public async Task<IActionResult> Grade(int id,UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
+        public async Task<IActionResult> Grade(int id, UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
         {
-            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() {Id=id, updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO });
+            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { Id = id, updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO });
             return NoContent();
         }
         [Authorize]

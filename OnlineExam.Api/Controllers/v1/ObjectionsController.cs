@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,11 @@ using OnlineExam.Application.Features.Objection.Request.Queries;
 using OnlineExam.Application.Response;
 using OnlineExam.Identity.Services;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/objections")]
+    [Route("api/v{version:apiVersion}/objections")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ObjectionsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -26,8 +28,8 @@ namespace OnlineExam.Api.Controllers
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Post(CreateObjectionDTO createObjectionDTO)
-        { 
-          
+        {
+
             await _mediator.Send(new CreateObjectionReqeust() { CreateObjectionDTO = createObjectionDTO });
             return Created();
         }
@@ -65,9 +67,9 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int id,UpdateObjectionDTO updateObjectionDTO)
+        public async Task<IActionResult> Put(int id, UpdateObjectionDTO updateObjectionDTO)
         {
-            await _mediator.Send(new UpdateObjectionRequest() { UpdateObjectionDTO = updateObjectionDTO , Id = id });
+            await _mediator.Send(new UpdateObjectionRequest() { UpdateObjectionDTO = updateObjectionDTO, Id = id });
             return NoContent();
         }
     }

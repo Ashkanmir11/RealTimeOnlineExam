@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,11 @@ using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Features.ClassRoomMember.Request.Commands;
 using OnlineExam.Application.Features.ClassRoomMember.Request.Queries;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/class-room-members")]
+    [Route("api/v{version:apiVersion}/class-room-members")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ClassRoomMemberController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -73,7 +75,7 @@ namespace OnlineExam.Api.Controllers
         public async Task<IActionResult> GetStudents(int classId)
         {
             var result = await _mediator.Send(new GetClassRoomMemberTeacherRequest() { ClassId = classId });
-            if(result==null)
+            if (result == null)
             {
                 return NoContent();
             }

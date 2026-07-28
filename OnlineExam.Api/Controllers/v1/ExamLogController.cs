@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,11 @@ using OnlineExam.Application.Features.ExamLog.Handler.Queries;
 using OnlineExam.Application.Features.ExamLog.Request.Commands;
 using OnlineExam.Application.Features.ExamLog.Request.Queries;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/exam-logs")]
+    [Route("api/v{version:apiVersion}/exam-logs")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ExamLogController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -51,10 +53,10 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpGet("{examId}/{studentId}")]
         [Authorize]
-        public async Task<IActionResult> GetByStudentId(int examId,string studentId)
+        public async Task<IActionResult> GetByStudentId(int examId, string studentId)
         {
             var result = await _mediator.Send(new GetExamLogForTeacherRequest() { ExamId = examId, StudentId = studentId });
-            if(result==null)
+            if (result == null)
             {
                 return NoContent();
             }

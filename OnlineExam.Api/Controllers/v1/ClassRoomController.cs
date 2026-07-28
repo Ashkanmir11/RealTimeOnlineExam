@@ -12,11 +12,13 @@ using Microsoft.AspNetCore.Identity;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Identity.Model;
 using System.Security.Claims;
+using Asp.Versioning;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/class-rooms")]
+    [Route("api/v{version:apiVersion}/class-rooms")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class ClassRoomController : ControllerBase
     {
         private readonly IMediator _mediator;

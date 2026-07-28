@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,10 +10,11 @@ using OnlineExam.Application.Features.LogType.Reqeust.Commands;
 using OnlineExam.Application.Features.LogType.Reqeust.Queries;
 using OnlineExam.Application.Response;
 
-namespace OnlineExam.Api.Controllers
+namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/log-types")]
+    [Route("api/v{version:apiVersion}/log-types")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class LogTypeController : ControllerBase
     {
         private readonly IMediator _meditor;
@@ -21,7 +23,7 @@ namespace OnlineExam.Api.Controllers
             _meditor = mediator;
         }
         [HttpPost]
-        [Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post(CreateLogTypeDTO createLogTypeDTO)
         {
             await _meditor.Send(new CreateLogTypeRequest() { CreateLogTypeDTO = createLogTypeDTO });
@@ -60,9 +62,9 @@ namespace OnlineExam.Api.Controllers
         }
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Put(int id,UpdateLogTypeDTO updateLogTypeDTO)
+        public async Task<IActionResult> Put(int id, UpdateLogTypeDTO updateLogTypeDTO)
         {
-            await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO ,Id=id});
+            await _meditor.Send(new UpdateLogTypeRequest() { UpdateLogTypeDTO = updateLogTypeDTO, Id = id });
             return NoContent();
         }
 
