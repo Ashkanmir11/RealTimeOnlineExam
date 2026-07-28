@@ -13,7 +13,7 @@ using OnlineExam.Identity.Services;
 
 namespace OnlineExam.Api.Controllers.V1
 {
-    [Route("api/v{version:apiVersion}/account")]
+    [Route("api/v{version:apiVersion}")]
     [ApiController]
     [ApiVersion("1.0")]
     public class AccountController : ControllerBase
@@ -27,14 +27,14 @@ namespace OnlineExam.Api.Controllers.V1
             _cookieHelper = cookieHelper;
             _accountRepository = accountRepository;
         }
-        [HttpPost("auth/Register")]
+        [HttpPost("auth/register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterDTO registerDTO)
         {
             await _authServices.RegisterAsync(registerDTO);
             return Created();
         }
-        [HttpPost("auth/Login")]
+        [HttpPost("auth/login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginDTO loginDTO)
         {
@@ -50,7 +50,7 @@ namespace OnlineExam.Api.Controllers.V1
 
         }
 
-        [HttpPost("auth/RefreshToken")]
+        [HttpPost("auth/refresh-token")]
         public async Task<IActionResult> RefreshToken()
         {
             var refreshToken = _cookieHelper.GetCookieValue("refreshToken");
@@ -59,7 +59,7 @@ namespace OnlineExam.Api.Controllers.V1
             _cookieHelper.SetRefreshToken(response.RefreshToken);
             return NoContent();
         }
-        [HttpGet("Account/GetAll")]
+        [HttpGet("accounts")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
@@ -73,7 +73,7 @@ namespace OnlineExam.Api.Controllers.V1
 
         }
 
-        [HttpPost("auth/Logout")]
+        [HttpPost("auth/logout")]
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -83,7 +83,7 @@ namespace OnlineExam.Api.Controllers.V1
             _cookieHelper.DeleteCookie(Response, "refreshToken");
             return NoContent();
         }
-        [HttpGet("Account/My")]
+        [HttpGet("accounts/me")]
         [Authorize]
         public async Task<IActionResult> GetMyInfo()
         {
