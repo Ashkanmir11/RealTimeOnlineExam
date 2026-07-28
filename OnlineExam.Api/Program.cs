@@ -7,6 +7,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Api.Hubs;
 using OnlineExam.Api.Middleware;
 using OnlineExam.Application;
+using OnlineExam.Application.Serviecs;
 using OnlineExam.Identity;
 using OnlineExam.Identity.SeedData;
 using OnlineExam.Persistence;
@@ -21,22 +22,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureIdentityServices(builder.Configuration);
 builder.Services.ConfigurePersistenceServices(builder.Configuration);
+builder.Services.ConfigureVersioningServices();
 builder.Services.AddSignalR();
-builder.Services.AddApiVersioning(options =>
-{
-    options.DefaultApiVersion = new Asp.Versioning.ApiVersion(1, 0);
-    options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions = true;
-}).AddApiExplorer(options=>
-{
-    options.GroupNameFormat = "'v'VVV";
-    options.SubstituteApiVersionInUrl = true;
-});
-builder.Services.AddEndpointsApiExplorer();
+
 
 var app = builder.Build();
 using (var scope = app.Services.CreateScope())
