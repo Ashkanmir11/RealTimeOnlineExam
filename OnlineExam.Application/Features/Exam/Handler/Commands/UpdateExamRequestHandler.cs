@@ -29,10 +29,14 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 
         public async Task Handle(UpdateExamRequest request, CancellationToken cancellationToken)
         {
-            bool examExist = await _examRepository.ExistAsync(request.Id);
-            if(examExist==false)
+            var exam = await _examRepository.GetAsync(request.Id);
+            if(exam==null)
             {
                 throw new NotFoundException("آزمون یافت نشد.");
+            }
+            if(exam.StartDate<DateTime.Now)
+            {
+                throw new ConflictException("امکان ویرایش بعد شروع ازمون وجود ندارد.");
             }
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
@@ -45,7 +49,8 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             var validationResult = await _validator.ValidateAsync(request.UpdateExamDTO);
             if(validationResult.IsValid==false)
             {
-                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new Application.Exceptions.ValidationException(errors);
             }
             await _examRepository.UpdateAsync(request.Id, request.UpdateExamDTO);
         }

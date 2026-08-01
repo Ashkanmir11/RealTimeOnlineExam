@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Exceptions
 {
-    public class ConflictException : ApplicationException
+    public class DbConflictException : ApplicationException
     {
-        public ConflictException(string massage) : base(massage)
+        public DbConflictException(string massage) : base(massage)
         {
         }
     }

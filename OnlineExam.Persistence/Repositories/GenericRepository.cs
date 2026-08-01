@@ -67,7 +67,7 @@ namespace OnlineExam.Persistence.Repositories
             {
                 if (ex.InnerException is SqlException sqlEx && sqlEx.Number == 547)
                 {
-                    throw new ConflictException("این مورد در بخش دیگری استفاده شده و قابل حذف نیست.");
+                    throw new DbConflictException("این مورد در بخش دیگری استفاده شده و قابل حذف نیست.");
                 }
 
                 throw;
