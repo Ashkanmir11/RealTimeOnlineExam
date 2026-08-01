@@ -54,7 +54,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation
                 {
                     return false;
                 }
-                int choicec = (question.Choices.Count) + 1;
+                int choicec = question.Choices.Count;
                 if (StudentChoice == 0 || StudentChoice > choicec)
                 {
                     return false;

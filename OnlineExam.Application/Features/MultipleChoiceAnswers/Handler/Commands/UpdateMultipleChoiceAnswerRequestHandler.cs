@@ -34,7 +34,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _MultipleChoiceAnswersRepository.GetAsync(request.Id);
-
+            request.UpdateMultipleChoiceQuestionAnswerDTO.QuestionId = questionAnswer.MultipleChoiceQuestionId;
             if (questionAnswer==null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
