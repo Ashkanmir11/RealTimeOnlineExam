@@ -9,7 +9,7 @@ using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Application.Response;
 using OnlineExam.Identity.Services;
-
+using OnlineExam.Persistence.Exceptions;
 
 namespace OnlineExam.Api.Controllers.V1
 {
@@ -41,7 +41,7 @@ namespace OnlineExam.Api.Controllers.V1
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             if (currentUser != null)
             {
-                return Ok(await _accountRepository.GetMyInfoAsync(currentUser));
+                throw new ConflictException("شما قبلا وارد شده اید.");
             }
             var loginReslt = await _authServices.LoginAsync(loginDTO);
             _cookieHelper.SetAccessToken(loginReslt.AccessToken);
