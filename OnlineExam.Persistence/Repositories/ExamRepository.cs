@@ -40,6 +40,10 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> IsUserTeacherAsync(string userId, int examId)
         {
             var exam = await _context.Exams.Where(e => e.Id == examId).SingleOrDefaultAsync();
+            if(exam==null)
+            {
+                return false;
+            }
             return await _context.ClassRooms.AnyAsync(e => e.Id == exam.ClassId && e.TeacherId == userId);
         }
 
