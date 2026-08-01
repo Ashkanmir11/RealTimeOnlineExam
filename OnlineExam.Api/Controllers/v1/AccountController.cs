@@ -7,6 +7,7 @@ using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Response;
 using OnlineExam.Identity.Services;
 using OnlineExam.Persistence.Exceptions;

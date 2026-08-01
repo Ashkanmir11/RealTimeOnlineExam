@@ -58,9 +58,9 @@ namespace OnlineExam.Api.Controllers.V1
         }
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> Put(int Id, UpdateQuestionDTO updateQuestionDTO)
+        public async Task<IActionResult> Put(int id, UpdateQuestionDTO updateQuestionDTO)
         {
-            await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO, Id = Id });
+            await _mediator.Send(new UpdateQuestionRequest() { UpdateQuestionDTO = updateQuestionDTO, Id = id });
             return NoContent();
         }
 

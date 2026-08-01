@@ -25,6 +25,20 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
+        public async Task<bool> CanModifyExamAsync(int examId)
+        {
+            var examStartDate = await _context.Exams.Where(e => e.Id == examId).Select(e => e.StartDate).SingleOrDefaultAsync();
+            if(examStartDate == null)
+            {
+                return false;
+            }
+            if(DateTime.Now>examStartDate)
+            {
+                return false;
+            }
+            return true;
+        }
+
         public async Task<PaginateResponse<GetExamDetailDTO>> GetByClassIdAsync(int classId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Exams.Where(e => e.ClassId == classId).AsQueryable();

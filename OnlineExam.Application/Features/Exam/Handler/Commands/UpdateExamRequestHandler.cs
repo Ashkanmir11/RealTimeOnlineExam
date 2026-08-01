@@ -29,14 +29,15 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 
         public async Task Handle(UpdateExamRequest request, CancellationToken cancellationToken)
         {
-            var exam = await _examRepository.GetAsync(request.Id);
-            if(exam==null)
+            var exam = await _examRepository.ExistAsync(request.Id);
+            if(!exam)
             {
                 throw new NotFoundException("آزمون یافت نشد.");
             }
-            if(exam.StartDate<DateTime.Now)
+            var canEdit=await _examRepository.CanModifyExamAsync(request.Id);
+            if(!canEdit)
             {
-                throw new ConflictException("امکان ویرایش بعد شروع ازمون وجود ندارد.");
+                throw new ConflictException("امکان ویرایش بعد شروع آزمون وجود ندارد.");
             }
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
