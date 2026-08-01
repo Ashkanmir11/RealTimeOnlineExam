@@ -112,7 +112,8 @@ namespace OnlineExam.Api.Controllers.V1
             return Ok(result);
         }
         [HttpGet("{examId}/answers/{studentId}")]
-        public async Task<IActionResult> GetStudentScore([FromQuery] int examId, [FromQuery] string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
+       
+        public async Task<IActionResult> GetStudentScore(int examId, string studentId, [FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _mediator.Send(new GetQuestionWithAnswerRequest() { ExamId = examId, StudentId = studentId, PaginateRequestDTO = paginateRequestDTO });
             return Ok(result);
