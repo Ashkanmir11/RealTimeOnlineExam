@@ -23,9 +23,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Identity", "Onli
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Application", "OnlineExam.Application\OnlineExam.Application.csproj", "{5291A236-72FE-45ED-AE5F-E72E1898F0D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Domain", "OnlineExam.Domain\OnlineExam.Domain.csproj", "{E086B745-2B88-49A8-99FE-53BA6947017D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Domain", "OnlineExam.Domain\OnlineExam.Domain.csproj", "{E086B745-2B88-49A8-99FE-53BA6947017D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineExam.Persistence", "OnlineExam.Persistence\OnlineExam.Persistence.csproj", "{68D848C6-AA99-40A4-A736-6D4D37342414}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineExam.Persistence", "OnlineExam.Persistence\OnlineExam.Persistence.csproj", "{68D848C6-AA99-40A4-A736-6D4D37342414}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

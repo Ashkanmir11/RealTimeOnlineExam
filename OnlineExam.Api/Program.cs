@@ -56,7 +56,19 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
-
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        foreach (var description in provider.ApiVersionDescriptions)
+        {
+            options.SwaggerEndpoint(
+                $"{description.GroupName}/swagger.json",
+                description.GroupName.ToUpperInvariant());
+        }
+    });
+}
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

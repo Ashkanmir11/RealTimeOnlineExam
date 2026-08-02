@@ -1,0 +1,18 @@
+﻿@page "/register"
+<h3>Register</h3>
+<EditForm Model="@registerDTO">
+    <InputText @bind-Value="@registerDTO.FirstName" @DisplayName="نام"></InputText>
+    <InputText @bind-Value="@registerDTO.LastName" @DisplayName="نام خانوادگی"></InputText>
+    <InputText @bind-Value="@registerDTO.Email" @DisplayName="ایمیل"></InputText>
+    <InputText type="password" @bind-Value="@registerDTO.Password" @DisplayName="رمز عبور" />
+</EditForm>
+<h1> @name</h1>
+<h1>@registerDTO.FirstName</h1>
+<h1>@registerDTO.LastName</h1>
+<h1>@registerDTO.Email</h1>
+<h1>@registerDTO.Password</h1>
+
+@code {
+    string name = "";
+   private RegisterDTO registerDTO { get; set; } = new RegisterDTO();
+}
