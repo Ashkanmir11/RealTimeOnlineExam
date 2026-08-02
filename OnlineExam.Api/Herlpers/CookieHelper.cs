@@ -13,7 +13,7 @@
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.Now.AddDays(10),
@@ -21,21 +21,22 @@
             };
 
             if (_httpContextAccessor.HttpContext != null)
+            {
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+            }
         }
 
         public void SetAccessToken(string accessToken)
         {
             var cookieOptions = new CookieOptions
             {
-                HttpOnly = true,
+                HttpOnly = false,
                 Secure = true,
                 SameSite = SameSiteMode.None,
                 Expires = DateTimeOffset.Now.AddMinutes(30)
             };
 
             if (_httpContextAccessor.HttpContext != null)
-
             {
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("accessToken", accessToken, cookieOptions);
             }

@@ -1,7 +1,35 @@
-﻿<h3>Login</h3>
-<form>
+﻿@using OnlineExam.Ui.Services;
+@page "/login"
+@inject AuthServices _authServices;
+@inject IJSRuntime _jsRunTime;
+@inject NavigationManager _navigationManagment;
+<h3>Login</h3>
 
+<form onsubmit="@loginUser">
+    <input placeholder="شماره موبایل" @bind-value="@phoneNumber">
+    <input type="password" placeholder="رمز عبور" @bind-value="@password">
+    <button type="submit">ورود</button>
 </form>
-@code {
 
+@{
+    foreach(var error in errors)
+    {
+        <div style="color:red">@error</div>
+    }
+}
+@code {
+    string phoneNumber = "";
+    string password = "";
+    List<string> errors = new List<string>();
+    public async Task loginUser()
+    {
+        var result = await _authServices.Login(phoneNumber, password);
+        errors.Clear();
+        if (!result.IsSuccess)
+        {
+            errors.AddRange(result.Errors);
+        }
+        //to do : navigate to profile
+        _navigationManagment.NavigateTo("Home");
+    }
 }

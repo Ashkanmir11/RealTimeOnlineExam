@@ -13,11 +13,15 @@ using OnlineExam.Identity.SeedData;
 using OnlineExam.Persistence;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-//TODO create Seperate File for services
+builder.Services.AddCors(o => o.AddPolicy("CorsPolicy", b =>
+{
+    b.WithOrigins("https://localhost:7207", "http://localhost:5139");
+    b.AllowAnyHeader();
+    b.AllowAnyMethod();
+    b.AllowCredentials();
+}));
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<CookieHelper>();
-
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -69,6 +73,7 @@ else
         }
     });
 }
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
