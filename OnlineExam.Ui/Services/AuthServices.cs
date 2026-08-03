@@ -44,7 +44,7 @@ namespace OnlineExam.Ui.Services
             {
                 HttpMethods = HttpMethod.Get,
                 ApiUrl = apiUrl,
-                IncludeCredentials = false,
+                IncludeCredentials = true,
                 RequiresAuth = true
             };
             var result = await _requestServices.SendAsync<MyInfoDTO>(options);
@@ -57,7 +57,7 @@ namespace OnlineExam.Ui.Services
             {
                 HttpMethods = HttpMethod.Post,
                 ApiUrl = apiUrl,
-                IncludeCredentials = false,
+                IncludeCredentials = true,
             };
             await _requestServices.SendAsync(options);
         }

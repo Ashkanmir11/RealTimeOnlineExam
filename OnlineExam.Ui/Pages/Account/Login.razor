@@ -29,7 +29,9 @@
         {
             errors.AddRange(result.Errors);
         }
-        //to do : navigate to profile
-        _navigationManagment.NavigateTo("Home");
+        else
+        {
+            _navigationManagment.NavigateTo("profile", forceLoad: true);
+        }
     }
 }

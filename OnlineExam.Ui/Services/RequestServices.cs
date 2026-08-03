@@ -45,6 +45,7 @@ namespace OnlineExam.Ui.Services
             }
 
             var response = await _httpClient.SendAsync(request);
+            //fill response
             result.StatusCode = (int)response.StatusCode;
             if (!response.IsSuccessStatusCode)
             {
@@ -59,18 +60,9 @@ namespace OnlineExam.Ui.Services
             else
             {
                 result.IsSuccess = true;
-                if (request.Content != null)
+                if (response.Content != null)
                 {
-
-                    if (typeof(TResult) == typeof(string))
-                    {
-
-                        result.Data = (TResult)(object)await response.Content.ReadAsStringAsync();
-                    }
-                    else
-                    {
-                        result.Data = await response.Content.ReadFromJsonAsync<TResult>();
-                    }
+                    result.Data= typeof(TResult) == typeof(string)? (TResult)(object)await response.Content.ReadAsStringAsync(): await response.Content.ReadFromJsonAsync<TResult>();
                 }
             }
             return result;

@@ -1,15 +1,25 @@
-﻿
+﻿@page "/profile"
 <h3>Profile</h3>
 <div>
-    <p>نام: @myInfoDTO.FirstName + @myInfoDTO.LastName</p>
+    <p>نام: @myInfoDTO.FirstName  @myInfoDTO.LastName</p>
     <p>نام کاربری: @myInfoDTO.UserName</p>
     <p>شماره تلفن : @myInfoDTO.Phone</p>
     <p>ایمیل : @myInfoDTO.Email</p>
 </div>
 @code {
     MyInfoDTO myInfoDTO = new MyInfoDTO();
-    protected override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
-        return base.OnInitializedAsync();
+        var result = await _authServices.GetMyInfo();
+        Console.WriteLine(result);
+        if(result.IsSuccess)
+        {
+            myInfoDTO = result.Data;
+        }
+        if(result.StatusCode==401)
+        {
+            _navigationManager.NavigateTo("/login");
+        }
+        await base.OnInitializedAsync();
     }
 }

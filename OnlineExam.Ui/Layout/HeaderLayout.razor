@@ -17,12 +17,12 @@
             else
             {
                 <li>
-                    <a href="#">
+                    <a href="profile">
                         مشاهده پروفایل
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a style="" @onclick="@Logout">
                         خروج از حساب
                     </a>
                 </li>
@@ -32,12 +32,18 @@
 </div>
 @code {
     bool isUserLogin;
+
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("enter");
         isUserLogin = await _authServices.IsUserLogin();
-        Console.WriteLine("exit");
         await base.OnInitializedAsync();
+    }
+    private async Task Logout()
+    {
+        isUserLogin = false;
+        await _authServices.Logout();
+        _navigationManager.NavigateTo("");
+
     }
 
 }
