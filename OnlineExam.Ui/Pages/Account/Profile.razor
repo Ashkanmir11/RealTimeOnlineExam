@@ -1,0 +1,15 @@
+﻿
+<h3>Profile</h3>
+<div>
+    <p>نام: @myInfoDTO.FirstName + @myInfoDTO.LastName</p>
+    <p>نام کاربری: @myInfoDTO.UserName</p>
+    <p>شماره تلفن : @myInfoDTO.Phone</p>
+    <p>ایمیل : @myInfoDTO.Email</p>
+</div>
+@code {
+    MyInfoDTO myInfoDTO = new MyInfoDTO();
+    protected override Task OnInitializedAsync()
+    {
+        return base.OnInitializedAsync();
+    }
+}

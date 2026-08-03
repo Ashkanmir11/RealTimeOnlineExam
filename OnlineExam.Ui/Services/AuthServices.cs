@@ -8,41 +8,58 @@ using OnlineExam.Ui.DTO.Account;
 using System.Reflection;
 using System.Collections;
 using Microsoft.AspNetCore.Components.WebAssembly.Http;
+using OnlineExam.Ui.Options;
 namespace OnlineExam.Ui.Services
 {
     public class AuthServices
     {
-        private readonly HttpClient _httpClient;
-        public AuthServices(HttpClient httpClient)
+        private readonly RequestServices _requestServices;
+        public AuthServices(RequestServices requestServices)
         {
-            _httpClient = httpClient;
+            _requestServices = requestServices;
         }
         public async Task<CommonResponse<SuccessLoginResultDTO>> Login(string phoneNumber, string password)
         {
-            var result = new CommonResponse<SuccessLoginResultDTO>();
-            result.Errors = new List<string>();
             var apiUrl = ApiRoutes.Login;
-            var request = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-
-            request.Content = JsonContent.Create(new
+            var content = JsonContent.Create(new
             {
                 phoneNumber = phoneNumber,
-                password =password
+                password = password
             });
-            request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
-            var response = await _httpClient.SendAsync(request);
-            result.StatusCode = (int)response.StatusCode;
-            if (!response.IsSuccessStatusCode)
+            var options = new RequestOptions()
             {
-                result.IsSuccess = false;
-                var erroes = await response.Content.ReadFromJsonAsync<CommonResponse<SuccessLoginResultDTO>>();
-                result.Errors.AddRange(erroes.Errors.ToList());
-                return result;
-            }
-
-            result.IsSuccess = true;
-            result.Data = await response.Content.ReadFromJsonAsync<SuccessLoginResultDTO>();
+                HttpMethods = HttpMethod.Post,
+                ApiUrl = apiUrl,
+                Content = content,
+                IncludeCredentials = true,
+                RequiresAuth = false
+            };
+            var result = await _requestServices.SendAsync<SuccessLoginResultDTO>(options);
             return result;
+        }
+        public async Task<CommonResponse<MyInfoDTO>> GetMyInfo()
+        {
+            var apiUrl = ApiRoutes.myInfo;
+            var options = new RequestOptions()
+            {
+                HttpMethods = HttpMethod.Get,
+                ApiUrl = apiUrl,
+                IncludeCredentials = false,
+                RequiresAuth = true
+            };
+            var result = await _requestServices.SendAsync<MyInfoDTO>(options);
+            return result;
+        }
+        public async Task Logout()
+        {
+            var apiUrl = ApiRoutes.Logout;
+            var options = new RequestOptions()
+            {
+                HttpMethods = HttpMethod.Post,
+                ApiUrl = apiUrl,
+                IncludeCredentials = false,
+            };
+            await _requestServices.SendAsync(options);
         }
     }
 }

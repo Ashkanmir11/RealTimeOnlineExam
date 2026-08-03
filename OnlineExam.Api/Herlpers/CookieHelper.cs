@@ -11,6 +11,7 @@
 
         public void SetRefreshToken(string refreshToken)
         {
+            //Note: make http only when release
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = false,
@@ -28,6 +29,7 @@
 
         public void SetAccessToken(string accessToken)
         {
+            //Note: make http only when release
             var cookieOptions = new CookieOptions
             {
                 HttpOnly = false,
