@@ -19,7 +19,7 @@ namespace OnlineExam.Ui.Services
 
         public async Task<CommonResponse<TResult>> SendAsync<TResult>(RequestOptions requestOptions)
         {
-
+            HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
             var result = new CommonResponse<TResult>();
             if (requestOptions.RequiresAuth)
             {
@@ -33,8 +33,8 @@ namespace OnlineExam.Ui.Services
                     result.StatusCode = 401;
                     return result;
                 }
+
             }
-            HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
             if (requestOptions.Content != null)
             {
                 request.Content = requestOptions.Content;
@@ -48,21 +48,29 @@ namespace OnlineExam.Ui.Services
             result.StatusCode = (int)response.StatusCode;
             if (!response.IsSuccessStatusCode)
             {
-                result.Errors = new List<string>();
-                var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
-                result.Errors = errorResponse?.Errors ?? new List<string>();
+                if (request.Content != null)
+                {
+                    result.Errors = new List<string>();
+                    var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
+                    result.Errors = errorResponse?.Errors ?? new List<string>();
+                }
                 result.IsSuccess = false;
             }
             else
             {
                 result.IsSuccess = true;
-                if (typeof(TResult) == typeof(string))
+                if (request.Content != null)
                 {
-                    result.Data = (TResult)(object)await response.Content.ReadAsStringAsync();
-                }
-                else
-                {
-                    result.Data = await response.Content.ReadFromJsonAsync<TResult>();
+
+                    if (typeof(TResult) == typeof(string))
+                    {
+
+                        result.Data = (TResult)(object)await response.Content.ReadAsStringAsync();
+                    }
+                    else
+                    {
+                        result.Data = await response.Content.ReadFromJsonAsync<TResult>();
+                    }
                 }
             }
             return result;

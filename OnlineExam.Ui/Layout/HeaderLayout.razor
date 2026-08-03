@@ -1,19 +1,43 @@
-﻿
-<div>
+﻿<div>
     <ul>
-        <li>
-            <a href="register">
-                ثبت نام
-            </a>
-        </li>
-        <li>
-            <a href="login">
-                ورود
-            </a>
-        </li>
-
+        @{
+            if (!isUserLogin)
+            {
+                <li>
+                    <a href="register">
+                        ثبت نام
+                    </a>
+                </li>
+                <li>
+                    <a href="login">
+                        ورود
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a href="#">
+                        مشاهده پروفایل
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        خروج از حساب
+                    </a>
+                </li>
+            }
+        }
     </ul>
 </div>
 @code {
+    bool isUserLogin;
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("enter");
+        isUserLogin = await _authServices.IsUserLogin();
+        Console.WriteLine("exit");
+        await base.OnInitializedAsync();
+    }
 
 }

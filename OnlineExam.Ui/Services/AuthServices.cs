@@ -61,6 +61,26 @@ namespace OnlineExam.Ui.Services
             };
             await _requestServices.SendAsync(options);
         }
+        public async Task<bool> IsUserLogin()
+        {
+            var apiUrl = ApiRoutes.myInfo;
+            var option = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            var result = await _requestServices.SendAsync<MyInfoDTO>(option);
+            if(result.StatusCode==401)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
     }
 }
 
