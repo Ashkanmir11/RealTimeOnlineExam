@@ -23,6 +23,10 @@
     List<string> errors = new List<string>();
     public async Task loginUser()
     {
+        if(phoneNumber.Length!= 11)
+        {
+            errors.Add("شماره تلفن باید 11 رقم باشد.");
+        }
         var result = await _authServices.Login(phoneNumber, password);
         errors.Clear();
         if (!result.IsSuccess)

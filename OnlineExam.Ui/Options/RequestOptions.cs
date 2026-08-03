@@ -10,5 +10,6 @@ namespace OnlineExam.Ui.Options
         public JsonContent? Content { get; set; } = null;
         public bool IncludeCredentials { get; set; } = false;
         public bool RequiresAuth { get; set; } = true;
+        public bool GetData { get; set; } = true;
     }
 }

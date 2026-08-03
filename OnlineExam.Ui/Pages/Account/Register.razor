@@ -1,8 +1,8 @@
 ﻿@page "/register"
 <h3>Register</h3>
-<EditForm Model="@registerDTO" OnValidSubmit="CreateUser">
+<p>@massage</p>
+<EditForm EditContext="@editContext" OnValidSubmit="CreateUser">
     <DataAnnotationsValidator></DataAnnotationsValidator>
-    <ValidationSummary></ValidationSummary>
     <InputText @bind-Value="@registerDTO.FirstName" placeholder="نام"></InputText>
     <InputText @bind-Value="@registerDTO.LastName" placeholder="نام خانوادگی"></InputText>
     <InputText @bind-Value="@registerDTO.Email" placeholder="ایمیل"></InputText>
@@ -12,13 +12,40 @@
     <button type="submit">ثبت نام</button>
 
 </EditForm>
-
-<h1>@name</h1>
+<ErrorComponent Errors="@errors"></ErrorComponent>
 @code {
-    string name = "";
+    private EditContext editContext;
+    string massage="";
+    List<string> errors = new List<string>();
     private RegisterDTO registerDTO { get; set; } = new RegisterDTO();
+
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(registerDTO);
+        editContext.OnValidationStateChanged += (sender, args) =>
+        {
+            errors.Clear();
+            var validationErrors = editContext.GetValidationMessages();
+            errors.AddRange(validationErrors);
+            StateHasChanged();
+        };
+        base.OnInitialized();
+    }
     public async Task CreateUser()
     {
-        name = "shod";
+        var result = await _authServices.Register(registerDTO);
+        Console.WriteLine(result);
+        if (result.IsSuccess)
+        {
+            massage = "ثبت نام با موفقیت انجام شد به صفحه ورود هدایت میشوید.";
+            StateHasChanged();
+            await Task.Delay(5000);
+            _navigationManager.NavigateTo("login");
+        }
+        else
+        {
+            errors.Clear();
+            errors.AddRange(result.Errors);
+        }
     }
 }

@@ -9,5 +9,6 @@
         public const string myInfo = $"{ApiUrl}/accounts/me";
         public const string RefreshToken = $"{ApiUrl}/auth/refresh-token";
         public const string Logout=$"{ApiUrl}/auth/logout";
+        public const string Register = $"{ApiUrl}/auth/register";
     }
 }

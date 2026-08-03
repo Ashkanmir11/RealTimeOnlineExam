@@ -1,0 +1,10 @@
+﻿@{
+    for (int i=0;i<Errors.Count;i++)
+    {
+        <p style="color:red">@(i+1)-@Errors[i]</p>
+    }
+}
+@code {
+    [Parameter]
+    public List<string>? Errors{ get; set; }
+}

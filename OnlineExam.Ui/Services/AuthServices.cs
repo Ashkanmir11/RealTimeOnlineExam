@@ -72,7 +72,7 @@ namespace OnlineExam.Ui.Services
                 RequiresAuth = true
             };
             var result = await _requestServices.SendAsync<MyInfoDTO>(option);
-            if(result.StatusCode==401)
+            if (result.StatusCode == 401)
             {
                 return false;
             }
@@ -80,6 +80,31 @@ namespace OnlineExam.Ui.Services
             {
                 return true;
             }
+        }
+        public async Task<CommonResponse<EmptyResponse>> Register(RegisterDTO registerDTO)
+        {
+            var apiUrl = ApiRoutes.Register;
+            var content = JsonContent.Create(new
+            {
+                firstName = registerDTO.FirstName,
+                lastName = registerDTO.LastName,
+                email = registerDTO.Email,
+                password = registerDTO.Password,
+                confirmPassword = registerDTO.ConfirmPassword,
+                phoneNumber = registerDTO.PhoneNumber,
+                nationCode = 0
+            });
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                HttpMethods = HttpMethod.Post,
+                Content = content,
+                RequiresAuth = false,
+                IncludeCredentials = false,
+                GetData = false
+            };
+            var result = await _requestServices.SendAsync<EmptyResponse>(options);
+            return result;
         }
     }
 }

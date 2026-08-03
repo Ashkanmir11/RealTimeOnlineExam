@@ -47,7 +47,16 @@ namespace OnlineExam.Ui.Services
             var response = await _httpClient.SendAsync(request);
             //fill response
             result.StatusCode = (int)response.StatusCode;
-            if (!response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+                if (response.Content != null && requestOptions.GetData != false)
+                {
+                    result.Data = typeof(TResult) == typeof(string) ? (TResult)(object)await response.Content.ReadAsStringAsync() : await response.Content.ReadFromJsonAsync<TResult>();
+                }
+                result.IsSuccess = true;
+            }
+            //response has error
+            else
             {
                 if (request.Content != null)
                 {
@@ -57,19 +66,11 @@ namespace OnlineExam.Ui.Services
                 }
                 result.IsSuccess = false;
             }
-            else
-            {
-                result.IsSuccess = true;
-                if (response.Content != null)
-                {
-                    result.Data= typeof(TResult) == typeof(string)? (TResult)(object)await response.Content.ReadAsStringAsync(): await response.Content.ReadFromJsonAsync<TResult>();
-                }
-            }
             return result;
 
 
         }
-        public async Task<bool> SendAsync(RequestOptions requestOptions)
+        public async Task<int> SendAsync(RequestOptions requestOptions)
         {
             HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
             if (requestOptions.Content != null)
@@ -83,11 +84,11 @@ namespace OnlineExam.Ui.Services
             var response = await _httpClient.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
-                return true;
+                return (int)response.StatusCode;
             }
             else
             {
-                return false;
+                return (int)response.StatusCode;
             }
         }
 

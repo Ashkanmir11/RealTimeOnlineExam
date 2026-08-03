@@ -117,7 +117,7 @@ namespace OnlineExam.Identity.Services
             var result = await _userManager.CreateAsync(identityUser, registerDTO.Password);
             if (result.Succeeded)
             {
-                var response = await _userManager.FindByNameAsync(registerDTO.UserName);
+                var response = await _userManager.FindByNameAsync(identityUser.UserName);
                 var role = await _userManager.AddToRoleAsync(response, "User");
                 return new GetUserDTO()
                 {
