@@ -1,0 +1,77 @@
+﻿@using OnlineExam.Ui.Components.ClassRoom;
+@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/classroom";
+@layout ManagmentLayout;
+@inject ClassRoomServices _classRoomServices;
+<h3>ClassRooms</h3>
+@{
+    if (showAddClassRoom)
+    {
+        <button @onclick="@ChangeAddClassStatus">بستن.</button>
+        <CreateClassRoomComponent addSuccess="@CreateSuccess"></CreateClassRoomComponent>
+    }
+    else
+    {
+        <button @onclick="@ChangeAddClassStatus">افزودن کلاس.</button>
+    }
+
+    //show data
+    if (result.Data.Count == 0)
+    {
+        <div>کلاسی یافت نشد.</div>
+    }
+    else
+    {
+        foreach (var classRoom in result.Data)
+        {
+            <div>
+                <p>
+                    @classRoom.ClassName
+                    <button> حذف</button>
+                    <button>ویرایش</button>
+                </p>
+            </div>
+        }
+    }
+
+
+}
+
+@code {
+    bool showAddClassRoom = false;
+    PaginateResponse<GetClassRoomTeacherDTO> result = new PaginateResponse<GetClassRoomTeacherDTO>();
+
+    private void ChangeAddClassStatus()
+    {
+        showAddClassRoom = showAddClassRoom == true ? false : true;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        base.OnInitializedAsync();
+    }
+    private async void CreateSuccess(bool success)
+    {
+
+        showAddClassRoom = false;
+        await GetData();
+
+    }
+
+    private async Task GetData()
+    {
+        result.Data = new List<GetClassRoomTeacherDTO>();
+        var paginateOption = new PaginateRequestDTO()
+            {
+                PageNumber = 1,
+                PageCount = 10
+            };
+
+        var response = await _classRoomServices.GetMyClassAsTeacher(paginateOption);     
+        if (response.IsSuccess && response.Data.Data.Count > 0)
+        {
+            result = response.Data;
+        }
+        StateHasChanged();
+    }
+}

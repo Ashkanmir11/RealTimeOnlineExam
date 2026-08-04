@@ -1,0 +1,48 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@inject ClassRoomServices _classRoomServices;
+
+
+
+<EditForm EditContext="@editContext" OnValidSubmit="@CraeteClassRoom">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <InputText @bind-Value="@createClassRoomDTO.ClassName"></InputText>
+    <button type="submit">افزودن</button>
+</EditForm>
+
+<ErrorComponent Errors="errors"></ErrorComponent>
+
+@code {
+    private EditContext editContext;
+    CreateClassRoomDTO createClassRoomDTO = new CreateClassRoomDTO();
+    List<string> errors = new List<string>();
+
+    [Parameter]
+    public EventCallback<bool> addSuccess { get; set; }
+    protected override void OnInitialized()
+    {
+        editContext = new EditContext(createClassRoomDTO);
+        editContext.OnValidationStateChanged += (sender, args) =>
+        {
+            errors.Clear();
+            var validationErrors = editContext.GetValidationMessages();
+            errors.AddRange(validationErrors);
+            StateHasChanged();
+        };
+        base.OnInitialized();
+    }
+    private async Task CraeteClassRoom()
+    {
+        var result = await _classRoomServices.CreateAsync(createClassRoomDTO);
+        if (!result.IsSuccess)
+        {
+            errors.Clear();
+            errors.AddRange(result.Errors);
+        }
+        else
+        {
+            await addSuccess.InvokeAsync(true);
+        }
+
+    }
+}
+

@@ -1,5 +1,11 @@
-﻿<div>
-    <ul>
+﻿<style>
+    ul >li
+    {
+        margin:25px;
+    }
+</style>
+<div>
+    <ul style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:right; width:100%;">
         @{
             if (!isUserLogin)
             {
@@ -16,6 +22,11 @@
             }
             else
             {
+                <li>
+                    <a href="classroom">
+                        داشبورد
+                    </a>
+                </li>
                 <li>
                     <a href="profile">
                         مشاهده پروفایل
