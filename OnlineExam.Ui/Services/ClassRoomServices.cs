@@ -4,6 +4,7 @@ using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
 using System.Net.Http.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OnlineExam.Ui.Services
 {
@@ -33,7 +34,7 @@ namespace OnlineExam.Ui.Services
             var result = await _requestServices.SendAsync<EmptyResponse>(options);
             return result;
         }
-        public async Task<CommonResponse<PaginateResponse<GetClassRoomTeacherDTO>>> GetMyClassAsTeacher(PaginateRequestDTO paginateRequestDTO)
+        public async Task<CommonResponse<PaginateResponse<GetClassRoomTeacherDTO>>> GetMyClassAsTeacherAsync(PaginateRequestDTO paginateRequestDTO)
         {
             var apiUrl = ApiRoutes.GetClassRoomAsTeacher + $"PageNumber={paginateRequestDTO.PageNumber}&PageCount={paginateRequestDTO.PageCount}";
             var options = new RequestOptions()
@@ -44,7 +45,24 @@ namespace OnlineExam.Ui.Services
                 RequiresAuth = true,
                 GetData = true,
             };
+            Console.WriteLine("arrive here");
             var result = await _requestServices.SendAsync<PaginateResponse<GetClassRoomTeacherDTO>>(options);
+            Console.WriteLine("exit here");
+            Console.WriteLine(result.StatusCode);
+            return result;
+        }
+        public async Task<CommonResponse<EmptyResponse>> DeleteAsync(int id)
+        {
+            var apiUrl = ApiRoutes.DeleteClassRoom + id;
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                RequiresAuth = true,
+                GetData = false,
+                HttpMethods = HttpMethod.Delete,
+                IncludeCredentials = true,
+            };
+            var result=await _requestServices.SendAsync<EmptyResponse>(options);
             return result;
         }
     }

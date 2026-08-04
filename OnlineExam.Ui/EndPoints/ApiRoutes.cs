@@ -13,5 +13,7 @@
 
         public const string CreateClassRoom = $"{ApiUrl}/class-rooms";
         public const string GetClassRoomAsTeacher = $"{ApiUrl}/class-rooms/my/as-teacher?";
+        public const string DeleteClassRoom = $"{ApiUrl}/class-rooms/";
     }
+ 
 }

@@ -1,33 +1,25 @@
-﻿@using OnlineExam.Ui.Components.ClassRoom;
-@using OnlineExam.Ui.DTO.ClassRoom;
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
 @page "/classroom";
-@layout ManagmentLayout;
 @inject ClassRoomServices _classRoomServices;
+@layout ManagmentLayout;
 <h3>ClassRooms</h3>
 @{
-    if (showAddClassRoom)
-    {
-        <button @onclick="@ChangeAddClassStatus">بستن.</button>
-        <CreateClassRoomComponent addSuccess="@CreateSuccess"></CreateClassRoomComponent>
-    }
-    else
-    {
-        <button @onclick="@ChangeAddClassStatus">افزودن کلاس.</button>
-    }
-
+    <button @onclick="@AddClass">افزودن کلاس.</button>
     //show data
     if (result.Data.Count == 0)
     {
         <div>کلاسی یافت نشد.</div>
     }
+
     else
     {
+        <ErrorComponent Errors="@errors"></ErrorComponent>
         foreach (var classRoom in result.Data)
         {
             <div>
                 <p>
                     @classRoom.ClassName
-                    <button> حذف</button>
+                    <button @onclick="(async=> DeleteClassRoom(classRoom.Id))"> حذف</button>
                     <button>ویرایش</button>
                 </p>
             </div>
@@ -38,24 +30,32 @@
 }
 
 @code {
-    bool showAddClassRoom = false;
+    List<string> errors = new List<string>();
     PaginateResponse<GetClassRoomTeacherDTO> result = new PaginateResponse<GetClassRoomTeacherDTO>();
 
-    private void ChangeAddClassStatus()
-    {
-        showAddClassRoom = showAddClassRoom == true ? false : true;
-    }
+
     protected override async Task OnInitializedAsync()
     {
         await GetData();
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
     }
-    private async void CreateSuccess(bool success)
+
+    private async Task AddClass()
     {
-
-        showAddClassRoom = false;
-        await GetData();
-
+        _navigationManager.NavigateTo("CreateClassRoom");
+    }
+    private async Task DeleteClassRoom(int id)
+    {
+        var result = await _classRoomServices.DeleteAsync(id);
+        if (!result.IsSuccess)
+        {
+            errors.Clear();
+            errors.AddRange(result.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
     }
 
     private async Task GetData()
@@ -67,7 +67,7 @@
                 PageCount = 10
             };
 
-        var response = await _classRoomServices.GetMyClassAsTeacher(paginateOption);     
+        var response = await _classRoomServices.GetMyClassAsTeacherAsync(paginateOption);
         if (response.IsSuccess && response.Data.Data.Count > 0)
         {
             result = response.Data;
