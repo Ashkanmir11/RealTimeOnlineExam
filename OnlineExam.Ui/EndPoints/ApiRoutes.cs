@@ -15,7 +15,16 @@ namespace OnlineExam.Ui.EndPoints
         public const string CreateClassRoom = $"{ApiUrl}/class-rooms";
         public static string GetClassRoomAsTeacher(PaginateRequestDTO paginateRequestDTO)
         {
-            return $"{ApiUrl}/class-rooms/my/as-teacher?PageNumber={paginateRequestDTO.PageNumber}&PageCount={paginateRequestDTO.PageCount}";
+            string baseUrl = $"{ApiUrl}/class-rooms/my/as-teacher";
+            baseUrl += $"?PageNumber={paginateRequestDTO.PageNumber}";
+            baseUrl += $"&PageCount={paginateRequestDTO.PageCount}";
+            if (paginateRequestDTO.SortBy != null)
+            {
+                baseUrl += $"&SortBy={paginateRequestDTO.SortBy}";
+            }
+            baseUrl += $"&Descending={paginateRequestDTO.Descending}";
+
+            return baseUrl ;
         }
         public static string DeleteClassRoom(int id) => $"{ApiUrl}/class-rooms/{id}";
         public static string GetClassRoomById(int Id) => $"{ApiUrl}/class-rooms/{Id}";

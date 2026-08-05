@@ -19,32 +19,35 @@
             <div>
                 <p>
                     @classRoom.ClassName
-                    <button @onclick="()=> DeleteClassRoom(classRoom.Id)"> حذف</button>
+                    <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
                     <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
                 </p>
             </div>
         }
     }
 
-
+    <PaginateComponent SelectedPage="@changePage" TotalPage="@totalPage" CurrentPage="@currentPage"></PaginateComponent>
 }
 
 @code {
     List<string> errors = new List<string>();
     PaginateResponse<GetClassRoomTeacherDTO> result = new PaginateResponse<GetClassRoomTeacherDTO>();
-
+    PaginateRequestDTO paginateRequestDTO = new PaginateRequestDTO();
+    int totalPage;
+    int currentPage;
 
     protected override async Task OnInitializedAsync()
     {
+        currentPage = 1;
         await GetData();
         await base.OnInitializedAsync();
     }
 
-    private  void AddClass()
+    private void AddClass()
     {
         _navigationManager.NavigateTo("CreateClassRoom");
     }
-    private  void UpdateClass(int Id)
+    private void UpdateClass(int Id)
     {
         _navigationManager.NavigateTo($"updateclassroom/{Id}");
     }
@@ -62,19 +65,27 @@
         }
     }
 
+    private async void changePage(int selectedPage)
+    {
+        paginateRequestDTO.PageNumber = selectedPage;
+        currentPage = selectedPage;
+        StateHasChanged();
+        await GetData();
+    }
+
     private async Task GetData()
     {
         result.Data = new List<GetClassRoomTeacherDTO>();
-        var paginateOption = new PaginateRequestDTO()
-            {
-                PageNumber = 1,
-                PageCount = 10
-            };
-
-        var response = await _classRoomServices.GetMyClassAsTeacherAsync(paginateOption);
+        var response = await _classRoomServices.GetMyClassAsTeacherAsync(paginateRequestDTO);
         if (response.IsSuccess && response.Data.Data.Count > 0)
         {
+            totalPage = response.Data.TotalPage;
             result = response.Data;
+        }
+        else if (!response.IsSuccess)
+        {
+            errors.Clear();
+            errors.AddRange(response.Errors);
         }
         StateHasChanged();
     }

@@ -1,0 +1,44 @@
+﻿<ul style="display:flex;flex-direction:row;flex-wrap:wrap; justify-content:center;">
+    @{
+        for (int i = 1; i <= TotalPage; i++)
+        {
+            var page = i;
+            if (CurrentPage == i)
+            {
+                Console.WriteLine(i);
+
+                <li style="margin:20px; color:red">
+
+                    <button @onclick="()=>OnChangePage(page)">
+                        @i
+                    </button>
+                </li>
+            }
+            else
+            {
+                <li style="margin:20px;">
+
+                    <button @onclick="()=>OnChangePage(page)">
+                        @i
+                    </button>
+                </li>
+            }
+        }
+    }
+</ul>
+@code {
+    [Parameter]
+    public int TotalPage { get; set; }
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SelectedPage { get; set; }
+    public async Task OnChangePage(int selectedPage)
+    {
+        CurrentPage = selectedPage;
+        StateHasChanged();
+        await SelectedPage.InvokeAsync(selectedPage);
+    }
+
+}

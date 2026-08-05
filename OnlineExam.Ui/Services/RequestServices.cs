@@ -60,12 +60,10 @@ namespace OnlineExam.Ui.Services
                 //response has error
                 else
                 {
-                    if (request.Content != null)
-                    {
-                        result.Errors = new List<string>();
-                        var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
-                        result.Errors = errorResponse?.Errors ?? new List<string>();
-                    }
+
+                    result.Errors = new List<string>();
+                    var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
+                    result.Errors = errorResponse?.Errors ?? new List<string>();
                     result.IsSuccess = false;
                 }
                 return result;

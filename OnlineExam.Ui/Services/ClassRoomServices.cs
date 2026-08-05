@@ -45,8 +45,8 @@ namespace OnlineExam.Ui.Services
                 RequiresAuth = true,
                 GetData = true,
             };
+
             var result = await _requestServices.SendAsync<PaginateResponse<GetClassRoomTeacherDTO>>(options);
-            Console.WriteLine(result.StatusCode);
             return result;
         }
         public async Task<CommonResponse<EmptyResponse>> DeleteAsync(int id)
