@@ -30,6 +30,8 @@ namespace OnlineExam.Ui.EndPoints
         public static string GetClassRoomById(int Id) => $"{ApiUrl}/class-rooms/{Id}";
         public static string UpdateClassRoom(int Id) => $"{ApiUrl}/class-rooms/{Id}";
 
+        public static string GetClassRoomMember(int classId) => $"{ApiUrl}/class-room-members/{classId}/students";
+
 
     }
 

@@ -1,0 +1,59 @@
+﻿@page "/classRoomMember/{ClassId:int}"
+@layout ManagmentLayout;
+@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@inject ClassRoomMemberServices _classRoomMembersServices;
+<h3>ClassRoomManament</h3>
+@{
+    <h2>@getClassRoomMembersDTO.className</h2>
+    if (getClassRoomMembersDTO.students != null && getClassRoomMembersDTO.students.Count > 0)
+    {
+
+        <table>
+            <tr>
+                <th>نام کاربری</th>
+                <th>نام و نام خانوادگی</th>
+                <th>شماره موبایل</th>
+                <th>ایمیل</th>
+            </tr>
+            @foreach (var student in getClassRoomMembersDTO.students)
+            {
+                <tr>
+                    <td>@student.UserName</td>
+                    <td>@student.FirstName @student.LastName</td>
+                    <td>@student.Phone</td>
+                    <td>@student.Email</td>
+                </tr>
+            }
+        </table>
+
+    }
+    else
+    {
+        <p>کلاس عضوی ندارد.</p>
+    }
+}
+
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+    List<string> Errors = new List<string>();
+    private GetClassRoomMembersDTO getClassRoomMembersDTO = new GetClassRoomMembersDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        var classMembers = await _classRoomMembersServices.GetClassStudnets(ClassId);
+
+        if (!classMembers.IsSuccess)
+        {
+            Errors.Clear();
+            Errors.AddRange(classMembers.Errors);
+        }
+        else
+        {
+            getClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
+
+            Console.WriteLine(getClassRoomMembersDTO.students.Count);
+            getClassRoomMembersDTO = classMembers.Data;
+        }
+        await base.OnInitializedAsync();
+    }
+    }
