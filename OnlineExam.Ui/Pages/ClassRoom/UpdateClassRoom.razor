@@ -1,0 +1,64 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/updateclassroom/{Id:int}";
+@inject ClassRoomServices _classRoomServices;
+@layout ManagmentLayout;
+<h1>ویرایش کلاس</h1>
+
+<EditForm EditContext="@editContext" OnValidSubmit="@UpdateClass">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <InputText @bind-Value="@updateClassRoomDTO.ClassName"></InputText>
+    <button type="submit">ویرایش</button>
+</EditForm>
+
+<ErrorComponent Errors="errors"></ErrorComponent>
+@code {
+    private EditContext editContext;
+
+    [Parameter]
+    public int Id { get; set; }
+    private List<string> errors = new List<string>();
+    UpdateClassRoomDTO updateClassRoomDTO = new UpdateClassRoomDTO();
+    protected override async void OnInitialized()
+    {
+        editContext = new EditContext(updateClassRoomDTO);
+        editContext.OnValidationStateChanged += (sender, args) =>
+        {
+            errors.Clear();
+            var validationErrors = editContext.GetValidationMessages();
+            errors.AddRange(validationErrors);
+            StateHasChanged();
+        };
+
+        var classRoom = await _classRoomServices.GetByIdAsync(Id);
+        if (!classRoom.IsSuccess)
+        {
+            errors.Clear();
+            errors.AddRange(classRoom.Errors);
+        }
+        else
+        {
+            updateClassRoomDTO.ClassName = classRoom.Data.ClassName;
+            StateHasChanged();
+        }
+        Console.WriteLine(classRoom.Data.ClassName);
+
+        base.OnInitialized();
+
+
+    }
+    private async Task UpdateClass()
+    {
+        var updateResult = await _classRoomServices.UpdateAsync(Id, updateClassRoomDTO);
+        Console.WriteLine(updateResult);
+        if (!updateResult.IsSuccess)
+        {
+            errors.Clear();
+            errors.AddRange(updateResult.Errors);
+        }
+        else
+        {
+            Console.WriteLine("success arrive");
+            _navigationManager.NavigateTo("classroom");
+        }
+    }
+}

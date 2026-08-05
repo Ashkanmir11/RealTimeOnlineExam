@@ -19,8 +19,8 @@
             <div>
                 <p>
                     @classRoom.ClassName
-                    <button @onclick="(async=> DeleteClassRoom(classRoom.Id))"> حذف</button>
-                    <button>ویرایش</button>
+                    <button @onclick="()=> DeleteClassRoom(classRoom.Id)"> حذف</button>
+                    <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
                 </p>
             </div>
         }
@@ -40,9 +40,13 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task AddClass()
+    private  void AddClass()
     {
         _navigationManager.NavigateTo("CreateClassRoom");
+    }
+    private  void UpdateClass(int Id)
+    {
+        _navigationManager.NavigateTo($"updateclassroom/{Id}");
     }
     private async Task DeleteClassRoom(int id)
     {

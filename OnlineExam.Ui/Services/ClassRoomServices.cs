@@ -36,7 +36,7 @@ namespace OnlineExam.Ui.Services
         }
         public async Task<CommonResponse<PaginateResponse<GetClassRoomTeacherDTO>>> GetMyClassAsTeacherAsync(PaginateRequestDTO paginateRequestDTO)
         {
-            var apiUrl = ApiRoutes.GetClassRoomAsTeacher + $"PageNumber={paginateRequestDTO.PageNumber}&PageCount={paginateRequestDTO.PageCount}";
+            var apiUrl = ApiRoutes.GetClassRoomAsTeacher(paginateRequestDTO);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -45,15 +45,13 @@ namespace OnlineExam.Ui.Services
                 RequiresAuth = true,
                 GetData = true,
             };
-            Console.WriteLine("arrive here");
             var result = await _requestServices.SendAsync<PaginateResponse<GetClassRoomTeacherDTO>>(options);
-            Console.WriteLine("exit here");
             Console.WriteLine(result.StatusCode);
             return result;
         }
         public async Task<CommonResponse<EmptyResponse>> DeleteAsync(int id)
         {
-            var apiUrl = ApiRoutes.DeleteClassRoom + id;
+            var apiUrl = ApiRoutes.DeleteClassRoom(id);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -62,7 +60,40 @@ namespace OnlineExam.Ui.Services
                 HttpMethods = HttpMethod.Delete,
                 IncludeCredentials = true,
             };
-            var result=await _requestServices.SendAsync<EmptyResponse>(options);
+            var result = await _requestServices.SendAsync<EmptyResponse>(options);
+            return result;
+        }
+        public async Task<CommonResponse<GetClassRoomTeacherDTO>> GetByIdAsync(int id)
+        {
+            var apiUrl = ApiRoutes.GetClassRoomById(id);
+            var optins = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                GetData = true,
+                RequiresAuth = true,
+            };
+            var result = await _requestServices.SendAsync<GetClassRoomTeacherDTO>(optins);
+            return result;
+        }
+        public async Task<CommonResponse<EmptyResponse>> UpdateAsync(int id, UpdateClassRoomDTO dto)
+        {
+            var apiUrl = ApiRoutes.UpdateClassRoom(id);
+            var content = JsonContent.Create(new
+            {
+                ClassName = dto.ClassName,
+            });
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                Content = content,
+                GetData = false,
+                RequiresAuth = true,
+            };
+            var result = await _requestServices.SendAsync<EmptyResponse>(options);
             return result;
         }
     }

@@ -1,4 +1,6 @@
-﻿namespace OnlineExam.Ui.EndPoints
+﻿using OnlineExam.Ui.DTO.Common;
+
+namespace OnlineExam.Ui.EndPoints
 {
     public class ApiRoutes
     {
@@ -10,10 +12,16 @@
         public const string RefreshToken = $"{ApiUrl}/auth/refresh-token";
         public const string Logout = $"{ApiUrl}/auth/logout";
         public const string Register = $"{ApiUrl}/auth/register";
-
         public const string CreateClassRoom = $"{ApiUrl}/class-rooms";
-        public const string GetClassRoomAsTeacher = $"{ApiUrl}/class-rooms/my/as-teacher?";
-        public const string DeleteClassRoom = $"{ApiUrl}/class-rooms/";
+        public static string GetClassRoomAsTeacher(PaginateRequestDTO paginateRequestDTO)
+        {
+            return $"{ApiUrl}/class-rooms/my/as-teacher?PageNumber={paginateRequestDTO.PageNumber}&PageCount={paginateRequestDTO.PageCount}";
+        }
+        public static string DeleteClassRoom(int id) => $"{ApiUrl}/class-rooms/{id}";
+        public static string GetClassRoomById(int Id) => $"{ApiUrl}/class-rooms/{Id}";
+        public static string UpdateClassRoom(int Id) => $"{ApiUrl}/class-rooms/{Id}";
+
+
     }
- 
+
 }
