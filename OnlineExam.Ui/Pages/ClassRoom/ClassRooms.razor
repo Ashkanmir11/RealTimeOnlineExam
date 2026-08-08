@@ -22,6 +22,7 @@
                     <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
                     <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
                     <button @onclick="()=>ManageStudents(classRoom.Id)">مدیریت اعضا</button>
+                    <button @onclick="()=>ManageExams(classRoom.Id)">مدیریت آزمون ها</button>
                 </p>
             </div>
         }
@@ -55,6 +56,10 @@
     private void ManageStudents(int id)
     {
         _navigationManager.NavigateTo($"classRoomMember/{id}");
+    }
+    private void ManageExams(int id)
+    {
+        _navigationManager.NavigateTo($"Exams/{id}");
     }
     #endregion
 

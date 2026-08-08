@@ -1,0 +1,15 @@
+﻿@layout ManagmentLayout;
+@page "/Exams/{classId:int}"
+<h3>Exams</h3>
+<button onclick="@RedirectToCreateExam">افزودن آزمون</button>
+
+@code {
+    [Parameter]
+    public int classId{ get; set; }
+
+
+    private void RedirectToCreateExam()
+    {
+        _navigationManager.NavigateTo($"CreateExams/{classId}");
+    }
+}
