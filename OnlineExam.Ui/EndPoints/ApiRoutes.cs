@@ -31,6 +31,8 @@ namespace OnlineExam.Ui.EndPoints
         public static string UpdateClassRoom(int Id) => $"{ApiUrl}/class-rooms/{Id}";
 
         public static string GetClassRoomMember(int classId) => $"{ApiUrl}/class-room-members/{classId}/students";
+        public const string CreateClassRoomMember = $"{ApiUrl}/class-room-members";
+        public static string DeleteClassRoomMember(string StudentId, int ClassId) => $"{ApiUrl}/class-room-members/{ClassId}/{StudentId}";
 
 
     }

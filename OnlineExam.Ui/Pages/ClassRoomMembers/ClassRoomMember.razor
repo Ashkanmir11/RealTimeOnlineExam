@@ -1,10 +1,21 @@
 ﻿@page "/classRoomMember/{ClassId:int}"
 @layout ManagmentLayout;
 @using OnlineExam.Ui.DTO.ClassRoomMembers;
+@using OnlineExam.Ui.Components.ClassRoomMembers;
 @inject ClassRoomMemberServices _classRoomMembersServices;
-<h3>ClassRoomManament</h3>
+<h3>مدیریت اعضای کلاس</h3>
 @{
-    <h2>@getClassRoomMembersDTO.className</h2>
+    <h4>@getClassRoomMembersDTO.className</h4>
+    if (showCreateMember)
+    {
+        <button @onclick="@ChangeShowCreateStatus">بستن</button>
+        <AddClassRoomMemberComponent SuccessAdd="AddComplete" ClassId="@ClassId"></AddClassRoomMemberComponent>
+    }
+    else
+    {
+        <button @onclick="@ChangeShowCreateStatus">افزودن اعضا</button>
+
+    }
     if (getClassRoomMembersDTO.students != null && getClassRoomMembersDTO.students.Count > 0)
     {
 
@@ -14,6 +25,7 @@
                 <th>نام و نام خانوادگی</th>
                 <th>شماره موبایل</th>
                 <th>ایمیل</th>
+                <th>عملیات</th>
             </tr>
             @foreach (var student in getClassRoomMembersDTO.students)
             {
@@ -22,6 +34,9 @@
                     <td>@student.FirstName @student.LastName</td>
                     <td>@student.Phone</td>
                     <td>@student.Email</td>
+                    <td>
+                        <button @onclick="()=>DeleteMember(student.Id)">حذف</button>
+                    </td>
                 </tr>
             }
         </table>
@@ -36,9 +51,39 @@
 @code {
     [Parameter]
     public int ClassId { get; set; }
+    bool showCreateMember = false;
     List<string> Errors = new List<string>();
     private GetClassRoomMembersDTO getClassRoomMembersDTO = new GetClassRoomMembersDTO();
+    CreateClassRoomMemberDTO createClassRoomMemberDTO = new CreateClassRoomMemberDTO();
+
+    private void ChangeShowCreateStatus()
+    {
+        showCreateMember = showCreateMember == true ? false : true;
+    }
+    private async Task AddComplete()
+    {
+        ChangeShowCreateStatus();
+        await GetData();
+    }
     protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task DeleteMember(string studentId)
+    {
+        var result = await _classRoomMembersServices.DeleteMember(studentId, ClassId);
+        if(!result.IsSuccess)
+        {
+            Errors.Clear();
+            Errors.AddRange(result.Errors);
+        }
+        else
+        {
+           await GetData();
+        }
+    }
+    private async Task GetData()
     {
         var classMembers = await _classRoomMembersServices.GetClassStudnets(ClassId);
 
@@ -54,6 +99,5 @@
             Console.WriteLine(getClassRoomMembersDTO.students.Count);
             getClassRoomMembersDTO = classMembers.Data;
         }
-        await base.OnInitializedAsync();
     }
-    }
+}

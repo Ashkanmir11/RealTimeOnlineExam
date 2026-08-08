@@ -1,0 +1,59 @@
+﻿@layout ManagmentLayout;
+@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@inject ClassRoomMemberServices _classRoomMembersServices;
+
+<input type="text" @bind-value="@tempPhone" />
+<button @onclick="@AddToPhones">افزودن</button>
+<ErrorComponent Errors="errors"></ErrorComponent>
+@{
+    foreach (var phone in phones)
+    {
+        <p>@phone</p>
+    }
+}
+<button @onclick="@AddAsync">ثبت تغییرات.</button>
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+    [Parameter]
+    public EventCallback<bool> SuccessAdd { get; set; }
+
+    string tempPhone = "";
+    List<string> phones = new List<string>();
+    List<string> errors = new List<string>();
+
+    CreateClassRoomMemberDTO createClassRoomMemberDTO = new CreateClassRoomMemberDTO();
+    private async Task AddAsync()
+    {
+        createClassRoomMemberDTO.Phones = phones;
+        createClassRoomMemberDTO.ClassRomeId = ClassId;
+        var result = await _classRoomMembersServices.CreateClassStudent(createClassRoomMemberDTO);
+        if (result.IsSuccess)
+        {
+            await SuccessAdd.InvokeAsync(true);
+        }
+        else
+        {
+            phones.Clear();
+            errors.Clear();
+            errors.AddRange(result.Errors);
+        }
+
+    }
+    private void AddToPhones()
+    {
+        if (tempPhone.Length != 11)
+        {
+            errors.Clear();
+            errors.Add("شماره تلفن معتبر نیست.");
+        }
+        else
+        {
+            phones.Add(tempPhone);
+            tempPhone = "";
+            StateHasChanged();
+        }
+
+    }
+
+}
