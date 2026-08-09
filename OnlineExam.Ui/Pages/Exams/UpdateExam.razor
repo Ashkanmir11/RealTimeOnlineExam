@@ -1,0 +1,131 @@
+﻿@using OnlineExam.Ui.DTO.Exam;
+@layout ManagmentLayout;
+@page "/updateExam/{ExamId:int}/{ClassId:int}"
+@inject ExamServices _examServices;
+
+<EditForm EditContext="@editContext" OnValidSubmit="@PreEditAsync">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <label for="questionCount">تعداد سوال:</label>
+    <InputNumber id="questionCount" @bind-Value="@updateExamDTO.QuestionCount"></InputNumber>
+    <br />
+
+    <label for="examName">نام آزمون:</label>
+    <InputText id="examName" @bind-Value="@updateExamDTO.Name"></InputText>
+    <br />
+
+    <label for="examDescription">توضیحات آزمون:</label>
+    <InputTextArea id="examDescription" @bind-Value="@updateExamDTO.Description"></InputTextArea>
+    <br />
+
+    <label for="examStartDate">تاریخ شروع:</label>
+    <InputPersianDatePicker id="examStartDate" @bind-ValueAsDateTime="updateExamDTO.StartDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
+    <br />
+
+    <label for="examEndDate">تاریخ پایان:</label>
+    <InputPersianDatePicker id="examEndDate" @bind-ValueAsDateTime="updateExamDTO.EndDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
+    <br />
+
+    <label for="examStartTime">ساعت شروع:</label>
+    <InputNumber placeholder="دقیقه" id="examStartTime" @bind-Value="@startMinute"></InputNumber>
+    :
+    <InputNumber placeholder="ساعت" @bind-Value="@startHour"></InputNumber>
+    <br />
+
+    <label for="examEndTime">ساعت پایان:</label>
+    <InputNumber placeholder="دقیقه" id="examEndTime" @bind-Value="@endMinute"></InputNumber>
+    :
+    <InputNumber placeholder="ساعت" @bind-Value="@endHour"></InputNumber>
+    <br />
+
+    <label for="examAllowDelay">میزان تاخیر مجاز:</label>
+    <InputNumber id="examAllowDelay" @bind-Value="@updateExamDTO.AllowedDelay"></InputNumber>
+    <br />
+
+    <label for="examAllowCopy">اجازه کپی:</label>
+    <InputCheckbox id="examAllowCopy" @bind-Value="@updateExamDTO.AllowedCopy"></InputCheckbox>
+    <br />
+
+    <label for="examLogStudent">لاگ کردن دانشجویان:</label>
+    <InputCheckbox id="examLogStudent" @bind-Value="@updateExamDTO.LogStudent"></InputCheckbox>
+    <br />
+
+    <label for="examRandomQuestion">سوالات درهم:</label>
+    <InputCheckbox id="examRandomQuestion" @bind-Value="@updateExamDTO.RandomQuestions"></InputCheckbox>
+    <br />
+
+    <button type="submit">افزودن</button>
+</EditForm>
+<ErrorComponent Errors="Errors"></ErrorComponent>
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public int ClassId{ get; set; }
+    UpdateExamDTO updateExamDTO = new UpdateExamDTO();
+    List<string> Errors = new List<string>();
+    int startHour;
+    int startMinute;
+    int endHour;
+    int endMinute;
+    EditContext editContext;
+    protected override async Task OnInitializedAsync()
+    {
+        editContext = new EditContext(updateExamDTO);
+        var response = await _examServices.GetByIdAsync(ExamId);
+        if (response.IsSuccess)
+        {
+            updateExamDTO = response.Data;
+            startHour = updateExamDTO.StartDate.Value.Hour;
+            startMinute = updateExamDTO.StartDate.Value.Minute;
+            endHour = updateExamDTO.EndDate.Value.Hour;
+            endMinute = updateExamDTO.EndDate.Value.Minute;
+        }
+        else
+        {
+            RefreshErrors(response.Errors);
+        }
+        editContext = new EditContext(updateExamDTO);
+        editContext.OnValidationStateChanged += (sender, args) =>
+        {
+            Errors.Clear();
+            var validationErrors = editContext.GetValidationMessages();
+            Errors.AddRange(validationErrors);
+            StateHasChanged();
+        };
+        await base.OnInitializedAsync();
+    }
+    private async Task PreEditAsync()
+    {
+       
+        if (startHour > 23 || startHour < 0 || startMinute > 59 || startMinute < 0 ||
+        endHour > 23 || endHour < 0 || endMinute > 59 || endMinute < 0)
+        {
+            RefreshErrors(new List<string>() { "ساعت انتخابی درست نیست." });
+            StateHasChanged();
+        }
+        else
+        {
+            Errors.Clear();
+            updateExamDTO.StartDate = new DateTime(updateExamDTO.StartDate.Value.Year, updateExamDTO.StartDate.Value.Month, updateExamDTO.StartDate.Value.Day, startHour, startMinute, 1);
+            updateExamDTO.EndDate = new DateTime(updateExamDTO.EndDate.Value.Year, updateExamDTO.EndDate.Value.Month, updateExamDTO.EndDate.Value.Day, endHour, endMinute, 1);
+            await UpdateAsync();
+        }
+    }
+    private async Task UpdateAsync()
+    {
+        var response = await _examServices.UpdateAsync(ExamId, updateExamDTO);
+        if(response.IsSuccess)
+        {
+            _navigationManager.NavigateTo($"Exams/{ClassId}");
+        }
+        else
+        {
+            RefreshErrors(response.Errors);
+        }
+    }
+    private void RefreshErrors(List<string> errors)
+    {
+        Errors.Clear();
+        Errors.AddRange(errors);
+    }
+}

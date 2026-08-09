@@ -4,23 +4,23 @@
 @inject ExamServices _examServices;
 <EditForm EditContext="@editContext" OnValidSubmit="@preAddAsync">
     <DataAnnotationsValidator></DataAnnotationsValidator>
-    <lable for="questionCount">تعداد سوال:</lable>
+    <label for="questionCount">تعداد سوال:</label>
     <InputNumber id="questionCount" @bind-Value="@createExamDTO.QuestionCount"></InputNumber>
     <br />
 
-    <lable for="examName">نام آزمون:</lable>
+    <label for="examName">نام آزمون:</label>
     <InputText id="examName" @bind-Value="@createExamDTO.Name"></InputText>
     <br />
 
-    <lable for="examDescription">توضیحات آزمون:</lable>
+    <label for="examDescription">توضیحات آزمون:</label>
     <InputTextArea id="examDescription" @bind-Value="@createExamDTO.Description"></InputTextArea>
     <br />
 
-    <lable for="examStartDate">تاریخ شروع:</lable>
+    <label for="examStartDate">تاریخ شروع:</label>
     <InputPersianDatePicker id="examStartDate" @bind-ValueAsDateTime="createExamDTO.StartDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
     <br />
 
-    <lable for="examEndDate">تاریخ پایان:</lable>
+    <label for="examEndDate">تاریخ پایان:</label>
     <InputPersianDatePicker id="examEndDate" @bind-ValueAsDateTime="createExamDTO.EndDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
     <br />
 
@@ -36,19 +36,19 @@
     <InputNumber placeholder="ساعت" @bind-Value="@endTimeHour"></InputNumber>
     <br />
 
-    <lable for="examAllowDelay">میزان تاخیر مجاز:</lable>
+    <label for="examAllowDelay">میزان تاخیر مجاز:</label>
     <InputNumber id="examAllowDelay" @bind-Value="@createExamDTO.AllowedDelay"></InputNumber>
     <br />
 
-    <lable for="examAllowCopy">اجازه کپی:</lable>
+    <label for="examAllowCopy">اجازه کپی:</label>
     <InputCheckbox id="examAllowCopy" @bind-Value="@createExamDTO.AllowedCopy"></InputCheckbox>
     <br />
 
-    <lable for="examLogStudent">لاگ کردن دانشجویان:</lable>
+    <label for="examLogStudent">لاگ کردن دانشجویان:</label>
     <InputCheckbox id="examLogStudent" @bind-Value="@createExamDTO.LogStudent"></InputCheckbox>
     <br />
 
-    <lable for="examRandomQuestion">سوالات درهم:</lable>
+    <label for="examRandomQuestion">سوالات درهم:</label>
     <InputCheckbox id="examRandomQuestion" @bind-Value="@createExamDTO.RandomQuestions"></InputCheckbox>
     <br />
 

@@ -16,15 +16,8 @@ namespace OnlineExam.Ui.EndPoints
         public static string GetClassRoomAsTeacher(PaginateRequestDTO paginateRequestDTO)
         {
             string baseUrl = $"{ApiUrl}/class-rooms/my/as-teacher";
-            baseUrl += $"?PageNumber={paginateRequestDTO.PageNumber}";
-            baseUrl += $"&PageCount={paginateRequestDTO.PageCount}";
-            if (paginateRequestDTO.SortBy != null)
-            {
-                baseUrl += $"&SortBy={paginateRequestDTO.SortBy}";
-            }
-            baseUrl += $"&Descending={paginateRequestDTO.Descending}";
-
-            return baseUrl ;
+            baseUrl= GetPaginateUrl(baseUrl, paginateRequestDTO);
+            return baseUrl;
         }
         public static string DeleteClassRoom(int id) => $"{ApiUrl}/class-rooms/{id}";
         public static string GetClassRoomById(int Id) => $"{ApiUrl}/class-rooms/{Id}";
@@ -35,8 +28,30 @@ namespace OnlineExam.Ui.EndPoints
         public static string DeleteClassRoomMember(string StudentId, int ClassId) => $"{ApiUrl}/class-room-members/{ClassId}/{StudentId}";
 
         public const string CreateExam = $"{ApiUrl}/exams";
+        public static string GetExamByClassId(int classId,PaginateRequestDTO paginateRequestDTO)
+        {
+            string baseUrl = $"{ApiUrl}/exams/class-room/{classId}";
+            baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
+            return baseUrl;
+        }
 
+        private static string GetPaginateUrl(string baseUrl,PaginateRequestDTO paginateRequestDTO)
+        {
+            baseUrl += $"?PageNumber={paginateRequestDTO.PageNumber}";
+            baseUrl += $"&PageCount={paginateRequestDTO.PageCount}";
+            if (paginateRequestDTO.SortBy != null)
+            {
+                baseUrl += $"&SortBy={paginateRequestDTO.SortBy}";
+            }
+            baseUrl += $"&Descending={paginateRequestDTO.Descending}";
+
+            return baseUrl;
+        }
+        public static string DeleteExam(int id) => $"{ApiUrl}/exams/{id}";
+        public static string GetExamById(int id) => $"{ApiUrl}/exams/{id}";
+        public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";
 
     }
+
 
 }

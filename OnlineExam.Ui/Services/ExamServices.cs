@@ -1,4 +1,6 @@
-﻿using OnlineExam.Ui.DTO.Exam;
+﻿using Newtonsoft.Json.Schema;
+using OnlineExam.Ui.DTO.Common;
+using OnlineExam.Ui.DTO.Exam;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
@@ -16,7 +18,7 @@ namespace OnlineExam.Ui.Services
         public async Task<CommonResponse<EmptyResponse>> AddExamAsync(CreateExamDTO createExamDTO)
         {
             var apiUrl = ApiRoutes.CreateExam;
-            var content=JsonContent.Create(createExamDTO);
+            var content = JsonContent.Create(createExamDTO);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -28,6 +30,59 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-
+        public async Task<CommonResponse<PaginateResponse<GetExamDetailDTO>>> GetExamTeacher(int classId, PaginateRequestDTO paginateRequestDTO)
+        {
+            var apiUrl = ApiRoutes.GetExamByClassId(classId, paginateRequestDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<PaginateResponse<GetExamDetailDTO>>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> DeleteAsync(int id)
+        {
+            var apiUrl = ApiRoutes.DeleteExam(id);
+            var option = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                HttpMethods = HttpMethod.Delete,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(option);
+        }
+        public async Task<CommonResponse<UpdateExamDTO>> GetByIdAsync(int id)
+        {
+            var apiUrl = ApiRoutes.GetExamById(id);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<UpdateExamDTO>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> UpdateAsync(int id,UpdateExamDTO updateExamDTO)
+        {
+            var apiUrl = ApiRoutes.UpdateExam(id);
+            var content = JsonContent.Create(updateExamDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+                Content=content
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
     }
 }

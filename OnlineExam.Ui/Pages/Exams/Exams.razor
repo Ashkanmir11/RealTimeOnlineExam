@@ -1,15 +1,108 @@
-﻿@layout ManagmentLayout;
-@page "/Exams/{classId:int}"
+﻿@using OnlineExam.Ui.DTO.Exam;
+@layout ManagmentLayout;
+@page "/Exams/{ClassId:int}"
+@inject ExamServices _examServices;
 <h3>Exams</h3>
 <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
 
+@{
+    if (result == null || result.Data == null)
+    {
+        <p>ازمونی یافت نشد.</p>
+    }
+    else
+    {
+        <table>
+            <tr>
+                <th>تعداد سوال</th>
+                <th>نام آزمون</th>
+                <th>توضیحات</th>
+                <th>تاریخ شروع</th>
+                <th>تاریخ پایان</th>
+                <th>میزان مجاز تاخیر</th>
+                <th>اجازه کپی</th>
+                <th>سوالات درهم</th>
+                <th>عملیات</th>
+            </tr>
+            @foreach (var exam in result.Data)
+            {
+                <tr>
+                    <td>@exam.QuestionCount</td>
+                    <td>@exam.Name</td>
+                    <td>@exam.Description</td>
+                    <td>@exam.QuestionCount</td>
+                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
+                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
+                    <td>@exam.AllowedDelay</td>
+                    <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
+                    <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
+                    <td>
+                        <button @onclick="()=>Delete(exam.Id)">حذف</button>
+                        <button @onclick="()=>RedirectToUpdateExam(exam.Id)">ویرایش</button>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
+}
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+<PaginateComponent CurrentPage="result.PageNumber" TotalPage="@result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
 @code {
     [Parameter]
-    public int classId{ get; set; }
-
-
+    public int ClassId { get; set; }
+    PaginateResponse<GetExamDetailDTO> result = new PaginateResponse<GetExamDetailDTO>();
+    PaginateRequestDTO paginateRequest = new PaginateRequestDTO();
+    List<string> Errors = new List<string>();
+    private async void changePage(int selectedPage)
+    {
+        paginateRequest.PageNumber = selectedPage;
+        await GetData();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task Delete(int Id)
+    {
+        var response = await _examServices.DeleteAsync(Id);
+        if (!response.IsSuccess)
+        {
+            RefreshError(response.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
+    }
+    private void RefreshError(List<string> errors)
+    {
+        Errors.Clear();
+        Errors.AddRange(errors);
+        StateHasChanged();
+    }
+    private async Task GetData()
+    {
+        result.Data = new List<GetExamDetailDTO>();
+        var response = await _examServices.GetExamTeacher(ClassId, paginateRequest);
+        if (!response.IsSuccess)
+        {
+            RefreshError(response.Errors);
+            StateHasChanged();
+        }
+        else
+        {
+            result = response.Data;
+            StateHasChanged();
+        }
+    }
     private void RedirectToCreateExam()
     {
-        _navigationManager.NavigateTo($"CreateExams/{classId}");
+        _navigationManager.NavigateTo($"CreateExams/{ClassId}");
+    }
+    private void RedirectToUpdateExam(int id)
+    {
+        _navigationManager.NavigateTo($"updateExam/{id}/{ClassId}");
     }
 }
