@@ -12,4 +12,5 @@ builder.Services.AddScoped<RequestServices>();
 builder.Services.AddScoped<ClassRoomServices>();
 builder.Services.AddScoped<ClassRoomMemberServices>();
 builder.Services.AddScoped<ExamServices>();
+builder.Services.AddScoped<QuestionServices>();
 await builder.Build().RunAsync();

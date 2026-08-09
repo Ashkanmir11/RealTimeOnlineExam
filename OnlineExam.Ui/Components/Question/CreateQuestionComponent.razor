@@ -1,0 +1,144 @@
+﻿@using OnlineExam.Ui.DTO.Question;
+@using OnlineExam.Ui.DTO.TrueOrFalseQuestion;
+@using OnlineExam.Ui.DTO.DescriptiveQuestion;
+@using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
+@inject QuestionServices _questionServices;
+<h3>CreateQuestionComponent</h3>
+
+<EditForm Model="CreateQuestionDTO" >
+    <label for="qustionType">نوع سوال</label>
+    <InputText @bind-Value="@CreateQuestionDTO.QuestionText"></InputText>
+
+    <label for="questionScore">نمره سوال</label>
+    <InputNumber id="questionScore" @bind-Value="@CreateQuestionDTO.TotalScore"></InputNumber>
+
+    <InputSelect @bind-Value="QuestionType" id="qustionType">
+        <option selected value="@QuestionType.TrueOrFalse">صحیح و غلط</option>
+        <option value="@QuestionType.MultipleChoice">چند گزینه ایی</option>
+        <option value="@QuestionType.Descripite">تشریحی</option>
+    </InputSelect>
+    @{
+        switch (QuestionType)
+        {
+            case QuestionType.MultipleChoice:
+                {
+
+                    <input type="text" placeholder="متن گزینه." @bind-value="@tempChoice" />
+                    <button onclick="@AddChoice">افزودن گزینه</button>
+                    foreach (var choice in MultipleChoices)
+                    {
+                        <p>@choice</p>
+                    }
+                    <label for="correctChoiec">گزینه صحیح:</label>
+                    <InputNumber id="correctChoiec" @bind-Value="@CorrentChoice"></InputNumber>
+                    <button onclick="@AddMultipleChoiceQuestion">تعیین نوع سوال.</button>
+                    break;
+                }
+            case QuestionType.TrueOrFalse:
+                {
+                    <label for="correctAnswer">جواب صحیح:</label>
+                    <InputCheckbox id="correctAnswer" @bind-Value="@CorrectAnswer"></InputCheckbox>
+                    <button onclick="@AddTrueOrFalseQuestion">تعیین نوع سوال.</button>
+                    break;
+                }
+            case QuestionType.Descripite:
+                {
+                    <label for="CorrectDescriptiveAnswer">پاسخ صحیح سوال:</label>
+                    <InputTextArea id="CorrectDescriptiveAnswer" @bind-Value="@CorrectDescriptiveAnswer"></InputTextArea>
+                    <button onclick="@AddDescrptiveQuestion">تعیین نوع سوال.</button>
+                    break;
+                }
+        }
+    }
+    <button type="submit" @onclick="AddQuesiton">افزودن.</button>
+</EditForm>
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    QuestionType QuestionType;
+    CreateQuestionDTO CreateQuestionDTO = new CreateQuestionDTO();
+    List<string> Errors = new List<string>();
+    //For true or false
+    bool CorrectAnswer;
+
+    //for multiple choice
+    List<string> MultipleChoices = new List<string>();
+    int choiceNumber = 0;
+    string tempChoice;
+    int CorrentChoice;
+
+    //for descriptive
+    string CorrectDescriptiveAnswer;
+    protected override void OnInitialized()
+    {
+        CreateQuestionDTO.ExamId = ExamId;
+        base.OnInitialized();
+    }
+
+    private async Task AddQuesiton()
+    {
+        //todo create add;
+        if (!IsCorrectChoiceValid())
+        {
+
+        }
+        else
+        {
+            var response = await _questionServices.AddAsync(CreateQuestionDTO);
+            if(response.IsSuccess)
+            {
+                //to do event call back and close 
+            }
+            else
+            {
+                RefreshError(response.Errors);
+            }
+
+        }
+
+
+    }
+    private void AddChoice()
+    {
+        choiceNumber += 1;
+        MultipleChoices.Add(choiceNumber.ToString() + "-" + tempChoice);
+        tempChoice = "";
+        StateHasChanged();
+    }
+    private bool IsCorrectChoiceValid()
+    {
+        if (CorrentChoice > choiceNumber)
+        {
+            RefreshError(new List<string>() { "کزینه وارد شده صحیح نیست.." });
+            return false;
+        }
+        return true;
+
+    }
+    private void RefreshError(List<string> errors)
+    {
+        Errors.Clear();
+        Errors.AddRange(errors);
+        StateHasChanged();
+    }
+    private void AddTrueOrFalseQuestion()
+    {
+        CreateTrueOrFalseQuestionDTO createTrueOrFalseQuestionDTO = new CreateTrueOrFalseQuestionDTO();
+        createTrueOrFalseQuestionDTO.CorrectAnswer = CorrectAnswer;
+        CreateQuestionDTO.TrueOrFalseQuestion = createTrueOrFalseQuestionDTO;
+    }
+    private void AddDescrptiveQuestion()
+    {
+        CreateDescriptiveQuestionDTO createDescriptiveQuestionDTO = new CreateDescriptiveQuestionDTO();
+        createDescriptiveQuestionDTO.CorrectAnswer = CorrectDescriptiveAnswer;
+        CreateQuestionDTO.DescriptiveQuestion = createDescriptiveQuestionDTO;
+    }
+    private void AddMultipleChoiceQuestion()
+    {
+        CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO = new CreateMultipleChoiceQuestionDTO();
+        createMultipleChoiceQuestionDTO.CorrectChoice = CorrentChoice;
+        CreateQuestionDTO.MultipleChoiceQuestion = createMultipleChoiceQuestionDTO;
+
+    }
+}

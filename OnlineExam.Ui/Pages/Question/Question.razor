@@ -1,0 +1,26 @@
+﻿@using OnlineExam.Ui.Components.Question;
+@page "/question/{examId:int}"
+@layout ManagmentLayout;
+<h3>Question</h3>
+@{
+    if (ShowCreate == false)
+    {
+        <button onclick="@ChangeShowCreatStatus">افزودن سوال</button>
+    }
+    else
+    {
+        <button onclick="@ChangeShowCreatStatus">بستن</button>
+        <CreateQuestionComponent ExamId="examId"></CreateQuestionComponent>
+    }
+}
+@code {
+
+    [Parameter]
+    public int examId { get; set; }
+
+    bool ShowCreate = false;
+    private void ChangeShowCreatStatus()
+    {
+        ShowCreate = ShowCreate == false ? true : false;
+    }
+}
