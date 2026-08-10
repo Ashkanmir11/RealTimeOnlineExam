@@ -54,7 +54,6 @@
     public int ClassId { get; set; }
     PaginateResponse<GetExamDetailDTO> result = new PaginateResponse<GetExamDetailDTO>();
     PaginateRequestDTO paginateRequest = new PaginateRequestDTO();
-    List<string> Errors = new List<string>();
     private async void changePage(int selectedPage)
     {
         paginateRequest.PageNumber = selectedPage;
@@ -71,25 +70,19 @@
         var response = await _examServices.DeleteAsync(Id);
         if (!response.IsSuccess)
         {
-            RefreshError(response.Errors);
+            SetErrors(response.Errors);
         }
         else
         {
             await GetData();
         }
     }
-    private void RefreshError(List<string> errors)
-    {
-        Errors.Clear();
-        Errors.AddRange(errors);
-        StateHasChanged();
-    }
     private async Task GetData()
     {
         var response = await _examServices.GetExamTeacher(ClassId, paginateRequest);
         if (!response.IsSuccess)
         {
-            RefreshError(response.Errors);
+            SetErrors(response.Errors);
             StateHasChanged();
         }
         else

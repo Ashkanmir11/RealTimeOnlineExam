@@ -11,27 +11,20 @@
     <button type="submit">ورود</button>
 </form>
 
-@{
-    foreach(var error in errors)
-    {
-        <div style="color:red">@error</div>
-    }
-}
+<ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
     string phoneNumber = "";
     string password = "";
-    List<string> errors = new List<string>();
     public async Task loginUser()
     {
         if(phoneNumber.Length!= 11)
         {
-            errors.Add("شماره تلفن باید 11 رقم باشد.");
+            SetErrors("شماره تلفن باید 11 رقم باشد.");
         }
         var result = await _authServices.Login(phoneNumber, password);
-        errors.Clear();
         if (!result.IsSuccess)
         {
-            errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
         }
         else
         {

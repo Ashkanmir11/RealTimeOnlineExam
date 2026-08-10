@@ -1,4 +1,5 @@
-﻿using OnlineExam.Ui.DTO.Question;
+﻿using OnlineExam.Ui.DTO.Common;
+using OnlineExam.Ui.DTO.Question;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
@@ -29,5 +30,32 @@ namespace OnlineExam.Ui.Services
             return await _requestServices.SendAsync<EmptyResponse>(options);
 
         }
+        public async Task<CommonResponse<PaginateResponse<GetQuestionTeacherDTO>>> GetByExamIdTeacher(PaginateRequestDTO paginateRequestDTO, int examId)
+        {
+            var apiUrl = ApiRoutes.GetQuestionByExamId(paginateRequestDTO,examId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<PaginateResponse<GetQuestionTeacherDTO>>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> DeleteQuestion(int id)
+        {
+            var apiUrl = ApiRoutes.DeleteQuestion(id);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                HttpMethods = HttpMethod.Delete,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+
     }
 }

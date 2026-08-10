@@ -46,13 +46,13 @@
     {
         <p>کلاس عضوی ندارد.</p>
     }
+    <ErrorComponent Errors="Errors"></ErrorComponent>
 }
 
 @code {
     [Parameter]
     public int ClassId { get; set; }
     bool showCreateMember = false;
-    List<string> Errors = new List<string>();
     private GetClassRoomMembersDTO getClassRoomMembersDTO = new GetClassRoomMembersDTO();
     CreateClassRoomMemberDTO createClassRoomMemberDTO = new CreateClassRoomMemberDTO();
 
@@ -75,8 +75,7 @@
         var result = await _classRoomMembersServices.DeleteMember(studentId, ClassId);
         if(!result.IsSuccess)
         {
-            Errors.Clear();
-            Errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
         }
         else
         {
@@ -89,8 +88,7 @@
 
         if (!classMembers.IsSuccess)
         {
-            Errors.Clear();
-            Errors.AddRange(classMembers.Errors);
+            SetErrors(classMembers.Errors);
         }
         else
         {

@@ -58,10 +58,10 @@
     public int ExamId { get; set; }
     QuestionType QuestionType;
     CreateQuestionDTO CreateQuestionDTO = new CreateQuestionDTO();
-    List<string> Errors = new List<string>();
     //For true or false
     bool CorrectAnswer;
-
+    [Parameter]
+    public EventCallback<bool> AddComplete{ get; set; }
     //for multiple choice
     List<string> MultipleChoices = new List<string>();
     int choiceNumber = 0;
@@ -88,11 +88,11 @@
             var response = await _questionServices.AddAsync(CreateQuestionDTO);
             if(response.IsSuccess)
             {
-                //to do event call back and close 
+                AddComplete.InvokeAsync(true);                
             }
             else
             {
-                RefreshError(response.Errors);
+                SetErrors(response.Errors);
             }
 
         }
@@ -110,17 +110,11 @@
     {
         if (CorrentChoice > choiceNumber)
         {
-            RefreshError(new List<string>() { "کزینه وارد شده صحیح نیست.." });
+            SetErrors("کزینه وارد شده صحیح نیست..");
             return false;
         }
         return true;
 
-    }
-    private void RefreshError(List<string> errors)
-    {
-        Errors.Clear();
-        Errors.AddRange(errors);
-        StateHasChanged();
     }
     private void AddTrueOrFalseQuestion()
     {
@@ -137,6 +131,7 @@
     private void AddMultipleChoiceQuestion()
     {
         CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO = new CreateMultipleChoiceQuestionDTO();
+        createMultipleChoiceQuestionDTO.Choices = MultipleChoices;
         createMultipleChoiceQuestionDTO.CorrectChoice = CorrentChoice;
         CreateQuestionDTO.MultipleChoiceQuestion = createMultipleChoiceQuestionDTO;
 

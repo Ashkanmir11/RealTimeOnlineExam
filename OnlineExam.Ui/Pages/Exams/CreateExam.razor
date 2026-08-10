@@ -55,13 +55,12 @@
     <button type="submit">افزودن</button>
 </EditForm>
 
-<ErrorComponent Errors="@errors"></ErrorComponent>
+<ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
     [Parameter]
     public int classId { get; set; }
 
     public EditContext editContext;
-    List<string> errors = new List<string>();
     CreateExamDTO createExamDTO = new CreateExamDTO();
     int startTimeHour;
     int startTimeMinute;
@@ -73,9 +72,8 @@
         editContext = new EditContext(createExamDTO);
         editContext.OnValidationStateChanged += (sender, args) =>
         {
-            errors.Clear();
             var validationErrors = editContext.GetValidationMessages();
-            errors.AddRange(validationErrors);
+            SetErrors(validationErrors.ToList());
             StateHasChanged();
         };
         base.OnInitialized();
@@ -86,13 +84,12 @@
         if (startTimeHour > 23 || startTimeHour < 0 || startTimeMinute > 59 || startTimeMinute < 0 ||
         endTimeHour > 23 || endTimeHour < 0 || endTimeMinute > 59 || endTimeMinute < 0)
         {
-            errors.Clear();
-            errors.Add("ساعت انتخابی درست نیست.");
+            SetErrors("ساعت انتخابی درست نیست.");
             StateHasChanged();
         }
         else
         {
-            errors.Clear();
+            Errors.Clear();
             createExamDTO.StartDate = new DateTime(createExamDTO.StartDate.Value.Year, createExamDTO.StartDate.Value.Month, createExamDTO.StartDate.Value.Day, startTimeHour, startTimeMinute, 1);
             createExamDTO.EndDate = new DateTime(createExamDTO.EndDate.Value.Year, createExamDTO.EndDate.Value.Month, createExamDTO.EndDate.Value.Day, endTimeHour, endTimeMinute, 1);
             await AddAsync();
@@ -103,8 +100,7 @@
         var result = await _examServices.AddExamAsync(createExamDTO);
         if(!result.IsSuccess)
         {
-            errors.Clear();
-            errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
             StateHasChanged();
         }
         else

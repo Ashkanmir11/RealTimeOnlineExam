@@ -19,65 +19,55 @@ namespace OnlineExam.Ui.Services
 
         public async Task<CommonResponse<TResult>> SendAsync<TResult>(RequestOptions requestOptions)
         {
-            try
+
+            HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
+            var result = new CommonResponse<TResult>();
+            if (requestOptions.RequiresAuth)
             {
-                HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
-                var result = new CommonResponse<TResult>();
-                if (requestOptions.RequiresAuth)
+                if (await refreshToken() == 401)
                 {
-                    if (await refreshToken() == 401)
-                    {
-                        result.IsSuccess = false;
-                        result.Errors = new()
+                    result.IsSuccess = false;
+                    result.Errors = new()
                     {
                         "لطفا وارد شوید."
                     };
-                        result.StatusCode = 401;
-                        return result;
-                    }
-
-                }
-                if (requestOptions.Content != null)
-                {
-                    request.Content = requestOptions.Content;
-                }
-                if (requestOptions.IncludeCredentials)
-                {
-                    request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+                    result.StatusCode = 401;
+                    return result;
                 }
 
-                var response = await _httpClient.SendAsync(request);
-                //fill response
-                result.StatusCode = (int)response.StatusCode;
-                if (response.IsSuccessStatusCode)
-                {
-                    if (response.Content != null && requestOptions.GetData != false)
-                    {
-                        result.Data = typeof(TResult) == typeof(string) ? (TResult)(object)await response.Content.ReadAsStringAsync() : await response.Content.ReadFromJsonAsync<TResult>();
-                    }
-                    result.IsSuccess = true;
-                }
-                //response has error
-                else
-                {
-
-                    result.Errors = new List<string>();
-                    var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
-                    result.Errors = errorResponse?.Errors ?? new List<string>();
-                    result.IsSuccess = false;
-                }
-                return result;
             }
-            catch
+            if (requestOptions.Content != null)
             {
-                var exception = new CommonResponse<TResult>
-                {
-                    IsSuccess = false,
-                    StatusCode = 500,
-                };
-                exception.Errors.Add("خطایی سمت سرور رخ داد.");
-                return exception;
+                request.Content = requestOptions.Content;
             }
+            if (requestOptions.IncludeCredentials)
+            {
+                request.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+            }
+
+            var response = await _httpClient.SendAsync(request);
+            //fill response
+            result.StatusCode = (int)response.StatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                var bodyExist=await response.Content.ReadAsStringAsync();
+                if (response.Content != null && requestOptions.GetData != false && !string.IsNullOrWhiteSpace(bodyExist))
+                {
+                    result.Data = typeof(TResult) == typeof(string) ? (TResult)(object)await response.Content.ReadAsStringAsync() : await response.Content.ReadFromJsonAsync<TResult>();
+                }
+                result.IsSuccess = true;
+            }
+            //response has error
+            else
+            {
+
+                result.Errors = new List<string>();
+                var errorResponse = await response.Content.ReadFromJsonAsync<CommonResponse<TResult>>();
+                result.Errors = errorResponse?.Errors ?? new List<string>();
+                result.IsSuccess = false;
+            }
+            return result;
+
 
         }
         public async Task<int> SendAsync(RequestOptions requestOptions)

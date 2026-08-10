@@ -30,7 +30,7 @@ namespace OnlineExam.Ui.EndPoints
         public static string GetClassRoomAsTeacher(PaginateRequestDTO paginateRequestDTO)
         {
             string baseUrl = $"{ApiUrl}/class-rooms/my/as-teacher";
-            baseUrl= GetPaginateUrl(baseUrl, paginateRequestDTO);
+            baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
         public static string DeleteClassRoom(int id) => $"{ApiUrl}/class-rooms/{id}";
@@ -53,6 +53,13 @@ namespace OnlineExam.Ui.EndPoints
         public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";
 
         public const string CreateQuestion = $"{ApiUrl}/questions";
+        public static string GetQuestionByExamId(PaginateRequestDTO paginateRequestDTO, int examId)
+        {
+            var baseUrl = $"{ApiUrl}/exams/{examId}/questions";
+            return GetPaginateUrl(baseUrl, paginateRequestDTO);
+        }
+        public static string DeleteQuestion(int id) => $"{ApiUrl}/questions/{id}";
+
 
     }
 

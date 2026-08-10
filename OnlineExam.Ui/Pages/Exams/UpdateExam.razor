@@ -62,7 +62,6 @@
     [Parameter]
     public int ClassId{ get; set; }
     UpdateExamDTO updateExamDTO = new UpdateExamDTO();
-    List<string> Errors = new List<string>();
     int startHour;
     int startMinute;
     int endHour;
@@ -82,12 +81,11 @@
         }
         else
         {
-            RefreshErrors(response.Errors);
+            SetErrors(response.Errors);
         }
         editContext = new EditContext(updateExamDTO);
         editContext.OnValidationStateChanged += (sender, args) =>
         {
-            Errors.Clear();
             var validationErrors = editContext.GetValidationMessages();
             Errors.AddRange(validationErrors);
             StateHasChanged();
@@ -100,8 +98,7 @@
         if (startHour > 23 || startHour < 0 || startMinute > 59 || startMinute < 0 ||
         endHour > 23 || endHour < 0 || endMinute > 59 || endMinute < 0)
         {
-            RefreshErrors(new List<string>() { "ساعت انتخابی درست نیست." });
-            StateHasChanged();
+            SetErrors("ساعت انتخابی درست نیست.");
         }
         else
         {
@@ -120,12 +117,7 @@
         }
         else
         {
-            RefreshErrors(response.Errors);
+            SetErrors(response.Errors);
         }
-    }
-    private void RefreshErrors(List<string> errors)
-    {
-        Errors.Clear();
-        Errors.AddRange(errors);
     }
 }

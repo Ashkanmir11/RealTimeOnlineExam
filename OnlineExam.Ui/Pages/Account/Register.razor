@@ -12,11 +12,10 @@
     <button type="submit">ثبت نام</button>
 
 </EditForm>
-<ErrorComponent Errors="@errors"></ErrorComponent>
+<ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
     private EditContext editContext;
     string massage="";
-    List<string> errors = new List<string>();
     private RegisterDTO registerDTO { get; set; } = new RegisterDTO();
 
     protected override void OnInitialized()
@@ -24,9 +23,8 @@
         editContext = new EditContext(registerDTO);
         editContext.OnValidationStateChanged += (sender, args) =>
         {
-            errors.Clear();
             var validationErrors = editContext.GetValidationMessages();
-            errors.AddRange(validationErrors);
+            SetErrors(validationErrors.ToList());
             StateHasChanged();
         };
         base.OnInitialized();
@@ -44,8 +42,7 @@
         }
         else
         {
-            errors.Clear();
-            errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
         }
     }
 }

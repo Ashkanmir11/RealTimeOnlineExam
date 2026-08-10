@@ -11,21 +11,19 @@
     <button type="submit">افزودن</button>
 </EditForm>
 
-<ErrorComponent Errors="errors"></ErrorComponent>
+<ErrorComponent Errors="Errors"></ErrorComponent>
 
 @code {
     private EditContext editContext;
     CreateClassRoomDTO createClassRoomDTO = new CreateClassRoomDTO();
-    List<string> errors = new List<string>();
 
     protected override void OnInitialized()
     {
         editContext = new EditContext(createClassRoomDTO);
         editContext.OnValidationStateChanged += (sender, args) =>
         {
-            errors.Clear();
             var validationErrors = editContext.GetValidationMessages();
-            errors.AddRange(validationErrors);
+            SetErrors(validationErrors.ToList());
             StateHasChanged();
         };
         base.OnInitialized();
@@ -36,8 +34,7 @@
         var result = await _classRoomServices.CreateAsync(createClassRoomDTO);
         if (!result.IsSuccess)
         {
-            errors.Clear();
-            errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
         }
         else
         {

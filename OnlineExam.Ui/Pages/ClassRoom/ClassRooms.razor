@@ -13,7 +13,7 @@
 
     else
     {
-        <ErrorComponent Errors="@errors"></ErrorComponent>
+        <ErrorComponent Errors="@Errors"></ErrorComponent>
         foreach (var classRoom in result.Data)
         {
             <div>
@@ -32,7 +32,6 @@
 }
 
 @code {
-    List<string> errors = new List<string>();
     PaginateResponse<GetClassRoomTeacherDTO> result = new PaginateResponse<GetClassRoomTeacherDTO>();
     PaginateRequestDTO paginateRequestDTO = new PaginateRequestDTO();
     int totalPage;
@@ -68,8 +67,7 @@
         var result = await _classRoomServices.DeleteAsync(id);
         if (!result.IsSuccess)
         {
-            errors.Clear();
-            errors.AddRange(result.Errors);
+            SetErrors(result.Errors);
         }
         else
         {
@@ -96,8 +94,7 @@
         }
         else if (!response.IsSuccess)
         {
-            errors.Clear();
-            errors.AddRange(response.Errors);
+            SetErrors(response.Errors);
         }
         StateHasChanged();
     }
