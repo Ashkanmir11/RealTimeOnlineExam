@@ -1,0 +1,52 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/StudentClassRoom"
+@inject ClassRoomServices _classRoomServices;
+<h3>StudentClassRoom</h3>
+<div>
+    @{
+        if (result == null || result.Data.Count == 0)
+        {
+            <p>کلاسی موجود نیست.</p>
+        }
+        else
+        {
+            @foreach (var classRoom in result.Data)
+            {
+                <div>
+                    <p>@classRoom.ClassName</p>
+                    <button>مشاهده آزمون ها</button>
+                </div>
+            }
+        }
+    }
+</div>
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+<PaginateComponent TotalPage="result.TotalPage" CurrentPage="result.PageNumber" SelectedPage="@ChangePage"></PaginateComponent>
+
+@code {
+    PaginateResponse<GetClassRoomStudentDTO> result = new PaginateResponse<GetClassRoomStudentDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        result.Data = new List<GetClassRoomStudentDTO>();
+        var response = await _classRoomServices.GetStudentClasses(GetDefultPaginate());
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            result = response.Data;
+        }
+        StateHasChanged();
+    }
+    private async Task ChangePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        await GetData();
+    }
+}

@@ -20,12 +20,14 @@ namespace OnlineExam.Ui.EndPoints
         }
 
 
-        //urls
+        //Auth
         public const string Login = $"{ApiUrl}/auth/login";
         public const string myInfo = $"{ApiUrl}/accounts/me";
         public const string RefreshToken = $"{ApiUrl}/auth/refresh-token";
         public const string Logout = $"{ApiUrl}/auth/logout";
         public const string Register = $"{ApiUrl}/auth/register";
+
+        //Class Room
         public const string CreateClassRoom = $"{ApiUrl}/class-rooms";
         public static string GetClassRoomAsTeacher(PaginateRequestDTO paginateRequestDTO)
         {
@@ -36,11 +38,18 @@ namespace OnlineExam.Ui.EndPoints
         public static string DeleteClassRoom(int id) => $"{ApiUrl}/class-rooms/{id}";
         public static string GetClassRoomById(int Id) => $"{ApiUrl}/class-rooms/{Id}";
         public static string UpdateClassRoom(int Id) => $"{ApiUrl}/class-rooms/{Id}";
-
+        public static string GetStudentClassRoom(PaginateRequestDTO paginateRequestDTO)
+        {
+            string baseUrl = $"{ApiUrl}/class-rooms/my/as-student";
+            baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
+            return baseUrl;
+        }
+        //Class Room Members
         public static string GetClassRoomMember(int classId) => $"{ApiUrl}/class-room-members/{classId}/students";
         public const string CreateClassRoomMember = $"{ApiUrl}/class-room-members";
         public static string DeleteClassRoomMember(string StudentId, int ClassId) => $"{ApiUrl}/class-room-members/{ClassId}/{StudentId}";
 
+        //Exam
         public const string CreateExam = $"{ApiUrl}/exams";
         public static string GetExamByClassId(int classId, PaginateRequestDTO paginateRequestDTO)
         {
@@ -52,6 +61,7 @@ namespace OnlineExam.Ui.EndPoints
         public static string GetExamById(int id) => $"{ApiUrl}/exams/{id}";
         public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";
 
+        //Question
         public const string CreateQuestion = $"{ApiUrl}/questions";
         public static string GetQuestionByExamId(PaginateRequestDTO paginateRequestDTO, int examId)
         {

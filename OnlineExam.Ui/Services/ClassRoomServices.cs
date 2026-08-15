@@ -96,5 +96,18 @@ namespace OnlineExam.Ui.Services
             var result = await _requestServices.SendAsync<EmptyResponse>(options);
             return result;
         }
+        public async Task<CommonResponse<PaginateResponse<GetClassRoomStudentDTO>>> GetStudentClasses(PaginateRequestDTO paginateRequestDTO)
+        {
+            var apiUrl = ApiRoutes.GetStudentClassRoom(paginateRequestDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<PaginateResponse<GetClassRoomStudentDTO>>(options);
+        }
     }
 }
