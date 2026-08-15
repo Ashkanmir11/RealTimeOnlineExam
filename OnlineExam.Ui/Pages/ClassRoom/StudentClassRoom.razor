@@ -14,7 +14,7 @@
             {
                 <div>
                     <p>@classRoom.ClassName</p>
-                    <button>مشاهده آزمون ها</button>
+                    <button @onclick="()=>RedirectToStudentExams(classRoom.Id)">مشاهده آزمون ها</button>
                 </div>
             }
         }
@@ -48,5 +48,9 @@
     {
         SetPageNumber(selectedPage);
         await GetData();
+    }
+    private void RedirectToStudentExams(int classId)
+    {
+        _navigationManager.NavigateTo($"StudentExams/{classId}");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Schema;
 using OnlineExam.Ui.DTO.Common;
 using OnlineExam.Ui.DTO.Exam;
+using OnlineExam.Ui.DTO.Question;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
@@ -83,6 +84,20 @@ namespace OnlineExam.Ui.Services
                 Content=content
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<PaginateResponse<GetQuestionStudentDTO>>> StartExam(int examId,PaginateRequestDTO paginateRequestDTO)
+        {
+            var apiUrl = ApiRoutes.StartExam(paginateRequestDTO,examId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Post,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<PaginateResponse<GetQuestionStudentDTO>>(options);
+
         }
     }
 }
