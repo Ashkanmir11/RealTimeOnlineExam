@@ -3,10 +3,9 @@
 @using OnlineExam.Ui.DTO.DescriptiveQuestion;
 @using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
 @inject QuestionServices _questionServices;
-<h3>CreateQuestionComponent</h3>
 
 <EditForm Model="CreateQuestionDTO" >
-    <label for="qustionType">نام سوال</label>
+    <label for="qustionType">متن سوال</label>
     <InputText @bind-Value="@CreateQuestionDTO.QuestionText"></InputText>
 
     <label for="questionScore">نمره سوال</label>
@@ -88,7 +87,10 @@
             var response = await _questionServices.AddAsync(CreateQuestionDTO);
             if(response.IsSuccess)
             {
-                AddComplete.InvokeAsync(true);                
+                AddComplete.InvokeAsync(true);
+                CreateQuestionDTO = new CreateQuestionDTO();
+                CreateQuestionDTO.ExamId = ExamId;
+                StateHasChanged();
             }
             else
             {
