@@ -6,7 +6,7 @@
 <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
 
 @{
-    if (result == null || result.Data == null || result.Data.Count==0)
+    if (result == null || result.Data == null || result.Data.Count == 0)
     {
         <p>ازمونی یافت نشد.</p>
     }
@@ -85,7 +85,7 @@
             SetErrors(response.Errors);
             StateHasChanged();
         }
-        else
+        else if (response.StatusCode != 204)
         {
             result = response.Data;
             StateHasChanged();

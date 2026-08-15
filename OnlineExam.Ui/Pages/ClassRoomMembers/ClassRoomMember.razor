@@ -73,13 +73,13 @@
     private async Task DeleteMember(string studentId)
     {
         var result = await _classRoomMembersServices.DeleteMember(studentId, ClassId);
-        if(!result.IsSuccess)
+        if (!result.IsSuccess)
         {
             SetErrors(result.Errors);
         }
         else
         {
-           await GetData();
+            await GetData();
         }
     }
     private async Task GetData()
@@ -90,7 +90,7 @@
         {
             SetErrors(classMembers.Errors);
         }
-        else
+        else if (classMembers.StatusCode != 204)
         {
             getClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
 

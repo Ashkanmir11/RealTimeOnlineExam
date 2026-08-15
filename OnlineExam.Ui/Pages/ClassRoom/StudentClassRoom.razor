@@ -38,7 +38,7 @@
         {
             SetErrors(response.Errors);
         }
-        else
+        else if(response.StatusCode!=204)
         {
             result = response.Data;
         }
