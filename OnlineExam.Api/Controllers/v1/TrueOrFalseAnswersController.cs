@@ -59,7 +59,7 @@ namespace OnlineExam.Api.Controllers.V1
             await _mediator.Send(new DeleteTrueOrFalseAnswerRequest() { Id = id });
             return NoContent();
         }
-        [HttpPut("Put")]
+        [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> Put(int id, UpdateTrueOrFalseAnswerDTO updateTrueOrFalseQuestionAnswerDTO)
         {

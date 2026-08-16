@@ -2,6 +2,7 @@
 using OnlineExam.Ui.DTO.Common;
 using OnlineExam.Ui.DTO.Exam;
 using OnlineExam.Ui.DTO.Question;
+using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
@@ -97,7 +98,50 @@ namespace OnlineExam.Ui.Services
                 RequiresAuth = true,
             };
             return await _requestServices.SendAsync<PaginateResponse<GetQuestionStudentDTO>>(options);
-
         }
+        public async Task<CommonResponse<GetTrueOrFalseAnswerStudentDTO>> GetMyTrueOrFalseAnswer(int questionId)
+        {
+            var apiUrl = ApiRoutes.GetMyTrueOrFalseAnswer(questionId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<GetTrueOrFalseAnswerStudentDTO>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> CreateTrueOrFalseAnswer(CreateTrueOrFalseAnswerDTO createTrueOrFalseAnswerDTO)
+        {
+            var apiUrl = ApiRoutes.CreateTrueOrFalseAnswer;
+            var content = JsonContent.Create(createTrueOrFalseAnswerDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                Content = content,
+                HttpMethods = HttpMethod.Post,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> UpdateTrueOrFalseAnswer(int id,UpdateTrueOrFalseAnswerDTO updateTrueOrFalseAnswerDTO)
+        {
+            var apiUrl = ApiRoutes.UpdateTrueOrFalseAnswer(id);
+            var content = JsonContent.Create(updateTrueOrFalseAnswerDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                Content = content,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+
     }
 }

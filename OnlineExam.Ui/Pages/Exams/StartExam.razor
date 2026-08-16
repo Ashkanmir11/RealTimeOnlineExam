@@ -1,134 +1,127 @@
-﻿@page "/StartExam/{examId:int}"
-@using Microsoft.AspNetCore.SignalR.Client
-@using OnlineExam.Ui.Handler;
-@using Microsoft.AspNetCore.Http.Connections;
-@using Microsoft.AspNetCore.Components.WebAssembly.Http;
+﻿@using OnlineExam.Ui.Components.Exam;
+@using OnlineExam.Ui.DTO.Question
+@using OnlineExam.Ui.DTO.TrueOrFalseAnswers
+
+@page "/StartExam/{examId:int}";
+@inject ExamServices _examServices;
+<ExamStatusComponent ExamId="@ExamId"></ExamStatusComponent>
 <h3>StartExam</h3>
 @{
-    switch (connectionStatus)
+    if (result == null || result.Data.Count == 0)
     {
-        case ConnectionStatuses.Connected:
-            {
-                <p style="color:green;">آنلاین</p>
-                break;
-            }
-        case ConnectionStatuses.Disconnected:
-            {
-                <p style="color:red;">عدم ارتباط با سرور</p>
-                break;
-            }
-        case ConnectionStatuses.CantConnect:
-            {
-                <p style="color:red;">ارتباط با سرور برقرار نشد.</p>
-                break;
-            }
-        case ConnectionStatuses.Reconnecting:
-            {
-                <p style="color:orangered;">تلاش برای ارتباط با سرور لطفا از اتصال اینترنت اطمینان حاصل فرمایید.</p>
-                break;
-            }
+        <p>سوالی موجود نیست.</p>
     }
-}<div>
-    زمان باقی مانده:
-    <p> @remainTime</p>
-    @if (connectionStatus != ConnectionStatuses.Connected)
+    foreach (var question in result.Data)
     {
-        <p style="color:red">زمان در حالت عدم اتصال ممکن است دقیق نباشد.</p>
+        <div style="border:2px solid black">
+            @{
+                <p>@question.QuestionText</p>
+                <p>@question.TotalScore</p>
+                Console.WriteLine("arrive forech");
+                if (question.TrueOrFalseQuestion != null)
+                {
+                    <label>پاسخ:</label>
+                    <InputCheckbox @bind-Value:after="()=>UpdateTrueOrFalseAnswer(question.Id)" @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer"></InputCheckbox>
+                }
+            }
+        </div>
+
     }
-</div>
+}
+
+<ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
     [Parameter]
-    public int examId { get; set; }
-    private HubConnection hubConnection;
-    ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
-    int totalSeconds;
-    string remainTime;
-
-    private Task OnConnectionClosed(Exception? error)
-    {
-        return Task.CompletedTask;
-    }
+    public int ExamId { get; set; }
+    PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
-        await Connect();
+        await GetData();
         await base.OnInitializedAsync();
     }
-
-    private async Task Connect()
+    private async Task GetData()
     {
-        try
+        result.Data = new List<GetQuestionStudentDTO>();
+        var response = await _examServices.StartExam(ExamId, GetDefultPaginate());
+        if (!response.IsSuccess)
         {
-            hubConnection = new HubConnectionBuilder().WithUrl("http://localhost/ExamApi/startExam", options =>
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            foreach (var question in response.Data.Data)
             {
-                options.Transports = HttpTransportType.LongPolling;
-                options.HttpMessageHandlerFactory = innerHandler => new IncludeCredentialsHandler
+                if (question.TrueOrFalseQuestion != null)
+                {
+                    question.TrueOrFalseAnswer = new GetTrueOrFalseAnswerStudentDTO();
+                    var answer = await GetMyTrueOrFlaseAnswer(question.Id);
+                    if (answer != null)
                     {
-                        InnerHandler = innerHandler
-                    };
-            }).Build();
-
-
-
-            totalSeconds = 0;
-            hubConnection.On<int>("ReceiveRemaindSeconds", (remainingTime) =>
-               {
-                   totalSeconds = remainingTime;
-                   CreateTime();
-               });
-            hubConnection.Closed += OnDisconnected;
-            await hubConnection.StartAsync();
-            connectionStatus = ConnectionStatuses.Connected;
-            await hubConnection.InvokeAsync("ReceiveRemaindSeconds", examId);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            connectionStatus = ConnectionStatuses.CantConnect;
-
-        }
-        StateHasChanged();
-    }
-    private async Task OnDisconnected(Exception? exception)
-    {
-        hubConnection.Closed += OnDisconnected;
-        connectionStatus = ConnectionStatuses.Disconnected;
-        StateHasChanged();
-        CountDown();
-        while (hubConnection.State == HubConnectionState.Disconnected)
-        {
-            try
-            {
-                await Task.Delay(500);
-                await hubConnection.StartAsync();
-                connectionStatus = ConnectionStatuses.Connected;
-                await hubConnection.InvokeAsync("ReceiveRemaindSeconds", examId);
-                await InvokeAsync(StateHasChanged);
-            }
-            catch
-            {
-                connectionStatus = ConnectionStatuses.Reconnecting;
-                await InvokeAsync(StateHasChanged);
+                        question.TrueOrFalseAnswer = answer;
+                    }
+                }
+                result.Data.Add(question);
             }
         }
         StateHasChanged();
+    }
+    private async Task<GetTrueOrFalseAnswerStudentDTO> GetMyTrueOrFlaseAnswer(int questionId)
+    {
+        var answerResult = await _examServices.GetMyTrueOrFalseAnswer(questionId);
+        if (answerResult.IsSuccess != false || answerResult.StatusCode != 204)
+        {
+            return answerResult.Data;
+        }
+        else
+        {
+            return null;
+        }
 
     }
-    private void CreateTime()
+    private async Task UpdateTrueOrFalseAnswer(int questionId)
     {
-        var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(totalSeconds));
-        remainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
-        StateHasChanged();
-    }
-    private async Task CountDown()
-    {
-        while (connectionStatus != ConnectionStatuses.Connected)
+        Console.WriteLine("hi");
+        var answer = await GetMyTrueOrFlaseAnswer(questionId);
+        if (answer == null)
         {
-            await Task.Delay(1000);
-            totalSeconds -= 1;
-            CreateTime();
-            StateHasChanged();
+            //add answer
+            var newAnswer = new CreateTrueOrFalseAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = result.Data.Where(e => e.Id == questionId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
+                    TrueOrFalseQuestionId = questionId
+                };
+            var response = await _examServices.CreateTrueOrFalseAnswer(newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+                await _jsRuntime.InvokeVoidAsync("alert", "پاسخ ذخیره شد.");
+            }
+        }
+        else
+        {
+            //Update answer
+            var newAnswer = new UpdateTrueOrFalseAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = result.Data.Where(e => e.Id == questionId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.UpdateTrueOrFalseAnswer(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+                await _jsRuntime.InvokeVoidAsync("alert", "پاسخ ذخیره شد.");
+            }
+
         }
     }
+
 
 
 }

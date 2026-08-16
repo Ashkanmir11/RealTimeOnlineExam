@@ -37,13 +37,13 @@ namespace OnlineExam.Api.Hubs
                     await Task.Delay(1000);
                     var userId = Context.User?.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.UserId)?.Value;
                     var remainingSeconds = await _meditor.Send(new GetExamRemainSecondsRequest() { ExamId = examId, currentUser = userId });
-                    await Clients.Caller.SendAsync("ReceiveRemaindSeconds", Convert.ToInt32(remainingSeconds));
-                    if(remainingSeconds==0)
+                    if (remainingSeconds == 0)
                     {
                         examEnded = true;
                     }
+                    await Clients.Caller.SendAsync("ReceiveRemaindSeconds", Convert.ToInt32(remainingSeconds));
                 }
-
+                
             }
             catch (Exception ex)
             {

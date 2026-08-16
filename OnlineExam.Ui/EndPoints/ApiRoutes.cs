@@ -75,6 +75,10 @@ namespace OnlineExam.Ui.EndPoints
         }
         public static string DeleteQuestion(int id) => $"{ApiUrl}/questions/{id}";
 
+        //True or false answer
+        public static string GetMyTrueOrFalseAnswer(int questionId) => $"{ApiUrl}/true-or-false-answers/my/{questionId}";
+        public const string CreateTrueOrFalseAnswer = $"{ApiUrl}/true-or-false-answers";
+        public static string UpdateTrueOrFalseAnswer(int id) => $"{ApiUrl}/true-or-false-answers/{id}";
 
     }
 
