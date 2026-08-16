@@ -1,14 +1,17 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.AIServices;
+using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.Features.Exam.Request.Commands;
 using OnlineExam.Application.Features.Exam.Request.Queries;
+using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
 
@@ -20,8 +23,10 @@ namespace OnlineExam.Api.Controllers.V1
     public class ExamController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public ExamController(IMediator mediator)
+        private readonly IAuthServices _authServices;
+        public ExamController(IMediator mediator, IAuthServices authServices)
         {
+            _authServices = authServices;
             _mediator = mediator;
         }
         [HttpPost]
@@ -124,13 +129,20 @@ namespace OnlineExam.Api.Controllers.V1
         {
 
             var result = await _mediator.Send(new GetQuestionTeacherRequest() { ExamId = examId, PaginateRequestDTO = paginateRequestDTO });
-            if(result.Data.Count==0)
+            if (result.Data.Count == 0)
             {
                 return NoContent();
             }
             return Ok(result);
         }
+        //[HttpGet("test")]
+        //[Authorize]
+        //public async Task<IActionResult> test(int examId)
+        //{
 
+        //    var remainingSeconds = await _mediator.Send(new GetExamRemainSecondsRequest() { ExamId = examId });
+        //    return Ok(Convert.ToInt32(remainingSeconds));
+        //}
 
     }
 }

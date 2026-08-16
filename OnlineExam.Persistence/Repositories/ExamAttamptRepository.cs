@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace OnlineExam.Persistence.Repositories
 {
     public class ExamAttamptRepository : GenericRepository<ExamAttampt>, IExamAttamptRepository
@@ -50,6 +51,13 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> ExamStartedAsync(int examId, string userId)
         {
             return await _context.ExamAttampts.AnyAsync(e => e.ExamId == examId && e.StudentId == userId);
+        }
+
+        public async Task<double> GetRemainingSeconds(int examId ,string studentId)
+        {
+            var endTime =await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == studentId).Select(e => e.EndDate).FirstOrDefaultAsync();
+            return endTime.Subtract(DateTime.Now).TotalSeconds;
+
         }
     }
 }

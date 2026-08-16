@@ -1,8 +1,135 @@
 ﻿@page "/StartExam/{examId:int}"
+@using Microsoft.AspNetCore.SignalR.Client
+@using OnlineExam.Ui.Handler;
+@using Microsoft.AspNetCore.Http.Connections;
+@using Microsoft.AspNetCore.Components.WebAssembly.Http;
 <h3>StartExam</h3>
-
-
+@{
+    switch (connectionStatus)
+    {
+        case ConnectionStatuses.Connected:
+            {
+                <p style="color:green;">آنلاین</p>
+                break;
+            }
+        case ConnectionStatuses.Disconnected:
+            {
+                <p style="color:red;">عدم ارتباط با سرور</p>
+                break;
+            }
+        case ConnectionStatuses.CantConnect:
+            {
+                <p style="color:red;">ارتباط با سرور برقرار نشد.</p>
+                break;
+            }
+        case ConnectionStatuses.Reconnecting:
+            {
+                <p style="color:orangered;">تلاش برای ارتباط با سرور لطفا از اتصال اینترنت اطمینان حاصل فرمایید.</p>
+                break;
+            }
+    }
+}<div>
+    زمان باقی مانده:
+    <p> @remainTime</p>
+    @if (connectionStatus != ConnectionStatuses.Connected)
+    {
+        <p style="color:red">زمان در حالت عدم اتصال ممکن است دقیق نباشد.</p>
+    }
+</div>
 @code {
     [Parameter]
     public int examId { get; set; }
+    private HubConnection hubConnection;
+    ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
+    int totalSeconds;
+    string remainTime;
+
+    private Task OnConnectionClosed(Exception? error)
+    {
+        return Task.CompletedTask;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await Connect();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Connect()
+    {
+        try
+        {
+            hubConnection = new HubConnectionBuilder().WithUrl("http://localhost/ExamApi/startExam", options =>
+            {
+                options.Transports = HttpTransportType.LongPolling;
+                options.HttpMessageHandlerFactory = innerHandler => new IncludeCredentialsHandler
+                    {
+                        InnerHandler = innerHandler
+                    };
+            }).Build();
+
+
+
+            totalSeconds = 0;
+            hubConnection.On<int>("ReceiveRemaindSeconds", (remainingTime) =>
+               {
+                   totalSeconds = remainingTime;
+                   CreateTime();
+               });
+            hubConnection.Closed += OnDisconnected;
+            await hubConnection.StartAsync();
+            connectionStatus = ConnectionStatuses.Connected;
+            await hubConnection.InvokeAsync("ReceiveRemaindSeconds", examId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            connectionStatus = ConnectionStatuses.CantConnect;
+
+        }
+        StateHasChanged();
+    }
+    private async Task OnDisconnected(Exception? exception)
+    {
+        hubConnection.Closed += OnDisconnected;
+        connectionStatus = ConnectionStatuses.Disconnected;
+        StateHasChanged();
+        CountDown();
+        while (hubConnection.State == HubConnectionState.Disconnected)
+        {
+            try
+            {
+                await Task.Delay(500);
+                await hubConnection.StartAsync();
+                connectionStatus = ConnectionStatuses.Connected;
+                await hubConnection.InvokeAsync("ReceiveRemaindSeconds", examId);
+                await InvokeAsync(StateHasChanged);
+            }
+            catch
+            {
+                connectionStatus = ConnectionStatuses.Reconnecting;
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        StateHasChanged();
+
+    }
+    private void CreateTime()
+    {
+        var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(totalSeconds));
+        remainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
+        StateHasChanged();
+    }
+    private async Task CountDown()
+    {
+        while (connectionStatus != ConnectionStatuses.Connected)
+        {
+            await Task.Delay(1000);
+            totalSeconds -= 1;
+            CreateTime();
+            StateHasChanged();
+        }
+    }
+
+
 }
+
