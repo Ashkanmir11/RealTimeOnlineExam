@@ -4,7 +4,7 @@
 
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
-<ExamStatusComponent ExamId="@ExamId"></ExamStatusComponent>
+<ExamStatusComponent ExamId="@ExamId" afterConnect="@SaveChangeAfterConnect"></ExamStatusComponent>
 <h3>StartExam</h3>
 @{
     if (result == null || result.Data.Count == 0)
@@ -17,7 +17,6 @@
             @{
                 <p>@question.QuestionText</p>
                 <p>@question.TotalScore</p>
-                Console.WriteLine("arrive forech");
                 if (question.TrueOrFalseQuestion != null)
                 {
                     <label>پاسخ:</label>
@@ -65,6 +64,19 @@
         }
         StateHasChanged();
     }
+    private async Task SaveChangeAfterConnect()
+    {
+        Console.WriteLine("hi");
+        foreach(var item in result.Data)
+        {
+            if(item.TrueOrFalseQuestion!=null)
+            {
+                Console.WriteLine("hello");
+
+                await UpdateTrueOrFalseAnswer(item.Id);
+            }
+        }
+    }
     private async Task<GetTrueOrFalseAnswerStudentDTO> GetMyTrueOrFlaseAnswer(int questionId)
     {
         var answerResult = await _examServices.GetMyTrueOrFalseAnswer(questionId);
@@ -80,7 +92,6 @@
     }
     private async Task UpdateTrueOrFalseAnswer(int questionId)
     {
-        Console.WriteLine("hi");
         var answer = await GetMyTrueOrFlaseAnswer(questionId);
         if (answer == null)
         {

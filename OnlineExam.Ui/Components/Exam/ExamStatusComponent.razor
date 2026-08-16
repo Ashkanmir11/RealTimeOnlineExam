@@ -39,11 +39,12 @@
 @code {
     [Parameter]
     public int ExamId { get; set; }
+    [Parameter]
+    public EventCallback afterConnect { get; set; }
     private HubConnection hubConnection;
     ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
     int totalSeconds;
     string remainTime;
-
     private Task OnConnectionClosed(Exception? error)
     {
         return Task.CompletedTask;
@@ -94,12 +95,13 @@
         connectionStatus = ConnectionStatuses.Disconnected;
         StateHasChanged();
         CountDown();
-        while (hubConnection.State == HubConnectionState.Disconnected)
+        while (connectionStatus == ConnectionStatuses.Disconnected || connectionStatus == ConnectionStatuses.Reconnecting)
         {
             try
             {
-                await Task.Delay(500);
+                await Task.Delay(5000);
                 await hubConnection.StartAsync();
+                await afterConnect.InvokeAsync();
                 connectionStatus = ConnectionStatuses.Connected;
                 await hubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
                 await InvokeAsync(StateHasChanged);
