@@ -1,11 +1,11 @@
 ﻿@using OnlineExam.Ui.Components.Exam;
 @using OnlineExam.Ui.DTO.Question
 @using OnlineExam.Ui.DTO.TrueOrFalseAnswers
-
+@using OnlineExam.Ui.DTO.DescriptiveAnswers
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
 <ExamStatusComponent ExamId="@ExamId" afterConnect="@SaveChangeAfterConnect"></ExamStatusComponent>
-<h3>StartExam</h3>
+<h3>@refreshTimer مانده تا ذخیره سازی خودکار</h3>
 @{
     if (result == null || result.Data.Count == 0)
     {
@@ -17,11 +17,16 @@
             @{
                 <p>@question.QuestionText</p>
                 <p>@question.TotalScore</p>
+                <label>پاسخ:</label>
                 if (question.TrueOrFalseQuestion != null)
                 {
-                    <label>پاسخ:</label>
-                    <InputCheckbox @bind-Value:after="()=>UpdateTrueOrFalseAnswer(question.Id)" @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer"></InputCheckbox>
+                    <InputCheckbox @bind-Value:after="()=>UpdateTrueOrFalseAnswer(question.TrueOrFalseQuestion.Id)" @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer"></InputCheckbox>
                 }
+                else if (question.DescriptiveQuestion != null)
+                {
+                    <InputTextArea @bind-Value="@question.DescriptiveAnswer.StudentAnswer" @onblur="()=>UpdateDescriptiveAnswer(question.DescriptiveQuestion.Id)"></InputTextArea>
+                }
+
             }
         </div>
 
@@ -32,10 +37,13 @@
 @code {
     [Parameter]
     public int ExamId { get; set; }
+    public int refreshTimer = 60;
     PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
+
         await GetData();
+        RefreshTimerCountDown();
         await base.OnInitializedAsync();
     }
     private async Task GetData()
@@ -50,13 +58,24 @@
         {
             foreach (var question in response.Data.Data)
             {
+                // quesiton type is true or false
                 if (question.TrueOrFalseQuestion != null)
                 {
                     question.TrueOrFalseAnswer = new GetTrueOrFalseAnswerStudentDTO();
-                    var answer = await GetMyTrueOrFlaseAnswer(question.Id);
+                    var answer = await GetMyTrueOrFlaseAnswer(question.TrueOrFalseQuestion.Id);
                     if (answer != null)
                     {
                         question.TrueOrFalseAnswer = answer;
+                    }
+                }
+                // quesiton type is Descriptive
+                else if (question.DescriptiveQuestion != null)
+                {
+                    question.DescriptiveAnswer = new GetDescriptiveAnswerStudentDTO();
+                    var answer = await GetMyDescriptiveAnswer(question.DescriptiveQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.DescriptiveAnswer = answer;
                     }
                 }
                 result.Data.Add(question);
@@ -66,17 +85,41 @@
     }
     private async Task SaveChangeAfterConnect()
     {
-        Console.WriteLine("hi");
-        foreach(var item in result.Data)
+        refreshTimer = 60;
+        foreach (var item in result.Data)
         {
-            if(item.TrueOrFalseQuestion!=null)
+            if (item.TrueOrFalseQuestion != null)
             {
-                Console.WriteLine("hello");
-
-                await UpdateTrueOrFalseAnswer(item.Id);
+                var answerExist = await GetMyTrueOrFlaseAnswer(item.TrueOrFalseQuestion.Id);
+                if (answerExist != null)
+                {
+                    await UpdateTrueOrFalseAnswer(item.TrueOrFalseQuestion.Id);
+                }
+            }
+            if (item.DescriptiveQuestion != null)
+            {
+                var answerExist = await GetMyDescriptiveAnswer(item.DescriptiveQuestion.Id);
+                if (answerExist != null)
+                {
+                    await UpdateDescriptiveAnswer(item.DescriptiveQuestion.Id);
+                }
             }
         }
     }
+    private async Task RefreshTimerCountDown()
+    {
+        while (true)
+        {
+            await Task.Delay(1000);
+            refreshTimer = refreshTimer - 1;
+            if (refreshTimer == 0)
+            {
+                 SaveChangeAfterConnect();
+            }
+            StateHasChanged();
+        }
+    }
+    #region true or false answers
     private async Task<GetTrueOrFalseAnswerStudentDTO> GetMyTrueOrFlaseAnswer(int questionId)
     {
         var answerResult = await _examServices.GetMyTrueOrFalseAnswer(questionId);
@@ -90,17 +133,17 @@
         }
 
     }
-    private async Task UpdateTrueOrFalseAnswer(int questionId)
+    private async Task UpdateTrueOrFalseAnswer(int questionDeatilId)
     {
-        var answer = await GetMyTrueOrFlaseAnswer(questionId);
+        var answer = await GetMyTrueOrFlaseAnswer(questionDeatilId);
         if (answer == null)
         {
             //add answer
             var newAnswer = new CreateTrueOrFalseAnswerDTO()
                 {
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.Id == questionId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
-                    TrueOrFalseQuestionId = questionId
+                    StudentAnswer = result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
+                    TrueOrFalseQuestionId = questionDeatilId
                 };
             var response = await _examServices.CreateTrueOrFalseAnswer(newAnswer);
             if (!response.IsSuccess)
@@ -118,7 +161,7 @@
             var newAnswer = new UpdateTrueOrFalseAnswerDTO()
                 {
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.Id == questionId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
+                    StudentAnswer = result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
                 };
             var response = await _examServices.UpdateTrueOrFalseAnswer(answer.Id, newAnswer);
             if (!response.IsSuccess)
@@ -132,8 +175,70 @@
 
         }
     }
+    #endregion
+
+    #region Descriptive answer
+    private async Task<GetDescriptiveAnswerStudentDTO> GetMyDescriptiveAnswer(int questionId)
+    {
+        var response = await _examServices.GetMyDescriptiveAnswer(questionId);
+
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+            return null;
+        }
+        if (response.StatusCode == 204)
+        {
+            return null;
+        }
+        return response.Data;
+    }
 
 
+    private async Task UpdateDescriptiveAnswer(int questionDeatilId)
+    {
+        var answer = await GetMyDescriptiveAnswer(questionDeatilId);
+        if (answer == null)
+        {
+            //add
+            var newAnswer = new CreateDescriptiveAnswersDTO()
+                {
+                    DescriptiveQuestionId = questionDeatilId,
+                    ExamId = ExamId,
+                    StudentAnswer = result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.CreateDescriptiveAnswers(newAnswer);
 
+            if (!response.IsSuccess)
+            {
+                SetErrors(Errors);
+            }
+            else
+            {
+                refreshTimer = 60;
+                await _jsRuntime.InvokeVoidAsync("alert", $"پاسخ ذخیره شد.");
+            }
+
+        }
+        else
+        {
+            var newAnswer = new UpdateDescriptiveAnswersDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.UpadteDescriptiveAnswers(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(Errors);
+            }
+            else
+            {
+                refreshTimer = 60;
+                await _jsRuntime.InvokeVoidAsync("alert", $"پاسخ ذخیره شد.");
+            }
+        }
+    }
+    #endregion
 }
 

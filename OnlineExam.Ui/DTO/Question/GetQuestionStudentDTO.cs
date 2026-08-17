@@ -1,4 +1,5 @@
 ﻿using OnlineExam.Ui.DTO.Common;
+using OnlineExam.Ui.DTO.DescriptiveAnswers;
 using OnlineExam.Ui.DTO.DescriptiveQuestion;
 using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
 using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
@@ -20,5 +21,6 @@ namespace OnlineExam.Ui.DTO.Question
         public GetDescriptiveQuestionStudentDTO? DescriptiveQuestion { get; set; }
         public GetMultipleChoiceQuestionStudentDTO? MultipleChoiceQuestion { get; set; }
         public GetTrueOrFalseAnswerStudentDTO? TrueOrFalseAnswer { get; set; }
+        public GetDescriptiveAnswerStudentDTO? DescriptiveAnswer { get; set; }
     }
 }

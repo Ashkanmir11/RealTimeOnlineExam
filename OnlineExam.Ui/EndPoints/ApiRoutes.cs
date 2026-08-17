@@ -80,6 +80,11 @@ namespace OnlineExam.Ui.EndPoints
         public const string CreateTrueOrFalseAnswer = $"{ApiUrl}/true-or-false-answers";
         public static string UpdateTrueOrFalseAnswer(int id) => $"{ApiUrl}/true-or-false-answers/{id}";
 
+        //Descriptive Answer
+        public static string GetMyDescriptiveAnswer(int questionId) => $"{ApiUrl}/descriptive-answers/my/{questionId}";
+        public const string CreateDescriptiveAnswer = $"{ApiUrl}/descriptive-answers";
+        public static string UpdateDescriptiveAnswer(int id) => $"{ApiUrl}/descriptive-answers/{id}";
+
     }
 
 

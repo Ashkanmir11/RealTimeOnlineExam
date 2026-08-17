@@ -5,33 +5,24 @@
 
 <h3>ExamStatusComponent</h3>
 @{
-    switch (connectionStatus)
+    switch (hubConnection.State)
     {
-        case ConnectionStatuses.Connected:
+        case HubConnectionState.Connected:
             {
                 <p style="color:green;">آنلاین</p>
                 break;
             }
-        case ConnectionStatuses.Disconnected:
-            {
-                <p style="color:red;">عدم ارتباط با سرور</p>
-                break;
-            }
-        case ConnectionStatuses.CantConnect:
-            {
-                <p style="color:red;">ارتباط با سرور برقرار نشد.</p>
-                break;
-            }
-        case ConnectionStatuses.Reconnecting:
+        default:
             {
                 <p style="color:orangered;">تلاش برای ارتباط با سرور لطفا از اتصال اینترنت اطمینان حاصل فرمایید.</p>
                 break;
             }
+
     }
 }<div>
     زمان باقی مانده:
     <p> @remainTime</p>
-    @if (connectionStatus != ConnectionStatuses.Connected)
+    @if (hubConnection.State != HubConnectionState.Connected)
     {
         <p style="color:red">زمان در حالت عدم اتصال ممکن است دقیق نباشد.</p>
     }
@@ -42,7 +33,7 @@
     [Parameter]
     public EventCallback afterConnect { get; set; }
     private HubConnection hubConnection;
-    ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
+    //ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
     int totalSeconds;
     string remainTime;
     private Task OnConnectionClosed(Exception? error)
@@ -78,13 +69,11 @@
                });
             hubConnection.Closed += OnDisconnected;
             await hubConnection.StartAsync();
-            connectionStatus = ConnectionStatuses.Connected;
             await hubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            connectionStatus = ConnectionStatuses.CantConnect;
 
         }
         StateHasChanged();
@@ -92,23 +81,20 @@
     private async Task OnDisconnected(Exception? exception)
     {
         hubConnection.Closed += OnDisconnected;
-        connectionStatus = ConnectionStatuses.Disconnected;
         StateHasChanged();
         CountDown();
-        while (connectionStatus == ConnectionStatuses.Disconnected || connectionStatus == ConnectionStatuses.Reconnecting)
+        while (hubConnection.State != HubConnectionState.Connected )
         {
             try
             {
                 await Task.Delay(5000);
                 await hubConnection.StartAsync();
                 await afterConnect.InvokeAsync();
-                connectionStatus = ConnectionStatuses.Connected;
                 await hubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
                 await InvokeAsync(StateHasChanged);
             }
             catch
             {
-                connectionStatus = ConnectionStatuses.Reconnecting;
                 await InvokeAsync(StateHasChanged);
             }
         }
@@ -123,7 +109,7 @@
     }
     private async Task CountDown()
     {
-        while (connectionStatus != ConnectionStatuses.Connected)
+        while (hubConnection.State != HubConnectionState.Connected)
         {
             await Task.Delay(1000);
             totalSeconds -= 1;

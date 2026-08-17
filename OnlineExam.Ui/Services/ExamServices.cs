@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Schema;
 using OnlineExam.Ui.DTO.Common;
+using OnlineExam.Ui.DTO.DescriptiveAnswers;
 using OnlineExam.Ui.DTO.Exam;
 using OnlineExam.Ui.DTO.Question;
 using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
@@ -136,6 +137,49 @@ namespace OnlineExam.Ui.Services
                 ApiUrl = apiUrl,
                 GetData = false,
                 Content = content,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<GetDescriptiveAnswerStudentDTO>> GetMyDescriptiveAnswer(int questionId)
+        {
+            var apiUrl = ApiRoutes.GetMyDescriptiveAnswer(questionId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<GetDescriptiveAnswerStudentDTO>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> CreateDescriptiveAnswers(CreateDescriptiveAnswersDTO createDescriptiveAnswersDTO)
+        {
+            var apiUrl = ApiRoutes.CreateDescriptiveAnswer;
+            var content= JsonContent.Create(createDescriptiveAnswersDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                Content = content,
+                HttpMethods = HttpMethod.Post,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> UpadteDescriptiveAnswers(int id,UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
+        {
+            var apiUrl = ApiRoutes.UpdateDescriptiveAnswer(id);
+            var content=JsonContent.Create(updateDescriptiveAnswersDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                Content = content,
+                GetData = false,
                 HttpMethods = HttpMethod.Put,
                 IncludeCredentials = true,
                 RequiresAuth = true
