@@ -2,6 +2,7 @@
 using OnlineExam.Ui.DTO.Common;
 using OnlineExam.Ui.DTO.DescriptiveAnswers;
 using OnlineExam.Ui.DTO.Exam;
+using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
 using OnlineExam.Ui.DTO.Question;
 using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
 using OnlineExam.Ui.EndPoints;
@@ -72,7 +73,7 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<UpdateExamDTO>(options);
         }
-        public async Task<CommonResponse<EmptyResponse>> UpdateAsync(int id,UpdateExamDTO updateExamDTO)
+        public async Task<CommonResponse<EmptyResponse>> UpdateAsync(int id, UpdateExamDTO updateExamDTO)
         {
             var apiUrl = ApiRoutes.UpdateExam(id);
             var content = JsonContent.Create(updateExamDTO);
@@ -83,13 +84,13 @@ namespace OnlineExam.Ui.Services
                 HttpMethods = HttpMethod.Put,
                 IncludeCredentials = true,
                 RequiresAuth = true,
-                Content=content
+                Content = content
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-        public async Task<CommonResponse<PaginateResponse<GetQuestionStudentDTO>>> StartExam(int examId,PaginateRequestDTO paginateRequestDTO)
+        public async Task<CommonResponse<PaginateResponse<GetQuestionStudentDTO>>> StartExam(int examId, PaginateRequestDTO paginateRequestDTO)
         {
-            var apiUrl = ApiRoutes.StartExam(paginateRequestDTO,examId);
+            var apiUrl = ApiRoutes.StartExam(paginateRequestDTO, examId);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -128,7 +129,7 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-        public async Task<CommonResponse<EmptyResponse>> UpdateTrueOrFalseAnswer(int id,UpdateTrueOrFalseAnswerDTO updateTrueOrFalseAnswerDTO)
+        public async Task<CommonResponse<EmptyResponse>> UpdateTrueOrFalseAnswer(int id, UpdateTrueOrFalseAnswerDTO updateTrueOrFalseAnswerDTO)
         {
             var apiUrl = ApiRoutes.UpdateTrueOrFalseAnswer(id);
             var content = JsonContent.Create(updateTrueOrFalseAnswerDTO);
@@ -159,7 +160,7 @@ namespace OnlineExam.Ui.Services
         public async Task<CommonResponse<EmptyResponse>> CreateDescriptiveAnswers(CreateDescriptiveAnswersDTO createDescriptiveAnswersDTO)
         {
             var apiUrl = ApiRoutes.CreateDescriptiveAnswer;
-            var content= JsonContent.Create(createDescriptiveAnswersDTO);
+            var content = JsonContent.Create(createDescriptiveAnswersDTO);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -171,10 +172,10 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-        public async Task<CommonResponse<EmptyResponse>> UpadteDescriptiveAnswers(int id,UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
+        public async Task<CommonResponse<EmptyResponse>> UpadteDescriptiveAnswers(int id, UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
         {
             var apiUrl = ApiRoutes.UpdateDescriptiveAnswer(id);
-            var content=JsonContent.Create(updateDescriptiveAnswersDTO);
+            var content = JsonContent.Create(updateDescriptiveAnswersDTO);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -183,6 +184,49 @@ namespace OnlineExam.Ui.Services
                 HttpMethods = HttpMethod.Put,
                 IncludeCredentials = true,
                 RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<GetMultipleChoiceAnswerStudentDTO>> GetMyMultipleChoiceAnswer(int questionId)
+        {
+            var apiUrl = ApiRoutes.GetMyMultipleChoiceAnswer(questionId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<GetMultipleChoiceAnswerStudentDTO>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>> CreateMultipleChoiceAnswer(CreateMultipleChoiceAnswerDTO createMultipleChoiceAnswerDTO)
+        {
+            var apiUrl = ApiRoutes.CreateMultipleChoiceAnswer;
+            var content=JsonContent.Create(createMultipleChoiceAnswerDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                HttpMethods = HttpMethod.Post,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+                Content=content
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
+        public async Task<CommonResponse<EmptyResponse>>UpdateMultipleChoiceAnswer(int id,UpdateMultipleChoiceAnswerDTO updateMultipleChoiceAnswerDTO)
+        {
+            var apiUrl = ApiRoutes.UpdateMultipleChoiceAnswer(id);
+            var content = JsonContent.Create(updateMultipleChoiceAnswerDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                Content = content,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                RequiresAuth = true,
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }

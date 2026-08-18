@@ -1,7 +1,8 @@
 ﻿@using OnlineExam.Ui.Components.Exam;
-@using OnlineExam.Ui.DTO.Question
-@using OnlineExam.Ui.DTO.TrueOrFalseAnswers
-@using OnlineExam.Ui.DTO.DescriptiveAnswers
+@using OnlineExam.Ui.DTO.Question;
+@using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
+@using OnlineExam.Ui.DTO.DescriptiveAnswers;
+@using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
 <ExamStatusComponent ExamId="@ExamId" afterConnect="@SaveChangeAfterConnect"></ExamStatusComponent>
@@ -26,6 +27,17 @@
                 {
                     <InputTextArea @bind-Value="@question.DescriptiveAnswer.StudentAnswer" @onblur="()=>UpdateDescriptiveAnswer(question.DescriptiveQuestion.Id)"></InputTextArea>
                 }
+                else if (question.MultipleChoiceQuestion != null)
+                {
+                    for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                    {
+                        <br />
+                        int index = i + 1;
+                        <label for="{@question.Id}multipleChoiceAnswer{@i}">@question.MultipleChoiceQuestion.Choices[i]</label>
+                        <input type="checkbox" id="@($"{question.Id}multipleChoiceAnswer{i}")"
+                               @onchange="arg=>GetSelectedItem(arg,index,question.Id,question.MultipleChoiceQuestion.Choices.Count,question.MultipleChoiceQuestion.Id)" />                        <br />
+                    }
+                }
 
             }
         </div>
@@ -38,6 +50,8 @@
     [Parameter]
     public int ExamId { get; set; }
     public int refreshTimer = 60;
+    bool dontNeed;
+    bool dataLoaded = false;
     PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
@@ -45,6 +59,7 @@
         await GetData();
         RefreshTimerCountDown();
         await base.OnInitializedAsync();
+        StateHasChanged();
     }
     private async Task GetData()
     {
@@ -78,11 +93,16 @@
                         question.DescriptiveAnswer = answer;
                     }
                 }
+                else if (question.MultipleChoiceQuestion != null)
+                {
+                    question.MultipleChoiceAnswer = new GetMultipleChoiceAnswerStudentDTO();
+
+                }
                 result.Data.Add(question);
             }
         }
-        StateHasChanged();
     }
+
     private async Task SaveChangeAfterConnect()
     {
         refreshTimer = 60;
@@ -104,6 +124,14 @@
                     await UpdateDescriptiveAnswer(item.DescriptiveQuestion.Id);
                 }
             }
+            else
+            {
+                var answer = await GetMyMultipleChoiceAnswer(item.MultipleChoiceQuestion.Id);
+                if (answer != null)
+                {
+                    await GetSelectedItem(null, (int)item.MultipleChoiceAnswer.StudentChoice, item.Id, item.MultipleChoiceQuestion.Choices.Count, item.MultipleChoiceQuestion.Id);
+                }
+            }
         }
     }
     private async Task RefreshTimerCountDown()
@@ -114,7 +142,7 @@
             refreshTimer = refreshTimer - 1;
             if (refreshTimer == 0)
             {
-                 SaveChangeAfterConnect();
+                SaveChangeAfterConnect();
             }
             StateHasChanged();
         }
@@ -152,7 +180,6 @@
             }
             else
             {
-                await _jsRuntime.InvokeVoidAsync("alert", "پاسخ ذخیره شد.");
             }
         }
         else
@@ -170,7 +197,6 @@
             }
             else
             {
-                await _jsRuntime.InvokeVoidAsync("alert", "پاسخ ذخیره شد.");
             }
 
         }
@@ -216,7 +242,6 @@
             else
             {
                 refreshTimer = 60;
-                await _jsRuntime.InvokeVoidAsync("alert", $"پاسخ ذخیره شد.");
             }
 
         }
@@ -235,9 +260,92 @@
             else
             {
                 refreshTimer = 60;
-                await _jsRuntime.InvokeVoidAsync("alert", $"پاسخ ذخیره شد.");
             }
         }
+    }
+    #endregion
+
+    #region Multiple choice answer
+    private async Task GetSelectedItem(ChangeEventArgs args, int selectedItem, int questionId, int totalChoices, int questionDeatilId)
+    {
+        var localData = result.Data.Where(e => e.MultipleChoiceQuestion?.Id == questionDeatilId).Select(e => e.MultipleChoiceAnswer).FirstOrDefault();
+        localData.StudentChoice = selectedItem;
+        await _jsRuntime.InvokeVoidAsync("CheckExamInputDuplicate", questionId, totalChoices, selectedItem);
+        await UpdateMultipleChoiceAnswer(selectedItem, questionDeatilId);
+        StateHasChanged();
+    }
+    private async Task<GetMultipleChoiceAnswerStudentDTO> GetMyMultipleChoiceAnswer(int questionDetailId)
+    {
+        var response = await _examServices.GetMyMultipleChoiceAnswer(questionDetailId);
+        if (response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode == 204)
+        {
+            return null;
+        }
+        return response.Data;
+
+    }
+    private async Task UpdateMultipleChoiceAnswer(int selectedItem, int questionDetailId)
+    {
+        var answer = await GetMyMultipleChoiceAnswer(questionDetailId);
+        if (answer == null)
+        {
+            //create
+            var newAnswer = new CreateMultipleChoiceAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    MultipleChoiceQuestionId = questionDetailId,
+                    StudentChoice = selectedItem
+                };
+            var response = await _examServices.CreateMultipleChoiceAnswer(newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+        }
+        else
+        {
+            var newAnswer = new UpdateMultipleChoiceAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentChoice = selectedItem
+                };
+            var response = await _examServices.UpdateMultipleChoiceAnswer(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+        }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (dataLoaded == false)
+        {
+            foreach (var question in result.Data)
+            {
+                if (question.MultipleChoiceQuestion != null)
+                {
+                    var answer = await GetMyMultipleChoiceAnswer(question.MultipleChoiceQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.MultipleChoiceAnswer = answer;
+                        await GetSelectedItem(null, (int)answer.StudentChoice, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id);
+                        dataLoaded = true;
+                        Console.WriteLine(dataLoaded);
+                    }
+                }
+            }
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
     #endregion
 }

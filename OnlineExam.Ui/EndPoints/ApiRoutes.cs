@@ -85,6 +85,12 @@ namespace OnlineExam.Ui.EndPoints
         public const string CreateDescriptiveAnswer = $"{ApiUrl}/descriptive-answers";
         public static string UpdateDescriptiveAnswer(int id) => $"{ApiUrl}/descriptive-answers/{id}";
 
+        //MultipleChoiec Answer
+        public static string GetMyMultipleChoiceAnswer(int questionId) => $"{ApiUrl}/multiple-choice-answers/my/{questionId}";
+        public const string CreateMultipleChoiceAnswer = $"{ApiUrl}/multiple-choice-answers";
+        public static string UpdateMultipleChoiceAnswer(int id) => $"{ApiUrl}/multiple-choice-answers/{id}";
+
+
     }
 
 
