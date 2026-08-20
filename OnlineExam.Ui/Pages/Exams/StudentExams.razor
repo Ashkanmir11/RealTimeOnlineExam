@@ -73,7 +73,8 @@
         }
         else
         {
-            _navigationManager.NavigateTo($"StartExam/{examId}");            
+            bool CanCopy = result.Data.Where(e => e.Id == examId).Select(e => e.AllowedCopy).FirstOrDefault();
+            _navigationManager.NavigateTo($"StartExam/{examId}?canCopy={CanCopy}");
         }
     }
 

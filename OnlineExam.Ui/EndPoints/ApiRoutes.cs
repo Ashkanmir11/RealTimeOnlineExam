@@ -57,6 +57,8 @@ namespace OnlineExam.Ui.EndPoints
             baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
+        //exam log
+        public const string CreateLog = $"{ApiUrl}/exam-logs";
         public static string DeleteExam(int id) => $"{ApiUrl}/exams/{id}";
         public static string GetExamById(int id) => $"{ApiUrl}/exams/{id}";
         public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";

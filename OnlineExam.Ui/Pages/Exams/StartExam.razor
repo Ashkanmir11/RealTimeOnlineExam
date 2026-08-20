@@ -5,6 +5,7 @@
 @using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
+@inject ExamLogServices _examLogServices;
 <ExamStatusComponent ExamId="@ExamId" afterConnect="@SaveChangeAfterConnect"></ExamStatusComponent>
 <h3>@refreshTimer مانده تا ذخیره سازی خودکار</h3>
 @{
@@ -49,17 +50,46 @@
 @code {
     [Parameter]
     public int ExamId { get; set; }
+    [SupplyParameterFromQuery]
+    public bool canCopy { get; set; }
     public int refreshTimer = 60;
     bool dontNeed;
     bool dataLoaded = false;
     PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
-
+        Console.WriteLine(canCopy);
         await GetData();
         RefreshTimerCountDown();
+        MonitorPage();
+
         await base.OnInitializedAsync();
         StateHasChanged();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (dataLoaded == false)
+        {
+            dataLoaded = true;
+            foreach (var question in result.Data)
+            {
+                if (question.MultipleChoiceQuestion != null)
+                {
+                    var answer = await GetMyMultipleChoiceAnswer(question.MultipleChoiceQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.MultipleChoiceAnswer = answer;
+                        await GetSelectedItem(null, (int)answer.StudentChoice, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id);
+                        Console.WriteLine(dataLoaded);
+                    }
+                }
+            }
+        }
+        if (!canCopy)
+        {
+            bool tryToPaste = await _jsRuntime.InvokeAsync<bool>("PreventCopyAndPaste");
+        }
+        await base.OnAfterRenderAsync(firstRender);
     }
     private async Task GetData()
     {
@@ -102,7 +132,6 @@
             }
         }
     }
-
     private async Task SaveChangeAfterConnect()
     {
         refreshTimer = 60;
@@ -147,6 +176,31 @@
             StateHasChanged();
         }
     }
+    private async Task MonitorPage()
+    {
+        while (true)
+        {
+            var monitor = await _jsRuntime.InvokeAsync<bool>("examPageMonitor");
+            if (monitor)
+            {
+                var response = await _examLogServices.LeavePageLog(ExamId);
+                if (!response.IsSuccess)
+                {
+                    SetErrors(response.Errors);
+                }
+                else
+                {
+                    await Task.Delay(30000);
+                }
+            }
+
+
+            await Task.Delay(1000);
+        }
+    }
+
+
+
     #region true or false answers
     private async Task<GetTrueOrFalseAnswerStudentDTO> GetMyTrueOrFlaseAnswer(int questionId)
     {
@@ -325,27 +379,6 @@
             {
             }
         }
-    }
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (dataLoaded == false)
-        {
-            foreach (var question in result.Data)
-            {
-                if (question.MultipleChoiceQuestion != null)
-                {
-                    var answer = await GetMyMultipleChoiceAnswer(question.MultipleChoiceQuestion.Id);
-                    if (answer != null)
-                    {
-                        question.MultipleChoiceAnswer = answer;
-                        await GetSelectedItem(null, (int)answer.StudentChoice, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id);
-                        dataLoaded = true;
-                        Console.WriteLine(dataLoaded);
-                    }
-                }
-            }
-        }
-        await base.OnAfterRenderAsync(firstRender);
     }
     #endregion
 }

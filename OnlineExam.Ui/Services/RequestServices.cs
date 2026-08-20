@@ -22,20 +22,6 @@ namespace OnlineExam.Ui.Services
 
             HttpRequestMessage request = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
             var result = new CommonResponse<TResult>();
-            if (requestOptions.RequiresAuth)
-            {
-                if (await refreshToken() == 401)
-                {
-                    result.IsSuccess = false;
-                    result.Errors = new()
-                    {
-                        "لطفا وارد شوید."
-                    };
-                    result.StatusCode = 401;
-                    return result;
-                }
-
-            }
             if (requestOptions.Content != null)
             {
                 request.Content = requestOptions.Content;
@@ -48,6 +34,23 @@ namespace OnlineExam.Ui.Services
             var response = await _httpClient.SendAsync(request);
             //fill response
             result.StatusCode = (int)response.StatusCode;
+            if(result.StatusCode==401 && requestOptions.RequiresAuth)
+            {
+                if (await refreshToken() == 401)
+                {
+                    result.IsSuccess = false;
+                    result.Errors = new()
+                    {
+                        "لطفا وارد شوید."
+                    };
+                    result.StatusCode = 401;
+                    return result;
+                }
+                else
+                {
+                    response = await _httpClient.SendAsync(request);
+                }
+            }
             if (response.IsSuccessStatusCode)
             {
                 var bodyExist=await response.Content.ReadAsStringAsync();
