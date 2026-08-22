@@ -230,6 +230,19 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
+        public async Task<CommonResponse<EmptyResponse>> EndExam(int examId)
+        {
+            var apiUrl=ApiRoutes.EndExam(examId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                HttpMethods = HttpMethod.Post,
+                IncludeCredentials = true,
+                RequiresAuth = true,
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
 
     }
 }

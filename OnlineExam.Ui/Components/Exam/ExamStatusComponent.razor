@@ -32,6 +32,8 @@
     public int ExamId { get; set; }
     [Parameter]
     public EventCallback afterConnect { get; set; }
+    [Parameter]
+    public EventCallback endExam { get; set; }
     private HubConnection hubConnection;
     //ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
     int totalSeconds;
@@ -83,7 +85,7 @@
         hubConnection.Closed += OnDisconnected;
         StateHasChanged();
         CountDown();
-        while (hubConnection.State != HubConnectionState.Connected )
+        while (hubConnection.State != HubConnectionState.Connected)
         {
             try
             {
@@ -101,10 +103,14 @@
         StateHasChanged();
 
     }
-    private void CreateTime()
+    private async void CreateTime()
     {
         var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(totalSeconds));
         remainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
+        if (totalSeconds == 0 && hubConnection.State == HubConnectionState.Connected)
+        {
+            await endExam.InvokeAsync();
+        }
         StateHasChanged();
     }
     private async Task CountDown()
@@ -112,9 +118,11 @@
         while (hubConnection.State != HubConnectionState.Connected)
         {
             await Task.Delay(1000);
-            totalSeconds -= 1;
+            if (totalSeconds <= 1)
+            {
+                totalSeconds -= 1;
+            }
             CreateTime();
-            StateHasChanged();
         }
     }
 }

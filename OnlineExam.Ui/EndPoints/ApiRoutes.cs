@@ -57,8 +57,7 @@ namespace OnlineExam.Ui.EndPoints
             baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
-        //exam log
-        public const string CreateLog = $"{ApiUrl}/exam-logs";
+         
         public static string DeleteExam(int id) => $"{ApiUrl}/exams/{id}";
         public static string GetExamById(int id) => $"{ApiUrl}/exams/{id}";
         public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";
@@ -68,6 +67,10 @@ namespace OnlineExam.Ui.EndPoints
             baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
+        public static string EndExam(int id) => $"{ApiUrl}/exams/{id}/end";
+        //exam log
+        public const string CreateLog = $"{ApiUrl}/exam-logs";
+
         //Question
         public const string CreateQuestion = $"{ApiUrl}/questions";
         public static string GetQuestionByExamId(PaginateRequestDTO paginateRequestDTO, int examId)

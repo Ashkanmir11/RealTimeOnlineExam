@@ -48,7 +48,17 @@ namespace OnlineExam.Ui.Services
                 }
                 else
                 {
-                    response = await _httpClient.SendAsync(request);
+                    HttpRequestMessage newRequest = new HttpRequestMessage(requestOptions.HttpMethods, requestOptions.ApiUrl);
+                    if (requestOptions.Content != null)
+                    {
+                        newRequest.Content = JsonContent.Create(requestOptions.Content);
+                    }
+                    if (requestOptions.IncludeCredentials)
+                    {
+                        newRequest.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
+                    }
+                     response = await _httpClient.SendAsync(newRequest);
+
                 }
             }
             if (response.IsSuccessStatusCode)
