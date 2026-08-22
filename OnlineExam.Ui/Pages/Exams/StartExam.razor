@@ -60,16 +60,20 @@
     public int ExamId { get; set; }
     [SupplyParameterFromQuery]
     public bool canCopy { get; set; }
+    [SupplyParameterFromQuery]
+    public bool StudentLog { get; set; }
     public int refreshTimer = 60;
-    bool dontNeed;
     bool dataLoaded = false;
     PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(StudentLog);
         await GetData();
         RefreshTimerCountDown();
-        MonitorPage();
-
+        if (StudentLog)
+        {
+            MonitorPage();
+        }
         await base.OnInitializedAsync();
         StateHasChanged();
     }

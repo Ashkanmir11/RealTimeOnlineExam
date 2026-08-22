@@ -74,7 +74,8 @@
         else
         {
             bool CanCopy = result.Data.Where(e => e.Id == examId).Select(e => e.AllowedCopy).FirstOrDefault();
-            _navigationManager.NavigateTo($"StartExam/{examId}?canCopy={CanCopy}");
+            bool StudentLog = result.Data.Where(e => e.Id == examId).Select(e => e.LogStudent).FirstOrDefault();
+            _navigationManager.NavigateTo($"StartExam/{examId}?canCopy={CanCopy}&&StudentLog={StudentLog}");
         }
     }
 
