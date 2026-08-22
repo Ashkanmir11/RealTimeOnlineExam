@@ -57,8 +57,8 @@ namespace OnlineExam.Ui.Services
                     {
                         newRequest.SetBrowserRequestCredentials(BrowserRequestCredentials.Include);
                     }
-                     response = await _httpClient.SendAsync(newRequest);
-
+                    response = await _httpClient.SendAsync(newRequest);
+                    result.StatusCode = (int)response.StatusCode;
                 }
             }
             if (response.IsSuccessStatusCode)

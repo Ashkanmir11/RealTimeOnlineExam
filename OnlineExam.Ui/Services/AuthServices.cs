@@ -58,8 +58,10 @@ namespace OnlineExam.Ui.Services
                 HttpMethods = HttpMethod.Post,
                 ApiUrl = apiUrl,
                 IncludeCredentials = true,
+                RequiresAuth=true,
+                GetData=false,       
             };
-            await _requestServices.SendAsync(options);
+            await _requestServices.SendAsync<EmptyResponse>(options);
         }
         public async Task<bool> IsUserLogin()
         {
