@@ -64,7 +64,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             {
                 errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            if(errors.Count!=0)
+            if(errors.Count>0)
             {
                 throw new Application.Exceptions.ValidationException(errors);
             }

@@ -30,7 +30,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
         {
             var errors = new List<string>();
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var question = await _questionRepository.GetByQuestionDetailIdAsync(true, false, false, request.UpdateTrueOrFalseAnswerTeacherDTO.ExamId);
+            var question = await _questionRepository.GetByQuestionDetailIdAsync(true, false, false, request.Id);
             if (question == null)
             {
                 throw new NotFoundException("سوال یافت نشد.");
@@ -48,6 +48,9 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             if (validationResult.IsValid == false)
             {
                 errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+            }
+            if(errors.Count>0)
+            {
                 throw new Application.Exceptions.ValidationException(errors);
             }
             await _trueOrFalseAnswersRepository.UpdateAsync(request.Id, request.UpdateTrueOrFalseAnswerTeacherDTO);

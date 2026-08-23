@@ -55,6 +55,9 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             if (validationResult.IsValid == false)
             {
                 errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+            }
+            if(errors.Count>0)
+            {
                 throw new Application.Exceptions.ValidationException(errors);
             }
             await _multipleChoiceAnswerRepository.UpdateAsync(request.Id, request.UpdateMultipleChoiceAnswerTeacherDTO);
