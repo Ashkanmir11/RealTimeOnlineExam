@@ -6,6 +6,7 @@
 @inject ExamServices _examServices;
 <h3>StudentAnswer</h3>
 <p style="color:red">توجه نمرات وارد شده توسط هوش مصنوعی نمره گذاری شده و امکان اشتباه وجود دارد.</p>
+<ErrorComponent Errors="Errors"></ErrorComponent>
 @{
     if (result.Data == null || result.Data.Count == 0)
     {
@@ -87,7 +88,6 @@
         }
     }
 }
-<ErrorComponent Errors="Errors"></ErrorComponent>
 @code {
     [Parameter]
     public int ExamId { get; set; }
@@ -126,7 +126,7 @@
             {
                 totalScore += question.DescriptiveQuestion.Answer == null ? 0 : question.DescriptiveQuestion.Answer.StudentScore;
             }
-            if(question.MultipleChoiceQuestion!=null)
+            if (question.MultipleChoiceQuestion != null)
             {
                 totalScore += question.MultipleChoiceQuestion.Answer == null ? 0 : question.MultipleChoiceQuestion.Answer.StudentScore;
 
@@ -153,7 +153,7 @@
                         {
                             quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
                             var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
-                            await GradeTrueOrFalseAnswer(answerId, score);
+                            await Grading(answerId, score, QuestionType.TrueOrFalse);
                         }
                         break;
                     }
@@ -163,7 +163,7 @@
                         {
                             quesiton.DescriptiveQuestion.Answer.StudentScore = score;
                             var answerId = quesiton.DescriptiveQuestion.Answer.Id;
-                            await GradeDescritiveAnswer(answerId, score);
+                            await Grading(answerId, score, QuestionType.Descripite);
                         }
                         break;
                     }
@@ -173,7 +173,7 @@
                         {
                             quesiton.MultipleChoiceQuestion.Answer.StudentScore = score;
                             var answerId = quesiton.MultipleChoiceQuestion.Answer.Id;
-                            await GradeMultipleChoiceAnswer(answerId, score);
+                            await Grading(answerId, score, QuestionType.MultipleChoice);
                         }
                         break;
                     }
@@ -186,15 +186,43 @@
             SetErrors("مقدار عددی معتبر وارد کنید.");
         }
     }
-    #region grading
-    private async Task GradeTrueOrFalseAnswer(int answerId, decimal score)
+    private async Task Grading(int answerId, decimal score, QuestionType questionType)
     {
-        var newScore = new UpdateTrueOrFalseAnswerTeacherDTO()
-            {
-                ExamId = ExamId,
-                StudentScore = score
-            };
-        var response = await _examServices.GradeTrueOrFalseQuestion(newScore, answerId);
+        var response = new CommonResponse<EmptyResponse>();
+        switch (questionType)
+        {
+            case QuestionType.TrueOrFalse:
+                {
+                    var newScore = new UpdateTrueOrFalseAnswerTeacherDTO()
+                        {
+                            ExamId = ExamId,
+                            StudentScore = score
+                        };
+                    response = await _examServices.GradeTrueOrFalseQuestion(newScore, answerId);
+                    break;
+                }
+            case QuestionType.Descripite:
+                {
+                    var newScore = new UpdateDescriptiveAnswersTeacherDTO()
+                        {
+                            ExamId = ExamId,
+                            StudentScore = score
+                        };
+                    response = await _examServices.GradeDescriptiveQuestion(newScore, answerId);
+                    break;
+                }
+            case QuestionType.MultipleChoice:
+                {
+                    var newScore = new UpdateMultipleChoiceAnswerTeacherDTO()
+                        {
+                            ExamId = ExamId,
+                            StudentScore = score
+                        };
+                    response = await _examServices.GradeMultiplechoiceQuestion(newScore, answerId);
+                    break;
+                }
+        }
+
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);
@@ -205,42 +233,5 @@
             await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
         }
     }
-    private async Task GradeDescritiveAnswer(int answerId, decimal score)
-    {
-        var newScore = new UpdateDescriptiveAnswersTeacherDTO()
-            {
-                ExamId = ExamId,
-                StudentScore = score
-            };
-        var response = await _examServices.GradeDescriptiveQuestion(newScore, answerId);
-        if (!response.IsSuccess)
-        {
-            SetErrors(response.Errors);
-        }
-        else
-        {
-            ShowTotalScore();
-            await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
-        }
-    }
-    private async Task GradeMultipleChoiceAnswer(int answerId, decimal score)
-    {
-        var newScore = new UpdateMultipleChoiceAnswerTeacherDTO()
-            {
-                ExamId = ExamId,
-                StudentScore = score
-            };
-        var response = await _examServices.GradeMultiplechoiceQuestion(newScore, answerId);
-        if (!response.IsSuccess)
-        {
-            SetErrors(response.Errors);
-        }
-        else
-        {
-            ShowTotalScore();
-            await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
-        }
-    }
-    #endregion
 
 }
