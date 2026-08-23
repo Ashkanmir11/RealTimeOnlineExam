@@ -11,6 +11,7 @@
     }
     else
     {
+        <p>نمره کامل دانشجو:@totalScore</p>
         foreach (var question in result.Data)
         {
             <div style="border:2px solid black">
@@ -30,7 +31,6 @@
 
                         <label for="studentScore">نمره دانشجو:</label>
                         <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeTrueOrFlaseScore(arg,question.Id)" />
-                        <button @onclick="()=>GradeTrueOrFalseAnswer(question.TrueOrFalseQuestion.Answer.Id,question.TrueOrFalseQuestion.Answer.StudentScore)">ثبت نمره</button>
                     }
                 }
             </div>
@@ -45,9 +45,11 @@
     [SupplyParameterFromQuery]
     public string? StudentId { get; set; }
     PaginateResponse<GetQuestionWithAnswerDTO> result = new PaginateResponse<GetQuestionWithAnswerDTO>();
+    decimal totalScore;
     protected override async Task OnInitializedAsync()
     {
         await GetData();
+        ShowTotalScore();
         await base.OnInitializedAsync();
     }
     private async Task GetData()
@@ -62,16 +64,35 @@
             result.Data = response.Data.Data;
         }
     }
+    private void ShowTotalScore()
+    {
+        totalScore = 0;
+        foreach (var question in result.Data)
+        {
+            if (question.TrueOrFalseQuestion != null)
+            {
+                totalScore += question.TrueOrFalseQuestion.Answer == null ? 0 : question.TrueOrFalseQuestion.Answer.StudentScore;
+            }
+        }
+        StateHasChanged();
+    }
     private async Task ChangeTrueOrFlaseScore(ChangeEventArgs arg, int questionId)
     {
         try
         {
-            
-            decimal score = Convert.ToDecimal(arg.Value);
+            var value = arg.Value.ToString();
+            if (value.Contains("/"))
+            {
+                value = value.Replace("/", ".");
+            }
+            decimal score = Convert.ToDecimal(value);
             var quesiton = result.Data.Where(e => e.Id == questionId).FirstOrDefault();
-            quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
-            var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
-            await GradeTrueOrFalseAnswer(answerId, score);
+            if (quesiton.TrueOrFalseQuestion.Answer != null)
+            {
+                quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
+                var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
+                await GradeTrueOrFalseAnswer(answerId, score);
+            }
 
         }
         catch (Exception ex)
@@ -93,7 +114,8 @@
         }
         else
         {
-            await _jsRuntime.InvokeVoidAsync("alert", "save grade");
+            ShowTotalScore();
+            await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
         }
     }
 }
