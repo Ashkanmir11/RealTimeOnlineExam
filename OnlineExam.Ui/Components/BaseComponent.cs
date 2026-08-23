@@ -26,6 +26,12 @@ namespace OnlineExam.Ui.Components
             }
             StateHasChanged();
         }
+        public void SetOrderById(bool descending)
+        {
+            PaginateRequestDTO.SortBy = "Id";
+            PaginateRequestDTO.Descending = descending;
+
+        }
         public void SetPaginateOrder(string orderBy,bool descending)
         {
             PaginateRequestDTO.SortBy=orderBy;

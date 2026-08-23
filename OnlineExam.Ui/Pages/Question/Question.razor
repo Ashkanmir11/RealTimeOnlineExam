@@ -5,6 +5,7 @@
 @inject QuestionServices _questionServices;
 <h3>Question</h3>
 @{
+    <p>نمره کامل: @TotalScore</p>
     if (ShowCreate == false)
     {
         <button onclick="@ChangeShowCreatStatus">افزودن سوال</button>
@@ -68,14 +69,15 @@
     }
 
 }
+<PaginateComponent CurrentPage="Result.PageNumber" TotalPage="Result.TotalPage" SelectedPage="ChangePage"></PaginateComponent>
 <ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
 
     [Parameter]
     public int examId { get; set; }
     bool ShowCreate = false;
+    decimal TotalScore;
     PaginateResponse<GetQuestionTeacherDTO> Result = new PaginateResponse<GetQuestionTeacherDTO>();
-    PaginateRequestDTO paginateRequestDTO = new PaginateRequestDTO();
     protected async override Task OnInitializedAsync()
     {
         await GetData();
@@ -100,16 +102,18 @@
     }
     private async Task GetData()
     {
+        SetOrderById(false);
         Result.Data = new List<GetQuestionTeacherDTO>();
-        var response = await _questionServices.GetByExamIdTeacher(paginateRequestDTO, examId);
-        if (response.IsSuccess)
-        {
-            Result = response.Data;
-        }
-        else if (response.StatusCode != 204)
+        var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), examId);
+        if (!response.IsSuccess)
         {
             SetErrors(response.Errors);
         }
+        else if (response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        RefreshTotalScore();
         StateHasChanged();
     }
     private async Task AddComplete(bool complete)
@@ -117,5 +121,22 @@
         await GetData();
     }
 
+    private void RefreshTotalScore()
+    {
+        TotalScore = 0;
+        if (Result.Data != null)
+        {
+            foreach (var item in Result.Data)
+            {
+                TotalScore += item.TotalScore;
+            }
+        }
+        StateHasChanged();
+    }
+    private async void ChangePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        await GetData();
+    }
 
 }
