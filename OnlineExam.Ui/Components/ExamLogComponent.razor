@@ -1,0 +1,51 @@
+﻿@using OnlineExam.Ui.DTO.ExamLog;
+@inject ExamLogServices _examLogServices;
+<h3>ExamLogComponent</h3>
+@{
+    if (Logs==null || Logs.Count == 0)
+    {
+        <p>لاگی موجود نیست.</p>
+    }
+    else
+    {
+
+        <table> 
+            <tr>
+                <th>نوع لاگ</th>
+            </tr>
+            <tr>
+                <th>توضیحات</th>
+            </tr>
+            @foreach (var log in Logs)
+            {
+                <tr>
+                    <td>@log.LogType.Name</td>
+                    <td>@log.LogDescription</td>
+                </tr>
+            }
+        </table>
+
+    }
+}
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public required string StudentId { get; set; }
+    List<GetExamLogDTO> Logs = new List<GetExamLogDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _examLogServices.GetLogs(ExamId, StudentId);
+        if (response.IsSuccess && response.StatusCode != 204)
+        {
+            Logs = response.Data;
+        }
+        StateHasChanged();
+    }
+}

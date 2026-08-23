@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineExam.Application.DTO.DescriptiveAnswers
+namespace OnlineExam.Ui.DTO.DescriptiveAnswers
 {
     public class GetDescriptiveAnswersTeacherDTO : BaseDTO
     {

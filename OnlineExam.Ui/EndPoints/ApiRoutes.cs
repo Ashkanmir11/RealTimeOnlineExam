@@ -80,7 +80,7 @@ namespace OnlineExam.Ui.EndPoints
         }
         //exam log
         public const string CreateLog = $"{ApiUrl}/exam-logs";
-
+        public static string GetLogs(int examId, string studentId) => $"{ApiUrl}/exam-logs/{examId}/{studentId}";
         //Question
         public const string CreateQuestion = $"{ApiUrl}/questions";
         public static string GetQuestionByExamId(PaginateRequestDTO paginateRequestDTO, int examId)

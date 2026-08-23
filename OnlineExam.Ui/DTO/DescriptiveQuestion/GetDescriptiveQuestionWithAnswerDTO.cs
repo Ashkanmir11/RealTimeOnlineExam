@@ -1,5 +1,4 @@
-﻿using OnlineExam.Application.DTO.DescriptiveAnswers;
-
+﻿using OnlineExam.Ui.DTO.DescriptiveAnswers;
 namespace OnlineExam.Ui.DTO.DescriptiveQuestion
 {
     public class GetDescriptiveQuestionWithAnswerDTO

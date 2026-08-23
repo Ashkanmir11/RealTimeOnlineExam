@@ -60,5 +60,18 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
+        public async Task<CommonResponse<List<GetExamLogDTO>>> GetLogs(int examId,string studentId)
+        {
+            var apiUrl = ApiRoutes.GetLogs(examId, studentId);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = true,
+                HttpMethods = HttpMethod.Get,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<List<GetExamLogDTO>>(options);
+        }
     }
 }
