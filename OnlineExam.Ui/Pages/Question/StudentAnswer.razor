@@ -2,11 +2,11 @@
 @using OnlineExam.Ui.DTO.TrueOrFalseAnswers
 @using OnlineExam.Ui.DTO.DescriptiveAnswers
 @using OnlineExam.Ui.DTO.MultipleChoiceAnswers
+@using OnlineExam.Ui.Components.Exam
 @page "/studentAnswer/{ExamId:int}"
 @inject ExamServices _examServices;
 <h3>StudentAnswer</h3>
 <p style="color:red">توجه نمرات وارد شده توسط هوش مصنوعی نمره گذاری شده و امکان اشتباه وجود دارد.</p>
-<ErrorComponent Errors="Errors"></ErrorComponent>
 <div style="display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;">
     <div style="width:60%;">
         @{
@@ -90,10 +90,9 @@
             }
         }
     </div>
-    <div style="width:30%;">
-        <ExamLogComponent ExamId="@ExamId" StudentId="@StudentId"></ExamLogComponent>
-    </div>
+    <ExamLogComponent ExamId="@ExamId" StudentId="@StudentId"></ExamLogComponent>
 </div>
+<ErrorComponent Errors="Errors"></ErrorComponent>
 
 @code {
     [Parameter]
