@@ -287,6 +287,21 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
+        public async Task<CommonResponse<EmptyResponse>> GradeMultiplechoiceQuestion(UpdateMultipleChoiceAnswerTeacherDTO updateMultipleChoiceAnswerTeacherDTO, int answerId)
+        {
+            var apiUrl = ApiRoutes.GradeMultiplechoiceAnswer(answerId);
+            var content = JsonContent.Create(updateMultipleChoiceAnswerTeacherDTO);
+            var options = new RequestOptions()
+            {
+                ApiUrl = apiUrl,
+                GetData = false,
+                Content = content,
+                HttpMethods = HttpMethod.Put,
+                IncludeCredentials = true,
+                RequiresAuth = true
+            };
+            return await _requestServices.SendAsync<EmptyResponse>(options);
+        }
 
     }
 }

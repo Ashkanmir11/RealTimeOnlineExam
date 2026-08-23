@@ -1,6 +1,7 @@
 ﻿@using OnlineExam.Ui.DTO.Question
 @using OnlineExam.Ui.DTO.TrueOrFalseAnswers
 @using OnlineExam.Ui.DTO.DescriptiveAnswers
+@using OnlineExam.Ui.DTO.MultipleChoiceAnswers
 @page "/studentAnswer/{ExamId:int}"
 @inject ExamServices _examServices;
 <h3>StudentAnswer</h3>
@@ -56,6 +57,30 @@
                             <input Value="@question.DescriptiveQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.Descripite)" />
                         }
                     }
+                    if (question.MultipleChoiceQuestion != null)
+                    {
+
+                        @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                        {
+                            var index = i + 1;
+                            <p>@question.MultipleChoiceQuestion.Choices[i]</p>
+                        }
+                        if (question.MultipleChoiceQuestion.Answer == null)
+                        {
+                            <p>دانشجو پاسخی نداده است.</p>
+                        }
+                        else
+                        {
+                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                            <p>
+                                گزینه :@question.MultipleChoiceQuestion.Choices[(int)@question.MultipleChoiceQuestion.Answer.StudentChoice - 1]
+                            </p>
+                            <label for="studentScore">نمره دانشجو:</label>
+                            <input Value="@question.MultipleChoiceQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.MultipleChoice)" />
+
+                        }
+
+                    }
                 }
             </div>
 
@@ -97,14 +122,18 @@
             {
                 totalScore += question.TrueOrFalseQuestion.Answer == null ? 0 : question.TrueOrFalseQuestion.Answer.StudentScore;
             }
-            if(question.DescriptiveQuestion!=null)
+            if (question.DescriptiveQuestion != null)
             {
                 totalScore += question.DescriptiveQuestion.Answer == null ? 0 : question.DescriptiveQuestion.Answer.StudentScore;
+            }
+            if(question.MultipleChoiceQuestion!=null)
+            {
+                totalScore += question.MultipleChoiceQuestion.Answer == null ? 0 : question.MultipleChoiceQuestion.Answer.StudentScore;
+
             }
         }
         StateHasChanged();
     }
-    #region true or flase answer
     private async Task ChangeScore(ChangeEventArgs arg, int questionId, QuestionType questionType)
     {
         try
@@ -130,11 +159,21 @@
                     }
                 case QuestionType.Descripite:
                     {
-                        if(quesiton.DescriptiveQuestion.Answer!=null)
+                        if (quesiton.DescriptiveQuestion.Answer != null)
                         {
                             quesiton.DescriptiveQuestion.Answer.StudentScore = score;
                             var answerId = quesiton.DescriptiveQuestion.Answer.Id;
-                            await GradeeDescritiveAnswer(answerId, score);
+                            await GradeDescritiveAnswer(answerId, score);
+                        }
+                        break;
+                    }
+                case QuestionType.MultipleChoice:
+                    {
+                        if (quesiton.MultipleChoiceQuestion.Answer != null)
+                        {
+                            quesiton.MultipleChoiceQuestion.Answer.StudentScore = score;
+                            var answerId = quesiton.MultipleChoiceQuestion.Answer.Id;
+                            await GradeMultipleChoiceAnswer(answerId, score);
                         }
                         break;
                     }
@@ -147,6 +186,7 @@
             SetErrors("مقدار عددی معتبر وارد کنید.");
         }
     }
+    #region grading
     private async Task GradeTrueOrFalseAnswer(int answerId, decimal score)
     {
         var newScore = new UpdateTrueOrFalseAnswerTeacherDTO()
@@ -165,7 +205,7 @@
             await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
         }
     }
-    private async Task GradeeDescritiveAnswer(int answerId, decimal score)
+    private async Task GradeDescritiveAnswer(int answerId, decimal score)
     {
         var newScore = new UpdateDescriptiveAnswersTeacherDTO()
             {
@@ -173,6 +213,24 @@
                 StudentScore = score
             };
         var response = await _examServices.GradeDescriptiveQuestion(newScore, answerId);
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            ShowTotalScore();
+            await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
+        }
+    }
+    private async Task GradeMultipleChoiceAnswer(int answerId, decimal score)
+    {
+        var newScore = new UpdateMultipleChoiceAnswerTeacherDTO()
+            {
+                ExamId = ExamId,
+                StudentScore = score
+            };
+        var response = await _examServices.GradeMultiplechoiceQuestion(newScore, answerId);
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

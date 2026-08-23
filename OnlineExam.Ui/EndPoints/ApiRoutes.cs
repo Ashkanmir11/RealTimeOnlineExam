@@ -69,6 +69,7 @@ namespace OnlineExam.Ui.EndPoints
         }
         public static string GradeTrueOrFalseAnswer(int answerId) => $"{ApiUrl}/true-or-false-answers/{answerId}/Grade";
         public static string GradeDescriptiveAnswer(int answerId) => $"{ApiUrl}/descriptive-answers/{answerId}/Grade";
+        public static string GradeMultiplechoiceAnswer(int answerId) => $"{ApiUrl}/multiple-choice-answers/{answerId}/Grade";
 
         public static string EndExam(int id) => $"{ApiUrl}/exams/{id}/end";
         public static string GetStudentQuestionWithAnswer(int examId,string studentId,PaginateRequestDTO paginateRequestDTO)
