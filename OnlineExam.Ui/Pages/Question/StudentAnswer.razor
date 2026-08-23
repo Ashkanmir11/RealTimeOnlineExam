@@ -1,5 +1,6 @@
 ﻿@using OnlineExam.Ui.DTO.Question
 @using OnlineExam.Ui.DTO.TrueOrFalseAnswers
+@using OnlineExam.Ui.DTO.DescriptiveAnswers
 @page "/studentAnswer/{ExamId:int}"
 @inject ExamServices _examServices;
 <h3>StudentAnswer</h3>
@@ -25,12 +26,35 @@
                     {
                         <label for="correctAnswer">پاسخ صحیح:</label>
                         <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer" id="correctAnswer" disabled />
+                        if (question.TrueOrFalseQuestion.Answer == null)
+                        {
+                            <p>دانشجو پاسخی نداده است.</p>
+                        }
+                        else
+                        {
+                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                            <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+                            <label for="studentScore">نمره دانشجو:</label>
+                            <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.TrueOrFalse)" />
+                        }
 
-                        <label for="studentAnswer">پاسخ دانشجو:</label>
-                        <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+                    }
+                    if (question.DescriptiveQuestion != null)
+                    {
+                        <label for="correctAnswer">پاسخ صحیح:</label>
+                        <InputTextArea @bind-Value="question.DescriptiveQuestion.CorrectAnswer" id="correctAnswer" disabled />
 
-                        <label for="studentScore">نمره دانشجو:</label>
-                        <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeTrueOrFlaseScore(arg,question.Id)" />
+                        if (question.DescriptiveQuestion.Answer == null)
+                        {
+                            <p>دانشجو پاسخی نداده است.</p>
+                        }
+                        else
+                        {
+                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                            <InputTextArea @bind-Value="question.DescriptiveQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+                            <label for="studentScore">نمره دانشجو:</label>
+                            <input Value="@question.DescriptiveQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.Descripite)" />
+                        }
                     }
                 }
             </div>
@@ -73,10 +97,15 @@
             {
                 totalScore += question.TrueOrFalseQuestion.Answer == null ? 0 : question.TrueOrFalseQuestion.Answer.StudentScore;
             }
+            if(question.DescriptiveQuestion!=null)
+            {
+                totalScore += question.DescriptiveQuestion.Answer == null ? 0 : question.DescriptiveQuestion.Answer.StudentScore;
+            }
         }
         StateHasChanged();
     }
-    private async Task ChangeTrueOrFlaseScore(ChangeEventArgs arg, int questionId)
+    #region true or flase answer
+    private async Task ChangeScore(ChangeEventArgs arg, int questionId, QuestionType questionType)
     {
         try
         {
@@ -87,12 +116,30 @@
             }
             decimal score = Convert.ToDecimal(value);
             var quesiton = result.Data.Where(e => e.Id == questionId).FirstOrDefault();
-            if (quesiton.TrueOrFalseQuestion.Answer != null)
+            switch (questionType)
             {
-                quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
-                var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
-                await GradeTrueOrFalseAnswer(answerId, score);
+                case QuestionType.TrueOrFalse:
+                    {
+                        if (quesiton.TrueOrFalseQuestion.Answer != null)
+                        {
+                            quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
+                            var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
+                            await GradeTrueOrFalseAnswer(answerId, score);
+                        }
+                        break;
+                    }
+                case QuestionType.Descripite:
+                    {
+                        if(quesiton.DescriptiveQuestion.Answer!=null)
+                        {
+                            quesiton.DescriptiveQuestion.Answer.StudentScore = score;
+                            var answerId = quesiton.DescriptiveQuestion.Answer.Id;
+                            await GradeeDescritiveAnswer(answerId, score);
+                        }
+                        break;
+                    }
             }
+
 
         }
         catch (Exception ex)
@@ -118,4 +165,24 @@
             await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
         }
     }
+    private async Task GradeeDescritiveAnswer(int answerId, decimal score)
+    {
+        var newScore = new UpdateDescriptiveAnswersTeacherDTO()
+            {
+                ExamId = ExamId,
+                StudentScore = score
+            };
+        var response = await _examServices.GradeDescriptiveQuestion(newScore, answerId);
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            ShowTotalScore();
+            await _jsRuntime.InvokeVoidAsync("alert", "نمره ثبت شد.");
+        }
+    }
+    #endregion
+
 }
