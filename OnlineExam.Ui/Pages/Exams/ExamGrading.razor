@@ -1,0 +1,72 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@page "/examGrading/{ClassId:int}/{ExamId:int}"
+@inject ClassRoomMemberServices _classRoomMember;
+<h3>ExamGrading</h3>
+@if (result.students==null || result.students.Count == 0)
+{
+    <p>این کلاس دانشجویی ندارد.</p>
+}
+else
+{
+    <table>
+        <tr>
+            <th>
+                نام و نام خانوادگی
+            </th>
+            <th>
+                شماره تلفن
+            </th>
+            <th>
+                عملیات
+            </th>
+        </tr>
+        @{
+            foreach (var student in result.students)
+            {
+                <tr>
+                    <td>@student.FirstName @student.LastName</td>
+                    <td>@student.Phone</td>
+                    <td>
+                        <button @onclick="()=>RedirectToStudentAnswers(student.Id)">مشاهده پاسخ ها</button>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+}
+
+
+
+
+
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public int ClassId { get; set; }
+
+    GetClassRoomMembersDTO result = new GetClassRoomMembersDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _classRoomMember.GetClassStudnets(ClassId);
+        if (!response.IsSuccess)
+        {
+            result.students = new List<StudentsInfoDTO>();
+            SetErrors(Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            result = response.Data;
+        }
+    }
+    private void RedirectToStudentAnswers(string studentId)
+    {
+        _navigationManager.NavigateTo($"studentAnswer/{ExamId}?StudentId={studentId}");
+    }
+}

@@ -67,7 +67,6 @@
     PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine(StudentLog);
         await GetData();
         RefreshTimerCountDown();
         if (StudentLog)

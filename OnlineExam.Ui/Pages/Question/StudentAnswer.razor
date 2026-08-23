@@ -1,0 +1,99 @@
+﻿@using OnlineExam.Ui.DTO.Question
+@using OnlineExam.Ui.DTO.TrueOrFalseAnswers
+@page "/studentAnswer/{ExamId:int}"
+@inject ExamServices _examServices;
+<h3>StudentAnswer</h3>
+<p style="color:red">توجه نمرات وارد شده توسط هوش مصنوعی نمره گذاری شده و امکان اشتباه وجود دارد.</p>
+@{
+    if (result.Data == null || result.Data.Count == 0)
+    {
+        <p>پاسخی یافت نشد.</p>
+    }
+    else
+    {
+        foreach (var question in result.Data)
+        {
+            <div style="border:2px solid black">
+                <label for="questiontext">متن سوال:</label>
+                <p id="questiontext">@question.QuestionText</p>
+
+                <label for="questionScore">نمره سوال:</label>
+                <p id="questionScore">@question.TotalScore</p>
+                @{
+                    if (question.TrueOrFalseQuestion != null)
+                    {
+                        <label for="correctAnswer">پاسخ صحیح:</label>
+                        <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer" id="correctAnswer" disabled />
+
+                        <label for="studentAnswer">پاسخ دانشجو:</label>
+                        <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+
+                        <label for="studentScore">نمره دانشجو:</label>
+                        <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeTrueOrFlaseScore(arg,question.Id)" />
+                        <button @onclick="()=>GradeTrueOrFalseAnswer(question.TrueOrFalseQuestion.Answer.Id,question.TrueOrFalseQuestion.Answer.StudentScore)">ثبت نمره</button>
+                    }
+                }
+            </div>
+
+        }
+    }
+}
+<ErrorComponent Errors="Errors"></ErrorComponent>
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [SupplyParameterFromQuery]
+    public string? StudentId { get; set; }
+    PaginateResponse<GetQuestionWithAnswerDTO> result = new PaginateResponse<GetQuestionWithAnswerDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _examServices.GetStudentQuestionsAndAnswer(ExamId, StudentId, GetDefultPaginate());
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            result.Data = response.Data.Data;
+        }
+    }
+    private async Task ChangeTrueOrFlaseScore(ChangeEventArgs arg, int questionId)
+    {
+        try
+        {
+            
+            decimal score = Convert.ToDecimal(arg.Value);
+            var quesiton = result.Data.Where(e => e.Id == questionId).FirstOrDefault();
+            quesiton.TrueOrFalseQuestion.Answer.StudentScore = score;
+            var answerId = quesiton.TrueOrFalseQuestion.Answer.Id;
+            await GradeTrueOrFalseAnswer(answerId, score);
+
+        }
+        catch (Exception ex)
+        {
+            SetErrors("مقدار عددی معتبر وارد کنید.");
+        }
+    }
+    private async Task GradeTrueOrFalseAnswer(int answerId, decimal score)
+    {
+        var newScore = new UpdateTrueOrFalseAnswerTeacherDTO()
+            {
+                ExamId = ExamId,
+                StudentScore = score
+            };
+        var response = await _examServices.GradeTrueOrFalseQuestion(newScore, answerId);
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            await _jsRuntime.InvokeVoidAsync("alert", "save grade");
+        }
+    }
+}

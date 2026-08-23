@@ -67,7 +67,14 @@ namespace OnlineExam.Ui.EndPoints
             baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
+        public static string GradeTrueOrFalseAnswer(int answerId) => $"{ApiUrl}/true-or-false-answers/{answerId}/Grade";
         public static string EndExam(int id) => $"{ApiUrl}/exams/{id}/end";
+        public static string GetStudentQuestionWithAnswer(int examId,string studentId,PaginateRequestDTO paginateRequestDTO)
+        {
+            var baseUrl = $"{ApiUrl}/exams/{examId}/answers/{studentId}";
+            baseUrl= GetPaginateUrl(baseUrl,paginateRequestDTO);
+            return baseUrl;
+        }
         //exam log
         public const string CreateLog = $"{ApiUrl}/exam-logs";
 

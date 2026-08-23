@@ -40,6 +40,7 @@
                         <button @onclick="()=>Delete(exam.Id)">حذف</button>
                         <button @onclick="()=>RedirectToUpdateExam(exam.Id)">ویرایش</button>
                         <button @onclick="()=>RedirectToQuestions(exam.Id)">مدیریت سوالات</button>
+                        <button @onclick="()=>RedirectToExamGrading(exam.Id)">تصحیح سوالات</button>
                     </td>
                 </tr>
             }
@@ -102,5 +103,9 @@
     private void RedirectToQuestions(int id)
     {
         _navigationManager.NavigateTo($"question/{id}");
+    }
+    private void RedirectToExamGrading(int id)
+    {
+        _navigationManager.NavigateTo($"examGrading/{ClassId}/{id}");
     }
 }
