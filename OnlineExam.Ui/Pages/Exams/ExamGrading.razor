@@ -2,44 +2,51 @@
 @page "/examGrading/{ClassId:int}/{ExamId:int}"
 @inject ClassRoomMemberServices _classRoomMember;
 <h3>ExamGrading</h3>
-@if (Result.students == null || Result.students.Count == 0)
-{
-    <p>این کلاس دانشجویی ندارد.</p>
-}
-else
-{
-    <table>
-        <tr>
-            <th>
-                نام و نام خانوادگی
-            </th>
-            <th>
-                شماره تلفن
-            </th>
-            <th>
-                عملیات
-            </th>
-        </tr>
-        @{
-            foreach (var student in Result.students)
-            {
-                <tr>
-                    <td>@student.FirstName @student.LastName</td>
-                    <td>@student.Phone</td>
-                    <td>
-                        <button @onclick="()=>RedirectToStudentAnswers(student.Id)">مشاهده پاسخ ها</button>
-                    </td>
-                </tr>
-            }
+@{
+    if (DataLoaded)
+    {
+        @if (Result.students == null || Result.students.Count == 0)
+        {
+            <p>این کلاس دانشجویی ندارد.</p>
         }
-    </table>
+        else
+        {
+            <table>
+                <tr>
+                    <th>
+                        نام و نام خانوادگی
+                    </th>
+                    <th>
+                        شماره تلفن
+                    </th>
+                    <th>
+                        عملیات
+                    </th>
+                </tr>
+                @{
+                    foreach (var student in Result.students)
+                    {
+                        <tr>
+                            <td>@student.FirstName @student.LastName</td>
+                            <td>@student.Phone</td>
+                            <td>
+                                <button @onclick="()=>RedirectToStudentAnswers(student.Id)">مشاهده پاسخ ها</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        }
+        <ErrorComponent Errors="@Errors"></ErrorComponent>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
 }
 
 
 
-
-
-<ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
     [Parameter]
     public int ExamId { get; set; }
@@ -55,6 +62,7 @@ else
     private async Task GetData()
     {
         var response = await _classRoomMember.GetClassStudnets(ClassId);
+        DataLoaded = true;
         if (!response.IsSuccess)
         {
             Result.students = new List<StudentsInfoDTO>();

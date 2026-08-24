@@ -2,14 +2,21 @@
 @page "/updateclassroom/{Id:int}";
 @inject ClassRoomServices _classRoomServices;
 <h1>ویرایش کلاس</h1>
-
-<EditForm EditContext="@EditContext" OnValidSubmit="@UpdateClass">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <InputText @bind-Value="@UpdateClassRoomDTO.ClassName"></InputText>
-    <button type="submit">ویرایش</button>
-</EditForm>
-
-<ErrorComponent Errors="Errors"></ErrorComponent>
+@{
+    if (DataLoaded)
+    {
+        <EditForm EditContext="@EditContext" OnValidSubmit="@UpdateClass">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <InputText @bind-Value="@UpdateClassRoomDTO.ClassName"></InputText>
+            <button type="submit">ویرایش</button>
+        </EditForm>
+        <ErrorComponent Errors="Errors"></ErrorComponent>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
+}
 @code {
     private EditContext EditContext;
 
@@ -27,17 +34,16 @@
         };
 
         var classRoom = await _classRoomServices.GetByIdAsync(Id);
+        DataLoaded = true;
         if (!classRoom.IsSuccess)
         {
             SetErrors(classRoom.Errors);
         }
         else
         {
-            Console.WriteLine(classRoom.Data.ClassName);
             UpdateClassRoomDTO.ClassName = classRoom.Data.ClassName;
             StateHasChanged();
         }
-        Console.WriteLine(classRoom.Data.ClassName);
 
         base.OnInitialized();
 

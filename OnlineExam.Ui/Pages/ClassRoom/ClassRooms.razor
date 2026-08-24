@@ -3,45 +3,52 @@
 @inject ClassRoomServices _classRoomServices;
 <h3>ClassRooms</h3>
 @{
-    <button @onclick="@AddClass">افزودن کلاس.</button>
-    //show data
-    if (Result.Data.Count == 0)
+    if (DataLoaded)
     {
-        <div>کلاسی یافت نشد.</div>
-    }
+        <button @onclick="@AddClass">افزودن کلاس.</button>
+        //show data
+        if (Result.Data.Count == 0)
+        {
+            <div>کلاسی یافت نشد.</div>
+        }
 
+        else
+        {
+            <ErrorComponent Errors="@Errors"></ErrorComponent>
+
+            <table>
+                <tr>
+                    <th>
+                        نام کلاس
+                    </th>
+                    <th>
+                        عملیات
+                    </th>
+                </tr>
+                @foreach (var classRoom in Result.Data)
+                {
+                    <tr>
+                        <td> @classRoom.ClassName</td>
+                        <td>
+                            <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
+                            <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
+                            <button @onclick="()=>ManageStudents(classRoom.Id)">مدیریت اعضا</button>
+                            <button @onclick="()=>ManageExams(classRoom.Id)">مدیریت آزمون ها</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+
+
+
+        }
+
+        <PaginateComponent SelectedPage="@changePage" TotalPage="Result.TotalPage" CurrentPage="Result.PageNumber"></PaginateComponent>
+    }
     else
     {
-        <ErrorComponent Errors="@Errors"></ErrorComponent>
-
-        <table>
-            <tr>
-                <th>
-                    نام کلاس
-                </th>
-                <th>
-                    عملیات
-                </th>
-            </tr>
-            @foreach (var classRoom in Result.Data)
-            {
-                <tr>
-                    <td> @classRoom.ClassName</td>
-                    <td>
-                        <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
-                        <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
-                        <button @onclick="()=>ManageStudents(classRoom.Id)">مدیریت اعضا</button>
-                        <button @onclick="()=>ManageExams(classRoom.Id)">مدیریت آزمون ها</button>
-                    </td>
-                </tr>
-            }
-        </table>
-
-
-
+        <LoadingComponent></LoadingComponent>
     }
-
-    <PaginateComponent SelectedPage="@changePage" TotalPage="Result.TotalPage" CurrentPage="Result.PageNumber"></PaginateComponent>
 }
 
 @code {
@@ -79,6 +86,7 @@
     {
         Result.Data = new List<GetClassRoomTeacherDTO>();
         var response = await _classRoomServices.GetMyClassAsTeacherAsync(GetDefultPaginate());
+        DataLoaded = true;
         if (response.IsSuccess && response.StatusCode != 204)
         {
             Result = response.Data;

@@ -4,67 +4,74 @@
 @inject QuestionServices _questionServices;
 <h3>Question</h3>
 @{
-    <p>نمره کامل: @TotalScore</p>
-    if (ShowCreate == false)
+    if (DataLoaded)
     {
-        <button onclick="@ChangeShowCreatStatus">افزودن سوال</button>
-    }
-    else
-    {
-        <button onclick="@ChangeShowCreatStatus">بستن</button>
-        <CreateQuestionComponent ExamId="ExamId" AddComplete="AddComplete"></CreateQuestionComponent>
-    }
+        <p>نمره کامل: @TotalScore</p>
+        if (ShowCreate == false)
+        {
+            <button onclick="@ChangeShowCreatStatus">افزودن سوال</button>
+        }
+        else
+        {
+            <button onclick="@ChangeShowCreatStatus">بستن</button>
+            <CreateQuestionComponent ExamId="ExamId" AddComplete="AddComplete"></CreateQuestionComponent>
+        }
 
-    if (Result == null || Result.Data == null || Result.Data.Count == 0)
-    {
-        <p>سوالی یافت نشد.</p>
+        if (Result == null || Result.Data == null || Result.Data.Count == 0)
+        {
+            <p>سوالی یافت نشد.</p>
+        }
+        else
+        {
+            <table>
+                <tr style="border:2px solid black">
+                    <th>نام سوال</th>
+                    <th>نمره سوال</th>
+                    <th>جزئیات سوال</th>
+                    <th>عملیات</th>
+                </tr>
+                @foreach (var item in @Result.Data)
+                {
+                    <tr style="border:2px solid black">
+                        <td>@item.QuestionText</td>
+                        <td>@item.TotalScore</td>
+                        @if (item.TrueOrFalseQuestion != null)
+                        {
+                            <td>
+                                <label for="trueOrFlaseCorrectAnswer">پاسخ صحیح</label>
+                                <InputCheckbox id="trueOrFlaseCorrectAnswer" disabled @bind-Value="@item.TrueOrFalseQuestion.CorrectAnswer"></InputCheckbox>
+                            </td>
+                        }
+                        @if (item.DescriptiveQuestion != null)
+                        {
+                            <td>
+                                <label for="multipleCorrectAnswer">پاسخ صحیح</label>
+                                <InputTextArea id="multipleCorrectAnswer" @bind-Value="@item.DescriptiveQuestion.CorrectAnswer"></InputTextArea>
+                            </td>
+                        }
+                        @if (item.MultipleChoiceQuestion != null)
+                        {
+                            <td>
+                                <label for="choicec">گزینه ها</label>
+                                @foreach (var choice in item.MultipleChoiceQuestion.Choices)
+                                {
+                                    <p id="choicec">@choice</p>
+                                }
+                                <label for="correctChoice">جواب صحیح</label>
+                                <p id="correctChoice">@item.MultipleChoiceQuestion.Choices[item.MultipleChoiceQuestion.CorrectChoice - 1]</p>
+                            </td>
+                        }
+                        <td>
+                            <button @onclick="()=>DeleteQuestion(item.Id)">حذف</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
     }
     else
     {
-        <table>
-            <tr style="border:2px solid black">
-                <th>نام سوال</th>
-                <th>نمره سوال</th>
-                <th>جزئیات سوال</th>
-                <th>عملیات</th>
-            </tr>
-            @foreach (var item in @Result.Data)
-            {
-                <tr style="border:2px solid black">
-                    <td>@item.QuestionText</td>
-                    <td>@item.TotalScore</td>
-                    @if (item.TrueOrFalseQuestion != null)
-                    {
-                        <td>
-                            <label for="trueOrFlaseCorrectAnswer">پاسخ صحیح</label>
-                            <InputCheckbox id="trueOrFlaseCorrectAnswer" disabled @bind-Value="@item.TrueOrFalseQuestion.CorrectAnswer"></InputCheckbox>
-                        </td>
-                    }
-                    @if (item.DescriptiveQuestion != null)
-                    {
-                        <td>
-                            <label for="multipleCorrectAnswer">پاسخ صحیح</label>
-                            <InputTextArea id="multipleCorrectAnswer" @bind-Value="@item.DescriptiveQuestion.CorrectAnswer"></InputTextArea>
-                        </td>
-                    }
-                    @if (item.MultipleChoiceQuestion != null)
-                    {
-                        <td>
-                            <label for="choicec">گزینه ها</label>
-                            @foreach (var choice in item.MultipleChoiceQuestion.Choices)
-                            {
-                                <p id="choicec">@choice</p>
-                            }
-                            <label for="correctChoice">جواب صحیح</label>
-                            <p id="correctChoice">@item.MultipleChoiceQuestion.Choices[item.MultipleChoiceQuestion.CorrectChoice - 1]</p>
-                        </td>
-                    }
-                    <td>
-                        <button @onclick="()=>DeleteQuestion(item.Id)">حذف</button>
-                    </td>
-                </tr>
-            }
-        </table>
+        <LoadingComponent></LoadingComponent>
     }
 
 }
@@ -104,6 +111,7 @@
         SetOrderById(false);
         Result.Data = new List<GetQuestionTeacherDTO>();
         var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), ExamId);
+        DataLoaded = true;
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

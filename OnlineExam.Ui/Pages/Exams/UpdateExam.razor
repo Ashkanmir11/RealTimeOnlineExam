@@ -1,65 +1,73 @@
 ﻿@using OnlineExam.Ui.DTO.Exam;
 @page "/updateExam/{ExamId:int}/{ClassId:int}"
 @inject ExamServices _examServices;
+@{
+    if (DataLoaded)
+    {
+        <EditForm EditContext="@EditContext" OnValidSubmit="@PreEditAsync">
+            <DataAnnotationsValidator></DataAnnotationsValidator>
+            <label for="questionCount">تعداد سوال:</label>
+            <InputNumber id="questionCount" @bind-Value="@UpdateExamDTO.QuestionCount"></InputNumber>
+            <br />
 
-<EditForm EditContext="@EditContext" OnValidSubmit="@PreEditAsync">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <label for="questionCount">تعداد سوال:</label>
-    <InputNumber id="questionCount" @bind-Value="@UpdateExamDTO.QuestionCount"></InputNumber>
-    <br />
+            <label for="examName">نام آزمون:</label>
+            <InputText id="examName" @bind-Value="@UpdateExamDTO.Name"></InputText>
+            <br />
 
-    <label for="examName">نام آزمون:</label>
-    <InputText id="examName" @bind-Value="@UpdateExamDTO.Name"></InputText>
-    <br />
+            <label for="examDescription">توضیحات آزمون:</label>
+            <InputTextArea id="examDescription" @bind-Value="@UpdateExamDTO.Description"></InputTextArea>
+            <br />
 
-    <label for="examDescription">توضیحات آزمون:</label>
-    <InputTextArea id="examDescription" @bind-Value="@UpdateExamDTO.Description"></InputTextArea>
-    <br />
+            <label for="examStartDate">تاریخ شروع:</label>
+            <InputPersianDatePicker id="examStartDate" @bind-ValueAsDateTime="UpdateExamDTO.StartDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
+            <br />
 
-    <label for="examStartDate">تاریخ شروع:</label>
-    <InputPersianDatePicker id="examStartDate" @bind-ValueAsDateTime="UpdateExamDTO.StartDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
-    <br />
+            <label for="examEndDate">تاریخ پایان:</label>
+            <InputPersianDatePicker id="examEndDate" @bind-ValueAsDateTime="UpdateExamDTO.EndDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
+            <br />
 
-    <label for="examEndDate">تاریخ پایان:</label>
-    <InputPersianDatePicker id="examEndDate" @bind-ValueAsDateTime="UpdateExamDTO.EndDate" CalendarType="Calendar.SingleModeJalali" ReadOnly=true></InputPersianDatePicker>
-    <br />
+            <label for="examStartTime">ساعت شروع:</label>
+            <InputNumber placeholder="دقیقه" id="examStartTime" @bind-Value="@StartMinute"></InputNumber>
+            :
+            <InputNumber placeholder="ساعت" @bind-Value="@StartHour"></InputNumber>
+            <br />
 
-    <label for="examStartTime">ساعت شروع:</label>
-    <InputNumber placeholder="دقیقه" id="examStartTime" @bind-Value="@StartMinute"></InputNumber>
-    :
-    <InputNumber placeholder="ساعت" @bind-Value="@StartHour"></InputNumber>
-    <br />
+            <label for="examEndTime">ساعت پایان:</label>
+            <InputNumber placeholder="دقیقه" id="examEndTime" @bind-Value="@EndMinute"></InputNumber>
+            :
+            <InputNumber placeholder="ساعت" @bind-Value="@EndHour"></InputNumber>
+            <br />
 
-    <label for="examEndTime">ساعت پایان:</label>
-    <InputNumber placeholder="دقیقه" id="examEndTime" @bind-Value="@EndMinute"></InputNumber>
-    :
-    <InputNumber placeholder="ساعت" @bind-Value="@EndHour"></InputNumber>
-    <br />
+            <label for="examAllowDelay">میزان تاخیر مجاز:</label>
+            <InputNumber id="examAllowDelay" @bind-Value="@UpdateExamDTO.AllowedDelay"></InputNumber>
+            <br />
 
-    <label for="examAllowDelay">میزان تاخیر مجاز:</label>
-    <InputNumber id="examAllowDelay" @bind-Value="@UpdateExamDTO.AllowedDelay"></InputNumber>
-    <br />
+            <label for="examAllowCopy">اجازه کپی:</label>
+            <InputCheckbox id="examAllowCopy" @bind-Value="@UpdateExamDTO.AllowedCopy"></InputCheckbox>
+            <br />
 
-    <label for="examAllowCopy">اجازه کپی:</label>
-    <InputCheckbox id="examAllowCopy" @bind-Value="@UpdateExamDTO.AllowedCopy"></InputCheckbox>
-    <br />
+            <label for="examLogStudent">لاگ کردن دانشجویان:</label>
+            <InputCheckbox id="examLogStudent" @bind-Value="@UpdateExamDTO.LogStudent"></InputCheckbox>
+            <br />
 
-    <label for="examLogStudent">لاگ کردن دانشجویان:</label>
-    <InputCheckbox id="examLogStudent" @bind-Value="@UpdateExamDTO.LogStudent"></InputCheckbox>
-    <br />
+            <label for="examRandomQuestion">سوالات درهم:</label>
+            <InputCheckbox id="examRandomQuestion" @bind-Value="@UpdateExamDTO.RandomQuestions"></InputCheckbox>
+            <br />
 
-    <label for="examRandomQuestion">سوالات درهم:</label>
-    <InputCheckbox id="examRandomQuestion" @bind-Value="@UpdateExamDTO.RandomQuestions"></InputCheckbox>
-    <br />
-
-    <button type="submit">افزودن</button>
-</EditForm>
-<ErrorComponent Errors="Errors"></ErrorComponent>
+            <button type="submit">افزودن</button>
+        </EditForm>
+        <ErrorComponent Errors="Errors"></ErrorComponent>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
+}
 @code {
     [Parameter]
     public int ExamId { get; set; }
     [Parameter]
-    public int ClassId{ get; set; }
+    public int ClassId { get; set; }
     UpdateExamDTO UpdateExamDTO = new UpdateExamDTO();
     int StartHour;
     int StartMinute;
@@ -70,6 +78,7 @@
     {
         EditContext = new EditContext(UpdateExamDTO);
         var response = await _examServices.GetByIdAsync(ExamId);
+        DataLoaded = true;
         if (response.IsSuccess)
         {
             UpdateExamDTO = response.Data;
@@ -93,7 +102,7 @@
     }
     private async Task PreEditAsync()
     {
-       
+
         if (StartHour > 23 || StartHour < 0 || StartMinute > 59 || StartMinute < 0 ||
         EndHour > 23 || EndHour < 0 || EndMinute > 59 || EndMinute < 0)
         {
@@ -110,7 +119,7 @@
     private async Task UpdateAsync()
     {
         var response = await _examServices.UpdateAsync(ExamId, UpdateExamDTO);
-        if(response.IsSuccess)
+        if (response.IsSuccess)
         {
             _navigationManager.NavigateTo($"Exams/{ClassId}");
         }

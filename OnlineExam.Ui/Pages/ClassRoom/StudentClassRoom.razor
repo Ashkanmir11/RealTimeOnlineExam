@@ -4,19 +4,26 @@
 <h3>StudentClassRoom</h3>
 <div>
     @{
-        if (Result == null || Result.Data.Count == 0)
+        if (DataLoaded)
         {
-            <p>کلاسی موجود نیست.</p>
+            if (Result == null || Result.Data.Count == 0)
+            {
+                <p>کلاسی موجود نیست.</p>
+            }
+            else
+            {
+                @foreach (var classRoom in Result.Data)
+                {
+                    <div>
+                        <p>@classRoom.ClassName</p>
+                        <button @onclick="()=>RedirectToStudentExams(classRoom.Id)">مشاهده آزمون ها</button>
+                    </div>
+                }
+            }
         }
         else
         {
-            @foreach (var classRoom in Result.Data)
-            {
-                <div>
-                    <p>@classRoom.ClassName</p>
-                    <button @onclick="()=>RedirectToStudentExams(classRoom.Id)">مشاهده آزمون ها</button>
-                </div>
-            }
+            <LoadingComponent></LoadingComponent>
         }
     }
 </div>
@@ -34,6 +41,7 @@
     {
         Result.Data = new List<GetClassRoomStudentDTO>();
         var response = await _classRoomServices.GetStudentClasses(GetDefultPaginate());
+        DataLoaded = true;
         if (response.IsSuccess && response.StatusCode != 204)
         {
             Result = response.Data;

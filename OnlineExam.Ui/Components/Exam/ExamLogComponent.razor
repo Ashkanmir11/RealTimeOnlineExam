@@ -1,25 +1,33 @@
 ﻿@using OnlineExam.Ui.DTO.ExamLog;
 @inject ExamLogServices _examLogServices;
 @{
-    if (Logs == null || Logs.Count == 0)
+    if (DataLoaded)
     {
-        <p>لاگی موجود نیست.</p>
+
+        if (Logs == null || Logs.Count == 0)
+        {
+            <p>لاگی موجود نیست.</p>
+        }
+        else
+        {
+            <table width="37%">
+                <tr style="margin:10px;">
+                    <th>نوع لاگ</th>
+                    <th>توضیحات</th>
+                </tr>
+                @foreach (var log in Logs)
+                {
+                    <tr style="margin:10px;">
+                        <td>@log.LogType.Name</td>
+                        <td>@log.LogDescription</td>
+                    </tr>
+                }
+            </table>
+        }
     }
     else
     {
-        <table width="37%">
-            <tr style="margin:10px;">
-                <th>نوع لاگ</th>
-                <th>توضیحات</th>
-            </tr>
-            @foreach (var log in Logs)
-            {
-                <tr style="margin:10px;">
-                    <td>@log.LogType.Name</td>
-                    <td>@log.LogDescription</td>
-                </tr>
-            }
-        </table>
+        <LoadingComponent></LoadingComponent>
     }
 }
 @code {
@@ -37,6 +45,7 @@
     private async Task GetData()
     {
         var response = await _examLogServices.GetLogs(ExamId, StudentId);
+        DataLoaded = true;
         if (response.IsSuccess && response.StatusCode != 204)
         {
             Logs = response.Data;

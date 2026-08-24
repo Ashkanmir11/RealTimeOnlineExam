@@ -1,16 +1,27 @@
 ﻿@page "/profile"
 <h3>Profile</h3>
 <div>
-    <p>نام: @Result.FirstName  @Result.LastName</p>
-    <p>نام کاربری: @Result.UserName</p>
-    <p>شماره تلفن : @Result.Phone</p>
-    <p>ایمیل : @Result.Email</p>
+    @{
+        if (DataLoaded)
+        {
+            <p>نام: @Result.FirstName  @Result.LastName</p>
+            <p>نام کاربری: @Result.UserName</p>
+            <p>شماره تلفن : @Result.Phone</p>
+            <p>ایمیل : @Result.Email</p>
+        }
+        else
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+    }
+
 </div>
 @code {
     MyInfoDTO Result = new MyInfoDTO();
     protected override async Task OnInitializedAsync()
     {
         var response = await _authServices.GetMyInfo();
+        DataLoaded = true;
         if (response.IsSuccess)
         {
             Result = response.Data;

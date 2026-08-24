@@ -8,88 +8,97 @@
 <h3>StudentAnswer</h3>
 <p style="color:red">توجه نمرات وارد شده توسط هوش مصنوعی نمره گذاری شده و امکان اشتباه وجود دارد.</p>
 <div style="display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;">
-    <div style="width:60%;">
-        @{
-            if (Result.Data == null || Result.Data.Count == 0)
-            {
-                <p>پاسخی یافت نشد.</p>
-            }
-            else
-            {
-                <p>نمره کامل دانشجو:@TotalScore</p>
-                foreach (var question in Result.Data)
-                {
-                    <div style="border:2px solid black;">
-                        <label for="questiontext">متن سوال:</label>
-                        <p id="questiontext">@question.QuestionText</p>
+    @{
+        if (DataLoaded)
+        {
+            <div style="width:60%;">
+                @{
+                    if (Result.Data == null || Result.Data.Count == 0)
+                    {
+                        <p>پاسخی یافت نشد.</p>
+                    }
+                    else
+                    {
+                        <p>نمره کامل دانشجو:@TotalScore</p>
+                        foreach (var question in Result.Data)
+                        {
+                            <div style="border:2px solid black;">
+                                <label for="questiontext">متن سوال:</label>
+                                <p id="questiontext">@question.QuestionText</p>
 
-                        <label for="questionScore">نمره سوال:</label>
-                        <p id="questionScore">@question.TotalScore</p>
-                        @{
-                            if (question.TrueOrFalseQuestion != null)
-                            {
-                                <label for="correctAnswer">پاسخ صحیح:</label>
-                                <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer" id="correctAnswer" disabled />
-                                if (question.TrueOrFalseQuestion.Answer == null)
-                                {
-                                    <p>دانشجو پاسخی نداده است.</p>
-                                }
-                                else
-                                {
-                                    <label for="studentAnswer">پاسخ دانشجو:</label>
-                                    <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
-                                    <label for="studentScore">نمره دانشجو:</label>
-                                    <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.TrueOrFalse)" />
-                                }
+                                <label for="questionScore">نمره سوال:</label>
+                                <p id="questionScore">@question.TotalScore</p>
+                                @{
+                                    if (question.TrueOrFalseQuestion != null)
+                                    {
+                                        <label for="correctAnswer">پاسخ صحیح:</label>
+                                        <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer" id="correctAnswer" disabled />
+                                        if (question.TrueOrFalseQuestion.Answer == null)
+                                        {
+                                            <p>دانشجو پاسخی نداده است.</p>
+                                        }
+                                        else
+                                        {
+                                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                                            <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+                                            <label for="studentScore">نمره دانشجو:</label>
+                                            <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.TrueOrFalse)" />
+                                        }
 
-                            }
-                            if (question.DescriptiveQuestion != null)
-                            {
-                                <label for="correctAnswer">پاسخ صحیح:</label>
-                                <InputTextArea @bind-Value="question.DescriptiveQuestion.CorrectAnswer" id="correctAnswer" disabled />
+                                    }
+                                    if (question.DescriptiveQuestion != null)
+                                    {
+                                        <label for="correctAnswer">پاسخ صحیح:</label>
+                                        <InputTextArea @bind-Value="question.DescriptiveQuestion.CorrectAnswer" id="correctAnswer" disabled />
 
-                                if (question.DescriptiveQuestion.Answer == null)
-                                {
-                                    <p>دانشجو پاسخی نداده است.</p>
-                                }
-                                else
-                                {
-                                    <label for="studentAnswer">پاسخ دانشجو:</label>
-                                    <InputTextArea @bind-Value="question.DescriptiveQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
-                                    <label for="studentScore">نمره دانشجو:</label>
-                                    <input Value="@question.DescriptiveQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.Descripite)" />
-                                }
-                            }
-                            if (question.MultipleChoiceQuestion != null)
-                            {
+                                        if (question.DescriptiveQuestion.Answer == null)
+                                        {
+                                            <p>دانشجو پاسخی نداده است.</p>
+                                        }
+                                        else
+                                        {
+                                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                                            <InputTextArea @bind-Value="question.DescriptiveQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
+                                            <label for="studentScore">نمره دانشجو:</label>
+                                            <input Value="@question.DescriptiveQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.Descripite)" />
+                                        }
+                                    }
+                                    if (question.MultipleChoiceQuestion != null)
+                                    {
 
-                                @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
-                                {
-                                    var index = i + 1;
-                                    <p>@question.MultipleChoiceQuestion.Choices[i]</p>
-                                }
-                                if (question.MultipleChoiceQuestion.Answer == null)
-                                {
-                                    <p>دانشجو پاسخی نداده است.</p>
-                                }
-                                else
-                                {
-                                    <label for="studentAnswer">پاسخ دانشجو:</label>
-                                    <p>
-                                        گزینه :@question.MultipleChoiceQuestion.Choices[(int)@question.MultipleChoiceQuestion.Answer.StudentChoice - 1]
-                                    </p>
-                                    <label for="studentScore">نمره دانشجو:</label>
-                                    <input Value="@question.MultipleChoiceQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.MultipleChoice)" />
+                                        @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                                        {
+                                            var index = i + 1;
+                                            <p>@question.MultipleChoiceQuestion.Choices[i]</p>
+                                        }
+                                        if (question.MultipleChoiceQuestion.Answer == null)
+                                        {
+                                            <p>دانشجو پاسخی نداده است.</p>
+                                        }
+                                        else
+                                        {
+                                            <label for="studentAnswer">پاسخ دانشجو:</label>
+                                            <p>
+                                                گزینه :@question.MultipleChoiceQuestion.Choices[(int)@question.MultipleChoiceQuestion.Answer.StudentChoice - 1]
+                                            </p>
+                                            <label for="studentScore">نمره دانشجو:</label>
+                                            <input Value="@question.MultipleChoiceQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.MultipleChoice)" />
 
-                                }
+                                        }
 
-                            }
+                                    }
+                                }
+                            </div>
                         }
-                    </div>
+                    }
                 }
-            }
+            </div>
         }
-    </div>
+        else
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+    }
     <ExamLogComponent ExamId="@ExamId" StudentId="@StudentId"></ExamLogComponent>
 </div>
 <ErrorComponent Errors="Errors"></ErrorComponent>
@@ -110,6 +119,7 @@
     private async Task GetData()
     {
         var response = await _examServices.GetStudentQuestionsAndAnswer(ExamId, StudentId, GetDefultPaginate());
+        DataLoaded = true;
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

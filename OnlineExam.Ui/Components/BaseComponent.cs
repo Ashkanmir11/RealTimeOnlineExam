@@ -8,6 +8,7 @@ namespace OnlineExam.Ui.Components
     {
         protected List<string> Errors { get; set; } = new();
         private PaginateRequestDTO PaginateRequestDTO = new PaginateRequestDTO();
+        public bool DataLoaded { get; set; }
         public void SetErrors(List<string> errors)
         {
             Errors.Clear();
@@ -32,9 +33,9 @@ namespace OnlineExam.Ui.Components
             PaginateRequestDTO.Descending = descending;
 
         }
-        public void SetPaginateOrder(string orderBy,bool descending)
+        public void SetPaginateOrder(string orderBy, bool descending)
         {
-            PaginateRequestDTO.SortBy=orderBy;
+            PaginateRequestDTO.SortBy = orderBy;
             PaginateRequestDTO.Descending = descending;
         }
         public PaginateRequestDTO GetDefultPaginate()

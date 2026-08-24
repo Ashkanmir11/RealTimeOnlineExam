@@ -3,42 +3,48 @@
 @inject ExamServices _examServices;
 <h3>StudentExams</h3>
 @{
-    if (Result == null || Result.Data.Count == 0)
+    if (DataLoaded)
     {
-        <p>آزمونی یافت نشد.</p>
-    }
-
-    <table>
-        <tr>
-            <th>تعداد سوال</th>
-            <th>نام آزمون</th>
-            <th>توضیحات</th>
-            <th>تاریخ شروع</th>
-            <th>تاریخ پایان</th>
-            <th>میزان مجاز تاخیر</th>
-            <th>اجازه کپی</th>
-            <th>سوالات درهم</th>
-            <th>عملیات</th>
-        </tr>
-        @foreach (var exam in Result.Data)
+        if (Result == null || Result.Data.Count == 0)
         {
-            <tr>
-                <td>@exam.QuestionCount</td>
-                <td>@exam.Name</td>
-                <td>@exam.Description</td>
-                <td>@exam.QuestionCount</td>
-                <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
-                <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
-                <td>@exam.AllowedDelay</td>
-                <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
-                <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
-                <td>
-                    <button @onclick="()=>StartExam(exam.Id)">شروع آزمون</button>
-                </td>
-            </tr>
+            <p>آزمونی یافت نشد.</p>
         }
-    </table>
 
+        <table>
+            <tr>
+                <th>تعداد سوال</th>
+                <th>نام آزمون</th>
+                <th>توضیحات</th>
+                <th>تاریخ شروع</th>
+                <th>تاریخ پایان</th>
+                <th>میزان مجاز تاخیر</th>
+                <th>اجازه کپی</th>
+                <th>سوالات درهم</th>
+                <th>عملیات</th>
+            </tr>
+            @foreach (var exam in Result.Data)
+            {
+                <tr>
+                    <td>@exam.QuestionCount</td>
+                    <td>@exam.Name</td>
+                    <td>@exam.Description</td>
+                    <td>@exam.QuestionCount</td>
+                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
+                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
+                    <td>@exam.AllowedDelay</td>
+                    <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
+                    <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
+                    <td>
+                        <button @onclick="()=>StartExam(exam.Id)">شروع آزمون</button>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
 }
 <ErrorComponent Errors="Errors"></ErrorComponent>
 @code {
@@ -54,6 +60,7 @@
     private async Task GetData()
     {
         var response = await _examServices.GetExamTeacher(ClassId, GetDefultPaginate());
+        DataLoaded = true;
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

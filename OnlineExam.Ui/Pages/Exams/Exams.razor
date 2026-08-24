@@ -2,53 +2,58 @@
 @page "/Exams/{ClassId:int}"
 @inject ExamServices _examServices;
 <h3>Exams</h3>
-<button onclick="@RedirectToCreateExam">افزودن آزمون</button>
-
 @{
-    if (Result == null || Result.Data == null || Result.Data.Count == 0)
+    if (DataLoaded)
     {
-        <p>ازمونی یافت نشد.</p>
+        <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
+        if (Result == null || Result.Data == null || Result.Data.Count == 0)
+        {
+            <p>ازمونی یافت نشد.</p>
+        }
+        else
+        {
+            <table>
+                <tr>
+                    <th>تعداد سوال</th>
+                    <th>نام آزمون</th>
+                    <th>توضیحات</th>
+                    <th>تاریخ شروع</th>
+                    <th>تاریخ پایان</th>
+                    <th>میزان مجاز تاخیر</th>
+                    <th>اجازه کپی</th>
+                    <th>سوالات درهم</th>
+                    <th>عملیات</th>
+                </tr>
+                @foreach (var exam in Result.Data)
+                {
+                    <tr>
+                        <td>@exam.QuestionCount</td>
+                        <td>@exam.Name</td>
+                        <td>@exam.Description</td>
+                        <td>@exam.QuestionCount</td>
+                        <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
+                        <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
+                        <td>@exam.AllowedDelay</td>
+                        <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
+                        <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
+                        <td>
+                            <button @onclick="()=>Delete(exam.Id)">حذف</button>
+                            <button @onclick="()=>RedirectToUpdateExam(exam.Id)">ویرایش</button>
+                            <button @onclick="()=>RedirectToQuestions(exam.Id)">مدیریت سوالات</button>
+                            <button @onclick="()=>RedirectToExamGrading(exam.Id)">تصحیح سوالات</button>
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+        <ErrorComponent Errors="@Errors"></ErrorComponent>
+        <PaginateComponent CurrentPage="Result.PageNumber" TotalPage="@Result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
     }
     else
     {
-        <table>
-            <tr>
-                <th>تعداد سوال</th>
-                <th>نام آزمون</th>
-                <th>توضیحات</th>
-                <th>تاریخ شروع</th>
-                <th>تاریخ پایان</th>
-                <th>میزان مجاز تاخیر</th>
-                <th>اجازه کپی</th>
-                <th>سوالات درهم</th>
-                <th>عملیات</th>
-            </tr>
-            @foreach (var exam in Result.Data)
-            {
-                <tr>
-                    <td>@exam.QuestionCount</td>
-                    <td>@exam.Name</td>
-                    <td>@exam.Description</td>
-                    <td>@exam.QuestionCount</td>
-                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
-                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
-                    <td>@exam.AllowedDelay</td>
-                    <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
-                    <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
-                    <td>
-                        <button @onclick="()=>Delete(exam.Id)">حذف</button>
-                        <button @onclick="()=>RedirectToUpdateExam(exam.Id)">ویرایش</button>
-                        <button @onclick="()=>RedirectToQuestions(exam.Id)">مدیریت سوالات</button>
-                        <button @onclick="()=>RedirectToExamGrading(exam.Id)">تصحیح سوالات</button>
-                    </td>
-                </tr>
-            }
-        </table>
+        <LoadingComponent></LoadingComponent>
     }
-
 }
-<ErrorComponent Errors="@Errors"></ErrorComponent>
-<PaginateComponent CurrentPage="Result.PageNumber" TotalPage="@Result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
 @code {
     [Parameter]
     public int ClassId { get; set; }
@@ -79,6 +84,7 @@
     private async Task GetData()
     {
         var response = await _examServices.GetExamTeacher(ClassId, GetDefultPaginate());
+        DataLoaded = true;
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

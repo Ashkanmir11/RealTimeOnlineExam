@@ -9,13 +9,14 @@
 <ExamStatusComponent ExamId="@ExamId" AfterConnect="@SaveChangeAfterConnect" EndExam="@EndExam"></ExamStatusComponent>
 <h3>@RefreshTimer مانده تا ذخیره سازی خودکار</h3>
 @{
+
     if (Result == null || Result.Data.Count == 0)
     {
         <p>سوالی موجود نیست.</p>
     }
     if (DataLoaded == false)
     {
-        <p>در حال بارگذاری سوالات.</p>
+        <LoadingComponent></LoadingComponent>
     }
     else
     {
@@ -51,7 +52,9 @@
 
         }
     }
-    <button @onclick="EndExam">پایان آزمون</button>
+}
+
+<button @onclick="EndExam">پایان آزمون</button>
 }
 
 <ErrorComponent Errors="@Errors"></ErrorComponent>
