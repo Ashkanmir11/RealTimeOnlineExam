@@ -1,18 +1,22 @@
 ﻿@page "/register"
 <h3>Register</h3>
 <p>@Massage</p>
-<EditForm EditContext="@EditContext" OnValidSubmit="CreateUser">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <InputText @bind-Value="@RegisterDTO.FirstName" placeholder="نام"></InputText>
-    <InputText @bind-Value="@RegisterDTO.LastName" placeholder="نام خانوادگی"></InputText>
-    <InputText @bind-Value="@RegisterDTO.Email" placeholder="ایمیل"></InputText>
-    <InputText type="password" @bind-Value="@RegisterDTO.Password" placeholder="رمز عبور" />
-    <InputText type="password" @bind-Value="@RegisterDTO.ConfirmPassword" placeholder="تکرار رمز عبور" />
-    <InputText @bind-Value="@RegisterDTO.PhoneNumber" placeholder="شماره تلفن" />
-    <button type="submit">ثبت نام</button>
+<div class="register-page">
+    <EditForm EditContext="@EditContext" OnValidSubmit="CreateUser">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
 
-</EditForm>
+        <InputText @bind-Value="@RegisterDTO.FirstName" placeholder="نام"></InputText>
+        <InputText @bind-Value="@RegisterDTO.LastName" placeholder="نام خانوادگی"></InputText>
+        <InputText @bind-Value="@RegisterDTO.Email" placeholder="ایمیل"></InputText>
+        <InputText type="password" @bind-Value="@RegisterDTO.Password" placeholder="رمز عبور" />
+        <InputText type="password" @bind-Value="@RegisterDTO.ConfirmPassword" placeholder="تکرار رمز عبور" />
+        <InputText @bind-Value="@RegisterDTO.PhoneNumber" placeholder="شماره تلفن" />
+
+        <button type="submit">ثبت نام</button>
+    </EditForm>
+</div>
 <ErrorComponent Errors="@Errors"></ErrorComponent>
+
 @code {
     private EditContext EditContext;
     string Massage="";

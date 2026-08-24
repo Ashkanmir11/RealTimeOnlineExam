@@ -5,13 +5,14 @@
 @inject NavigationManager _navigationManagment;
 <h3>Login</h3>
 
-<form onsubmit="@loginUser">
+<form @onsubmit="loginUser" @onsubmit:preventDefault="true">
     <input placeholder="شماره موبایل" @bind-value="@PhoneNumber">
     <input type="password" placeholder="رمز عبور" @bind-value="@Password">
     <button type="submit">ورود</button>
 </form>
 
 <ErrorComponent Errors="@Errors"></ErrorComponent>
+
 @code {
     string PhoneNumber = "";
     string Password = "";

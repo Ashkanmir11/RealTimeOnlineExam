@@ -1,0 +1,114 @@
+﻿/* HeaderComponent.razor.css */
+
+div {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    background: rgba(8, 13, 26, 0.84);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.16);
+    backdrop-filter: blur(16px);
+}
+
+ul {
+    box-sizing: border-box;
+    width: min(100%, 1280px) !important;
+    min-height: 76px;
+    margin: 0 auto;
+    padding: 12px 24px;
+    list-style: none;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+li {
+    display: flex;
+    align-items: center;
+}
+
+a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 17px;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    cursor: pointer;
+    color: #b9c7db;
+    background: transparent;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    a:hover {
+        border-color: rgba(96, 165, 250, 0.2);
+        color: #ffffff;
+        background: rgba(59, 130, 246, 0.13);
+        transform: translateY(-1px);
+    }
+
+    a:active {
+        transform: translateY(0);
+    }
+
+    a:focus-visible {
+        outline: 3px solid rgba(96, 165, 250, 0.38);
+        outline-offset: 2px;
+    }
+
+/* دکمه ورود */
+li:has(a[href="login"]) a {
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.22);
+}
+
+    li:has(a[href="login"]) a:hover {
+        border-color: transparent;
+        background: linear-gradient(135deg, #3b82f6, #5b54e8);
+        box-shadow: 0 9px 23px rgba(37, 99, 235, 0.32);
+    }
+
+/* دکمه خروج */
+li:has(a:not([href])) a {
+    border-color: rgba(248, 113, 113, 0.18);
+    color: #fca5a5;
+}
+
+    li:has(a:not([href])) a:hover {
+        border-color: rgba(248, 113, 113, 0.25);
+        color: #fecaca;
+        background: rgba(239, 68, 68, 0.12);
+    }
+
+@media (max-width: 650px) {
+    ul {
+        justify-content: center !important;
+        gap: 7px;
+        min-height: 68px;
+        padding: 10px 12px;
+    }
+
+    a {
+        min-height: 38px;
+        padding: 0 12px;
+        font-size: 0.79rem;
+    }
+}
+
+@media (max-width: 380px) {
+    ul {
+        gap: 4px;
+    }
+
+    a {
+        padding: 0 9px;
+        font-size: 0.72rem;
+    }
+}
