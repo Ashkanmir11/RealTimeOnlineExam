@@ -3,25 +3,25 @@
 @inject ClassRoomServices _classRoomServices;
 <h1>ویرایش کلاس</h1>
 
-<EditForm EditContext="@editContext" OnValidSubmit="@UpdateClass">
+<EditForm EditContext="@EditContext" OnValidSubmit="@UpdateClass">
     <DataAnnotationsValidator></DataAnnotationsValidator>
-    <InputText @bind-Value="@updateClassRoomDTO.ClassName"></InputText>
+    <InputText @bind-Value="@UpdateClassRoomDTO.ClassName"></InputText>
     <button type="submit">ویرایش</button>
 </EditForm>
 
 <ErrorComponent Errors="Errors"></ErrorComponent>
 @code {
-    private EditContext editContext;
+    private EditContext EditContext;
 
     [Parameter]
     public int Id { get; set; }
-    UpdateClassRoomDTO updateClassRoomDTO = new UpdateClassRoomDTO();
+    UpdateClassRoomDTO UpdateClassRoomDTO = new UpdateClassRoomDTO();
     protected override async void OnInitialized()
     {
-        editContext = new EditContext(updateClassRoomDTO);
-        editContext.OnValidationStateChanged += (sender, args) =>
+        EditContext = new EditContext(UpdateClassRoomDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
         {
-            var validationErrors = editContext.GetValidationMessages();
+            var validationErrors = EditContext.GetValidationMessages();
             SetErrors(validationErrors.ToList());
             StateHasChanged();
         };
@@ -34,7 +34,7 @@
         else
         {
             Console.WriteLine(classRoom.Data.ClassName);
-            updateClassRoomDTO.ClassName = classRoom.Data.ClassName;
+            UpdateClassRoomDTO.ClassName = classRoom.Data.ClassName;
             StateHasChanged();
         }
         Console.WriteLine(classRoom.Data.ClassName);
@@ -45,7 +45,7 @@
     }
     private async Task UpdateClass()
     {
-        var updateResult = await _classRoomServices.UpdateAsync(Id, updateClassRoomDTO);
+        var updateResult = await _classRoomServices.UpdateAsync(Id, UpdateClassRoomDTO);
         Console.WriteLine(updateResult);
         if (!updateResult.IsSuccess)
         {
@@ -53,7 +53,6 @@
         }
         else
         {
-            Console.WriteLine("success arrive");
             _navigationManager.NavigateTo("classroom");
         }
     }

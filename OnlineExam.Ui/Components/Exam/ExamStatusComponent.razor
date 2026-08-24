@@ -5,7 +5,7 @@
 
 <h3>ExamStatusComponent</h3>
 @{
-    switch (hubConnection.State)
+    switch (HubConnection.State)
     {
         case HubConnectionState.Connected:
             {
@@ -21,8 +21,8 @@
     }
 }<div>
     زمان باقی مانده:
-    <p> @remainTime</p>
-    @if (hubConnection.State != HubConnectionState.Connected)
+    <p> @RemainTime</p>
+    @if (HubConnection.State != HubConnectionState.Connected)
     {
         <p style="color:red">زمان در حالت عدم اتصال ممکن است دقیق نباشد.</p>
     }
@@ -31,13 +31,13 @@
     [Parameter]
     public int ExamId { get; set; }
     [Parameter]
-    public EventCallback afterConnect { get; set; }
+    public EventCallback AfterConnect { get; set; }
     [Parameter]
-    public EventCallback endExam { get; set; }
-    private HubConnection hubConnection;
+    public EventCallback EndExam { get; set; }
+    private HubConnection HubConnection;
     //ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
-    int totalSeconds;
-    string remainTime;
+    int TotalSeconds;
+    string RemainTime;
     private Task OnConnectionClosed(Exception? error)
     {
         return Task.CompletedTask;
@@ -52,7 +52,7 @@
     {
         try
         {
-            hubConnection = new HubConnectionBuilder().WithUrl("http://localhost/ExamApi/startExam", options =>
+            HubConnection = new HubConnectionBuilder().WithUrl("http://localhost/ExamApi/startExam", options =>
             {
                 options.Transports = HttpTransportType.LongPolling;
                 options.HttpMessageHandlerFactory = innerHandler => new IncludeCredentialsHandler
@@ -63,15 +63,15 @@
 
 
 
-            totalSeconds = 0;
-            hubConnection.On<int>("ReceiveRemaindSeconds", (remainingTime) =>
+            TotalSeconds = 0;
+            HubConnection.On<int>("ReceiveRemaindSeconds", (remainingTime) =>
                {
-                   totalSeconds = remainingTime;
+                   TotalSeconds = remainingTime;
                    CreateTime();
                });
-            hubConnection.Closed += OnDisconnected;
-            await hubConnection.StartAsync();
-            await hubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
+            HubConnection.Closed += OnDisconnected;
+            await HubConnection.StartAsync();
+            await HubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
         }
         catch (Exception ex)
         {
@@ -82,17 +82,17 @@
     }
     private async Task OnDisconnected(Exception? exception)
     {
-        hubConnection.Closed += OnDisconnected;
+        HubConnection.Closed += OnDisconnected;
         StateHasChanged();
         CountDown();
-        while (hubConnection.State != HubConnectionState.Connected)
+        while (HubConnection.State != HubConnectionState.Connected)
         {
             try
             {
                 await Task.Delay(5000);
-                await hubConnection.StartAsync();
-                await afterConnect.InvokeAsync();
-                await hubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
+                await HubConnection.StartAsync();
+                await AfterConnect.InvokeAsync();
+                await HubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
                 await InvokeAsync(StateHasChanged);
             }
             catch
@@ -105,22 +105,22 @@
     }
     private async void CreateTime()
     {
-        var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(totalSeconds));
-        remainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
-        if (totalSeconds == 0 && hubConnection.State == HubConnectionState.Connected)
+        var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(TotalSeconds));
+        RemainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
+        if (TotalSeconds == 0 && HubConnection.State == HubConnectionState.Connected)
         {
-            await endExam.InvokeAsync();
+            await EndExam.InvokeAsync();
         }
         StateHasChanged();
     }
     private async Task CountDown()
     {
-        while (hubConnection.State != HubConnectionState.Connected)
+        while (HubConnection.State != HubConnectionState.Connected)
         {
             await Task.Delay(1000);
-            if (totalSeconds <= 1)
+            if (TotalSeconds <= 1)
             {
-                totalSeconds -= 1;
+                TotalSeconds -= 1;
             }
             CreateTime();
         }

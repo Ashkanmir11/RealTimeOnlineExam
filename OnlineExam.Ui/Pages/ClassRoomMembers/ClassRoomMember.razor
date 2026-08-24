@@ -4,8 +4,8 @@
 @inject ClassRoomMemberServices _classRoomMembersServices;
 <h3>مدیریت اعضای کلاس</h3>
 @{
-    <h4>@getClassRoomMembersDTO.className</h4>
-    if (showCreateMember)
+    <h4>@GetClassRoomMembersDTO.className</h4>
+    if (ShowCreateMember)
     {
         <button @onclick="@ChangeShowCreateStatus">بستن</button>
         <AddClassRoomMemberComponent SuccessAdd="AddComplete" ClassId="@ClassId"></AddClassRoomMemberComponent>
@@ -15,7 +15,7 @@
         <button @onclick="@ChangeShowCreateStatus">افزودن اعضا</button>
 
     }
-    if (getClassRoomMembersDTO.students != null && getClassRoomMembersDTO.students.Count > 0)
+    if (GetClassRoomMembersDTO.students != null && GetClassRoomMembersDTO.students.Count > 0)
     {
 
         <table>
@@ -26,7 +26,7 @@
                 <th>ایمیل</th>
                 <th>عملیات</th>
             </tr>
-            @foreach (var student in getClassRoomMembersDTO.students)
+            @foreach (var student in GetClassRoomMembersDTO.students)
             {
                 <tr>
                     <td>@student.UserName</td>
@@ -51,13 +51,12 @@
 @code {
     [Parameter]
     public int ClassId { get; set; }
-    bool showCreateMember = false;
-    private GetClassRoomMembersDTO getClassRoomMembersDTO = new GetClassRoomMembersDTO();
-    CreateClassRoomMemberDTO createClassRoomMemberDTO = new CreateClassRoomMemberDTO();
+    bool ShowCreateMember = false;
+    private GetClassRoomMembersDTO GetClassRoomMembersDTO = new GetClassRoomMembersDTO();
 
     private void ChangeShowCreateStatus()
     {
-        showCreateMember = showCreateMember == true ? false : true;
+        ShowCreateMember = ShowCreateMember == true ? false : true;
     }
     private async Task AddComplete()
     {
@@ -91,9 +90,9 @@
         }
         else if (classMembers.StatusCode != 204)
         {
-            getClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
-            Console.WriteLine(getClassRoomMembersDTO.students.Count);
-            getClassRoomMembersDTO = classMembers.Data;
+            GetClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
+            Console.WriteLine(GetClassRoomMembersDTO.students.Count);
+            GetClassRoomMembersDTO = classMembers.Data;
         }
     }
 }

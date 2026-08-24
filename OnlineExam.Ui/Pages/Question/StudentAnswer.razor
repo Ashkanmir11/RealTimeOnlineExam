@@ -10,14 +10,14 @@
 <div style="display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;">
     <div style="width:60%;">
         @{
-            if (result.Data == null || result.Data.Count == 0)
+            if (Result.Data == null || Result.Data.Count == 0)
             {
                 <p>پاسخی یافت نشد.</p>
             }
             else
             {
-                <p>نمره کامل دانشجو:@totalScore</p>
-                foreach (var question in result.Data)
+                <p>نمره کامل دانشجو:@TotalScore</p>
+                foreach (var question in Result.Data)
                 {
                     <div style="border:2px solid black;">
                         <label for="questiontext">متن سوال:</label>
@@ -99,8 +99,8 @@
     public int ExamId { get; set; }
     [SupplyParameterFromQuery]
     public required string StudentId { get; set; }
-    PaginateResponse<GetQuestionWithAnswerDTO> result = new PaginateResponse<GetQuestionWithAnswerDTO>();
-    decimal totalScore;
+    PaginateResponse<GetQuestionWithAnswerDTO> Result = new PaginateResponse<GetQuestionWithAnswerDTO>();
+    decimal TotalScore;
     protected override async Task OnInitializedAsync()
     {
         await GetData();
@@ -116,25 +116,25 @@
         }
         else
         {
-            result.Data = response.Data.Data;
+            Result.Data = response.Data.Data;
         }
     }
     private void ShowTotalScore()
     {
-        totalScore = 0;
-        foreach (var question in result.Data)
+        TotalScore = 0;
+        foreach (var question in Result.Data)
         {
             if (question.TrueOrFalseQuestion != null)
             {
-                totalScore += question.TrueOrFalseQuestion.Answer == null ? 0 : question.TrueOrFalseQuestion.Answer.StudentScore;
+                TotalScore += question.TrueOrFalseQuestion.Answer == null ? 0 : question.TrueOrFalseQuestion.Answer.StudentScore;
             }
             if (question.DescriptiveQuestion != null)
             {
-                totalScore += question.DescriptiveQuestion.Answer == null ? 0 : question.DescriptiveQuestion.Answer.StudentScore;
+                TotalScore += question.DescriptiveQuestion.Answer == null ? 0 : question.DescriptiveQuestion.Answer.StudentScore;
             }
             if (question.MultipleChoiceQuestion != null)
             {
-                totalScore += question.MultipleChoiceQuestion.Answer == null ? 0 : question.MultipleChoiceQuestion.Answer.StudentScore;
+                TotalScore += question.MultipleChoiceQuestion.Answer == null ? 0 : question.MultipleChoiceQuestion.Answer.StudentScore;
 
             }
         }
@@ -150,7 +150,7 @@
                 value = value.Replace("/", ".");
             }
             decimal score = Convert.ToDecimal(value);
-            var quesiton = result.Data.Where(e => e.Id == questionId).FirstOrDefault();
+            var quesiton = Result.Data.Where(e => e.Id == questionId).FirstOrDefault();
             switch (questionType)
             {
                 case QuestionType.TrueOrFalse:

@@ -6,7 +6,7 @@
 <div>
     <ul style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:right; width:100%;">
         @{
-            if (!isUserLogin)
+            if (!IsUserLogin)
             {
                 <li>
                     <a href="register">
@@ -46,16 +46,16 @@
     </ul>
 </div>
 @code {
-    bool isUserLogin;
+    bool IsUserLogin;
 
     protected override async Task OnInitializedAsync()
     {
-        isUserLogin = await _authServices.IsUserLogin();
+        IsUserLogin = await _authServices.IsUserLogin();
         await base.OnInitializedAsync();
     }
     private async Task Logout()
     {
-        isUserLogin = false;
+        IsUserLogin = false;
         await _authServices.Logout();
         _navigationManager.NavigateTo("");
 

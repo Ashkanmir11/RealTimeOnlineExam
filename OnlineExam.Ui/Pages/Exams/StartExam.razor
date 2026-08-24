@@ -6,20 +6,20 @@
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
 @inject ExamLogServices _examLogServices;
-<ExamStatusComponent ExamId="@ExamId" afterConnect="@SaveChangeAfterConnect" endExam="@EndExam"></ExamStatusComponent>
-<h3>@refreshTimer مانده تا ذخیره سازی خودکار</h3>
+<ExamStatusComponent ExamId="@ExamId" AfterConnect="@SaveChangeAfterConnect" EndExam="@EndExam"></ExamStatusComponent>
+<h3>@RefreshTimer مانده تا ذخیره سازی خودکار</h3>
 @{
-    if (result == null || result.Data.Count == 0)
+    if (Result == null || Result.Data.Count == 0)
     {
         <p>سوالی موجود نیست.</p>
     }
-    if (dataLoaded == false)
+    if (DataLoaded == false)
     {
         <p>در حال بارگذاری سوالات.</p>
     }
     else
     {
-        foreach (var question in result.Data)
+        foreach (var question in Result.Data)
         {
             <div style="border:2px solid black">
                 @{
@@ -59,12 +59,12 @@
     [Parameter]
     public int ExamId { get; set; }
     [SupplyParameterFromQuery]
-    public bool canCopy { get; set; }
+    public bool CanCopy { get; set; }
     [SupplyParameterFromQuery]
     public bool StudentLog { get; set; }
-    public int refreshTimer = 60;
-    bool dataLoaded = false;
-    PaginateResponse<GetQuestionStudentDTO> result = new PaginateResponse<GetQuestionStudentDTO>();
+    public int RefreshTimer = 60;
+    bool DataLoaded = false;
+    PaginateResponse<GetQuestionStudentDTO> Result = new PaginateResponse<GetQuestionStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
         await GetData();
@@ -78,7 +78,7 @@
     }
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (!canCopy)
+        if (!CanCopy)
         {
             PreventCopyAndPasting();
         }
@@ -86,7 +86,7 @@
     }
     private async Task GetData()
     {
-        result.Data = new List<GetQuestionStudentDTO>();
+        Result.Data = new List<GetQuestionStudentDTO>();
         var response = await _examServices.StartExam(ExamId, GetDefultPaginate());
         if (!response.IsSuccess)
         {
@@ -121,16 +121,16 @@
                     question.MultipleChoiceAnswer = new GetMultipleChoiceAnswerStudentDTO();
 
                 }
-                result.Data.Add(question);
+                Result.Data.Add(question);
             }
-            dataLoaded = true;
+            DataLoaded = true;
             await RefreshMultipleChoiceAnswer();
         }
     }
     private async Task SaveChangeAfterConnect()
     {
-        refreshTimer = 60;
-        foreach (var item in result.Data)
+        RefreshTimer = 60;
+        foreach (var item in Result.Data)
         {
             if (item.TrueOrFalseQuestion != null)
             {
@@ -163,8 +163,8 @@
         while (true)
         {
             await Task.Delay(1000);
-            refreshTimer = refreshTimer - 1;
-            if (refreshTimer == 0)
+            RefreshTimer = RefreshTimer - 1;
+            if (RefreshTimer == 0)
             {
                 SaveChangeAfterConnect();
             }
@@ -223,7 +223,7 @@
             var newAnswer = new CreateTrueOrFalseAnswerDTO()
                 {
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
+                    StudentAnswer = Result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
                     TrueOrFalseQuestionId = questionDeatilId
                 };
             var response = await _examServices.CreateTrueOrFalseAnswer(newAnswer);
@@ -241,7 +241,7 @@
             var newAnswer = new UpdateTrueOrFalseAnswerDTO()
                 {
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
+                    StudentAnswer = Result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
                 };
             var response = await _examServices.UpdateTrueOrFalseAnswer(answer.Id, newAnswer);
             if (!response.IsSuccess)
@@ -284,7 +284,7 @@
                 {
                     DescriptiveQuestionId = questionDeatilId,
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                    StudentAnswer = Result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
                 };
             var response = await _examServices.CreateDescriptiveAnswers(newAnswer);
 
@@ -294,7 +294,7 @@
             }
             else
             {
-                refreshTimer = 60;
+                RefreshTimer = 60;
             }
 
         }
@@ -303,7 +303,7 @@
             var newAnswer = new UpdateDescriptiveAnswersDTO()
                 {
                     ExamId = ExamId,
-                    StudentAnswer = result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                    StudentAnswer = Result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
                 };
             var response = await _examServices.UpadteDescriptiveAnswers(answer.Id, newAnswer);
             if (!response.IsSuccess)
@@ -312,7 +312,7 @@
             }
             else
             {
-                refreshTimer = 60;
+                RefreshTimer = 60;
             }
         }
     }
@@ -326,7 +326,7 @@
         Console.WriteLine("totalChoices" + totalChoices);
         Console.WriteLine("questionDeatilId" + questionDeatilId);
 
-        var localData = result.Data.Where(e => e.MultipleChoiceQuestion?.Id == questionDeatilId).Select(e => e.MultipleChoiceAnswer).FirstOrDefault();
+        var localData = Result.Data.Where(e => e.MultipleChoiceQuestion?.Id == questionDeatilId).Select(e => e.MultipleChoiceAnswer).FirstOrDefault();
         localData.StudentChoice = selectedItem;
         await _jsRuntime.InvokeVoidAsync("CheckExamInputDuplicate", questionId, totalChoices, selectedItem);
         await UpdateMultipleChoiceAnswer(selectedItem, questionDeatilId);
@@ -386,23 +386,17 @@
     }
     private async Task RefreshMultipleChoiceAnswer()
     {
-        if (dataLoaded == true)
+        if (DataLoaded == true)
         {
-            foreach (var question in result.Data)
+            foreach (var question in Result.Data)
             {
-                Console.WriteLine("im here 2");
                 if (question.MultipleChoiceQuestion != null)
                 {
-                    Console.WriteLine("im here");
-                    Console.WriteLine("MultipleChoiceQuestion.Id=" + question.MultipleChoiceQuestion.Id);
                     var answer = await GetMyMultipleChoiceAnswer(question.MultipleChoiceQuestion.Id);
-
-                    Console.WriteLine(answer);
                     if (answer != null)
                     {
                         question.MultipleChoiceAnswer = answer;
                         await GetSelectedItem(null, (int)answer.StudentChoice, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id);
-                        Console.WriteLine(dataLoaded);
                     }
                 }
             }

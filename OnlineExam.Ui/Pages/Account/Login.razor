@@ -6,22 +6,22 @@
 <h3>Login</h3>
 
 <form onsubmit="@loginUser">
-    <input placeholder="شماره موبایل" @bind-value="@phoneNumber">
-    <input type="password" placeholder="رمز عبور" @bind-value="@password">
+    <input placeholder="شماره موبایل" @bind-value="@PhoneNumber">
+    <input type="password" placeholder="رمز عبور" @bind-value="@Password">
     <button type="submit">ورود</button>
 </form>
 
 <ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
-    string phoneNumber = "";
-    string password = "";
+    string PhoneNumber = "";
+    string Password = "";
     public async Task loginUser()
     {
-        if(phoneNumber.Length!= 11)
+        if (PhoneNumber.Length != 11)
         {
             SetErrors("شماره تلفن باید 11 رقم باشد.");
         }
-        var result = await _authServices.Login(phoneNumber, password);
+        var result = await _authServices.Login(PhoneNumber, Password);
         if (!result.IsSuccess)
         {
             SetErrors(result.Errors);

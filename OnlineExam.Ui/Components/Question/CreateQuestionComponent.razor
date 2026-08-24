@@ -22,7 +22,7 @@
             case QuestionType.MultipleChoice:
                 {
 
-                    <input type="text" placeholder="متن گزینه." @bind-value="@tempChoice" />
+                    <input type="text" placeholder="متن گزینه." @bind-value="@TempChoice" />
                     <button onclick="@AddChoice">افزودن گزینه</button>
                     foreach (var choice in MultipleChoices)
                     {
@@ -63,8 +63,8 @@
     public EventCallback<bool> AddComplete{ get; set; }
     //for multiple choice
     List<string> MultipleChoices = new List<string>();
-    int choiceNumber = 0;
-    string tempChoice;
+    int ChoiceNumber = 0;
+    string TempChoice;
     int CorrentChoice;
 
     //for descriptive
@@ -103,16 +103,16 @@
     }
     private void AddChoice()
     {
-        choiceNumber += 1;
-        MultipleChoices.Add(choiceNumber.ToString() + "-" + tempChoice);
-        tempChoice = "";
+        ChoiceNumber += 1;
+        MultipleChoices.Add(ChoiceNumber.ToString() + "-" + TempChoice);
+        TempChoice = "";
         StateHasChanged();
     }
     private bool IsCorrectChoiceValid()
     {
-        if (CorrentChoice > choiceNumber)
+        if (CorrentChoice > ChoiceNumber)
         {
-            SetErrors("کزینه وارد شده صحیح نیست..");
+            SetErrors("کزینه وارد شده صحیح نیست.");
             return false;
         }
         return true;

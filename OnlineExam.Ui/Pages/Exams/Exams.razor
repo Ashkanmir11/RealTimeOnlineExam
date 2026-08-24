@@ -5,7 +5,7 @@
 <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
 
 @{
-    if (result == null || result.Data == null || result.Data.Count == 0)
+    if (Result == null || Result.Data == null || Result.Data.Count == 0)
     {
         <p>ازمونی یافت نشد.</p>
     }
@@ -23,7 +23,7 @@
                 <th>سوالات درهم</th>
                 <th>عملیات</th>
             </tr>
-            @foreach (var exam in result.Data)
+            @foreach (var exam in Result.Data)
             {
                 <tr>
                     <td>@exam.QuestionCount</td>
@@ -48,20 +48,19 @@
 
 }
 <ErrorComponent Errors="@Errors"></ErrorComponent>
-<PaginateComponent CurrentPage="result.PageNumber" TotalPage="@result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
+<PaginateComponent CurrentPage="Result.PageNumber" TotalPage="@Result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
 @code {
     [Parameter]
     public int ClassId { get; set; }
-    PaginateResponse<GetExamDetailDTO> result = new PaginateResponse<GetExamDetailDTO>();
-    PaginateRequestDTO paginateRequest = new PaginateRequestDTO();
+    PaginateResponse<GetExamDetailDTO> Result = new PaginateResponse<GetExamDetailDTO>();
     private async void changePage(int selectedPage)
     {
-        paginateRequest.PageNumber = selectedPage;
+        SetPageNumber(selectedPage);
         await GetData();
     }
     protected override async Task OnInitializedAsync()
     {
-        result.Data = new List<GetExamDetailDTO>();
+        Result.Data = new List<GetExamDetailDTO>();
         await GetData();
         await base.OnInitializedAsync();
     }
@@ -79,7 +78,7 @@
     }
     private async Task GetData()
     {
-        var response = await _examServices.GetExamTeacher(ClassId, paginateRequest);
+        var response = await _examServices.GetExamTeacher(ClassId, GetDefultPaginate());
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);
@@ -87,10 +86,11 @@
         }
         else if (response.StatusCode != 204)
         {
-            result = response.Data;
+            Result = response.Data;
             StateHasChanged();
         }
     }
+    #region redirects
     private void RedirectToCreateExam()
     {
         _navigationManager.NavigateTo($"CreateExams/{ClassId}");
@@ -107,4 +107,5 @@
     {
         _navigationManager.NavigateTo($"examGrading/{ClassId}/{id}");
     }
+    #endregion
 }

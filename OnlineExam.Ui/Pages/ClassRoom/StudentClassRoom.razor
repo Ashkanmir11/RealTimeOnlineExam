@@ -4,13 +4,13 @@
 <h3>StudentClassRoom</h3>
 <div>
     @{
-        if (result == null || result.Data.Count == 0)
+        if (Result == null || Result.Data.Count == 0)
         {
             <p>کلاسی موجود نیست.</p>
         }
         else
         {
-            @foreach (var classRoom in result.Data)
+            @foreach (var classRoom in Result.Data)
             {
                 <div>
                     <p>@classRoom.ClassName</p>
@@ -21,10 +21,10 @@
     }
 </div>
 <ErrorComponent Errors="@Errors"></ErrorComponent>
-<PaginateComponent TotalPage="result.TotalPage" CurrentPage="result.PageNumber" SelectedPage="@ChangePage"></PaginateComponent>
+<PaginateComponent TotalPage="Result.TotalPage" CurrentPage="Result.PageNumber" SelectedPage="@ChangePage"></PaginateComponent>
 
 @code {
-    PaginateResponse<GetClassRoomStudentDTO> result = new PaginateResponse<GetClassRoomStudentDTO>();
+    PaginateResponse<GetClassRoomStudentDTO> Result = new PaginateResponse<GetClassRoomStudentDTO>();
     protected override async Task OnInitializedAsync()
     {
         await GetData();
@@ -32,11 +32,11 @@
     }
     private async Task GetData()
     {
-        result.Data = new List<GetClassRoomStudentDTO>();
+        Result.Data = new List<GetClassRoomStudentDTO>();
         var response = await _classRoomServices.GetStudentClasses(GetDefultPaginate());
         if (response.IsSuccess && response.StatusCode != 204)
         {
-            result = response.Data;
+            Result = response.Data;
         }
         else if (!response.IsSuccess)
         {

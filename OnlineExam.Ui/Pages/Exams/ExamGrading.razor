@@ -2,7 +2,7 @@
 @page "/examGrading/{ClassId:int}/{ExamId:int}"
 @inject ClassRoomMemberServices _classRoomMember;
 <h3>ExamGrading</h3>
-@if (result.students==null || result.students.Count == 0)
+@if (Result.students == null || Result.students.Count == 0)
 {
     <p>این کلاس دانشجویی ندارد.</p>
 }
@@ -21,7 +21,7 @@ else
             </th>
         </tr>
         @{
-            foreach (var student in result.students)
+            foreach (var student in Result.students)
             {
                 <tr>
                     <td>@student.FirstName @student.LastName</td>
@@ -46,7 +46,7 @@ else
     [Parameter]
     public int ClassId { get; set; }
 
-    GetClassRoomMembersDTO result = new GetClassRoomMembersDTO();
+    GetClassRoomMembersDTO Result = new GetClassRoomMembersDTO();
     protected override async Task OnInitializedAsync()
     {
         await GetData();
@@ -57,12 +57,12 @@ else
         var response = await _classRoomMember.GetClassStudnets(ClassId);
         if (!response.IsSuccess)
         {
-            result.students = new List<StudentsInfoDTO>();
+            Result.students = new List<StudentsInfoDTO>();
             SetErrors(Errors);
         }
         else if (response.StatusCode != 204)
         {
-            result = response.Data;
+            Result = response.Data;
         }
     }
     private void RedirectToStudentAnswers(string studentId)

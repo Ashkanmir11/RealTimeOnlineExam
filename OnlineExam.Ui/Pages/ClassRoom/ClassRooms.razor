@@ -5,7 +5,7 @@
 @{
     <button @onclick="@AddClass">افزودن کلاس.</button>
     //show data
-    if (result.Data.Count == 0)
+    if (Result.Data.Count == 0)
     {
         <div>کلاسی یافت نشد.</div>
     }
@@ -23,7 +23,7 @@
                     عملیات
                 </th>
             </tr>
-            @foreach (var classRoom in result.Data)
+            @foreach (var classRoom in Result.Data)
             {
                 <tr>
                     <td> @classRoom.ClassName</td>
@@ -41,21 +41,55 @@
 
     }
 
-    <PaginateComponent SelectedPage="@changePage" TotalPage="@totalPage" CurrentPage="@currentPage"></PaginateComponent>
+    <PaginateComponent SelectedPage="@changePage" TotalPage="Result.TotalPage" CurrentPage="Result.PageNumber"></PaginateComponent>
 }
 
 @code {
-    PaginateResponse<GetClassRoomTeacherDTO> result = new PaginateResponse<GetClassRoomTeacherDTO>();
-    PaginateRequestDTO paginateRequestDTO = new PaginateRequestDTO();
-    int totalPage;
-    int currentPage;
+    PaginateResponse<GetClassRoomTeacherDTO> Result = new PaginateResponse<GetClassRoomTeacherDTO>();
+
 
     protected override async Task OnInitializedAsync()
     {
-        currentPage = 1;
         await GetData();
         await base.OnInitializedAsync();
     }
+
+
+    private async Task DeleteClassRoom(int id)
+    {
+        var result = await _classRoomServices.DeleteAsync(id);
+        if (!result.IsSuccess)
+        {
+            SetErrors(result.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
+    }
+
+    private async void changePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        StateHasChanged();
+        await GetData();
+    }
+
+    private async Task GetData()
+    {
+        Result.Data = new List<GetClassRoomTeacherDTO>();
+        var response = await _classRoomServices.GetMyClassAsTeacherAsync(GetDefultPaginate());
+        if (response.IsSuccess && response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        else if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        StateHasChanged();
+    }
+
     #region Redirect merhods
     private void AddClass()
     {
@@ -74,42 +108,4 @@
         _navigationManager.NavigateTo($"Exams/{id}");
     }
     #endregion
-
-    private async Task DeleteClassRoom(int id)
-    {
-        var result = await _classRoomServices.DeleteAsync(id);
-        if (!result.IsSuccess)
-        {
-            SetErrors(result.Errors);
-        }
-        else
-        {
-            await GetData();
-        }
-    }
-
-    private async void changePage(int selectedPage)
-    {
-        paginateRequestDTO.PageNumber = selectedPage;
-        currentPage = selectedPage;
-        StateHasChanged();
-        await GetData();
-    }
-
-    private async Task GetData()
-    {
-        result.Data = new List<GetClassRoomTeacherDTO>();
-        var response = await _classRoomServices.GetMyClassAsTeacherAsync(paginateRequestDTO);
-        if (response.IsSuccess && response.StatusCode != 204)
-        {
-            totalPage = response.Data.TotalPage;
-            result = response.Data;
-        }
-        else if (!response.IsSuccess)
-        {
-            SetErrors(response.Errors);
-        }
-        StateHasChanged();
-    }
-
 }

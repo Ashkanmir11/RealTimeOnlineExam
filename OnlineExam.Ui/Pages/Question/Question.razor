@@ -1,6 +1,6 @@
 ﻿@using OnlineExam.Ui.Components.Question;
 @using OnlineExam.Ui.DTO.Question;
-@page "/question/{examId:int}"
+@page "/question/{ExamId:int}"
 @inject QuestionServices _questionServices;
 <h3>Question</h3>
 @{
@@ -12,7 +12,7 @@
     else
     {
         <button onclick="@ChangeShowCreatStatus">بستن</button>
-        <CreateQuestionComponent ExamId="examId" AddComplete="AddComplete"></CreateQuestionComponent>
+        <CreateQuestionComponent ExamId="ExamId" AddComplete="AddComplete"></CreateQuestionComponent>
     }
 
     if (Result == null || Result.Data == null || Result.Data.Count == 0)
@@ -73,7 +73,7 @@
 @code {
 
     [Parameter]
-    public int examId { get; set; }
+    public int ExamId { get; set; }
     bool ShowCreate = false;
     decimal TotalScore;
     PaginateResponse<GetQuestionTeacherDTO> Result = new PaginateResponse<GetQuestionTeacherDTO>();
@@ -103,7 +103,7 @@
     {
         SetOrderById(false);
         Result.Data = new List<GetQuestionTeacherDTO>();
-        var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), examId);
+        var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), ExamId);
         if (!response.IsSuccess)
         {
             SetErrors(response.Errors);

@@ -1,11 +1,11 @@
 ﻿@using OnlineExam.Ui.DTO.ClassRoomMembers;
 @inject ClassRoomMemberServices _classRoomMembersServices;
 
-<input type="text" @bind-value="@tempPhone" />
+<input type="text" @bind-value="@TempPhone" />
 <button @onclick="@AddToPhones">افزودن</button>
-<ErrorComponent Errors="errors"></ErrorComponent>
+<ErrorComponent Errors="Errors"></ErrorComponent>
 @{
-    foreach (var phone in phones)
+    foreach (var phone in Phones)
     {
         <p>@phone</p>
     }
@@ -17,39 +17,36 @@
     [Parameter]
     public EventCallback<bool> SuccessAdd { get; set; }
 
-    string tempPhone = "";
-    List<string> phones = new List<string>();
-    List<string> errors = new List<string>();
+    string TempPhone = "";
+    List<string> Phones = new List<string>();
 
-    CreateClassRoomMemberDTO createClassRoomMemberDTO = new CreateClassRoomMemberDTO();
+    CreateClassRoomMemberDTO CreateClassRoomMemberDTO = new CreateClassRoomMemberDTO();
     private async Task AddAsync()
     {
-        createClassRoomMemberDTO.Phones = phones;
-        createClassRoomMemberDTO.ClassRomeId = ClassId;
-        var result = await _classRoomMembersServices.CreateClassStudent(createClassRoomMemberDTO);
+        CreateClassRoomMemberDTO.Phones = Phones;
+        CreateClassRoomMemberDTO.ClassRomeId = ClassId;
+        var result = await _classRoomMembersServices.CreateClassStudent(CreateClassRoomMemberDTO);
         if (result.IsSuccess)
         {
             await SuccessAdd.InvokeAsync(true);
         }
         else
         {
-            phones.Clear();
-            errors.Clear();
-            errors.AddRange(result.Errors);
+            Phones.Clear();
+            SetErrors(result.Errors);
         }
 
     }
     private void AddToPhones()
     {
-        if (tempPhone.Length != 11)
+        if (TempPhone.Length != 11)
         {
-            errors.Clear();
-            errors.Add("شماره تلفن معتبر نیست.");
+            SetErrors("شماره تلفن معتبر نیست.");
         }
         else
         {
-            phones.Add(tempPhone);
-            tempPhone = "";
+            Phones.Add(TempPhone);
+            TempPhone = "";
             StateHasChanged();
         }
 

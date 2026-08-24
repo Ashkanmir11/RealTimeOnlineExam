@@ -3,7 +3,7 @@
 @inject ExamServices _examServices;
 <h3>StudentExams</h3>
 @{
-    if (result == null || result.Data.Count == 0)
+    if (Result == null || Result.Data.Count == 0)
     {
         <p>آزمونی یافت نشد.</p>
     }
@@ -20,7 +20,7 @@
             <th>سوالات درهم</th>
             <th>عملیات</th>
         </tr>
-        @foreach (var exam in result.Data)
+        @foreach (var exam in Result.Data)
         {
             <tr>
                 <td>@exam.QuestionCount</td>
@@ -44,10 +44,10 @@
 @code {
     [Parameter]
     public int ClassId { get; set; }
-    PaginateResponse<GetExamDetailDTO> result = new PaginateResponse<GetExamDetailDTO>();
+    PaginateResponse<GetExamDetailDTO> Result = new PaginateResponse<GetExamDetailDTO>();
     protected override async Task OnInitializedAsync()
     {
-        result.Data = new List<GetExamDetailDTO>();
+        Result.Data = new List<GetExamDetailDTO>();
         await GetData();
         await base.OnInitializedAsync();
     }
@@ -60,7 +60,7 @@
         }
         else if (response.StatusCode != 204)
         {
-            result = response.Data;
+            Result = response.Data;
         }
         StateHasChanged();
     }
@@ -73,8 +73,8 @@
         }
         else
         {
-            bool CanCopy = result.Data.Where(e => e.Id == examId).Select(e => e.AllowedCopy).FirstOrDefault();
-            bool StudentLog = result.Data.Where(e => e.Id == examId).Select(e => e.LogStudent).FirstOrDefault();
+            bool CanCopy = Result.Data.Where(e => e.Id == examId).Select(e => e.AllowedCopy).FirstOrDefault();
+            bool StudentLog = Result.Data.Where(e => e.Id == examId).Select(e => e.LogStudent).FirstOrDefault();
             _navigationManager.NavigateTo($"StartExam/{examId}?canCopy={CanCopy}&&StudentLog={StudentLog}");
         }
     }

@@ -4,24 +4,24 @@
 
 <h1>ثبت کلاس جدید</h1>
 
-<EditForm EditContext="@editContext" OnValidSubmit="@CraeteClassRoom">
+<EditForm EditContext="@EditContext" OnValidSubmit="@CraeteClassRoom">
     <DataAnnotationsValidator></DataAnnotationsValidator>
-    <InputText @bind-Value="@createClassRoomDTO.ClassName"></InputText>
+    <InputText @bind-Value="@CreateClassRoomDTO.ClassName"></InputText>
     <button type="submit">افزودن</button>
 </EditForm>
 
 <ErrorComponent Errors="Errors"></ErrorComponent>
 
 @code {
-    private EditContext editContext;
-    CreateClassRoomDTO createClassRoomDTO = new CreateClassRoomDTO();
+    private EditContext EditContext;
+    CreateClassRoomDTO CreateClassRoomDTO = new CreateClassRoomDTO();
 
     protected override void OnInitialized()
     {
-        editContext = new EditContext(createClassRoomDTO);
-        editContext.OnValidationStateChanged += (sender, args) =>
+        EditContext = new EditContext(CreateClassRoomDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
         {
-            var validationErrors = editContext.GetValidationMessages();
+            var validationErrors = EditContext.GetValidationMessages();
             SetErrors(validationErrors.ToList());
             StateHasChanged();
         };
@@ -30,7 +30,7 @@
     private async Task CraeteClassRoom()
     {
 
-        var result = await _classRoomServices.CreateAsync(createClassRoomDTO);
+        var result = await _classRoomServices.CreateAsync(CreateClassRoomDTO);
         if (!result.IsSuccess)
         {
             SetErrors(result.Errors);

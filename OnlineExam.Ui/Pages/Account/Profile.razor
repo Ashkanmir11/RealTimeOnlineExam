@@ -1,22 +1,21 @@
 ﻿@page "/profile"
 <h3>Profile</h3>
 <div>
-    <p>نام: @myInfoDTO.FirstName  @myInfoDTO.LastName</p>
-    <p>نام کاربری: @myInfoDTO.UserName</p>
-    <p>شماره تلفن : @myInfoDTO.Phone</p>
-    <p>ایمیل : @myInfoDTO.Email</p>
+    <p>نام: @Result.FirstName  @Result.LastName</p>
+    <p>نام کاربری: @Result.UserName</p>
+    <p>شماره تلفن : @Result.Phone</p>
+    <p>ایمیل : @Result.Email</p>
 </div>
 @code {
-    MyInfoDTO myInfoDTO = new MyInfoDTO();
+    MyInfoDTO Result = new MyInfoDTO();
     protected override async Task OnInitializedAsync()
     {
-        var result = await _authServices.GetMyInfo();
-        Console.WriteLine(result);
-        if(result.IsSuccess)
+        var response = await _authServices.GetMyInfo();
+        if (response.IsSuccess)
         {
-            myInfoDTO = result.Data;
+            Result = response.Data;
         }
-        if(result.StatusCode==401)
+        if (response.StatusCode == 401)
         {
             _navigationManager.NavigateTo("/login");
         }
