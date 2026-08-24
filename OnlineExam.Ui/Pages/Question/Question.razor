@@ -108,6 +108,7 @@
     }
     private async Task GetData()
     {
+        Result = new PaginateResponse<GetQuestionTeacherDTO>();
         SetOrderById(false);
         Result.Data = new List<GetQuestionTeacherDTO>();
         var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), ExamId);

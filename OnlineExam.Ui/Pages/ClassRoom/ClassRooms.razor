@@ -84,6 +84,7 @@
 
     private async Task GetData()
     {
+        Result = new PaginateResponse<GetClassRoomTeacherDTO>();
         Result.Data = new List<GetClassRoomTeacherDTO>();
         var response = await _classRoomServices.GetMyClassAsTeacherAsync(GetDefultPaginate());
         DataLoaded = true;

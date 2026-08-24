@@ -89,6 +89,7 @@
     }
     private async Task GetData()
     {
+        this.GetClassRoomMembersDTO = new GetClassRoomMembersDTO();
         var classMembers = await _classRoomMembersServices.GetClassStudnets(ClassId);
         DataLoaded = true;
         if (!classMembers.IsSuccess)
@@ -101,5 +102,6 @@
             Console.WriteLine(GetClassRoomMembersDTO.students.Count);
             GetClassRoomMembersDTO = classMembers.Data;
         }
+        StateHasChanged();
     }
 }

@@ -6,6 +6,7 @@
     if (DataLoaded)
     {
         <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
+        
         if (Result == null || Result.Data == null || Result.Data.Count == 0)
         {
             <p>ازمونی یافت نشد.</p>
@@ -83,6 +84,7 @@
     }
     private async Task GetData()
     {
+        Result = new PaginateResponse<GetExamDetailDTO>();
         var response = await _examServices.GetExamTeacher(ClassId, GetDefultPaginate());
         DataLoaded = true;
         if (!response.IsSuccess)
@@ -93,8 +95,8 @@
         else if (response.StatusCode != 204)
         {
             Result = response.Data;
-            StateHasChanged();
         }
+        StateHasChanged();
     }
     #region redirects
     private void RedirectToCreateExam()
