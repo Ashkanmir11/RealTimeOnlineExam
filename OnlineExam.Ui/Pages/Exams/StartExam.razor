@@ -55,7 +55,7 @@
 }
 
 <button @onclick="EndExam">پایان آزمون</button>
-}
+
 
 <ErrorComponent Errors="@Errors"></ErrorComponent>
 @code {
@@ -166,7 +166,7 @@
         while (true)
         {
             await Task.Delay(1000);
-            RefreshTimer = RefreshTimer - 1;
+           // RefreshTimer = RefreshTimer - 1;
             if (RefreshTimer == 0)
             {
                 SaveChangeAfterConnect();
