@@ -1,0 +1,128 @@
+﻿/* ============ صفحه ============ */
+.edit-class-page {
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* ============ کارت فرم ============ */
+.edit-card {
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 16px;
+    padding: 1.75rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============ عنوان ============ */
+h4 {
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1.5rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    position: relative;
+}
+
+    h4::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: -1px;
+        width: 52px;
+        height: 2px;
+        border-radius: 2px;
+        background: linear-gradient(90deg, #6366f1, #22d3ee);
+    }
+
+/* ============ فیلد ورودی (با ::deep برای نفوذ به InputText) ============ */
+.edit-card ::deep .form-group {
+    margin-bottom: 1.5rem;
+}
+
+    .edit-card ::deep .form-group label {
+        display: block;
+        color: #94a3b8;
+        font-family: Vazirmatn, Tahoma, sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .edit-card ::deep .form-group input {
+        width: 100%;
+        background: rgba(8, 13, 26, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        color: #f8fafc;
+        font-family: Vazirmatn, Tahoma, sans-serif;
+        font-size: 0.9rem;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .edit-card ::deep .form-group input::placeholder {
+            color: #64748b;
+        }
+
+        .edit-card ::deep .form-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+
+        /* رفع مشکل autofill */
+        .edit-card ::deep .form-group input:-webkit-autofill,
+        .edit-card ::deep .form-group input:-webkit-autofill:hover,
+        .edit-card ::deep .form-group input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #f8fafc !important;
+            -webkit-box-shadow: 0 0 0 1000px #0f172a inset !important;
+            transition: background-color 9999s ease-in-out 0s;
+        }
+
+/* ============ دکمه ویرایش ============ */
+.btn-save {
+    width: 100%;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #f8fafc;
+    border: none;
+    border-radius: 12px;
+    padding: 0.8rem;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+    transition: all 0.25s ease;
+}
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 26px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-save:active {
+        transform: translateY(0);
+    }
+
+    .btn-save:focus-visible {
+        outline: 2px solid #818cf8;
+        outline-offset: 2px;
+    }
+
+/* ============ موبایل ============ */
+@media (max-width: 640px) {
+    .edit-class-page {
+        max-width: 100%;
+    }
+
+    .edit-card {
+        padding: 1.25rem;
+    }
+
+    h4 {
+        font-size: 1.1rem;
+    }
+}

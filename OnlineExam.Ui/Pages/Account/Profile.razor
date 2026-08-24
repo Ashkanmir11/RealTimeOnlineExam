@@ -1,20 +1,39 @@
 ﻿@page "/profile"
-<h3>Profile</h3>
-<div>
+<div class="profile-page">
+    <h3>پروفایل کاربری</h3>
+
     @{
         if (DataLoaded)
         {
-            <p>نام: @Result.FirstName  @Result.LastName</p>
-            <p>نام کاربری: @Result.UserName</p>
-            <p>شماره تلفن : @Result.Phone</p>
-            <p>ایمیل : @Result.Email</p>
+            <div class="profile-card">
+                <div class="profile-item">
+                    <span class="profile-label">نام و نام خانوادگی</span>
+                    <span class="profile-value">@Result.FirstName @Result.LastName</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">نام کاربری</span>
+                    <span class="profile-value">@Result.UserName</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">شماره تلفن</span>
+                    <span class="profile-value phone-value">@Result.Phone</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">ایمیل</span>
+                    <span class="profile-value email-value">@Result.Email</span>
+                </div>
+            </div>
         }
         else
         {
-            <LoadingComponent></LoadingComponent>
+            <div class="profile-loading">
+                <LoadingComponent></LoadingComponent>
+            </div>
         }
     }
-
 </div>
 @code {
     MyInfoDTO Result = new MyInfoDTO();

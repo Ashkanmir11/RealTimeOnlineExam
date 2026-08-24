@@ -1,16 +1,34 @@
 ﻿@page "/CreateClassRoom";
 @using OnlineExam.Ui.DTO.ClassRoom;
 @inject ClassRoomServices _classRoomServices;
+<div class="create-class-page">
+    <h1>ثبت کلاس جدید</h1>
+    <EditForm EditContext="@EditContext" OnValidSubmit="@CraeteClassRoom">
+        <DataAnnotationsValidator />
 
-<h1>ثبت کلاس جدید</h1>
+        <div class="class-form-row">
+            <InputText id="className"
+                       class="class-name-input"
+                       @bind-Value="@CreateClassRoomDTO.ClassName"
+                       placeholder="نام کلاس را وارد کنید"
+                       autocomplete="off" />
 
-<EditForm EditContext="@EditContext" OnValidSubmit="@CraeteClassRoom">
-    <DataAnnotationsValidator></DataAnnotationsValidator>
-    <InputText @bind-Value="@CreateClassRoomDTO.ClassName"></InputText>
-    <button type="submit">افزودن</button>
-</EditForm>
+            <button class="submit-button" type="submit">
+                <svg class="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                <span>افزودن کلاس</span>
+            </button>
+        </div>
+    </EditForm>
 
-<ErrorComponent Errors="Errors"></ErrorComponent>
+    <ErrorComponent Errors="Errors" />
+</div>
+
+
+
+
 
 @code {
     private EditContext EditContext;

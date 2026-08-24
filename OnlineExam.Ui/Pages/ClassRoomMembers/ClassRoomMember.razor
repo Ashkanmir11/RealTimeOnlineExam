@@ -4,55 +4,62 @@
 @inject ClassRoomMemberServices _classRoomMembersServices;
 <h3>مدیریت اعضای کلاس</h3>
 @{
-    if (DataLoaded)
+    @if (DataLoaded)
     {
         <h4>@GetClassRoomMembersDTO.className</h4>
-        if (ShowCreateMember)
+
+        @if (ShowCreateMember)
         {
-            <button @onclick="@ChangeShowCreateStatus">بستن</button>
+            <button class="btn-close" @onclick="@ChangeShowCreateStatus">بستن</button>
             <AddClassRoomMemberComponent SuccessAdd="AddComplete" ClassId="@ClassId"></AddClassRoomMemberComponent>
         }
         else
         {
-            <button @onclick="@ChangeShowCreateStatus">افزودن اعضا</button>
-
+            <button class="btn-add" @onclick="@ChangeShowCreateStatus">افزودن اعضا</button>
         }
-        if (GetClassRoomMembersDTO.students != null && GetClassRoomMembersDTO.students.Count > 0)
+
+        @if (GetClassRoomMembersDTO.students != null && GetClassRoomMembersDTO.students.Count > 0)
         {
-
-            <table>
-                <tr>
-                    <th>نام کاربری</th>
-                    <th>نام و نام خانوادگی</th>
-                    <th>شماره موبایل</th>
-                    <th>ایمیل</th>
-                    <th>عملیات</th>
-                </tr>
-                @foreach (var student in GetClassRoomMembersDTO.students)
-                {
-                    <tr>
-                        <td>@student.UserName</td>
-                        <td>@student.FirstName @student.LastName</td>
-                        <td>@student.Phone</td>
-                        <td>@student.Email</td>
-                        <td>
-                            <button @onclick="()=>DeleteMember(student.Id)">حذف</button>
-                        </td>
-                    </tr>
-                }
-            </table>
-
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام کاربری</th>
+                            <th>نام و نام خانوادگی</th>
+                            <th>شماره موبایل</th>
+                            <th>ایمیل</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in GetClassRoomMembersDTO.students)
+                        {
+                            <tr>
+                                <td>@student.UserName</td>
+                                <td>@student.FirstName @student.LastName</td>
+                                <td>@student.Phone</td>
+                                <td>@student.Email</td>
+                                <td>
+                                    <button class="btn-delete" @onclick="()=>DeleteMember(student.Id)">حذف</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
         else
         {
-            <p>کلاس عضوی ندارد.</p>
+            <p class="empty-state">کلاس عضوی ندارد.</p>
         }
+
         <ErrorComponent Errors="Errors"></ErrorComponent>
     }
     else
     {
         <LoadingComponent></LoadingComponent>
     }
+
 }
 
 @code {

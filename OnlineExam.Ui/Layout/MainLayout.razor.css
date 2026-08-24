@@ -31,10 +31,10 @@ article {
         font-family: Vazirmatn, Tahoma, sans-serif;
     }
 
-    article ::deep p {
+    /*article ::deep p {
         color: #b7c4d8;
         line-height: 2;
-    }
+    }*/
 
 @media (max-width: 768px) {
     .page {

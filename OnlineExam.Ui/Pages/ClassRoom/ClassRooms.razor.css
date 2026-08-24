@@ -1,0 +1,157 @@
+﻿.classes-page {
+    width: min(100% - 32px, 1100px);
+    margin: 58px auto 40px;
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    direction: rtl;
+}
+
+    .classes-page .classes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+        .classes-page .classes-header h3 {
+            margin: 0 0 7px;
+            color: #f8fafc;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(59, 130, 246, 0.22);
+        }
+
+        .classes-page .classes-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+    .classes-page .add-class-button,
+    .classes-page .empty-add-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 45px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 11px;
+        cursor: pointer;
+        color: #ffffff;
+        background: linear-gradient(135deg, #3b82f6, #4f46e5);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.26);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+        .classes-page .add-class-button:hover,
+        .classes-page .empty-add-button:hover {
+            filter: brightness(1.12);
+            box-shadow: 0 14px 30px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+    .classes-page .empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 280px;
+        padding: 30px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        text-align: center;
+    }
+
+        .classes-page .empty-state h4 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: 1.15rem;
+        }
+
+        .classes-page .empty-state p {
+            margin: 0 0 20px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+    .classes-page .classes-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .classes-page .classes-table {
+        width: 100%;
+        min-width: 760px;
+        border-collapse: collapse;
+    }
+
+        .classes-page .classes-table th {
+            padding: 17px 22px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            color: #94a3b8;
+            background: rgba(30, 41, 59, 0.55);
+            font-size: 0.83rem;
+            font-weight: 700;
+            text-align: right;
+        }
+
+        .classes-page .classes-table td {
+            padding: 17px 22px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+            color: #e2e8f0;
+            font-size: 0.92rem;
+            vertical-align: middle;
+        }
+
+        .classes-page .classes-table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.06);
+        }
+
+        .classes-page .classes-table tbody tr:last-child td {
+            border-bottom: 0;
+        }
+
+    .classes-page .class-name {
+        color: #f8fafc !important;
+        font-weight: 700;
+    }
+
+    .classes-page .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .classes-page .action-button {
+        min-height: 35px;
+        padding: 0 11px;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.78rem;
+        font-weight: 600;
+        white-space: nowrap;
+        transition: transform 0.18s ease, filter 0.18s ease;
+    }
+
+        .classes-page .action-button:hover {
+            filter: brightness(1.16);
+            transform: translateY(-1px);
+        }
+
+        .classes-page .action-button.danger {
+            border-color: rgba(248, 113, 113, 0.24);
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.12);
+        }

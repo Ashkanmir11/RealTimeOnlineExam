@@ -1,16 +1,31 @@
 ﻿@using OnlineExam.Ui.DTO.ClassRoomMembers;
 @inject ClassRoomMemberServices _classRoomMembersServices;
 
-<input type="text" @bind-value="@TempPhone" />
-<button @onclick="@AddToPhones">افزودن</button>
-<ErrorComponent Errors="Errors"></ErrorComponent>
-@{
-    foreach (var phone in Phones)
+<div class="member-form">
+    <div class="phone-row">
+        <input type="text" @bind-value="@TempPhone" placeholder="شماره موبایل" />
+        <button class="btn-add-phone" @onclick="@AddToPhones">افزودن</button>
+    </div>
+
+    <ErrorComponent Errors="Errors"></ErrorComponent>
+
+    @if (Phones != null && Phones.Count > 0)
     {
-        <p>@phone</p>
+        <div class="phones-list">
+            @foreach (var phone in Phones)
+            {
+                <span class="phone-chip">@phone</span>
+            }
+        </div>
     }
-}
-<button @onclick="@AddAsync">ثبت تغییرات.</button>
+    else
+    {
+        <p class="phones-empty">هنوز شمارهای اضافه نشده است.</p>
+    }
+
+    <button class="btn-save" @onclick="@AddAsync">ثبت تغییرات</button>
+</div>
+
 @code {
     [Parameter]
     public int ClassId { get; set; }
