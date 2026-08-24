@@ -1,7 +1,6 @@
 ﻿@using OnlineExam.Ui.DTO.ClassRoom;
 @page "/updateclassroom/{Id:int}";
 @inject ClassRoomServices _classRoomServices;
-@layout ManagmentLayout;
 <h1>ویرایش کلاس</h1>
 
 <EditForm EditContext="@editContext" OnValidSubmit="@UpdateClass">

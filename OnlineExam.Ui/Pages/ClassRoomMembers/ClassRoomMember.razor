@@ -1,5 +1,4 @@
 ﻿@page "/classRoomMember/{ClassId:int}"
-@layout ManagmentLayout;
 @using OnlineExam.Ui.DTO.ClassRoomMembers;
 @using OnlineExam.Ui.Components.ClassRoomMembers;
 @inject ClassRoomMemberServices _classRoomMembersServices;
@@ -93,7 +92,6 @@
         else if (classMembers.StatusCode != 204)
         {
             getClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
-
             Console.WriteLine(getClassRoomMembersDTO.students.Count);
             getClassRoomMembersDTO = classMembers.Data;
         }

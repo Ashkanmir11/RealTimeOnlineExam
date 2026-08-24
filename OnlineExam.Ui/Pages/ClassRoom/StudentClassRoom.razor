@@ -34,13 +34,13 @@
     {
         result.Data = new List<GetClassRoomStudentDTO>();
         var response = await _classRoomServices.GetStudentClasses(GetDefultPaginate());
-        if (!response.IsSuccess)
-        {
-            SetErrors(response.Errors);
-        }
-        else if(response.StatusCode!=204)
+        if (response.IsSuccess && response.StatusCode != 204)
         {
             result = response.Data;
+        }
+        else if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
         }
         StateHasChanged();
     }

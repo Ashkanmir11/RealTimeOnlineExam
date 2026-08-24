@@ -1,7 +1,6 @@
 ﻿@using OnlineExam.Ui.DTO.ClassRoom;
 @page "/classroom";
 @inject ClassRoomServices _classRoomServices;
-@layout ManagmentLayout;
 <h3>ClassRooms</h3>
 @{
     <button @onclick="@AddClass">افزودن کلاس.</button>
@@ -14,18 +13,32 @@
     else
     {
         <ErrorComponent Errors="@Errors"></ErrorComponent>
-        foreach (var classRoom in result.Data)
-        {
-            <div>
-                <p>
-                    @classRoom.ClassName
-                    <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
-                    <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
-                    <button @onclick="()=>ManageStudents(classRoom.Id)">مدیریت اعضا</button>
-                    <button @onclick="()=>ManageExams(classRoom.Id)">مدیریت آزمون ها</button>
-                </p>
-            </div>
-        }
+
+        <table>
+            <tr>
+                <th>
+                    نام کلاس
+                </th>
+                <th>
+                    عملیات
+                </th>
+            </tr>
+            @foreach (var classRoom in result.Data)
+            {
+                <tr>
+                    <td> @classRoom.ClassName</td>
+                    <td>
+                        <button @onclick="()=>DeleteClassRoom(classRoom.Id)"> حذف</button>
+                        <button @onclick="()=>UpdateClass(classRoom.Id)">ویرایش</button>
+                        <button @onclick="()=>ManageStudents(classRoom.Id)">مدیریت اعضا</button>
+                        <button @onclick="()=>ManageExams(classRoom.Id)">مدیریت آزمون ها</button>
+                    </td>
+                </tr>
+            }
+        </table>
+
+
+
     }
 
     <PaginateComponent SelectedPage="@changePage" TotalPage="@totalPage" CurrentPage="@currentPage"></PaginateComponent>

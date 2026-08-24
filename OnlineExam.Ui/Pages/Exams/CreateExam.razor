@@ -1,5 +1,4 @@
 ﻿@using OnlineExam.Ui.DTO.Exam;
-@layout ManagmentLayout;
 @page "/CreateExams/{classId:int}";
 @inject ExamServices _examServices;
 <EditForm EditContext="@editContext" OnValidSubmit="@preAddAsync">
