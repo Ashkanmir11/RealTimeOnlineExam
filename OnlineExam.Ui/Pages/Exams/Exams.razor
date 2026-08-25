@@ -1,60 +1,137 @@
 ﻿@using OnlineExam.Ui.DTO.Exam;
 @page "/Exams/{ClassId:int}"
 @inject ExamServices _examServices;
-<h3>Exams</h3>
-@{
-    if (DataLoaded)
+<div class="exams-page">
+    <div class="exams-header">
+        <div>
+            <h3>آزمون‌ها</h3>
+            <p>مدیریت آزمون‌ها، سؤال‌ها و تصحیح پاسخ‌ها</p>
+        </div>
+
+        <button class="add-exam-button" @onclick="RedirectToCreateExam">
+            افزودن آزمون
+        </button>
+    </div>
+
+    @if (DataLoaded)
     {
-        <button onclick="@RedirectToCreateExam">افزودن آزمون</button>
-        
-        if (Result == null || Result.Data == null || Result.Data.Count == 0)
+        @if (Result?.Data == null || Result.Data.Count == 0)
         {
-            <p>ازمونی یافت نشد.</p>
+            <div class="exams-empty-state">
+                <div class="empty-icon">📝</div>
+                <h4>آزمونی یافت نشد</h4>
+                <p>برای شروع، اولین آزمون خود را ایجاد کنید.</p>
+
+                <button class="add-exam-button" @onclick="RedirectToCreateExam">
+                    افزودن آزمون
+                </button>
+            </div>
         }
         else
         {
-            <table>
-                <tr>
-                    <th>تعداد سوال</th>
-                    <th>نام آزمون</th>
-                    <th>توضیحات</th>
-                    <th>تاریخ شروع</th>
-                    <th>تاریخ پایان</th>
-                    <th>میزان مجاز تاخیر</th>
-                    <th>اجازه کپی</th>
-                    <th>سوالات درهم</th>
-                    <th>عملیات</th>
-                </tr>
-                @foreach (var exam in Result.Data)
-                {
-                    <tr>
-                        <td>@exam.QuestionCount</td>
-                        <td>@exam.Name</td>
-                        <td>@exam.Description</td>
-                        <td>@exam.QuestionCount</td>
-                        <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
-                        <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
-                        <td>@exam.AllowedDelay</td>
-                        <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
-                        <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
-                        <td>
-                            <button @onclick="()=>Delete(exam.Id)">حذف</button>
-                            <button @onclick="()=>RedirectToUpdateExam(exam.Id)">ویرایش</button>
-                            <button @onclick="()=>RedirectToQuestions(exam.Id)">مدیریت سوالات</button>
-                            <button @onclick="()=>RedirectToExamGrading(exam.Id)">تصحیح سوالات</button>
-                        </td>
-                    </tr>
-                }
-            </table>
+            <div class="exams-table-wrapper">
+                <table class="exams-table">
+                    <thead>
+                        <tr>
+                            <th>تعداد سؤال</th>
+                            <th>نام آزمون</th>
+                            <th>توضیحات</th>
+                            <th>تاریخ شروع</th>
+                            <th>تاریخ پایان</th>
+                            <th>میزان مجاز تأخیر</th>
+                            <th>اجازه کپی</th>
+                            <th>سؤالات درهم</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var exam in Result.Data)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="question-count">@exam.QuestionCount</span>
+                                </td>
+
+                                <td class="exam-name">@exam.Name</td>
+
+                                <td class="exam-description" title="@exam.Description">
+                                    @exam.Description
+                                </td>
+
+                                <td class="date-cell">
+                                    @DateHelper.MiladiToShamsi((DateTime)exam.StartDate)
+                                </td>
+
+                                <td class="date-cell">
+                                    @DateHelper.MiladiToShamsi((DateTime)exam.EndDate)
+                                </td>
+
+                                <td>
+                                    <span class="delay-badge">@exam.AllowedDelay</span>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox-cell">
+                                        <InputCheckbox disabled @bind-Value="@exam.AllowedCopy" />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="checkbox-cell">
+                                        <InputCheckbox disabled @bind-Value="@exam.RandomQuestions" />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="exam-actions">
+                                        <button class="exam-action-button danger"
+                                                title="حذف آزمون"
+                                                @onclick="() => Delete(exam.Id)">
+                                            حذف
+                                        </button>
+
+                                        <button class="exam-action-button edit"
+                                                title="ویرایش آزمون"
+                                                @onclick="() => RedirectToUpdateExam(exam.Id)">
+                                            ویرایش
+                                        </button>
+
+                                        <button class="exam-action-button questions"
+                                                title="مدیریت سوالات"
+                                                @onclick="() => RedirectToQuestions(exam.Id)">
+                                            سوالات
+                                        </button>
+
+                                        <button class="exam-action-button grading"
+                                                title="تصحیح سوالات"
+                                                @onclick="() => RedirectToExamGrading(exam.Id)">
+                                            تصحیح
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
-        <ErrorComponent Errors="@Errors"></ErrorComponent>
-        <PaginateComponent CurrentPage="Result.PageNumber" TotalPage="@Result.TotalPage" SelectedPage="@changePage"></PaginateComponent>
+
+        <ErrorComponent Errors="@Errors" />
+
+        @if (Result is not null)
+        {
+            <PaginateComponent CurrentPage="Result.PageNumber"
+                               TotalPage="@Result.TotalPage"
+                               SelectedPage="@changePage" />
+        }
     }
     else
     {
-        <LoadingComponent></LoadingComponent>
+        <LoadingComponent />
     }
-}
+</div>
+
 @code {
     [Parameter]
     public int ClassId { get; set; }

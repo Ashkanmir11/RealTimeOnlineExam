@@ -1,0 +1,333 @@
+﻿.create-exam-page {
+    width: min(100% - 32px, 860px);
+    margin: 50px auto 40px;
+    direction: rtl;
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    .create-exam-page .create-exam-card {
+        padding: 36px 32px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .create-exam-page .create-exam-header {
+        margin-bottom: 28px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+        .create-exam-page .create-exam-header h3 {
+            margin: 0 0 6px;
+            color: #f8fafc;
+            font-size: 1.5rem;
+            font-weight: 800;
+        }
+
+        .create-exam-page .create-exam-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.88rem;
+        }
+
+    .create-exam-page .create-exam-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .create-exam-page .create-exam-field {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+    }
+
+    .create-exam-page .create-exam-full-width {
+        grid-column: 1 / -1;
+    }
+
+    .create-exam-page .create-exam-field > label {
+        margin-bottom: 8px;
+        color: #cbd5e1;
+        font-size: 0.86rem;
+        font-weight: 700;
+    }
+
+    /* ----------------------------------------
+   InputText / InputNumber / InputTextArea
+   ::deep برای CSS Isolation ضروری است
+   ---------------------------------------- */
+
+    .create-exam-page ::deep .create-exam-input {
+        width: 100%;
+        min-height: 50px;
+        box-sizing: border-box;
+        padding: 0 15px;
+        border: 1px solid #2b3b57;
+        border-radius: 12px;
+        outline: none;
+        color: #f8fafc;
+        background: linear-gradient( 135deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.98) );
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 3px 9px rgba(0, 0, 0, 0.14);
+        font-family: inherit;
+        font-size: 0.92rem;
+        line-height: 1.5;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+        .create-exam-page ::deep .create-exam-input:hover {
+            border-color: #466084;
+            background: linear-gradient( 135deg, rgba(37, 51, 73, 0.96), rgba(18, 29, 50, 0.98) );
+        }
+
+        .create-exam-page ::deep .create-exam-input:focus {
+            border-color: #6484ff;
+            background: linear-gradient( 135deg, rgba(37, 51, 78, 0.98), rgba(19, 31, 57, 0.98) );
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.18), 0 9px 20px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .create-exam-page ::deep .create-exam-input::placeholder {
+            color: #71819c;
+            opacity: 1;
+        }
+
+    .create-exam-page ::deep .create-exam-textarea {
+        min-height: 110px;
+        padding: 13px 15px;
+        line-height: 1.8;
+        resize: vertical;
+    }
+
+    /* حذف فلش InputNumber در Chrome / Edge / Safari */
+    .create-exam-page ::deep input[type="number"]::-webkit-inner-spin-button,
+    .create-exam-page ::deep input[type="number"]::-webkit-outer-spin-button {
+        margin: 0;
+        appearance: none;
+        -webkit-appearance: none;
+    }
+
+    /* حذف فلش InputNumber در Firefox */
+    .create-exam-page ::deep input[type="number"] {
+        appearance: textfield;
+        -moz-appearance: textfield;
+    }
+
+    /* ----------------------------------------
+   DatePicker داخلی
+   ---------------------------------------- */
+
+    .create-exam-page .create-exam-datepicker ::deep input {
+        width: 100%;
+        min-height: 50px;
+        box-sizing: border-box;
+        padding: 0 15px;
+        border: 1px solid #2b3b57;
+        border-radius: 12px;
+        outline: none;
+        color: #f8fafc;
+        background: linear-gradient( 135deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.98) );
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.045), 0 3px 9px rgba(0, 0, 0, 0.14);
+        font-family: inherit;
+        font-size: 0.92rem;
+    }
+
+        .create-exam-page .create-exam-datepicker ::deep input:focus {
+            border-color: #6484ff;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.18), 0 9px 20px rgba(0, 0, 0, 0.2);
+        }
+
+    /* ----------------------------------------
+   زمان: ساعت و دقیقه کنار هم
+   ---------------------------------------- */
+
+    .create-exam-page .create-exam-time-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        width: 100%;
+        padding: 5px;
+        box-sizing: border-box;
+        border: 1px solid rgba(71, 85, 105, 0.55);
+        border-radius: 14px;
+        background: rgba(8, 13, 26, 0.38);
+        direction: ltr;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .create-exam-page .create-exam-time-row:focus-within {
+            border-color: rgba(100, 132, 255, 0.8);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+        }
+
+    /*
+  flex: 1 و min-width: 0 مهم هستند:
+  باعث می‌شوند دو InputNumber در هر عرضی
+  کنار یکدیگر باقی بمانند و زیر هم نروند.
+*/
+    .create-exam-page ::deep .create-exam-time-row .create-exam-time-input {
+        flex: 1 1 0;
+        width: 0;
+        min-width: 0;
+        min-height: 40px;
+        padding-right: 8px;
+        padding-left: 8px;
+        border: 0;
+        border-radius: 9px;
+        background: rgba(30, 41, 59, 0.74);
+        box-shadow: none;
+        text-align: center;
+        font-weight: 750;
+    }
+
+        .create-exam-page ::deep .create-exam-time-row .create-exam-time-input:hover {
+            border: 0;
+            background: rgba(42, 57, 82, 0.9);
+        }
+
+        .create-exam-page ::deep .create-exam-time-row .create-exam-time-input:focus {
+            border: 0;
+            background: rgba(48, 65, 98, 0.9);
+            box-shadow: none;
+        }
+
+    .create-exam-page .create-exam-time-separator {
+        flex: 0 0 auto;
+        color: #a5b4fc;
+        font-size: 1.4rem;
+        font-weight: 900;
+        line-height: 1;
+    }
+
+    /* ----------------------------------------
+   گزینه‌ها / Checkbox
+   ---------------------------------------- */
+
+    .create-exam-page .create-exam-options {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 14px;
+        margin: 24px 0 30px;
+    }
+
+    .create-exam-page .create-exam-option {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.16);
+        border-radius: 12px;
+        background: rgba(30, 41, 59, 0.35);
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+        .create-exam-page .create-exam-option:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(30, 41, 59, 0.65);
+        }
+
+    .create-exam-page ::deep .create-exam-checkbox {
+        width: 18px;
+        height: 18px;
+        margin-top: 3px;
+        cursor: pointer;
+        accent-color: #6366f1;
+    }
+
+    .create-exam-page .create-exam-option-text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .create-exam-page .create-exam-option-title {
+        color: #f1f5f9;
+        font-size: 0.88rem;
+        font-weight: 700;
+    }
+
+    .create-exam-page .create-exam-option-description {
+        color: #94a3b8;
+        font-size: 0.76rem;
+        line-height: 1.45;
+    }
+
+    /* ----------------------------------------
+   اعتبارسنجی و دکمه ثبت
+   ---------------------------------------- */
+
+    .create-exam-page ::deep .validation-message {
+        margin-top: 5px;
+        color: #fca5a5;
+        font-size: 0.78rem;
+    }
+
+    .create-exam-page .create-exam-actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .create-exam-page .create-exam-submit {
+        min-height: 48px;
+        padding: 0 32px;
+        border: 0;
+        border-radius: 11px;
+        cursor: pointer;
+        color: #ffffff;
+        background: linear-gradient(135deg, #3b82f6, #4f46e5);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.26);
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 700;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+        .create-exam-page .create-exam-submit:hover {
+            filter: brightness(1.12);
+            box-shadow: 0 14px 30px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .create-exam-page .create-exam-submit:active {
+            transform: translateY(0);
+        }
+
+    /* Autofill */
+    .create-exam-page ::deep input:-webkit-autofill,
+    .create-exam-page ::deep input:-webkit-autofill:hover,
+    .create-exam-page ::deep input:-webkit-autofill:focus,
+    .create-exam-page ::deep textarea:-webkit-autofill,
+    .create-exam-page ::deep textarea:-webkit-autofill:hover,
+    .create-exam-page ::deep textarea:-webkit-autofill:focus {
+        -webkit-text-fill-color: #f8fafc !important;
+        -webkit-box-shadow: 0 0 0 1000px #1e293b inset !important;
+        box-shadow: 0 0 0 1000px #1e293b inset !important;
+        caret-color: #f8fafc;
+    }
+
+/* موبایل */
+@media (max-width: 680px) {
+    .create-exam-page {
+        width: min(100% - 24px, 860px);
+        margin-top: 30px;
+    }
+
+        .create-exam-page .create-exam-card {
+            padding: 22px 18px;
+        }
+
+        .create-exam-page .create-exam-form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .create-exam-page .create-exam-full-width {
+            grid-column: auto;
+        }
+
+        .create-exam-page .create-exam-submit {
+            width: 100%;
+        }
+}
