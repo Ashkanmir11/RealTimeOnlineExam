@@ -8,8 +8,9 @@
 }
 
 main {
-    width: min(100%, 1280px);
+    /*    width: min(100%, 1280px);*/
     margin: 0 auto;
+    width:90%;
 }
 
 article {
@@ -31,7 +32,7 @@ article {
         font-family: Vazirmatn, Tahoma, sans-serif;
     }
 
-    /*article ::deep p {
+/*article ::deep p {
         color: #b7c4d8;
         line-height: 2;
     }*/
