@@ -6,58 +6,124 @@
 @page "/StartExam/{examId:int}";
 @inject ExamServices _examServices;
 @inject ExamLogServices _examLogServices;
-<ExamStatusComponent ExamId="@ExamId" AfterConnect="@SaveChangeAfterConnect" EndExam="@EndExam"></ExamStatusComponent>
-<h3>@RefreshTimer مانده تا ذخیره سازی خودکار</h3>
-@{
+<div class="student-exam-page">
 
-    if (Result == null || Result.Data.Count == 0)
-    {
-        <p>سوالی موجود نیست.</p>
-    }
-    if (DataLoaded == false)
-    {
-        <LoadingComponent></LoadingComponent>
-    }
-    else
-    {
-        foreach (var question in Result.Data)
+    <ExamStatusComponent ExamId="@ExamId"
+                         AfterConnect="@SaveChangeAfterConnect"
+                         EndExam="@EndExam">
+    </ExamStatusComponent>
+
+    <div class="student-exam-autosave-status">
+        <span class="student-exam-autosave-dot"></span>
+        <h3>
+            @RefreshTimer مانده تا ذخیره‌سازی خودکار
+        </h3>
+    </div>
+
+    @{
+        if (Result == null || Result.Data.Count == 0)
         {
-            <div style="border:2px solid black">
-                @{
-                    <p>@question.QuestionText</p>
-                    <p>@question.TotalScore</p>
-                    <label>پاسخ:</label>
-                    if (question.TrueOrFalseQuestion != null)
-                    {
-                        <InputCheckbox @bind-Value:after="()=>UpdateTrueOrFalseAnswer(question.TrueOrFalseQuestion.Id)" @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer"></InputCheckbox>
-                    }
-                    else if (question.DescriptiveQuestion != null)
-                    {
-                        <InputTextArea @bind-Value="@question.DescriptiveAnswer.StudentAnswer" @onblur="()=>UpdateDescriptiveAnswer(question.DescriptiveQuestion.Id)"></InputTextArea>
-                    }
-                    else if (question.MultipleChoiceQuestion != null)
-                    {
-                        for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
-                        {
-                            <br />
-                            int index = i + 1;
-                            <label for="{@question.Id}multipleChoiceAnswer{@i}">@question.MultipleChoiceQuestion.Choices[i]</label>
-                            <input type="checkbox" id="@($"{question.Id}multipleChoiceAnswer{i}")"
-                                   @onchange="arg=>GetSelectedItem(arg,index,question.Id,question.MultipleChoiceQuestion.Choices.Count,question.MultipleChoiceQuestion.Id)" />                        <br />
-                        }
-                    }
+            <div class="student-exam-empty-state">
+                <div class="student-exam-empty-icon">📝</div>
+                <h4>سؤالی موجود نیست</h4>
+                <p>در حال حاضر سؤالی برای این آزمون در دسترس نیست.</p>
+            </div>
+        }
 
+        if (DataLoaded == false)
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+        else
+        {
+            <div class="student-exam-questions">
+                @foreach (var question in Result.Data)
+                {
+                    <section class="student-exam-question-card">
+
+                        <div class="student-exam-question-header">
+                            <span class="student-exam-question-label">
+                                سؤال
+                            </span>
+
+                            <span class="student-exam-score">
+                                @question.TotalScore نمره
+                            </span>
+                        </div>
+
+                        <p class="student-exam-question-text">
+                            @question.QuestionText
+                        </p>
+
+                        <div class="student-exam-answer-section">
+                            <label class="student-exam-answer-label">
+                                پاسخ شما
+                            </label>
+
+                            @if (question.TrueOrFalseQuestion != null)
+                            {
+                                <label class="student-exam-true-false-answer">
+                                    <InputCheckbox class="student-exam-checkbox"
+                                                   @bind-Value:after="() => UpdateTrueOrFalseAnswer(question.TrueOrFalseQuestion.Id)"
+                                                   @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer">
+                                    </InputCheckbox>
+
+                                    <span>صحیح است</span>
+                                </label>
+                            }
+                            else if (question.DescriptiveQuestion != null)
+                            {
+                                <InputTextArea class="student-exam-descriptive-input"
+                                               placeholder="پاسخ خود را اینجا بنویسید..."
+                                               @bind-Value="@question.DescriptiveAnswer.StudentAnswer"
+                                               @onblur="() => UpdateDescriptiveAnswer(question.DescriptiveQuestion.Id)">
+                                </InputTextArea>
+                            }
+                            else if (question.MultipleChoiceQuestion != null)
+                            {
+                                <div class="student-exam-choices">
+                                    @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                                    {
+                                        int index = i + 1;
+
+                                        <label class="student-exam-choice"
+                                               for="@($"{question.Id}multipleChoiceAnswer{i}")">
+
+                                            <input type="checkbox"
+                                                  id="@($"{question.Id}multipleChoiceAnswer{i}")"
+                                                  @onchange="arg => GetSelectedItem(arg, index, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id)" />
+
+                                            <span class="student-exam-choice-number">
+                                                @index
+                                            </span>
+
+                                            <span class="student-exam-choice-text">
+                                                @question.MultipleChoiceQuestion.Choices[i]
+                                            </span>
+                                        </label>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                    </section>
                 }
             </div>
-
         }
     }
-}
 
-<button @onclick="EndExam">پایان آزمون</button>
+    <div class="student-exam-footer">
+        <button type="button"
+                class="student-exam-end-button"
+                @onclick="EndExam">
+            پایان آزمون
+        </button>
+    </div>
 
+    <ErrorComponent Errors="@Errors"></ErrorComponent>
 
-<ErrorComponent Errors="@Errors"></ErrorComponent>
+</div>
+
 @code {
     [Parameter]
     public int ExamId { get; set; }
@@ -166,7 +232,7 @@
         while (true)
         {
             await Task.Delay(1000);
-           // RefreshTimer = RefreshTimer - 1;
+           RefreshTimer = RefreshTimer - 1;
             if (RefreshTimer == 0)
             {
                 SaveChangeAfterConnect();

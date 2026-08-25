@@ -10,7 +10,6 @@ window.PreventCopyAndPaste = function () {
         });
         property[i].addEventListener("paste", (e) => {
             e.preventDefault();
-            alert("امکان کپی و پیست در این آزمون وجود ندارد.");
         })
     }
 

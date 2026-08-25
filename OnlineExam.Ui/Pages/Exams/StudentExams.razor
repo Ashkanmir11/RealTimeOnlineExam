@@ -1,52 +1,149 @@
 ﻿@using OnlineExam.Ui.DTO.Exam;
 @page "/StudentExams/{ClassId:int}"
 @inject ExamServices _examServices;
-<h3>StudentExams</h3>
-@{
-    if (DataLoaded)
-    {
-        if (Result == null || Result.Data.Count == 0)
-        {
-            <p>آزمونی یافت نشد.</p>
-        }
+@if (DataLoaded)
+{
+    <div class="student-exams-page">
 
-        <table>
-            <tr>
-                <th>تعداد سوال</th>
-                <th>نام آزمون</th>
-                <th>توضیحات</th>
-                <th>تاریخ شروع</th>
-                <th>تاریخ پایان</th>
-                <th>میزان مجاز تاخیر</th>
-                <th>اجازه کپی</th>
-                <th>سوالات درهم</th>
-                <th>عملیات</th>
-            </tr>
-            @foreach (var exam in Result.Data)
+        <div class="student-exams-card">
+
+            <div class="student-exams-header">
+                <div>
+                    <h3>آزمون‌های کلاس</h3>
+                    <p>
+                        آزمون موردنظر را انتخاب کنید و در بازه زمانی تعیین‌شده وارد آزمون شوید.
+                    </p>
+                </div>
+
+                @if (Result?.Data != null && Result.Data.Count > 0)
+                {
+                    <span class="student-exams-count">
+                        @Result.Data.Count آزمون
+                    </span>
+                }
+            </div>
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
             {
-                <tr>
-                    <td>@exam.QuestionCount</td>
-                    <td>@exam.Name</td>
-                    <td>@exam.Description</td>
-                    <td>@exam.QuestionCount</td>
-                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.StartDate)</td>
-                    <td>@DateHelper.MiladiToShamsi((DateTime)exam.EndDate)</td>
-                    <td>@exam.AllowedDelay</td>
-                    <InputCheckbox disabled @bind-Value="@exam.AllowedCopy"></InputCheckbox>
-                    <InputCheckbox disabled @bind-Value="@exam.RandomQuestions"></InputCheckbox>
-                    <td>
-                        <button @onclick="()=>StartExam(exam.Id)">شروع آزمون</button>
-                    </td>
-                </tr>
+                <div class="student-exams-empty-state">
+                    <div class="student-exams-empty-icon">
+                        📝
+                    </div>
+
+                    <h4>آزمونی یافت نشد</h4>
+                    <p>
+                        در حال حاضر آزمونی برای این کلاس در دسترس نیست.
+                    </p>
+                </div>
             }
-        </table>
-    }
-    else
-    {
-        <LoadingComponent></LoadingComponent>
-    }
+            else
+            {
+                <div class="student-exams-table-wrapper">
+                    <table class="student-exams-table">
+
+                        <thead>
+                            <tr>
+                                <th>نام آزمون</th>
+                                <th>توضیحات</th>
+                                <th>تعداد سؤال</th>
+                                <th>تاریخ شروع</th>
+                                <th>تاریخ پایان</th>
+                                <th>تأخیر مجاز</th>
+                                <th>کپی</th>
+                                <th>سؤال درهم</th>
+                                <th class="student-exams-action-column">
+                                    عملیات
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var exam in Result.Data)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="student-exams-name">
+                                            @exam.Name
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(exam.Description))
+                                        {
+                                            <span class="student-exams-no-description">
+                                                بدون توضیحات
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <div class="student-exams-description">
+                                                @exam.Description
+                                            </div>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-question-count">
+                                            @exam.QuestionCount
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-date">
+                                            @DateHelper.MiladiToShamsi((DateTime)exam.StartDate)
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-date">
+                                            @DateHelper.MiladiToShamsi((DateTime)exam.EndDate)
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-delay">
+                                            @exam.AllowedDelay دقیقه
+                                        </span>
+                                    </td>
+
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.AllowedCopy ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.AllowedCopy ? "مجاز" : "غیرمجاز")
+                                        </span>
+                                    </td>
+
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.RandomQuestions ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.RandomQuestions ? "فعال" : "غیرفعال")
+                                        </span>
+                                    </td>
+
+                                    <td class="student-exams-action-column">
+                                        <button type="button"
+                                                class="student-exams-start-button"
+                                                @onclick="() => StartExam(exam.Id)">
+                                            شروع آزمون
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
 }
-<ErrorComponent Errors="Errors"></ErrorComponent>
+else
+{
+    <LoadingComponent />
+}
+
 @code {
     [Parameter]
     public int ClassId { get; set; }

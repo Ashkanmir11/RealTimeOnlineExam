@@ -3,30 +3,64 @@
 @using Microsoft.AspNetCore.Http.Connections;
 @using Microsoft.AspNetCore.Components.WebAssembly.Http;
 
-<h3>ExamStatusComponent</h3>
-@{
-    switch (HubConnection.State)
-    {
-        case HubConnectionState.Connected:
-            {
-                <p style="color:green;">آنلاین</p>
-                break;
-            }
-        default:
-            {
-                <p style="color:orangered;">تلاش برای ارتباط با سرور لطفا از اتصال اینترنت اطمینان حاصل فرمایید.</p>
-                break;
-            }
+<div class="exam-status" role="status" aria-live="polite">
 
-    }
-}<div>
-    زمان باقی مانده:
-    <p> @RemainTime</p>
-    @if (HubConnection.State != HubConnectionState.Connected)
-    {
-        <p style="color:red">زمان در حالت عدم اتصال ممکن است دقیق نباشد.</p>
-    }
+    <div class="exam-status-main">
+
+        <div class="exam-status-timer">
+            <span class="exam-status-label">زمان باقی‌مانده</span>
+
+            <strong class="exam-status-time">
+                @RemainTime
+            </strong>
+        </div>
+
+        <div class="exam-status-divider"></div>
+
+        @if (HubConnection?.State == HubConnectionState.Connected)
+        {
+            <div class="exam-status-connection exam-status-online">
+                <span class="exam-status-indicator"></span>
+
+                <div>
+                    <span class="exam-status-label">وضعیت ارتباط</span>
+                    <strong>آنلاین و متصل</strong>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="exam-status-connection exam-status-offline">
+                <span class="exam-status-indicator"></span>
+
+                <div>
+                    <span class="exam-status-label">وضعیت ارتباط</span>
+                    <strong>در حال اتصال به سرور</strong>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="exam-status-actions">
+
+        @if (HubConnection?.State != HubConnectionState.Connected)
+        {
+            <p class="exam-status-warning">
+                زمان در حالت عدم اتصال ممکن است دقیق نباشد.
+            </p>
+        }
+
+        <button type="button"
+                class="exam-status-end-button"
+                @onclick="EndExam">
+            پایان آزمون
+        </button>
+
+    </div>
+
 </div>
+
 @code {
     [Parameter]
     public int ExamId { get; set; }

@@ -1,34 +1,100 @@
 ﻿@using OnlineExam.Ui.DTO.ClassRoom;
 @page "/StudentClassRoom"
 @inject ClassRoomServices _classRoomServices;
-<h3>StudentClassRoom</h3>
-<div>
-    @{
-        if (DataLoaded)
-        {
-            if (Result == null || Result.Data.Count == 0)
+@if (DataLoaded)
+{
+    <div class="student-classroom-page">
+
+        <div class="student-classroom-card">
+
+            <div class="student-classroom-header">
+                <div>
+                    <h3>کلاس‌های من</h3>
+                    <p>کلاس موردنظر را انتخاب کنید تا آزمون‌های آن را مشاهده کنید.</p>
+                </div>
+
+                @if (Result?.Data != null && Result.Data.Count > 0)
+                {
+                    <span class="student-classroom-count">
+                        @Result.Data.Count کلاس
+                    </span>
+                }
+            </div>
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
             {
-                <p>کلاسی موجود نیست.</p>
+                <div class="student-classroom-empty-state">
+                    <div class="student-classroom-empty-icon">
+                        🎓
+                    </div>
+
+                    <h4>کلاسی موجود نیست</h4>
+                    <p>
+                        در حال حاضر کلاسی برای حساب کاربری شما ثبت نشده است.
+                    </p>
+                </div>
             }
             else
             {
-                @foreach (var classRoom in Result.Data)
-                {
-                    <div>
-                        <p>@classRoom.ClassName</p>
-                        <button @onclick="()=>RedirectToStudentExams(classRoom.Id)">مشاهده آزمون ها</button>
-                    </div>
-                }
+                <div class="student-classroom-grid">
+                    @foreach (var classRoom in Result.Data)
+                    {
+                        <article class="student-classroom-item">
+
+                            <div class="student-classroom-item-top">
+                                <div class="student-classroom-icon">
+                                    <span>ک</span>
+                                </div>
+
+                                <div class="student-classroom-info">
+                                    <span class="student-classroom-label">
+                                        کلاس
+                                    </span>
+
+                                    <h4>
+                                        @classRoom.ClassName
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="student-classroom-item-footer">
+                                <span class="student-classroom-exam-hint">
+                                    مشاهده آزمون‌های کلاس
+                                </span>
+
+                                <button type="button"
+                                        class="student-classroom-view-button"
+                                        @onclick="() => RedirectToStudentExams(classRoom.Id)">
+                                    <span>مشاهده آزمون‌ها</span>
+                                    <span class="student-classroom-arrow">←</span>
+                                </button>
+                            </div>
+
+                        </article>
+                    }
+                </div>
             }
-        }
-        else
-        {
-            <LoadingComponent></LoadingComponent>
-        }
-    }
-</div>
-<ErrorComponent Errors="@Errors"></ErrorComponent>
-<PaginateComponent TotalPage="Result.TotalPage" CurrentPage="Result.PageNumber" SelectedPage="@ChangePage"></PaginateComponent>
+
+            @if (Result != null)
+            {
+                <div class="student-classroom-pagination">
+                    <PaginateComponent TotalPage="@Result.TotalPage"
+                                       CurrentPage="@Result.PageNumber"
+                                       SelectedPage="@ChangePage" />
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <LoadingComponent />
+}
+
 
 @code {
     PaginateResponse<GetClassRoomStudentDTO> Result = new PaginateResponse<GetClassRoomStudentDTO>();
