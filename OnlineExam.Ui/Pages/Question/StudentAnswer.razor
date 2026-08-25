@@ -5,103 +5,281 @@
 @using OnlineExam.Ui.Components.Exam
 @page "/studentAnswer/{ExamId:int}"
 @inject ExamServices _examServices;
-<h3>StudentAnswer</h3>
-<p style="color:red">توجه نمرات وارد شده توسط هوش مصنوعی نمره گذاری شده و امکان اشتباه وجود دارد.</p>
-<div style="display:flex;flex-direction:row;justify-content:center;flex-wrap:wrap;">
-    @{
-        if (DataLoaded)
-        {
-            <div style="width:60%;">
-                @{
+<div class="student-answer-page">
+
+    <header class="student-answer-header">
+        <div>
+            <h3>تصحیح پاسخ‌های دانش‌آموز</h3>
+            <p>
+                پاسخ‌ها، نمرات و جزئیات آزمون دانش‌آموز را بررسی و در صورت نیاز اصلاح کنید.
+            </p>
+        </div>
+    </header>
+
+    <div class="student-answer-ai-warning">
+        <span class="student-answer-warning-icon">!</span>
+
+        <p>
+            توجه: نمرات واردشده توسط هوش مصنوعی نمره‌گذاری شده‌اند و احتمال خطا وجود دارد.
+            لطفاً پیش از ثبت نهایی، نمرات را بررسی کنید.
+        </p>
+    </div>
+
+    <div class="student-answer-layout">
+
+        <main class="student-answer-content">
+            @{
+                if (DataLoaded)
+                {
                     if (Result.Data == null || Result.Data.Count == 0)
                     {
-                        <p>پاسخی یافت نشد.</p>
+                        <div class="student-answer-empty-state">
+                            <div class="student-answer-empty-icon">📝</div>
+                            <h4>پاسخی یافت نشد</h4>
+                            <p>دانش‌آموز برای این آزمون پاسخی ثبت نکرده است.</p>
+                        </div>
                     }
                     else
                     {
-                        <p>نمره کامل دانشجو:@TotalScore</p>
-                        foreach (var question in Result.Data)
-                        {
-                            <div style="border:2px solid black;">
-                                <label for="questiontext">متن سوال:</label>
-                                <p id="questiontext">@question.QuestionText</p>
+                        <div class="student-answer-total-score">
+                            <span>نمره کامل دانش‌آموز</span>
+                            <strong>@TotalScore</strong>
+                        </div>
 
-                                <label for="questionScore">نمره سوال:</label>
-                                <p id="questionScore">@question.TotalScore</p>
-                                @{
-                                    if (question.TrueOrFalseQuestion != null)
-                                    {
-                                        <label for="correctAnswer">پاسخ صحیح:</label>
-                                        <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer" id="correctAnswer" disabled />
-                                        if (question.TrueOrFalseQuestion.Answer == null)
+                        <div class="student-answer-questions">
+                            @foreach (var question in Result.Data)
+                            {
+                                <section class="student-answer-question-card">
+
+                                    <div class="student-answer-question-header">
+                                        <span class="student-answer-question-title">
+                                            سؤال
+                                        </span>
+
+                                        <span class="student-answer-question-score">
+                                            نمره سؤال: @question.TotalScore
+                                        </span>
+                                    </div>
+
+                                    <div class="student-answer-question-body">
+                                        <span class="student-answer-field-label">
+                                            متن سؤال
+                                        </span>
+
+                                        <p class="student-answer-question-text">
+                                            @question.QuestionText
+                                        </p>
+                                    </div>
+
+                                    @{
+                                        if (question.TrueOrFalseQuestion != null)
                                         {
-                                            <p>دانشجو پاسخی نداده است.</p>
-                                        }
-                                        else
-                                        {
-                                            <label for="studentAnswer">پاسخ دانشجو:</label>
-                                            <InputCheckbox @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
-                                            <label for="studentScore">نمره دانشجو:</label>
-                                            <input Value="@question.TrueOrFalseQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.TrueOrFalse)" />
+                                            <div class="student-answer-answer-grid">
+
+                                                <div class="student-answer-answer-box">
+                                                    <span class="student-answer-field-label">
+                                                        پاسخ صحیح
+                                                    </span>
+
+                                                    <label class="student-answer-checkbox-value">
+                                                        <InputCheckbox class="student-answer-checkbox"
+                                                                       @bind-Value="question.TrueOrFalseQuestion.CorrectAnswer"
+                                                                       disabled />
+
+                                                        <span>
+                                                            @(question.TrueOrFalseQuestion.CorrectAnswer ? "صحیح" : "غلط")
+                                                        </span>
+                                                    </label>
+                                                </div>
+
+                                                @if (question.TrueOrFalseQuestion.Answer == null)
+                                                {
+                                                    <div class="student-answer-no-response">
+                                                        دانش‌آموز پاسخی نداده است.
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="student-answer-answer-box">
+                                                        <span class="student-answer-field-label">
+                                                            پاسخ دانش‌آموز
+                                                        </span>
+
+                                                        <label class="student-answer-checkbox-value">
+                                                            <InputCheckbox class="student-answer-checkbox"
+                                                                           @bind-Value="question.TrueOrFalseQuestion.Answer.StudentAnswer"
+                                                                           disabled />
+
+                                                            <span>
+                                                                @(question.TrueOrFalseQuestion.Answer.StudentAnswer ? "صحیح" : "غلط")
+                                                            </span>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="student-answer-score-box">
+                                                        <label class="student-answer-field-label"
+                                                               for="@($"trueFalseScore-{question.Id}")">
+                                                            نمره دانش‌آموز
+                                                        </label>
+
+                                                        <input class="student-answer-score-input"
+                                                               value="@question.TrueOrFalseQuestion.Answer.StudentScore"
+                                                               type="text"
+                                                               id="@($"trueFalseScore-{question.Id}")"
+                                                               @onchange="arg => ChangeScore(arg, question.Id, QuestionType.TrueOrFalse)" />
+                                                    </div>
+                                                }
+
+                                            </div>
                                         }
 
+                                        if (question.DescriptiveQuestion != null)
+                                        {
+                                            <div class="student-answer-answer-grid">
+
+                                                <div class="student-answer-answer-box student-answer-answer-box-full">
+                                                    <label class="student-answer-field-label"
+                                                           for="@($"correctDescriptiveAnswer-{question.Id}")">
+                                                        پاسخ صحیح
+                                                    </label>
+
+                                                    <InputTextArea class="student-answer-textarea"
+                                                                   @bind-Value="question.DescriptiveQuestion.CorrectAnswer"
+                                                                   id="@($"correctDescriptiveAnswer-{question.Id}")"
+                                                                   disabled />
+                                                </div>
+
+                                                @if (question.DescriptiveQuestion.Answer == null)
+                                                {
+                                                    <div class="student-answer-no-response">
+                                                        دانش‌آموز پاسخی نداده است.
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="student-answer-answer-box student-answer-answer-box-full">
+                                                        <label class="student-answer-field-label"
+                                                               for="@($"studentDescriptiveAnswer-{question.Id}")">
+                                                            پاسخ دانش‌آموز
+                                                        </label>
+
+                                                        <InputTextArea class="student-answer-textarea"
+                                                                       @bind-Value="question.DescriptiveQuestion.Answer.StudentAnswer"
+                                                                       id="@($"studentDescriptiveAnswer-{question.Id}")"
+                                                                       disabled />
+                                                    </div>
+
+                                                    <div class="student-answer-score-box">
+                                                        <label class="student-answer-field-label"
+                                                               for="@($"descriptiveScore-{question.Id}")">
+                                                            نمره دانش‌آموز
+                                                        </label>
+
+                                                        <input class="student-answer-score-input"
+                                                               value="@question.DescriptiveQuestion.Answer.StudentScore"
+                                                               type="text"
+                                                               id="@($"descriptiveScore-{question.Id}")"
+                                                               @onchange="arg => ChangeScore(arg, question.Id, QuestionType.Descripite)" />
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        }
+
+                                        if (question.MultipleChoiceQuestion != null)
+                                        {
+                                            <div class="student-answer-answer-grid">
+
+                                                <div class="student-answer-answer-box student-answer-answer-box-full">
+                                                    <span class="student-answer-field-label">
+                                                        گزینه‌های سؤال
+                                                    </span>
+
+                                                    <div class="student-answer-choices">
+                                                        @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                                                        {
+                                                            var index = i + 1;
+
+                                                            <div class="student-answer-choice">
+                                                                <span class="student-answer-choice-number">
+                                                                    @index
+                                                                </span>
+
+                                                                <span>
+                                                                    @question.MultipleChoiceQuestion.Choices[i]
+                                                                </span>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+
+                                                @if (question.MultipleChoiceQuestion.Answer == null)
+                                                {
+                                                    <div class="student-answer-no-response">
+                                                        دانش‌آموز پاسخی نداده است.
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="student-answer-answer-box">
+                                                        <span class="student-answer-field-label">
+                                                            پاسخ دانش‌آموز
+                                                        </span>
+
+                                                        <p class="student-answer-selected-choice">
+                                                            گزینه
+                                                            <strong>
+                                                                @question.MultipleChoiceQuestion.Answer.StudentChoice
+                                                            </strong>
+                                                            :
+                                                            @question.MultipleChoiceQuestion.Choices[
+                                                             (int)question.MultipleChoiceQuestion.Answer.StudentChoice - 1
+                                                             ]
+                                                        </p>
+                                                    </div>
+
+                                                    <div class="student-answer-score-box">
+                                                        <label class="student-answer-field-label"
+                                                               for="@($"multipleChoiceScore-{question.Id}")">
+                                                            نمره دانش‌آموز
+                                                        </label>
+
+                                                        <input class="student-answer-score-input"
+                                                               value="@question.MultipleChoiceQuestion.Answer.StudentScore"
+                                                               type="text"
+                                                               id="@($"multipleChoiceScore-{question.Id}")"
+                                                               @onchange="arg => ChangeScore(arg, question.Id, QuestionType.MultipleChoice)" />
+                                                    </div>
+                                                }
+
+                                            </div>
+                                        }
                                     }
-                                    if (question.DescriptiveQuestion != null)
-                                    {
-                                        <label for="correctAnswer">پاسخ صحیح:</label>
-                                        <InputTextArea @bind-Value="question.DescriptiveQuestion.CorrectAnswer" id="correctAnswer" disabled />
 
-                                        if (question.DescriptiveQuestion.Answer == null)
-                                        {
-                                            <p>دانشجو پاسخی نداده است.</p>
-                                        }
-                                        else
-                                        {
-                                            <label for="studentAnswer">پاسخ دانشجو:</label>
-                                            <InputTextArea @bind-Value="question.DescriptiveQuestion.Answer.StudentAnswer" id="studentAnswer" disabled />
-                                            <label for="studentScore">نمره دانشجو:</label>
-                                            <input Value="@question.DescriptiveQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.Descripite)" />
-                                        }
-                                    }
-                                    if (question.MultipleChoiceQuestion != null)
-                                    {
-
-                                        @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
-                                        {
-                                            var index = i + 1;
-                                            <p>@question.MultipleChoiceQuestion.Choices[i]</p>
-                                        }
-                                        if (question.MultipleChoiceQuestion.Answer == null)
-                                        {
-                                            <p>دانشجو پاسخی نداده است.</p>
-                                        }
-                                        else
-                                        {
-                                            <label for="studentAnswer">پاسخ دانشجو:</label>
-                                            <p>
-                                                گزینه :@question.MultipleChoiceQuestion.Choices[(int)@question.MultipleChoiceQuestion.Answer.StudentChoice - 1]
-                                            </p>
-                                            <label for="studentScore">نمره دانشجو:</label>
-                                            <input Value="@question.MultipleChoiceQuestion.Answer.StudentScore" type="text" id="studentScore" @onchange="arg=>ChangeScore(arg,question.Id,QuestionType.MultipleChoice)" />
-
-                                        }
-
-                                    }
-                                }
-                            </div>
-                        }
+                                </section>
+                            }
+                        </div>
                     }
                 }
-            </div>
-        }
-        else
-        {
-            <LoadingComponent></LoadingComponent>
-        }
-    }
-    <ExamLogComponent ExamId="@ExamId" StudentId="@StudentId"></ExamLogComponent>
+                else
+                {
+                    <LoadingComponent></LoadingComponent>
+                }
+            }
+        </main>
+
+        <aside class="student-answer-log-sidebar">
+            <ExamLogComponent ExamId="@ExamId"
+                              StudentId="@StudentId">
+            </ExamLogComponent>
+        </aside>
+
+    </div>
+
+    <ErrorComponent Errors="@Errors"></ErrorComponent>
+
 </div>
-<ErrorComponent Errors="Errors"></ErrorComponent>
+
 
 @code {
     [Parameter]
