@@ -2,81 +2,198 @@
 @using OnlineExam.Ui.DTO.Question;
 @page "/question/{ExamId:int}"
 @inject QuestionServices _questionServices;
-<h3>Question</h3>
-@{
-    if (DataLoaded)
-    {
-        <p>نمره کامل: @TotalScore</p>
-        if (ShowCreate == false)
-        {
-            <button onclick="@ChangeShowCreatStatus">افزودن سوال</button>
-        }
-        else
-        {
-            <button onclick="@ChangeShowCreatStatus">بستن</button>
-            <CreateQuestionComponent ExamId="ExamId" AddComplete="AddComplete"></CreateQuestionComponent>
-        }
+@if (DataLoaded)
+{
+    <div class="question-page">
 
-        if (Result == null || Result.Data == null || Result.Data.Count == 0)
-        {
-            <p>سوالی یافت نشد.</p>
-        }
-        else
-        {
-            <table>
-                <tr style="border:2px solid black">
-                    <th>نام سوال</th>
-                    <th>نمره سوال</th>
-                    <th>جزئیات سوال</th>
-                    <th>عملیات</th>
-                </tr>
-                @foreach (var item in @Result.Data)
+        <div class="question-card">
+
+            <div class="question-header">
+                <div>
+                    <h3>مدیریت سؤال‌ها</h3>
+                    <p>سؤال‌های آزمون را مشاهده، اضافه یا حذف کنید.</p>
+                </div>
+
+                <div class="question-total-score">
+                    <span>نمره کامل آزمون</span>
+                    <strong>@TotalScore</strong>
+                </div>
+            </div>
+
+            <div class="question-toolbar">
+                @if (!ShowCreate)
                 {
-                    <tr style="border:2px solid black">
-                        <td>@item.QuestionText</td>
-                        <td>@item.TotalScore</td>
-                        @if (item.TrueOrFalseQuestion != null)
-                        {
-                            <td>
-                                <label for="trueOrFlaseCorrectAnswer">پاسخ صحیح</label>
-                                <InputCheckbox id="trueOrFlaseCorrectAnswer" disabled @bind-Value="@item.TrueOrFalseQuestion.CorrectAnswer"></InputCheckbox>
-                            </td>
-                        }
-                        @if (item.DescriptiveQuestion != null)
-                        {
-                            <td>
-                                <label for="multipleCorrectAnswer">پاسخ صحیح</label>
-                                <InputTextArea id="multipleCorrectAnswer" @bind-Value="@item.DescriptiveQuestion.CorrectAnswer"></InputTextArea>
-                            </td>
-                        }
-                        @if (item.MultipleChoiceQuestion != null)
-                        {
-                            <td>
-                                <label for="choicec">گزینه ها</label>
-                                @foreach (var choice in item.MultipleChoiceQuestion.Choices)
-                                {
-                                    <p id="choicec">@choice</p>
-                                }
-                                <label for="correctChoice">جواب صحیح</label>
-                                <p id="correctChoice">@item.MultipleChoiceQuestion.Choices[item.MultipleChoiceQuestion.CorrectChoice - 1]</p>
-                            </td>
-                        }
-                        <td>
-                            <button @onclick="()=>DeleteQuestion(item.Id)">حذف</button>
-                        </td>
-                    </tr>
+                    <button type="button"
+                            class="question-create-button"
+                            @onclick="@ChangeShowCreatStatus">
+                        <span class="question-button-icon">+</span>
+                        افزودن سؤال
+                    </button>
                 }
-            </table>
-        }
-    }
-    else
-    {
-        <LoadingComponent></LoadingComponent>
-    }
+                else
+                {
+                    <button type="button"
+                            class="question-close-button"
+                            @onclick="@ChangeShowCreatStatus">
+                        بستن فرم افزودن
+                    </button>
+                }
+            </div>
 
+            @if (ShowCreate)
+            {
+                <div class="question-create-container">
+                    <CreateQuestionComponent ExamId="ExamId"
+                                             AddComplete="AddComplete" />
+                </div>
+            }
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
+            {
+                <div class="question-empty-state">
+                    <div class="question-empty-icon">؟</div>
+                    <h4>سؤالی یافت نشد</h4>
+                    <p>برای شروع، اولین سؤال این آزمون را اضافه کنید.</p>
+                </div>
+            }
+            else
+            {
+                <div class="question-table-wrapper">
+                    <table class="question-table">
+                        <thead>
+                            <tr>
+                                <th>نام سؤال</th>
+                                <th>نمره</th>
+                                <th>جزئیات و پاسخ صحیح</th>
+                                <th class="question-action-column">عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Result.Data)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="question-text">
+                                            @item.QuestionText
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="question-score-badge">
+                                            @item.TotalScore
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        @if (item.TrueOrFalseQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    پاسخ صحیح
+                                                </span>
+
+                                                <div class="question-true-false-answer">
+                                                    <InputCheckbox class="question-checkbox"
+                                                                   disabled="true"
+                                                                   @bind-Value="@item.TrueOrFalseQuestion.CorrectAnswer" />
+
+                                                    <span>
+                                                        @(item.TrueOrFalseQuestion.CorrectAnswer
+                                                            ? "صحیح"
+                                                            : "غلط")
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.DescriptiveQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    پاسخ صحیح
+                                                </span>
+
+                                                <textarea class="question-descriptive-answer"
+                                                          readonly>@item.DescriptiveQuestion.CorrectAnswer</textarea>
+                                            </div>
+                                        }
+                                        else if (item.MultipleChoiceQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    گزینه‌ها
+                                                </span>
+
+                                                <div class="question-choices-list">
+                                                    @for (var index = 0; index < item.MultipleChoiceQuestion.Choices.Count; index++)
+                                                    {
+                                                        var choiceNumber = index + 1;
+                                                        var isCorrectChoice =
+                                                        choiceNumber == item.MultipleChoiceQuestion.CorrectChoice;
+
+                                                        <div class="question-choice @(isCorrectChoice ? "question-choice-correct" : "")">
+                                                            <span class="question-choice-number">
+                                                                @choiceNumber
+                                                            </span>
+
+                                                            <span class="question-choice-text">
+                                                                @item.MultipleChoiceQuestion.Choices[index]
+                                                            </span>
+
+                                                            @if (isCorrectChoice)
+                                                            {
+                                                                <span class="question-correct-badge">
+                                                                    پاسخ صحیح
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="question-no-details">
+                                                جزئیاتی برای این سؤال ثبت نشده است.
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="question-action-column">
+                                        <button type="button"
+                                                class="question-delete-button"
+                                                title="حذف سؤال"
+                                                @onclick="() => DeleteQuestion(item.Id)">
+                                            حذف
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (Result != null)
+            {
+                <div class="question-pagination-container">
+                    <PaginateComponent CurrentPage="@Result.PageNumber"
+                                       TotalPage="@Result.TotalPage"
+                                       SelectedPage="@ChangePage" />
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
 }
-<PaginateComponent CurrentPage="Result.PageNumber" TotalPage="Result.TotalPage" SelectedPage="ChangePage"></PaginateComponent>
-<ErrorComponent Errors="@Errors"></ErrorComponent>
+else
+{
+    <LoadingComponent />
+}
+
 @code {
 
     [Parameter]
