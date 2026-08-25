@@ -15,7 +15,7 @@ namespace OnlineExam.Application.DTOs.Identity.Validation
         {
 
             _accountRepository = accountRepository;
-            RuleFor(e => e.FirstName).MinimumLength(1).WithMessage("نام بیش از حد کوچک است.").MaximumLength(150).WithMessage("نام بیش از حد بزرگ است.").NotEmpty().WithMessage("نام خانوادگی نباید خالی باشد.");
+            RuleFor(e => e.FirstName).MinimumLength(1).WithMessage("نام بیش از حد کوچک است.").MaximumLength(150).WithMessage("نام بیش از حد بزرگ است.").NotEmpty().WithMessage("نام نباید خالی باشد.");
             RuleFor(e => e.LastName).MinimumLength(1).WithMessage("نام خانوادگی بیش از حد کوچک است.").MaximumLength(150).WithMessage("نام خانوادگی بیش از حد بزرگ است.").NotEmpty().WithMessage("نام خانوادگی نباید خالی باشد.");
             RuleFor(e => e.Password).Equal(e => e.ConfirmPassword).WithMessage("رمز عبور با تکرار رمز عبور مطابقت ندارد.");
             RuleFor(e => e.Email).EmailAddress().WithMessage("ایمیل معتبر نیست");
