@@ -7,6 +7,7 @@ using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
+using OnlineExam.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,22 +67,27 @@ namespace OnlineExam.Persistence.Repositories
 
         }
 
-        public async Task<Question> GetByQuestionDetailIdAsync(bool trueOrFalse, bool multipleChoice, bool descriptive, int id)
+        public async Task<Question> GetByQuestionDetailIdAsync(QuestionType questionType, int id)
         {
             int questionDetailId;
-            if (trueOrFalse)
+            switch (questionType)
             {
-                questionDetailId = await _context.TrueOrFalseAnswers.Where(e=>e.Id == id).Select(e=>e.TrueOrFalseQuestionId).FirstOrDefaultAsync();
-                return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == questionDetailId).FirstOrDefaultAsync();
+                case QuestionType.TrueOrFalse:
+                    {
+                        questionDetailId = await _context.TrueOrFalseAnswers.Where(e => e.Id == id).Select(e => e.TrueOrFalseQuestionId).FirstOrDefaultAsync();
+                        return await _context.Questions.Where(e => e.TrueOrFalseQuestionId == questionDetailId).FirstOrDefaultAsync();
+                    }
+                case QuestionType.MultipleChoice:
+                    {
+                        questionDetailId = await _context.MultipleChoiceAnswers.Where(e => e.Id == id).Select(e => e.MultipleChoiceQuestionId).FirstOrDefaultAsync();
+                        return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == questionDetailId).FirstOrDefaultAsync();
+                    }
+                default:
+                    {
+                        questionDetailId = await _context.DescriptiveAnswers.Where(e => e.Id == id).Select(e => e.DescriptiveQuestionId).FirstOrDefaultAsync();
+                        return await _context.Questions.Where(e => e.DescriptiveQuestionId == questionDetailId).FirstOrDefaultAsync();
+                    }
             }
-            if (multipleChoice)
-            {
-                questionDetailId = await _context.MultipleChoiceAnswers.Where(e => e.Id == id).Select(e => e.MultipleChoiceQuestionId).FirstOrDefaultAsync();
-                return await _context.Questions.Where(e => e.MultipleChoiceQuestionId == questionDetailId).FirstOrDefaultAsync();
-            }
-            questionDetailId =await _context.DescriptiveAnswers.Where(e => e.Id == id).Select(e => e.DescriptiveQuestionId).FirstOrDefaultAsync();
-            return await _context.Questions.Where(e => e.DescriptiveQuestionId == questionDetailId).FirstOrDefaultAsync();
-
         }
 
         public async Task RemoveNoRelationQuestionDetail()
@@ -101,7 +107,7 @@ namespace OnlineExam.Persistence.Repositories
 
                 await _context.SaveChangesAsync();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }

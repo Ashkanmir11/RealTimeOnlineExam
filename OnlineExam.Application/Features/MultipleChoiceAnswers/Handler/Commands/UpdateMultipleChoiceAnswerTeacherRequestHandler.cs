@@ -6,6 +6,7 @@ using OnlineExam.Application.DTOs.DescriptiveAnswers;
 using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
+using OnlineExam.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +37,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
         {
             var errors = new List<string>();
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var question = await _questionRepository.GetByQuestionDetailIdAsync(false, true, false, request.Id);
+            var question = await _questionRepository.GetByQuestionDetailIdAsync(QuestionType.MultipleChoice, request.Id);
             if (question == null)
             {
                 throw new NotFoundException("سوال یافت نشد.");

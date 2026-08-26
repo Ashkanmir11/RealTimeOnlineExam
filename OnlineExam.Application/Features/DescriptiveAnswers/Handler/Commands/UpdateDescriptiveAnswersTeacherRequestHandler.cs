@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
+using OnlineExam.Domain.Enums;
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 {
     public class UpdateDescriptiveAnswersTeacherRequestHandler : IRequestHandler<UpdateDescriptiveAnswersTeacherRequest>
@@ -49,7 +50,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             }
 
 
-            var question = await _questionRepository.GetByQuestionDetailIdAsync(false, false, true, request.Id);
+            var question = await _questionRepository.GetByQuestionDetailIdAsync(QuestionType.Descriptive, request.Id);
             if (question == null)
             {
                 throw new NotFoundException("سوال یافت نشد.");

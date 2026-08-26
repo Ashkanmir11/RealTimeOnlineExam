@@ -2,6 +2,7 @@
 using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
+using OnlineExam.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ namespace OnlineExam.Application.Contracts.Persistence
     {
         Task DeleteQuestionDetailAsync(int questionId);
         Task<PaginateResponse<TResult>> GetByExamIdAsync<TResult>(int examId,bool randomQuestions, string? studentId,PaginateRequestDTO paginateRequestDTO);
-        Task<Question> GetByQuestionDetailIdAsync(bool trueOrFalse, bool multipleChoice, bool descriptive, int id);
+        Task<Question> GetByQuestionDetailIdAsync(QuestionType questionType, int id);
         Task RemoveNoRelationQuestionDetail();
     }
 }

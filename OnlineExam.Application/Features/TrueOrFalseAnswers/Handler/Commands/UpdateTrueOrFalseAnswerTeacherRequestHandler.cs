@@ -6,7 +6,7 @@ using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 using static System.Formats.Asn1.AsnWriter;
-
+using OnlineExam.Domain.Enums;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class UpdateTrueOrFalseAnswerTeacherRequestHandler : IRequestHandler<UpdateTrueOrFalseAnswerTeacherRequest>
@@ -30,7 +30,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
         {
             var errors = new List<string>();
             var currentUser = await _authServices.GetCurrentUserIdAsync();
-            var question = await _questionRepository.GetByQuestionDetailIdAsync(true, false, false, request.Id);
+            var question = await _questionRepository.GetByQuestionDetailIdAsync(QuestionType.TrueOrFalse, request.Id);
             if (question == null)
             {
                 throw new NotFoundException("سوال یافت نشد.");
