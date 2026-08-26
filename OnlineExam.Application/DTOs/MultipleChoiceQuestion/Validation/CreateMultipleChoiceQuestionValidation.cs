@@ -1,10 +1,4 @@
 ﻿using FluentValidation;
-using OnlineExam.Application.Contracts.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion.Validation
 {
@@ -24,7 +18,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion.Validation
             }).WithMessage((Model) => $"انتخاب ها نباید خالی باشند.");
             RuleFor(e => e.CorrectChoice).Must((Model, CorrectChoice) =>
             {
-                if(Model.Choices.Count< CorrectChoice || CorrectChoice<=0)
+                if (Model.Choices.Count < CorrectChoice || CorrectChoice <= 0)
                 {
                     return false;
                 }

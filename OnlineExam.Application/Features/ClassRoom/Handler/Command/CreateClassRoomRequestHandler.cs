@@ -1,20 +1,10 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
-using MediatR.Pipeline;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoom;
-using OnlineExam.Application.DTOs.ClassRoom.Validation;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.ClassRoom.Request.Command;
-using OnlineExam.Application.Helper;
-using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
 {
@@ -25,7 +15,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateClassRoomDTO> _validator;
 
-        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAuthServices authServices,IValidator<CreateClassRoomDTO> validator)
+        public CreateClassRoomRequestHandler(IClassRoomRepository classRoomRepository, IMapper mapper, IAuthServices authServices, IValidator<CreateClassRoomDTO> validator)
         {
             _classRoomRepository = classRoomRepository;
             _mapper = mapper;
@@ -38,7 +28,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             var validationResult = await _validator.ValidateAsync(request.CreateClassRoomDTO);
             if (validationResult.IsValid == false)
             {
-                var errors =validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
 

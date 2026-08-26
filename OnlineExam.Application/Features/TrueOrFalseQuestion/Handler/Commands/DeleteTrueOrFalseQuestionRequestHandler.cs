@@ -1,12 +1,7 @@
 ﻿using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
 namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
 {
     public class DeleteTrueOrFalseQuestionRequestHandler : IRequestHandler<DeleteTrueOrFalseQuestionRequest>
@@ -19,7 +14,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Commands
         public async Task Handle(DeleteTrueOrFalseQuestionRequest request, CancellationToken cancellationToken)
         {
             var question = await _trueOrFalseQuestionRepository.GetAsync(request.Id);
-            if(question==null)
+            if (question == null)
             {
                 throw new NotFoundException($"سوالی با آیدی {request.Id} یافت نشد.");
             }

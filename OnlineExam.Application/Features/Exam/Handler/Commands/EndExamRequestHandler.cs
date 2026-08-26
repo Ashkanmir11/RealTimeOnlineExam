@@ -1,16 +1,9 @@
 ﻿using MediatR;
-using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.Exam.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenAI.Responses;
-using OnlineExam.Application.Contracts.Identity;
-using OpenAI.Realtime;
 using OnlineExam.Application.Contracts.AIServices;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Features.Exam.Request.Commands;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class EndExamRequestHandler : IRequestHandler<EndExamRequest>
@@ -44,7 +37,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             await _examAttamptRepository.EndExamAsync(request.ExamId, currentUserId);
 
             var questionList = await _questionRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
-            
+
             //Automatic Grading
             foreach (var question in questionList.Data)
             {
@@ -66,10 +59,10 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                     }
                     await _multipleChoiceAnswersRepository.UpdateAsync(answer.Id, answer);
                 }
-                else if(question.DescriptiveQuestion != null) 
+                else if (question.DescriptiveQuestion != null)
                 {
                     var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.DescriptiveQuestion.Id);
-                    var score =await _aiServices.GetScoreAsync(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
+                    var score = await _aiServices.GetScoreAsync(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
                     answer.StudentScore = score;
                     await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);
                 }

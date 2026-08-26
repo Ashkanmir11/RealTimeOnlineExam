@@ -4,11 +4,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries
 {
@@ -24,9 +19,9 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries
         }
         public async Task<PaginateResponse<GetDescriptiveAnswersDTO>> Handle(GetDescriptiveAnswersRequest request, CancellationToken cancellationToken)
         {
-            var answerList=await _DescriptiveAnswersRepository.GetAllAsync<GetDescriptiveAnswersDTO>(request.PaginateRequest);
+            var answerList = await _DescriptiveAnswersRepository.GetAllAsync<GetDescriptiveAnswersDTO>(request.PaginateRequest);
             var temp = new List<GetDescriptiveAnswersDTO>();
-            foreach(var answer in answerList.Data)
+            foreach (var answer in answerList.Data)
             {
                 temp.Add(new GetDescriptiveAnswersDTO()
                 {
@@ -37,7 +32,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries
 
                 });
             }
-            answerList.Data= temp;
+            answerList.Data = temp;
             return answerList;
 
         }

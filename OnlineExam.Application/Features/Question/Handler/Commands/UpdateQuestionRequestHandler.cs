@@ -12,12 +12,6 @@ using OnlineExam.Application.Features.DescriptiveQuestion.Request.Commands;
 using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
 using OnlineExam.Application.Features.Question.Request.Commands;
 using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
-using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Handler.Commands
 {
@@ -43,16 +37,16 @@ namespace OnlineExam.Application.Features.Question.Handler.Commands
         public async Task Handle(UpdateQuestionRequest request, CancellationToken cancellationToken)
         {
             var question = await _questionRepository.GetAsync(request.Id);
-            if(question==null)
+            if (question == null)
             {
                 throw new NotFoundException("سوال یافت نشد.");
             }
-            
+
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, question.ExamId);
             bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             bool canEdit = await _examRepository.CanModifyExamAsync(question.ExamId);
-            if(!canEdit)
+            if (!canEdit)
             {
                 throw new ConflictException("امکان ویرایش سوالات بعد شروع آزمون وجود ندارد.");
             }

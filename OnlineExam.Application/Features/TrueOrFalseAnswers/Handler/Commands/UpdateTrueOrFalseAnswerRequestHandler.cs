@@ -1,18 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.TrueOrFalseQuestion.Validation;
-using OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation;
-using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using FluentValidation;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class UpdateTrueOrFalseAnswerRequestHandler : IRequestHandler<UpdateTrueOrFalseAnswerRequest>
@@ -26,7 +18,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             , IAuthServices authServices, IValidator<UpdateTrueOrFalseAnswerDTO> validator)
         {
             _TrueOrFalseAnswersRepository = TrueOrFalseAnswersRepository;
-            _authServices=authServices;
+            _authServices = authServices;
             _examAttamptRepository = examAttamptRepository;
             _validator = validator;
         }
@@ -35,7 +27,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _TrueOrFalseAnswersRepository.GetAsync(request.Id);
-            if(questionAnswer==null)
+            if (questionAnswer == null)
             {
                 throw new NotFoundException("پاسخ یافت نشد.");
             }

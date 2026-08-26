@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineExam.Identity.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Identity.SeedData
 {
@@ -66,7 +61,7 @@ namespace OnlineExam.Identity.SeedData
                 PhoneNumber = "09908752253",
                 PhoneNumberConfirmed = true,
                 PasswordHash="Rezapass12!",
-               
+
                 },
                  new OnlineExamUser()
                 {
@@ -90,7 +85,7 @@ namespace OnlineExam.Identity.SeedData
                     if (userCreateResult.Succeeded)
                     {
                         var userCreated = await userManagerService.FindByNameAsync(user.UserName);
-                        if(user.UserName== "09908752252")
+                        if (user.UserName == "09908752252")
                         {
                             await userManagerService.AddToRoleAsync(user, "Admin");
 

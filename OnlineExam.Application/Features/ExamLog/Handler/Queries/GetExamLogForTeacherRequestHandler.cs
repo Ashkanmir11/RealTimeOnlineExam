@@ -2,13 +2,8 @@
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ExamLog;
-using OnlineExam.Application.Features.ExamLog.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.ExamLog.Request.Queries;
 namespace OnlineExam.Application.Features.ExamLog.Handler.Queries
 {
     public class GetExamLogForTeacherRequestHandler : IRequestHandler<GetExamLogForTeacherRequest, List<GetExamLogDTO>>

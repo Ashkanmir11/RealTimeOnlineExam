@@ -1,6 +1,6 @@
-﻿using OnlineExam.Application.Response;
-using OnlineExam.Api.Herlpers;
+﻿using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Response;
 namespace OnlineExam.Api.Middleware
 {
     public class ExceptionMiddleware

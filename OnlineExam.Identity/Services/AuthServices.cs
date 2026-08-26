@@ -1,27 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-using OnlineExam.Application.Contracts.Identity;
-using OnlineExam.Application.Response;
-using System;
-using OnlineExam.Application.DTOs.Identity;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Identity.Model;
-using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.DTOs.Identity.Validation;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Data;
-using OnlineExam.Application.Constants;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Options;
-using OnlineExam.Application.Helper;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
-using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Formatters;
+using OnlineExam.Application.Constants;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity;
+using OnlineExam.Application.Response;
+using OnlineExam.Identity.Model;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace OnlineExam.Identity.Services
 {
@@ -155,7 +143,7 @@ namespace OnlineExam.Identity.Services
         {
             var user = await _userManager.FindByIdAsync(userId);
             var userRoles = await _userManager.GetRolesAsync(user);
-            if(userRoles.Contains("Admin"))
+            if (userRoles.Contains("Admin"))
             {
                 return true;
             }

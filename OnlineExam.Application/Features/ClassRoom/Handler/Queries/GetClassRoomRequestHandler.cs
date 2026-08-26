@@ -1,14 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.Features.ClassRoom.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 {
@@ -22,7 +16,7 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 
         public async Task<PaginateResponse<GetClassRoomDTO>> Handle(GetClassRoomRequest request, CancellationToken cancellationToken)
         {
-            return await _classRoomRepository.GetAllAsync<GetClassRoomDTO>(request.PaginateRequest);    
+            return await _classRoomRepository.GetAllAsync<GetClassRoomDTO>(request.PaginateRequest);
         }
     }
 }

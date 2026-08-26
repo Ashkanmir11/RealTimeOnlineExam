@@ -2,11 +2,6 @@
 using OnlineExam.Ui.DTO.DescriptiveQuestion;
 using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
 using OnlineExam.Ui.DTO.TrueOrFalseQuestion;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Ui.DTO.Question
 {

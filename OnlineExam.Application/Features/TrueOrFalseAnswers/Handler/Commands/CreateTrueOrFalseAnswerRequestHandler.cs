@@ -1,17 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.TrueOrFalseAnswers.Validation;
-using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
-using FluentValidation;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class CreateTrueOrFalseAnswerRequestHandler : IRequestHandler<CreateTrueOrFalseAnswerRequest>
@@ -20,7 +13,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
         private readonly IAuthServices _authServices;
         private readonly IValidator<CreateTrueOrFalseAnswerDTO> _validator;
         private readonly IExamAttamptRepository _examAttamptRepository;
-        public CreateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository,IAuthServices authServices, IValidator<CreateTrueOrFalseAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
+        public CreateTrueOrFalseAnswerRequestHandler(ITrueOrFalseAnswersRepository TrueOrFalseAnswersRepository, IAuthServices authServices, IValidator<CreateTrueOrFalseAnswerDTO> validator, IExamAttamptRepository examAttamptRepository)
         {
             _TrueOrFalseAnswersRepository = TrueOrFalseAnswersRepository;
             _authServices = authServices;

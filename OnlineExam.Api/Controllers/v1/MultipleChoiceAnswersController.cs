@@ -1,16 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
 using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
 using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
-using OnlineExam.Api.Herlpers;
-using OnlineExam.Application.Response;
-using OnlineExam.Application.Contracts.Identity;
-using Microsoft.AspNetCore.Authorization;
-using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
-using Asp.Versioning;
 namespace OnlineExam.Api.Controllers.V1
 {
     [Route("api/v{version:apiVersion}/multiple-choice-answers")]

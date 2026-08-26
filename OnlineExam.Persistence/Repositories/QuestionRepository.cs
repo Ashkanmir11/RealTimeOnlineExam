@@ -3,16 +3,10 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
 using OnlineExam.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {

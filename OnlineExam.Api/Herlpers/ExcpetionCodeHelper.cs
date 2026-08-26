@@ -1,6 +1,4 @@
-﻿using System;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Persistence.Exceptions;
+﻿using OnlineExam.Application.Exceptions;
 
 namespace OnlineExam.Api.Herlpers
 {

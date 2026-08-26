@@ -1,20 +1,11 @@
-﻿using AutoMapper;
-//using FluentValidation;
+﻿//using FluentValidation;
+using FluentValidation;
 using MediatR;
+using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoom;
-using OnlineExam.Application.DTOs.ClassRoom.Validation;
-using OnlineExam.Application.Features.ClassRoom.Request.Command;
-using OnlineExam.Application.Helper;
-using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Contracts.Identity;
-using FluentValidation;
+using OnlineExam.Application.Features.ClassRoom.Request.Command;
 namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
 {
     public class UpdateClassRoomRequestHandler : IRequestHandler<UpdateClassRoomRequest>
@@ -42,12 +33,12 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Command
             if (classRoom.TeacherId != currentUser && !isUserAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
-            }   
+            }
             var validationResult = await _validator.ValidateAsync(request.UpdateClassRoomDTO);
             if (validationResult.IsValid == false)
             {
                 throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
-            }          
+            }
             await _classRoomRepository.UpdateAsync(request.Id, request.UpdateClassRoomDTO);
         }
     }

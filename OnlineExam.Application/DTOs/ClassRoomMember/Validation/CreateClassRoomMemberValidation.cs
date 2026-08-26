@@ -1,14 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.ClassRoomMember.Validation
 {
@@ -28,7 +19,7 @@ namespace OnlineExam.Application.DTOs.ClassRoomMember.Validation
             }).WithMessage("کلاس با آیدی {PropertyValue} وجود ندارد.");
             RuleFor(e => e.StudentIDs).MustAsync(async (Model, Id, Token) =>
             {
-                if (Model.StudentIDs.Count!= Model.Phones.Count)
+                if (Model.StudentIDs.Count != Model.Phones.Count)
                 {
                     return false;
                 }

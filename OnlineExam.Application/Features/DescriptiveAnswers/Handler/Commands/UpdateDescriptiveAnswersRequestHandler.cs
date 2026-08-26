@@ -1,17 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
-using OnlineExam.Application.DTOs.DescriptiveAnswers.Validation;
-using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
-using FluentValidation;
+using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 {
     public class UpdateDescriptiveAnswersRequestHandler : IRequestHandler<UpdateDescriptiveAnswersRequest>
@@ -32,7 +25,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
         public async Task Handle(UpdateDescriptiveAnswersRequest request, CancellationToken cancellationToken)
         {
             var questionAnswer = await _DescriptiveAnswersRepository.GetAsync(request.Id);
-            if(questionAnswer==null)
+            if (questionAnswer == null)
             {
                 throw new NotFoundException("پاسخ پیدا نشد.");
             }

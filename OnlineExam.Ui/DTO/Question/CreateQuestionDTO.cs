@@ -1,7 +1,6 @@
 ﻿using OnlineExam.Ui.DTO.DescriptiveQuestion;
 using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
 using OnlineExam.Ui.DTO.TrueOrFalseQuestion;
-using System.Text.Json.Serialization;
 
 namespace OnlineExam.Ui.DTO.Question
 {

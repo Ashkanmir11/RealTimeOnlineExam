@@ -2,11 +2,6 @@
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Objection;
 using OnlineExam.Application.Features.Objection.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Objection.Handler.Queries
 {
@@ -20,8 +15,8 @@ namespace OnlineExam.Application.Features.Objection.Handler.Queries
 
         public async Task<GetObjectionDTO> Handle(GetObjectionByIdRequest request, CancellationToken cancellationToken)
         {
-           return await _objectionRepository.GetAsync<GetObjectionDTO>(request.Id);
-            
+            return await _objectionRepository.GetAsync<GetObjectionDTO>(request.Id);
+
         }
     }
 }

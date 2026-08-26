@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using OnlineExam.Application.Constants;
-using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
-using System.Security.Cryptography;
 namespace OnlineExam.Api.Hubs
 {
 
@@ -43,7 +41,7 @@ namespace OnlineExam.Api.Hubs
                     }
                     await Clients.Caller.SendAsync("ReceiveRemaindSeconds", Convert.ToInt32(remainingSeconds));
                 }
-                
+
             }
             catch (Exception ex)
             {

@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Linq.Dynamic.Core;
-using OnlineExam.Application.Exceptions;
-using Microsoft.Data.SqlClient;
 using OnlineExam.Persistence.Exceptions;
+using System.Linq.Dynamic.Core;
 namespace OnlineExam.Persistence.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class

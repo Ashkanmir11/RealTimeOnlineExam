@@ -5,13 +5,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 using OnlineExam.Domain.Enums;
 namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
 {
@@ -65,7 +58,7 @@ namespace OnlineExam.Application.Features.DescriptiveAnswers.Handler.Commands
             {
                 errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            if(errors.Count>0)
+            if (errors.Count > 0)
             {
                 throw new Application.Exceptions.ValidationException(errors);
             }

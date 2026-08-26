@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using OnlineExam.Ui.DTO.ClassRoomMembers;
+﻿using OnlineExam.Ui.DTO.ClassRoomMembers;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 
 namespace OnlineExam.Ui.Services
 {
@@ -26,13 +24,13 @@ namespace OnlineExam.Ui.Services
                 IncludeCredentials = true,
                 RequiresAuth = true,
             };
-            var result=await _requestServices.SendAsync<GetClassRoomMembersDTO>(options);
+            var result = await _requestServices.SendAsync<GetClassRoomMembersDTO>(options);
             return result;
         }
         public async Task<CommonResponse<EmptyResponse>> CreateClassStudent(CreateClassRoomMemberDTO createClassRoomMemberDTO)
         {
             var apiUrl = ApiRoutes.CreateClassRoomMember;
-            var content=JsonContent.Create(createClassRoomMemberDTO);
+            var content = JsonContent.Create(createClassRoomMemberDTO);
             var option = new RequestOptions()
             {
                 ApiUrl = apiUrl,
@@ -45,9 +43,9 @@ namespace OnlineExam.Ui.Services
             var result = await _requestServices.SendAsync<EmptyResponse>(option);
             return result;
         }
-        public async Task<CommonResponse<EmptyResponse>> DeleteMember(string StudentId,int ClassId)
+        public async Task<CommonResponse<EmptyResponse>> DeleteMember(string StudentId, int ClassId)
         {
-            var apiUrl = ApiRoutes.DeleteClassRoomMember(StudentId,ClassId);
+            var apiUrl = ApiRoutes.DeleteClassRoomMember(StudentId, ClassId);
             var option = new RequestOptions()
             {
                 ApiUrl = apiUrl,

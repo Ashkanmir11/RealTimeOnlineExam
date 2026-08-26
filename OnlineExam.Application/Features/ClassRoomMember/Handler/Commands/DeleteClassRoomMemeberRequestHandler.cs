@@ -3,11 +3,6 @@ using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.ClassRoomMember.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
 {
@@ -27,7 +22,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _classRoomRepository.IsUserTeacherAsync(request.ClassId, currentUser);
-            if(isTeacher==false)
+            if (isTeacher == false)
             {
                 throw new AccessForbiddenException("شما دسترسی به این کلاس را ندارید");
             }

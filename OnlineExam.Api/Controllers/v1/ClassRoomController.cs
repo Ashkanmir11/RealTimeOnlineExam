@@ -1,18 +1,11 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
+﻿using Asp.Versioning;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineExam.Application.DTOs.ClassRoom;
-using OnlineExam.Application.Features.ClassRoom.Request.Command;
-using OnlineExam.Api.Herlpers;
-using OnlineExam.Application.Features.ClassRoom.Request.Queries;
 using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.Response;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using OnlineExam.Application.Contracts.Identity;
-using OnlineExam.Identity.Model;
-using System.Security.Claims;
-using Asp.Versioning;
+using OnlineExam.Application.Features.ClassRoom.Request.Command;
+using OnlineExam.Application.Features.ClassRoom.Request.Queries;
 
 namespace OnlineExam.Api.Controllers.V1
 {

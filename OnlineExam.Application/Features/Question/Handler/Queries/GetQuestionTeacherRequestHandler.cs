@@ -2,14 +2,9 @@
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Application.Features.Question.Handler.Queries
 {
     public class GetQuestionTeacherRequestHandler : IRequestHandler<GetQuestionTeacherRequest, PaginateResponse<GetQuestionTeacherDTO>>

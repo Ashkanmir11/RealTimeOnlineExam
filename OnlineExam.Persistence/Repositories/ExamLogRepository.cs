@@ -4,11 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ExamLog;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {
@@ -22,9 +17,9 @@ namespace OnlineExam.Persistence.Repositories
             _mapper = mapper;
         }
 
-        public async Task<List<GetExamLogDTO>> GetForTeacher(string studentId,int examId)
+        public async Task<List<GetExamLogDTO>> GetForTeacher(string studentId, int examId)
         {
-            return await _context.ExamsLogs.Where(e => e.StudentId == studentId && e.ExamId==examId).ProjectTo<GetExamLogDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            return await _context.ExamsLogs.Where(e => e.StudentId == studentId && e.ExamId == examId).ProjectTo<GetExamLogDTO>(_mapper.ConfigurationProvider).ToListAsync();
         }
     }
 }

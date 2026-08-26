@@ -1,11 +1,5 @@
 ﻿using FluentValidation;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OnlineExam.Application.Contracts.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.Exam.Validation
 {
@@ -26,10 +20,10 @@ namespace OnlineExam.Application.DTOs.Exam.Validation
                         return false;
                     }
                     return true;
-                }).WithMessage("تاریخ شروع نباید قبل از تاریخ الان باشد.").Must((Model,date)=>
+                }).WithMessage("تاریخ شروع نباید قبل از تاریخ الان باشد.").Must((Model, date) =>
                 {
                     date = date.Value.AddMinutes(5);
-                    if(date>Model.EndDate)
+                    if (date > Model.EndDate)
                     {
                         return false;
                     }

@@ -1,5 +1,4 @@
 ﻿using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
-using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
 
 namespace OnlineExam.Ui.DTO.MultipleChoiceQuestion
 {

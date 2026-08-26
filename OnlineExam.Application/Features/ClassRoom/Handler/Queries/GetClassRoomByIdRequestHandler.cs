@@ -1,13 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.Features.ClassRoom.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 {

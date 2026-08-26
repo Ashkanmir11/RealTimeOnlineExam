@@ -1,15 +1,9 @@
 ﻿using FluentValidation;
-using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.ExamLog.Validation
 {
-    public class CreateExamLogValidation:AbstractValidator<CreateExamLogDTO>
+    public class CreateExamLogValidation : AbstractValidator<CreateExamLogDTO>
     {
         private readonly IExamRepository _examRepository;
         private readonly ILogTypeRepository _logTypeRepository;

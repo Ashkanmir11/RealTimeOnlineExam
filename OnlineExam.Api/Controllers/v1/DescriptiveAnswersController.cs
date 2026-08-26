@@ -1,16 +1,11 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OnlineExam.Api.Herlpers;
-using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
-using OnlineExam.Application.Features.DescriptiveAnswers.Handler.Queries;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
 using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
-using OnlineExam.Application.Response;
 
 namespace OnlineExam.Api.Controllers.V1
 {

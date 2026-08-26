@@ -1,16 +1,9 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.LogType.Validation;
 using OnlineExam.Application.DTOs.LogType;
-using OnlineExam.Application.Features.LogType.Reqeust.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
-using FluentValidation;
+using OnlineExam.Application.Features.LogType.Reqeust.Commands;
 
 namespace OnlineExam.Application.Features.LogType.Handler.Commands
 {

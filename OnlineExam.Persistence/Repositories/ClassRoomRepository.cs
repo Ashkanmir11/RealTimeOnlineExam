@@ -7,11 +7,6 @@ using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {
@@ -28,7 +23,7 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<PaginateResponse<GetClassRoomStudentDTO>> GetStudentClassesAsync(string studentId, PaginateRequestDTO paginateRequestDTO)
         {
             var studentClasses = await _context.ClassRoomMembers.Where(e => e.StudentId == studentId).Select(e => e.ClassRomeId).ToListAsync();
-            if(studentClasses.Count==0)
+            if (studentClasses.Count == 0)
             {
                 return null;
             }
@@ -37,7 +32,7 @@ namespace OnlineExam.Persistence.Repositories
             var query = _context.ClassRooms.Where(e => studentClasses.Contains(e.Id)).AsQueryable();
             query = QuerySortHelper<ClassRoom>.Sort(query, paginateRequestDTO);
             query = query.Skip(skip).Take(paginateRequestDTO.PageCount);
-            var data=await query.ProjectTo<GetClassRoomStudentDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            var data = await query.ProjectTo<GetClassRoomStudentDTO>(_mapper.ConfigurationProvider).ToListAsync();
             var result = PaginateHelper<GetClassRoomStudentDTO>.Paginate(data, totalCount, paginateRequestDTO);
             return result;
         }

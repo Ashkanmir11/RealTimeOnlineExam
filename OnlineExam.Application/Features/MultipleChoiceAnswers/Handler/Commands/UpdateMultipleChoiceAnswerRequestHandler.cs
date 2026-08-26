@@ -1,17 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
+using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
-using OnlineExam.Application.DTOs.MultipleChoiceAnswers.Validation;
-using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Helper;
-using OnlineExam.Application.Contracts.Identity;
-using FluentValidation;
+using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
 
 namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
 {
@@ -25,8 +18,8 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             , IAuthServices authServices, IValidator<UpdateMultipleChoiceAnswerDTO> validator)
         {
             _MultipleChoiceAnswersRepository = MultipleChoiceAnswersRepository;
-            _examAttamptRepository= examAttamptRepository;
-            _authServices= authServices;
+            _examAttamptRepository = examAttamptRepository;
+            _authServices = authServices;
             _validator = validator;
         }
         public async Task Handle(UpdateMultipleChoiceAnswerRequest request, CancellationToken cancellationToken)
@@ -35,15 +28,15 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             var isAdmin = await _authServices.IsUserAdminAsync(currentUser);
             var questionAnswer = await _MultipleChoiceAnswersRepository.GetAsync(request.Id);
             request.UpdateMultipleChoiceQuestionAnswerDTO.QuestionId = questionAnswer.MultipleChoiceQuestionId;
-            if (questionAnswer==null || questionAnswer.StudentId != currentUser && !isAdmin)
+            if (questionAnswer == null || questionAnswer.StudentId != currentUser && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }
 
             var validationResult = await _validator.ValidateAsync(request.UpdateMultipleChoiceQuestionAnswerDTO);
-            if(validationResult.IsValid==false)
+            if (validationResult.IsValid == false)
             {
-                var errors = validationResult.Errors.Select(e=>e.ErrorMessage).ToList();
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);
             }
             var examEnded = await _examAttamptRepository.ExamEndedAsync(request.UpdateMultipleChoiceQuestionAnswerDTO.ExamId, currentUser);

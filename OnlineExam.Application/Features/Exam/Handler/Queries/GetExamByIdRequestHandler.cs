@@ -2,11 +2,6 @@
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.Features.Exam.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Exam.Handler.Queries
 {
@@ -20,7 +15,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Queries
         public async Task<GetExamDTO> Handle(GetExamByIdRequest request, CancellationToken cancellationToken)
         {
             return await _examRepository.GetAsync<GetExamDTO>(request.Id);
-            
+
         }
     }
 }

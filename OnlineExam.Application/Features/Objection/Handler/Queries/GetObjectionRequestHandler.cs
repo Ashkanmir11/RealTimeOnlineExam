@@ -3,11 +3,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Objection;
 using OnlineExam.Application.Features.Objection.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Objection.Handler.Queries
 {

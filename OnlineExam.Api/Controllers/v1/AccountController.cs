@@ -1,16 +1,11 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Response;
-using OnlineExam.Identity.Services;
-using OnlineExam.Persistence.Exceptions;
 
 namespace OnlineExam.Api.Controllers.V1
 {

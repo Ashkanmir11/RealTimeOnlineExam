@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components.WebAssembly.Http;
-using OnlineExam.Ui.DTO.Account;
 using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
-using System.Collections.Generic;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace OnlineExam.Ui.Services
@@ -34,7 +31,7 @@ namespace OnlineExam.Ui.Services
             var response = await _httpClient.SendAsync(request);
             //fill response
             result.StatusCode = (int)response.StatusCode;
-            if(result.StatusCode==401 && requestOptions.RequiresAuth)
+            if (result.StatusCode == 401 && requestOptions.RequiresAuth)
             {
                 if (await refreshToken() == 401)
                 {
@@ -63,7 +60,7 @@ namespace OnlineExam.Ui.Services
             }
             if (response.IsSuccessStatusCode)
             {
-                var bodyExist=await response.Content.ReadAsStringAsync();
+                var bodyExist = await response.Content.ReadAsStringAsync();
                 if (response.Content != null && requestOptions.GetData != false && !string.IsNullOrWhiteSpace(bodyExist))
                 {
                     result.Data = typeof(TResult) == typeof(string) ? (TResult)(object)await response.Content.ReadAsStringAsync() : await response.Content.ReadFromJsonAsync<TResult>();

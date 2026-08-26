@@ -1,12 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Logging;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
@@ -15,7 +9,7 @@ namespace OnlineExam.Persistence.Configuration
         public void Configure(EntityTypeBuilder<MultipleChoiceAnswers> builder)
         {
             builder.HasKey(e => e.Id);
-            builder.Property(e=>e.Id).UseIdentityColumn();
+            builder.Property(e => e.Id).UseIdentityColumn();
             builder.Property(e => e.StudentScore).HasPrecision(5, 2);
 
         }

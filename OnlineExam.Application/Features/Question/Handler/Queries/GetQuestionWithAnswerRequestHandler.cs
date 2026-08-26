@@ -3,21 +3,12 @@ using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
-using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
-using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
 using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
-using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.Response;
-using OpenAI.Realtime;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Handler.Queries
 {
@@ -62,9 +53,9 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
             {
                 if (question.TrueOrFalseQuestion != null)
                 {
-                    var answer =await _trueOrFalseAnswersRepository.GetByQuestionIdAsync(question.TrueOrFalseQuestion.Id);
+                    var answer = await _trueOrFalseAnswersRepository.GetByQuestionIdAsync(question.TrueOrFalseQuestion.Id);
                     var answerDto = _mapper.Map<GetTrueOrFalseAnswerTeacherDTO>(answer);
-                    question.TrueOrFalseQuestion.Answer= answerDto;
+                    question.TrueOrFalseQuestion.Answer = answerDto;
                 }
                 else if (question.MultipleChoiceQuestion != null)
                 {

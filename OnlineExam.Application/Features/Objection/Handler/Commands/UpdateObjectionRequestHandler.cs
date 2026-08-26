@@ -2,14 +2,8 @@
 using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Objection;
-using OnlineExam.Application.DTOs.Objection.Validation;
-using OnlineExam.Application.Features.Objection.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.Objection.Request.Commands;
 namespace OnlineExam.Application.Features.Objection.Handler.Commands
 {
     public class UpdateObjectionRequestHandler : IRequestHandler<UpdateObjectionRequest>
@@ -23,8 +17,8 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
         }
         public async Task Handle(UpdateObjectionRequest request, CancellationToken cancellationToken)
         {
-            var exist =await _objectionRepository.ExistAsync(request.Id);
-            if(exist==false)
+            var exist = await _objectionRepository.ExistAsync(request.Id);
+            if (exist == false)
             {
                 throw new NotFoundException("اعتراض یافت نشد.");
             }

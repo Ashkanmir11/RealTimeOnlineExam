@@ -1,13 +1,8 @@
 ﻿using MediatR;
-using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Commands;
 
 namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
 {
@@ -36,7 +31,7 @@ namespace OnlineExam.Application.Features.MultipleChoiceAnswers.Handler.Commands
             }
 
 
-          
+
             await _MultipleChoiceAnswersRepository.DeleteAsync(answer);
         }
     }

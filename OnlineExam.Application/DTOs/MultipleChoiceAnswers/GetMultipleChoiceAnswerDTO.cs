@@ -1,13 +1,7 @@
 ﻿using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using OnlineExam.Domain.Entities;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+using System.Text.Json.Serialization;
 
 namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers
 {
@@ -17,7 +11,7 @@ namespace OnlineExam.Application.DTOs.MultipleChoiceAnswers
         [JsonIgnore]
         public string? StudentId { get; set; }
         public GetUserDTO? User { get; set; }
-        public decimal StudentScore { get; set; } 
+        public decimal StudentScore { get; set; }
         public GetMultipleChoiceQuestionDTO? MultipleChoiceQuestion { get; set; }
     }
 }

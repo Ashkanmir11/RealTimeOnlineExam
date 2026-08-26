@@ -1,22 +1,15 @@
-﻿using MediatR;
-using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.Question.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Domain.Enums;
-using OnlineExam.Domain.Entities;
-using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
-using AutoMapper;
+﻿using AutoMapper;
 using FluentValidation;
-using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+using MediatR;
+using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveQuestion;
+using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
 using OnlineExam.Application.DTOs.Question;
-using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
+using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 using OnlineExam.Application.Features.DescriptiveQuestion.Request.Commands;
 using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
+using OnlineExam.Application.Features.Question.Request.Commands;
+using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Commands;
 namespace OnlineExam.Application.Features.Question.Handler.Commands
 {
     public class CreateQuestionRequestHandler : IRequestHandler<CreateQuestionRequest>

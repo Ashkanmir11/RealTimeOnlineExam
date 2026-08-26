@@ -4,7 +4,6 @@ using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
 using System.Net.Http.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OnlineExam.Ui.Services
 {

@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Contracts;
-using OnlineExam.Persistence.Repositories;
-using OnlineExam.Persistence;
-
-namespace OnlineExam.Api.Configuration
+﻿namespace OnlineExam.Api.Configuration
 {
     public static class VersioningConfiguration
     {

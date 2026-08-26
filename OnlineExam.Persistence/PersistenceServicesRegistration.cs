@@ -1,15 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineExam.Application.Contracts;
-using OnlineExam.Persistence.Repositories;
 using OnlineExam.Application.Contracts.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OnlineExam.Persistence.Repositories;
 
 namespace OnlineExam.Persistence
 {
@@ -33,7 +27,7 @@ namespace OnlineExam.Persistence
             services.AddScoped<ITrueOrFalseQuestionRepository, TrueOrFalseQuestionRepository>();
             services.AddScoped<ITrueOrFalseAnswersRepository, TrueOrFalseAnswersRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
-            services.AddScoped<IExamAttamptRepository,ExamAttamptRepository>();
+            services.AddScoped<IExamAttamptRepository, ExamAttamptRepository>();
             return services;
         }
     }

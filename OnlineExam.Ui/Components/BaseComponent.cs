@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OnlineExam.Ui.DTO.Common;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OnlineExam.Ui.Components
 {

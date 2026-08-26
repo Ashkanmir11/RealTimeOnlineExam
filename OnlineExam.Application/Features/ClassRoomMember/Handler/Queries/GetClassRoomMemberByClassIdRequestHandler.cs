@@ -4,11 +4,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.DTOs.ClassRoomMember;
 using OnlineExam.Application.Features.ClassRoomMember.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
 {
@@ -29,7 +24,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
             var result = new GetClassRoomMemberDTO()
             {
                 GetClassRoomDTO = await _classRoomRepository.GetAsync<GetClassRoomDTO>(request.ClassRoomId),
-                Students =await _accountRepository.GetUsersByIdsAsync(studentsId)
+                Students = await _accountRepository.GetUsersByIdsAsync(studentsId)
             };
             return result;
         }

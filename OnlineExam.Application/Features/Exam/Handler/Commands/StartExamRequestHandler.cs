@@ -1,19 +1,13 @@
 ﻿using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.Exam.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.DTOs.Common;
-using OnlineExam.Application.Features.Question.Request.Queries;
 using OnlineExam.Application.DTOs.Question;
-using OnlineExam.Application.Response;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.Exam.Request.Commands;
 using OnlineExam.Application.Features.ExamAttampt.Request.Commands;
 using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
+using OnlineExam.Application.Features.Question.Request.Queries;
+using OnlineExam.Application.Response;
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionStudentDTO>>

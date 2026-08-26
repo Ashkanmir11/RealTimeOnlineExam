@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Configuration
 {
@@ -18,7 +13,7 @@ namespace OnlineExam.Persistence.Configuration
             builder.Property(e => e.QuestionText).IsRequired().HasMaxLength(300);
             builder.Property(e => e.TotalScore).IsRequired();
             builder.Property(e => e.TotalScore).HasPrecision(5, 2);
-            builder.HasOne(e=>e.TrueOrFalseQuestion).WithMany(e=>e.Question).HasForeignKey(e=>e.TrueOrFalseQuestionId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(e => e.TrueOrFalseQuestion).WithMany(e => e.Question).HasForeignKey(e => e.TrueOrFalseQuestionId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(e => e.DescriptiveQuestion).WithMany(e => e.Question).HasForeignKey(e => e.DescriptiveQuestionId).OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(e => e.MultipleChoiceQuestion).WithMany(e => e.Question).HasForeignKey(e => e.MultipleChoiceQuestionId).OnDelete(DeleteBehavior.Cascade);
 

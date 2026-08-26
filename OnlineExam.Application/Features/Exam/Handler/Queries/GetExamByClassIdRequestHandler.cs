@@ -2,14 +2,9 @@
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Exam;
+using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Exam.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 namespace OnlineExam.Application.Features.Exam.Handler.Queries
 {
     public class GetExamByClassIdRequestHandler : IRequestHandler<GetExamByClassIdRequest, PaginateResponse<GetExamDetailDTO>>
@@ -32,7 +27,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Queries
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             bool isTeacher = await _classRoomRepository.IsUserTeacherAsync(request.ClassId, currentUser);
             bool isStudent = await _classRoomMembersRepository.StudentIsInClassAsync(currentUser, request.ClassId);
-            if(!isStudent && !isTeacher)
+            if (!isStudent && !isTeacher)
             {
                 throw new AccessForbiddenException("شما دسترسی به این کلاس را ندارید.");
             }

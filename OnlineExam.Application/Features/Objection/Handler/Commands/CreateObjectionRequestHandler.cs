@@ -1,19 +1,9 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.Objection.Validation;
-using OnlineExam.Application.Features.Objection.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Helper;
 using OnlineExam.Application.DTOs.Objection;
-using AutoMapper;
-using OnlineExam.Domain.Entities;
-using FluentValidation;
+using OnlineExam.Application.Features.Objection.Request.Commands;
 
 namespace OnlineExam.Application.Features.Objection.Handler.Commands
 {
@@ -25,7 +15,7 @@ namespace OnlineExam.Application.Features.Objection.Handler.Commands
         public CreateObjectionRequestHandler(IObjectionRepository objectionRepository, IAuthServices authServices, IValidator<CreateObjectionDTO> validator)
         {
             _objectionRepository = objectionRepository;
-            _authServices= authServices;
+            _authServices = authServices;
             _validator = validator;
         }
 

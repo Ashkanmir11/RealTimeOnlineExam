@@ -7,11 +7,6 @@ using OnlineExam.Application.DTOs.Exam;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {
@@ -28,11 +23,11 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> CanModifyExamAsync(int examId)
         {
             var examStartDate = await _context.Exams.Where(e => e.Id == examId).Select(e => e.StartDate).SingleOrDefaultAsync();
-            if(examStartDate == null)
+            if (examStartDate == null)
             {
                 return false;
             }
-            if(DateTime.Now>examStartDate)
+            if (DateTime.Now > examStartDate)
             {
                 return false;
             }
@@ -42,11 +37,11 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<PaginateResponse<GetExamDetailDTO>> GetByClassIdAsync(int classId, PaginateRequestDTO paginateRequestDTO)
         {
             var query = _context.Exams.Where(e => e.ClassId == classId).AsQueryable();
-            int totalCount=query.Count();
+            int totalCount = query.Count();
             int skip = PaginateHelper<Exam>.GetSkip(paginateRequestDTO);
             query = QuerySortHelper<Exam>.Sort(query, paginateRequestDTO);
             query = query.Skip(skip).Take(paginateRequestDTO.PageCount);
-            var data =await query.ProjectTo<GetExamDetailDTO>(_mapper.ConfigurationProvider).ToListAsync();
+            var data = await query.ProjectTo<GetExamDetailDTO>(_mapper.ConfigurationProvider).ToListAsync();
             var result = PaginateHelper<GetExamDetailDTO>.Paginate(data, totalCount, paginateRequestDTO);
             return result;
         }
@@ -54,7 +49,7 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> IsUserTeacherAsync(string userId, int examId)
         {
             var exam = await _context.Exams.Where(e => e.Id == examId).SingleOrDefaultAsync();
-            if(exam==null)
+            if (exam == null)
             {
                 return false;
             }

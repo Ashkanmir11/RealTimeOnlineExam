@@ -32,7 +32,7 @@ namespace OnlineExam.Ui.Services
         }
         public async Task<CommonResponse<PaginateResponse<GetQuestionTeacherDTO>>> GetByExamIdTeacher(PaginateRequestDTO paginateRequestDTO, int examId)
         {
-            var apiUrl = ApiRoutes.GetQuestionByExamId(paginateRequestDTO,examId);
+            var apiUrl = ApiRoutes.GetQuestionByExamId(paginateRequestDTO, examId);
             var options = new RequestOptions()
             {
                 ApiUrl = apiUrl,

@@ -12,7 +12,7 @@ namespace OnlineExam.Ui.Services
         private readonly RequestServices _requestServices;
         public ExamLogServices(RequestServices requestServices)
         {
-             _requestServices = requestServices;
+            _requestServices = requestServices;
         }
         //logtype 1=leaving page;
         //logtype 2=trying copy and pase
@@ -60,7 +60,7 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-        public async Task<CommonResponse<List<GetExamLogDTO>>> GetLogs(int examId,string studentId)
+        public async Task<CommonResponse<List<GetExamLogDTO>>> GetLogs(int examId, string studentId)
         {
             var apiUrl = ApiRoutes.GetLogs(examId, studentId);
             var options = new RequestOptions()

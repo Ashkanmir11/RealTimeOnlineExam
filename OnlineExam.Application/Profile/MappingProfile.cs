@@ -1,23 +1,17 @@
-﻿using AutoMapper;
-using OnlineExam.Application.DTOs.ClassRoom;
+﻿using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.DTOs.ClassRoomMember;
-using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
+using OnlineExam.Application.DTOs.DescriptiveQuestion;
 using OnlineExam.Application.DTOs.Exam;
-using OnlineExam.Application.DTOs.LogType;
-using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
-using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
-using OnlineExam.Application.DTOs.Objection;
-using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
-using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
-using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.DTOs.Question;
 using OnlineExam.Application.DTOs.ExamLog;
+using OnlineExam.Application.DTOs.LogType;
+using OnlineExam.Application.DTOs.MultipleChoiceAnswers;
+using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
+using OnlineExam.Application.DTOs.Objection;
+using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
+using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
+using OnlineExam.Domain.Entities;
 
 namespace OnlineExam.Application.Profile
 {
@@ -54,7 +48,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<DescriptiveQuestion, UpdateDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionStudentDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionTeacherDTO>().ReverseMap();
-            CreateMap<DescriptiveQuestion,GetDescriptiveQuestionWithAnswerDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestion, GetDescriptiveQuestionWithAnswerDTO>().ReverseMap();
 
             //Descriptive Answer
             CreateMap<DescriptiveAnswers, CreateDescriptiveAnswersDTO>().ReverseMap();

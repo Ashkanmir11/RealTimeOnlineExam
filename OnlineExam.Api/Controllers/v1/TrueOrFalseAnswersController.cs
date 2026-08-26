@@ -1,16 +1,11 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Queries;
-using OnlineExam.Api.Herlpers;
-using OnlineExam.Application.Response;
-using OnlineExam.Application.Features.MultipleChoiceAnswers.Request.Queries;
-using Asp.Versioning;
 namespace OnlineExam.Api.Controllers.V1
 {
     [Route("api/v{version:apiVersion}/true-or-false-answers")]

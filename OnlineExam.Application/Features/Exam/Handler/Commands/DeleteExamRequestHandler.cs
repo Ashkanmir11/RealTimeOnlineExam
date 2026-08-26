@@ -3,11 +3,6 @@ using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.Exam.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
@@ -16,7 +11,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         private readonly IExamRepository _examRepository;
         private readonly IAuthServices _authServices;
         private readonly IQuestionRepository _questionRepository;
-        public DeleteExamRequestHandler(IExamRepository examRepository,IAuthServices authServices, IQuestionRepository questionRepository)
+        public DeleteExamRequestHandler(IExamRepository examRepository, IAuthServices authServices, IQuestionRepository questionRepository)
         {
             _examRepository = examRepository;
             _authServices = authServices;
@@ -24,10 +19,10 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         }
         public async Task Handle(DeleteExamRequest request, CancellationToken cancellationToken)
         {
-            var currentUser=await _authServices.GetCurrentUserIdAsync();
-            bool isTeacher =await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
             bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
-            if(!isTeacher && !isAdmin)
+            if (!isTeacher && !isAdmin)
             {
                 throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
             }

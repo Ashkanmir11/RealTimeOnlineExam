@@ -4,11 +4,6 @@ using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ExamLog;
 using OnlineExam.Application.Features.ExamLog.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ExamLog.Handler.Commands
 {
@@ -17,7 +12,7 @@ namespace OnlineExam.Application.Features.ExamLog.Handler.Commands
         private readonly IExamLogRepository _examLogRepository;
         private readonly IValidator<CreateExamLogDTO> _validator;
         private readonly IAuthServices _authServices;
-        public CreateExamLogRequestHandler(IExamLogRepository examLogRepository, IValidator<CreateExamLogDTO> validator,IAuthServices authServices)
+        public CreateExamLogRequestHandler(IExamLogRepository examLogRepository, IValidator<CreateExamLogDTO> validator, IAuthServices authServices)
         {
             _examLogRepository = examLogRepository;
             _validator = validator;
@@ -28,9 +23,9 @@ namespace OnlineExam.Application.Features.ExamLog.Handler.Commands
         {
             request.CreateExamLogDTO.StudentId = await _authServices.GetCurrentUserIdAsync();
             var validationResult = await _validator.ValidateAsync(request.CreateExamLogDTO);
-            if(validationResult.IsValid==false)
+            if (validationResult.IsValid == false)
             {
-                var erroes=validationResult.Errors.Select(e=> e.ErrorMessage).ToList();
+                var erroes = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(erroes);
             }
             await _examLogRepository.AddAsync<CreateExamLogDTO>(request.CreateExamLogDTO);

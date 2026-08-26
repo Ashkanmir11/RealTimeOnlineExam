@@ -4,11 +4,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ExamLog;
 using OnlineExam.Application.Features.ExamLog.Request.Queries;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ExamLog.Handler.Queries
 {
@@ -28,11 +23,11 @@ namespace OnlineExam.Application.Features.ExamLog.Handler.Queries
             {
                 return null;
             }
-            foreach(var log in logs.Data)
+            foreach (var log in logs.Data)
             {
                 log.Student = await _accountRepository.GetUserByIdAsync(log.StudentId);
             }
-            
+
             return logs;
         }
     }

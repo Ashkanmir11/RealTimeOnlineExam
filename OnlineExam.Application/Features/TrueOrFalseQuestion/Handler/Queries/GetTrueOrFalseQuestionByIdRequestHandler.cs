@@ -2,11 +2,6 @@
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.TrueOrFalseQuestion;
 using OnlineExam.Application.Features.TrueOrFalseQuestion.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.TrueOrFalseQuestion.Handler.Queries
 {

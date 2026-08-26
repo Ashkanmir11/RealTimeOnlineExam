@@ -1,14 +1,8 @@
-﻿using OnlineExam.Ui.Response;
+﻿using OnlineExam.Ui.DTO.Account;
 using OnlineExam.Ui.EndPoints;
-using System.Text;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Net.Http.Json;
-using OnlineExam.Ui.DTO.Account;
-using System.Reflection;
-using System.Collections;
-using Microsoft.AspNetCore.Components.WebAssembly.Http;
 using OnlineExam.Ui.Options;
+using OnlineExam.Ui.Response;
+using System.Net.Http.Json;
 namespace OnlineExam.Ui.Services
 {
     public class AuthServices
@@ -58,8 +52,8 @@ namespace OnlineExam.Ui.Services
                 HttpMethods = HttpMethod.Post,
                 ApiUrl = apiUrl,
                 IncludeCredentials = true,
-                RequiresAuth=true,
-                GetData=false,       
+                RequiresAuth = true,
+                GetData = false,
             };
             await _requestServices.SendAsync<EmptyResponse>(options);
         }

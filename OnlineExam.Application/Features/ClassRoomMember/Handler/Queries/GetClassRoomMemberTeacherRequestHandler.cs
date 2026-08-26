@@ -2,13 +2,8 @@
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.ClassRoomMember;
-using OnlineExam.Application.Features.ClassRoomMember.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.ClassRoomMember.Request.Queries;
 namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
 {
     public class GetClassRoomMemberTeacherRequestHandler : IRequestHandler<GetClassRoomMemberTeacherRequest, GetClassRoomMemberTeacherDTO>
@@ -18,7 +13,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
         private readonly IAccountRepository _accountRepository;
         private readonly IAuthServices _authServices;
         public GetClassRoomMemberTeacherRequestHandler(IClassRoomMembersRepository classRoomMembersRepository
-            , IClassRoomRepository classRoomRepository,IAccountRepository accountRepository,IAuthServices authServices)
+            , IClassRoomRepository classRoomRepository, IAccountRepository accountRepository, IAuthServices authServices)
         {
             _classRoomMembersRepository = classRoomMembersRepository;
             _classRoomRepository = classRoomRepository;
@@ -27,9 +22,9 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Queries
         }
         public async Task<GetClassRoomMemberTeacherDTO> Handle(GetClassRoomMemberTeacherRequest request, CancellationToken cancellationToken)
         {
-            var currentUser = await _authServices.GetCurrentUserIdAsync(); 
-            bool isTeacher=await _classRoomRepository.IsUserTeacherAsync(request.ClassId,currentUser);
-            if(!isTeacher)
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher = await _classRoomRepository.IsUserTeacherAsync(request.ClassId, currentUser);
+            if (!isTeacher)
             {
                 throw new AccessForbiddenException("شما دسترسی به این کلاس ندارید.");
             }

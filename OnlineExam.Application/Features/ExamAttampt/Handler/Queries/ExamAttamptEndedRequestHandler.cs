@@ -1,11 +1,6 @@
 ﻿using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ExamAttampt.Handler.Queries
 {

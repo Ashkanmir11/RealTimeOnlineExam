@@ -1,17 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.ClassRoomMember.Validation;
-using OnlineExam.Application.Features.ClassRoomMember.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using FluentValidation;
 using OnlineExam.Application.DTOs.ClassRoomMember;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.ClassRoomMember.Request.Commands;
 namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
 {
     public class CreateClassRoomMemberRequestHandler : IRequestHandler<CreateClassRoomMemberRequest>
@@ -22,7 +15,7 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
         private readonly IAuthServices _authServices;
         private readonly IClassRoomRepository _classRoomRepository;
         public CreateClassRoomMemberRequestHandler(IClassRoomMembersRepository classRoomMembersRepository
-            , IValidator<CreateClassRoomMemberDTO> validator,IAccountRepository accountRepository, IAuthServices authServices, IClassRoomRepository classRoomRepository)
+            , IValidator<CreateClassRoomMemberDTO> validator, IAccountRepository accountRepository, IAuthServices authServices, IClassRoomRepository classRoomRepository)
         {
             _classRoomMembersRepository = classRoomMembersRepository;
             _validator = validator;
@@ -50,9 +43,9 @@ namespace OnlineExam.Application.Features.ClassRoomMember.Handler.Commands
             }
 
 
-           
 
-           await _classRoomMembersRepository.AddMembersAsync(request.CreateClassRoomMemberDTO);
+
+            await _classRoomMembersRepository.AddMembersAsync(request.CreateClassRoomMemberDTO);
         }
     }
 }

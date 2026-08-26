@@ -1,10 +1,7 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using OnlineExam.Api.Herlpers;
-using OnlineExam.Application.DTOs.ClassRoom;
 using OnlineExam.Application.DTOs.ClassRoomMember;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Features.ClassRoomMember.Request.Commands;

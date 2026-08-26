@@ -4,7 +4,7 @@ namespace OnlineExam.Ui.Helper
 {
     public class DateHelper
     {
-       
+
         public static string MiladiToShamsi(DateTime dateTime)
         {
             if (dateTime == null)
@@ -12,8 +12,8 @@ namespace OnlineExam.Ui.Helper
                 return null;
             }
             PersianCalendar pc = new PersianCalendar();
-            return pc.GetYear(dateTime).ToString("0000") + "/" + pc.GetMonth(dateTime).ToString("00") 
-                + "/" + pc.GetDayOfMonth(dateTime).ToString("00") +" "+ pc.GetHour(dateTime).ToString("00")+":"+pc.GetMinute(dateTime).ToString("00");
+            return pc.GetYear(dateTime).ToString("0000") + "/" + pc.GetMonth(dateTime).ToString("00")
+                + "/" + pc.GetDayOfMonth(dateTime).ToString("00") + " " + pc.GetHour(dateTime).ToString("00") + ":" + pc.GetMinute(dateTime).ToString("00");
         }
         public static string MiladiToShamsi(string dateTime)
         {
@@ -25,7 +25,7 @@ namespace OnlineExam.Ui.Helper
             var DateType = DateTime.Parse(dateTime);
             return pc.GetYear(DateType).ToString("0000") + "/" + pc.GetMonth(DateType).ToString("00") + "/" + pc.GetDayOfMonth(DateType).ToString("00");
 
-        }    
+        }
         public static string GetShamsiYear(DateTime DateTime)
         {
             PersianCalendar ps = new PersianCalendar();

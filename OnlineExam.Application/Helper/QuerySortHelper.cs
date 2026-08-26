@@ -1,11 +1,5 @@
 ﻿using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Linq.Dynamic.Core;
 namespace OnlineExam.Application.Helper
 {

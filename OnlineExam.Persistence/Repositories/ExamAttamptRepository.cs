@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using OnlineExam.Domain.Entities;
 namespace OnlineExam.Persistence.Repositories
 {
     public class ExamAttamptRepository : GenericRepository<ExamAttampt>, IExamAttamptRepository
@@ -35,7 +29,7 @@ namespace OnlineExam.Persistence.Repositories
         public async Task<bool> ExamEndedAsync(int examId, string userId)
         {
             var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
-            if(examAttampt == null)
+            if (examAttampt == null)
             {
                 throw new BadRequestException("آزمون شروع نشده.");
             }
@@ -53,9 +47,9 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.ExamAttampts.AnyAsync(e => e.ExamId == examId && e.StudentId == userId);
         }
 
-        public async Task<double> GetRemainingSeconds(int examId ,string studentId)
+        public async Task<double> GetRemainingSeconds(int examId, string studentId)
         {
-            var endTime =await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == studentId).Select(e => e.EndDate).FirstOrDefaultAsync();
+            var endTime = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == studentId).Select(e => e.EndDate).FirstOrDefaultAsync();
             return endTime.Subtract(DateTime.Now).TotalSeconds;
 
         }

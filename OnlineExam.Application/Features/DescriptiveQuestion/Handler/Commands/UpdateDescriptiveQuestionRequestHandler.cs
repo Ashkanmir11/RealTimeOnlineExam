@@ -1,15 +1,8 @@
 ﻿using MediatR;
-using OnlineExam.Application.DTOs.DescriptiveQuestion.Validation;
-using OnlineExam.Application.Features.DescriptiveQuestion.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.DescriptiveQuestion;
+using OnlineExam.Application.DTOs.DescriptiveQuestion.Validation;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.DescriptiveQuestion.Request.Commands;
 
 namespace OnlineExam.Application.Features.DescriptiveQuestion.Handler.Commands
 {

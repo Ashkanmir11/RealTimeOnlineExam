@@ -1,12 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OnlineExam.Application.DTOs.Common;
+﻿using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
 using OnlineExam.Application.Response;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Contracts.Identity
 {
@@ -19,7 +13,7 @@ namespace OnlineExam.Application.Contracts.Identity
         Task<bool> PhoneExistAsync(string phone);
         Task<string> GetUserIdByPhoneAsync(string phone);
         Task<List<string>> GetUsersIdByPhonesAsync(List<string> phone);
-        Task <GetMyUserInfoDTO> GetMyInfoAsync(string userId);
-       
+        Task<GetMyUserInfoDTO> GetMyInfoAsync(string userId);
+
     }
 }

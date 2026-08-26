@@ -1,13 +1,8 @@
 ﻿using MediatR;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
     public class DeleteTrueOrFalseAnswerRequestHandler : IRequestHandler<DeleteTrueOrFalseAnswerRequest>
@@ -34,7 +29,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
                 throw new AccessForbiddenException("شما دسترسی این عملیات را ندارید.");
             }
 
-           
+
             await _TrueOrFalseAnswersRepository.DeleteAsync(answer);
         }
     }

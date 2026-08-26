@@ -57,7 +57,7 @@ namespace OnlineExam.Ui.EndPoints
             baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
-         
+
         public static string DeleteExam(int id) => $"{ApiUrl}/exams/{id}";
         public static string GetExamById(int id) => $"{ApiUrl}/exams/{id}";
         public static string UpdateExam(int id) => $"{ApiUrl}/exams/{id}";
@@ -72,10 +72,10 @@ namespace OnlineExam.Ui.EndPoints
         public static string GradeMultiplechoiceAnswer(int answerId) => $"{ApiUrl}/multiple-choice-answers/{answerId}/Grade";
 
         public static string EndExam(int id) => $"{ApiUrl}/exams/{id}/end";
-        public static string GetStudentQuestionWithAnswer(int examId,string studentId,PaginateRequestDTO paginateRequestDTO)
+        public static string GetStudentQuestionWithAnswer(int examId, string studentId, PaginateRequestDTO paginateRequestDTO)
         {
             var baseUrl = $"{ApiUrl}/exams/{examId}/answers/{studentId}";
-            baseUrl= GetPaginateUrl(baseUrl,paginateRequestDTO);
+            baseUrl = GetPaginateUrl(baseUrl, paginateRequestDTO);
             return baseUrl;
         }
         //exam log

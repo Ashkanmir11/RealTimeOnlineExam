@@ -1,20 +1,14 @@
-﻿using AutoMapper.QueryableExtensions;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Identity;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.Identity;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Helper;
 using OnlineExam.Application.Response;
 using OnlineExam.Identity.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Linq.Dynamic.Core;
-using AutoMapper;
 
 namespace OnlineExam.Identity.Repositories
 {
@@ -69,7 +63,7 @@ namespace OnlineExam.Identity.Repositories
 
         public async Task<GetUserDTO> GetUserByIdAsync(string userId)
         {
-            return await _context.Users.Where(e=>e.Id==userId).ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+            return await _context.Users.Where(e => e.Id == userId).ProjectTo<GetUserDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
         }
 
         public async Task<string> GetUserIdByPhoneAsync(string phone)
@@ -85,7 +79,7 @@ namespace OnlineExam.Identity.Repositories
 
         public async Task<List<string>> GetUsersIdByPhonesAsync(List<string> phone)
         {
-            var result= await _context.Users.Where(e => phone.Contains(e.PhoneNumber)).Select(e => e.Id).ToListAsync();
+            var result = await _context.Users.Where(e => phone.Contains(e.PhoneNumber)).Select(e => e.Id).ToListAsync();
             return result;
         }
 

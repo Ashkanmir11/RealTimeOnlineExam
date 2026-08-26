@@ -4,11 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.DescriptiveAnswers;
 using OnlineExam.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Persistence.Repositories
 {
@@ -27,7 +22,7 @@ namespace OnlineExam.Persistence.Repositories
             return await _context.DescriptiveAnswers.Where(e => e.DescriptiveQuestionId == questionId).SingleOrDefaultAsync();
         }
 
-        public async Task<GetDescriptiveAnswerStudentDTO> GetForStudent(string studentId ,int questionId)
+        public async Task<GetDescriptiveAnswerStudentDTO> GetForStudent(string studentId, int questionId)
         {
             return await _context.DescriptiveAnswers.Where(e => e.StudentId == studentId && e.DescriptiveQuestionId == questionId)
                 .ProjectTo<GetDescriptiveAnswerStudentDTO>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();

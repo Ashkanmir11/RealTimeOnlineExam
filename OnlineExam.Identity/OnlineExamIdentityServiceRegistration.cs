@@ -5,18 +5,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using OnlineExam.Application.Contracts.Identity;
-using OnlineExam.Application.Profile;
 using OnlineExam.Identity.ErrorDescribers;
 using OnlineExam.Identity.Model;
 using OnlineExam.Identity.Profile;
 using OnlineExam.Identity.Repositories;
-using OnlineExam.Identity.SeedData;
 using OnlineExam.Identity.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 
 namespace OnlineExam.Identity
@@ -37,7 +31,7 @@ namespace OnlineExam.Identity
                 e.Password.RequireUppercase = true;
                 e.Password.RequireDigit = true;
                 e.Password.RequireLowercase = true;
-                
+
             }).AddRoles<IdentityRole>().AddEntityFrameworkStores<OnlineExamIdentityDbContext>().AddDefaultTokenProviders().AddErrorDescriber<ErrorToFarsi>(); ;
             services.AddScoped<IAuthServices, AuthServices>();
             services.AddScoped<TokenServices>();

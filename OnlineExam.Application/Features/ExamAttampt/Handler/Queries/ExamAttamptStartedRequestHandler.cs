@@ -1,11 +1,6 @@
 ﻿using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.ExamAttampt.Handler.Queries
 {
@@ -19,7 +14,7 @@ namespace OnlineExam.Application.Features.ExamAttampt.Handler.Queries
 
         public async Task<bool> Handle(ExamAttamptStartedRequest request, CancellationToken cancellationToken)
         {
-           return await _examAttamptRepository.ExamStartedAsync(request.ExamId, request.UserId);
+            return await _examAttamptRepository.ExamStartedAsync(request.ExamId, request.UserId);
         }
     }
 }

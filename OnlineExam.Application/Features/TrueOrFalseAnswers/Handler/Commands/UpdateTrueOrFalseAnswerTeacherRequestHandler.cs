@@ -5,7 +5,6 @@ using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.TrueOrFalseAnswers;
 using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.Features.TrueOrFalseAnswers.Request.Commands;
-using static System.Formats.Asn1.AsnWriter;
 using OnlineExam.Domain.Enums;
 namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
 {
@@ -49,7 +48,7 @@ namespace OnlineExam.Application.Features.TrueOrFalseAnswers.Handler.Commands
             {
                 errors.AddRange(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
             }
-            if(errors.Count>0)
+            if (errors.Count > 0)
             {
                 throw new Application.Exceptions.ValidationException(errors);
             }

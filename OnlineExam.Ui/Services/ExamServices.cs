@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Schema;
-using OnlineExam.Ui.DTO.Common;
+﻿using OnlineExam.Ui.DTO.Common;
 using OnlineExam.Ui.DTO.DescriptiveAnswers;
 using OnlineExam.Ui.DTO.Exam;
 using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
@@ -9,7 +8,6 @@ using OnlineExam.Ui.EndPoints;
 using OnlineExam.Ui.Options;
 using OnlineExam.Ui.Response;
 using System.Net.Http.Json;
-using System.Net.WebSockets;
 namespace OnlineExam.Ui.Services
 {
     public class ExamServices
@@ -257,7 +255,7 @@ namespace OnlineExam.Ui.Services
             return await _requestServices.SendAsync<PaginateResponse<GetQuestionWithAnswerDTO>>(options);
 
         }
-        public async Task<CommonResponse<EmptyResponse>> GradeTrueOrFalseQuestion(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO,int answerId)
+        public async Task<CommonResponse<EmptyResponse>> GradeTrueOrFalseQuestion(UpdateTrueOrFalseAnswerTeacherDTO updateTrueOrFalseAnswerTeacherDTO, int answerId)
         {
             var apiUrl = ApiRoutes.GradeTrueOrFalseAnswer(answerId);
             var content = JsonContent.Create(updateTrueOrFalseAnswerTeacherDTO);
@@ -272,7 +270,7 @@ namespace OnlineExam.Ui.Services
             };
             return await _requestServices.SendAsync<EmptyResponse>(options);
         }
-        public async Task<CommonResponse<EmptyResponse>> GradeDescriptiveQuestion(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO , int answerId)
+        public async Task<CommonResponse<EmptyResponse>> GradeDescriptiveQuestion(UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO, int answerId)
         {
             var apiUrl = ApiRoutes.GradeDescriptiveAnswer(answerId);
             var content = JsonContent.Create(updateDescriptiveAnswersTeacherDTO);

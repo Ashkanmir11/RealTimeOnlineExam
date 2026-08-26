@@ -1,17 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.DescriptiveQuestion.Validation;
-using OnlineExam.Application.DTOs.MultipleChoiceQuestion.Validation;
-using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
-using OnlineExam.Application.Helper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
 using OnlineExam.Application.DTOs.MultipleChoiceQuestion;
-using FluentValidation;
+using OnlineExam.Application.Features.MultipleChoiceQuestion.Request.Commands;
 
 namespace OnlineExam.Application.Features.MultipleChoiceQuestion.Handler.Commands
 {

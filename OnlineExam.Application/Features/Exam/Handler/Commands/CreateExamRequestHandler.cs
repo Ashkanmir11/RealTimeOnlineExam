@@ -1,16 +1,8 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Features.Exam.Request.Commands;
-using OnlineExam.Application.DTOs.Exam;
-using OnlineExam.Application.DTOs.Exam.Validation;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Helper;
-using FluentValidation;
+using OnlineExam.Application.DTOs.Exam;
+using OnlineExam.Application.Features.Exam.Request.Commands;
 
 
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
@@ -19,7 +11,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
     {
         private readonly IExamRepository _examRepository;
         private readonly IValidator<CreateExamDTO> _validator;
-        public CreateExamRequestHandler( IExamRepository examRepository, IValidator<CreateExamDTO> validator)
+        public CreateExamRequestHandler(IExamRepository examRepository, IValidator<CreateExamDTO> validator)
         {
             _examRepository = examRepository;
             _validator = validator;

@@ -1,12 +1,9 @@
 ﻿using Asp.Versioning;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using OnlineExam.Application.DTOs.Common;
 using OnlineExam.Application.DTOs.ExamLog;
-using OnlineExam.Application.Features.ExamLog.Handler.Queries;
 using OnlineExam.Application.Features.ExamLog.Request.Commands;
 using OnlineExam.Application.Features.ExamLog.Request.Queries;
 

@@ -1,17 +1,10 @@
-﻿using MediatR;
-using OnlineExam.Application.Contracts.Persistence;
-using OnlineExam.Application.DTOs.Exam.Validation;
-using OnlineExam.Application.Features.Exam.Request.Commands;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OnlineExam.Application.Exceptions;
-using OnlineExam.Application.Helper;
+﻿using FluentValidation;
+using MediatR;
 using OnlineExam.Application.Contracts.Identity;
-using FluentValidation;
+using OnlineExam.Application.Contracts.Persistence;
 using OnlineExam.Application.DTOs.Exam;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.Exam.Request.Commands;
 
 namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
@@ -30,12 +23,12 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         public async Task Handle(UpdateExamRequest request, CancellationToken cancellationToken)
         {
             var exam = await _examRepository.ExistAsync(request.Id);
-            if(!exam)
+            if (!exam)
             {
                 throw new NotFoundException("آزمون یافت نشد.");
             }
-            var canEdit=await _examRepository.CanModifyExamAsync(request.Id);
-            if(!canEdit)
+            var canEdit = await _examRepository.CanModifyExamAsync(request.Id);
+            if (!canEdit)
             {
                 throw new ConflictException("امکان ویرایش بعد شروع آزمون وجود ندارد.");
             }
@@ -48,7 +41,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             }
 
             var validationResult = await _validator.ValidateAsync(request.UpdateExamDTO);
-            if(validationResult.IsValid==false)
+            if (validationResult.IsValid == false)
             {
                 var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new Application.Exceptions.ValidationException(errors);

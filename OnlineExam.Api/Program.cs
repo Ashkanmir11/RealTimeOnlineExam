@@ -1,13 +1,10 @@
 using Asp.Versioning.ApiExplorer;
-using Asp.Versioning.Conventions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using OnlineExam.Api.Configuration;
 using OnlineExam.Api.Herlpers;
 using OnlineExam.Api.Hubs;
 using OnlineExam.Api.Middleware;
 using OnlineExam.Application;
-using OnlineExam.Application.Serviecs;
 using OnlineExam.Identity;
 using OnlineExam.Identity.SeedData;
 using OnlineExam.Persistence;

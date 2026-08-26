@@ -49,13 +49,13 @@
             _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(cookieName, out var result);
             return result;
         }
-        public void DeleteCookie(HttpResponse httpResponse,string cookieName)
+        public void DeleteCookie(HttpResponse httpResponse, string cookieName)
         {
 
             httpResponse.Cookies.Delete(cookieName);
-            
+
             // Specify the same path, domain, and Secure/HttpOnly flags as when the cookie was created
-            
+
         }
     }
 }

@@ -1,16 +1,9 @@
-﻿using OnlineExam.Application.Contracts.AIServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenAI.Responses;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
-using OpenAI;
-using static System.Formats.Asn1.AsnWriter;
-using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
+using OnlineExam.Application.Contracts.AIServices;
+using System.Net.Http.Headers;
+using System.Text;
 namespace OnlineExam.Application.Serviecs
 {
     public class AiServices : IAiServices
