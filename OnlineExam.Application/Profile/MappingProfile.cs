@@ -45,8 +45,8 @@ namespace OnlineExam.Application.Profile
             CreateMap<Exam, GetExamDetailDTO>().ReverseMap();
 
             //Exam Log
-            CreateMap<ExamLog,CreateExamLogDTO>().ReverseMap();
-            CreateMap<ExamLog,GetExamLogDTO>().ReverseMap();
+            CreateMap<ExamLog, CreateExamLogDTO>().ReverseMap();
+            CreateMap<ExamLog, GetExamLogDTO>().ReverseMap();
 
             //Descriptive Question
             CreateMap<DescriptiveQuestion, CreateDescriptiveQuestionDTO>().ReverseMap();
@@ -54,6 +54,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<DescriptiveQuestion, UpdateDescriptiveQuestionDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionStudentDTO>().ReverseMap();
             CreateMap<DescriptiveQuestion, GetDescriptiveQuestionTeacherDTO>().ReverseMap();
+            CreateMap<DescriptiveQuestion,GetDescriptiveQuestionWithAnswerDTO>().ReverseMap();
 
             //Descriptive Answer
             CreateMap<DescriptiveAnswers, CreateDescriptiveAnswersDTO>().ReverseMap();
@@ -69,6 +70,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<MultipleChoiceQuestion, UpdateMultipleChoiceQuestionDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionStudentDTO>().ReverseMap();
             CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionTeacherDTO>().ReverseMap();
+            CreateMap<MultipleChoiceQuestion, GetMultipleChoiceQuestionWithAnswerDTO>().ReverseMap();
 
             //Multiple Choice Answer
             CreateMap<MultipleChoiceAnswers, CreateMultipleChoiceAnswerDTO>().ReverseMap();
@@ -83,6 +85,7 @@ namespace OnlineExam.Application.Profile
             CreateMap<Question, GetQuestionStudentDTO>().ReverseMap();
             CreateMap<Question, UpdateQuestionDTO>().ReverseMap();
             CreateMap<Question, GetQuestionTeacherDTO>().ReverseMap();
+            CreateMap<Question, GetQuestionWithAnswerDTO>().ReverseMap();
 
             //Objection
             CreateMap<Objection, CreateObjectionDTO>().ReverseMap();
@@ -100,6 +103,8 @@ namespace OnlineExam.Application.Profile
             CreateMap<TrueOrFalseQuestion, UpdateTrueOfFalseQuestionDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionStudentDTO>().ReverseMap();
             CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionTeacherDTO>().ReverseMap();
+            CreateMap<TrueOrFalseQuestion, GetTrueOrFalseQuestionWithAnswerDTO>().ReverseMap();
+
             //True or false Answer
             CreateMap<TrueOrFalseAnswers, CreateTrueOrFalseAnswerDTO>().ReverseMap();
             CreateMap<TrueOrFalseAnswers, GetTrueOrFalseAnswerDTO>().ReverseMap();

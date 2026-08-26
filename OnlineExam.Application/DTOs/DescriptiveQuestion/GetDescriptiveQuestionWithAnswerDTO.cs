@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.DescriptiveQuestion
 {
-    public class GetDescriptiveQuestionTeacherDTO : BaseDTO
+    public class GetDescriptiveQuestionWithAnswerDTO : BaseDTO
     {
         public string? CorrectAnswer { get; set; }
+        public GetDescriptiveAnswersTeacherDTO? Answer { get; set; }
     }
 }

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.MultipleChoiceQuestion
 {
-    public class GetMultipleChoiceQuestionTeacherDTO : BaseDTO
+    public class GetMultipleChoiceQuestionWithAnswerDTO : BaseDTO
     {
         public List<string>? Choices { get; set; }
         public int CorrectChoice { get; set; }
-
+        public GetMultipleChoiceAnswerTeacherDTO? Answer { get; set; }
     }
 }

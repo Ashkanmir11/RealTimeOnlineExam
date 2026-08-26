@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.Features.Question.Handler.Queries
 {
-    public class GetQuestionWithAnswerRequestHandler : IRequestHandler<GetQuestionWithAnswerRequest, PaginateResponse<GetQuestionTeacherDTO>>
+    public class GetQuestionWithAnswerRequestHandler : IRequestHandler<GetQuestionWithAnswerRequest, PaginateResponse<GetQuestionWithAnswerDTO>>
     {
         private readonly IQuestionRepository _quesitonRepository;
         private readonly IExamRepository _examRepository;
@@ -43,7 +43,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
             _descriptiveAnswersRepository = descriptiveAnswersRepository;
         }
 
-        public async Task<PaginateResponse<GetQuestionTeacherDTO>> Handle(GetQuestionWithAnswerRequest request, CancellationToken cancellationToken)
+        public async Task<PaginateResponse<GetQuestionWithAnswerDTO>> Handle(GetQuestionWithAnswerRequest request, CancellationToken cancellationToken)
         {
             var currentUser = await _authServices.GetCurrentUserIdAsync();
             var access = await _examRepository.IsUserTeacherAsync(currentUser, request.ExamId);
@@ -52,7 +52,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
                 throw new AccessForbiddenException("شما دسترسی به سوالات و پاسخ های این آزمون ندارید.");
             }
 
-            var questions = await _quesitonRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);
+            var questions = await _quesitonRepository.GetByExamIdAsync<GetQuestionWithAnswerDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);
             if (questions == null)
             {
                 return null;
@@ -64,7 +64,7 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
                 {
                     var answer =await _trueOrFalseAnswersRepository.GetByQuestionIdAsync(question.TrueOrFalseQuestion.Id);
                     var answerDto = _mapper.Map<GetTrueOrFalseAnswerTeacherDTO>(answer);
-                    question.TrueOrFalseQuestion.Answer = answerDto;
+                    question.TrueOrFalseQuestion.Answer= answerDto;
                 }
                 else if (question.MultipleChoiceQuestion != null)
                 {

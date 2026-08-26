@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace OnlineExam.Application.DTOs.TrueOrFalseQuestion
 {
-    public class GetTrueOrFalseQuestionTeacherDTO : BaseDTO
+    public class GetTrueOrFalseQuestionWithAnswerDTO : BaseDTO
     {
         public bool CorrectAnswer { get; set; }
-        public GetTrueOrFalseAnswerTeacherDTO? Answer { get;set; }  
+        public GetTrueOrFalseAnswerTeacherDTO? Answer { get; set; }
     }
 }
