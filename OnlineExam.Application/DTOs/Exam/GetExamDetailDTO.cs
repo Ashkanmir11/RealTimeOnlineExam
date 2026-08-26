@@ -17,6 +17,8 @@ namespace OnlineExam.Application.DTOs.Exam
         public int AllowedDelay { get; set; }
         public bool AllowedCopy { get; set; } = false;
         public bool RandomQuestions { get; set; } = false;
+        public bool LogStudent { get; set; } = true;
+
 
     }
 }

@@ -41,6 +41,7 @@
                             <th>میزان مجاز تأخیر</th>
                             <th>اجازه کپی</th>
                             <th>سؤالات درهم</th>
+                            <th>لاگ دانشجو</th>
                             <th>عملیات</th>
                         </tr>
                     </thead>
@@ -82,7 +83,11 @@
                                         <InputCheckbox disabled @bind-Value="@exam.RandomQuestions" />
                                     </div>
                                 </td>
-
+                                <td>
+                                    <div class="checkbox-cell">
+                                        <InputCheckbox disabled @bind-Value="@exam.LogStudent" />
+                                    </div>
+                                </td>
                                 <td>
                                     <div class="exam-actions">
                                         <button class="exam-action-button danger"

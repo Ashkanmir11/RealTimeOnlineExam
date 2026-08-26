@@ -75,7 +75,6 @@ namespace OnlineExam.Api.Controllers.V1
         }
 
         [HttpPost("auth/logout")]
-        [Authorize]
         public async Task<IActionResult> Logout()
         {
             var refreshToken = _cookieHelper.GetCookieValue("refreshToken");

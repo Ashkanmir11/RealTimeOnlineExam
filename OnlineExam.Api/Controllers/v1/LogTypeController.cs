@@ -31,7 +31,7 @@ namespace OnlineExam.Api.Controllers.V1
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
         {
             var result = await _meditor.Send(new GetLogTypeRequest() { PaginateRequestDTO = paginateRequestDTO });
@@ -43,7 +43,7 @@ namespace OnlineExam.Api.Controllers.V1
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> Get(int id)
         {
             var result = await _meditor.Send(new GetLogTypeByIdRequest() { Id = id });

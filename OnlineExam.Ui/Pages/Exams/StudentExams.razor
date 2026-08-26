@@ -51,6 +51,7 @@
                                 <th>تأخیر مجاز</th>
                                 <th>کپی</th>
                                 <th>سؤال درهم</th>
+                                <th>لاگ دانشجو</th>
                                 <th class="student-exams-action-column">
                                     عملیات
                                 </th>
@@ -117,7 +118,11 @@
                                             @(exam.RandomQuestions ? "فعال" : "غیرفعال")
                                         </span>
                                     </td>
-
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.LogStudent ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.RandomQuestions ? "فعال" : "غیرفعال")
+                                        </span>
+                                    </td>
                                     <td class="student-exams-action-column">
                                         <button type="button"
                                                 class="student-exams-start-button"
