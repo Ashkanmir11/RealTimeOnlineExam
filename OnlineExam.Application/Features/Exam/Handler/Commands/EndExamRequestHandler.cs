@@ -8,7 +8,6 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 {
     public class EndExamRequestHandler : IRequestHandler<EndExamRequest>
     {
-        private readonly IAccountRepository _accountRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IAuthServices _authServices;
         private readonly ITrueOrFalseAnswersRepository _trueOrFalseAnswersRepository;
@@ -16,12 +15,10 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         private readonly IDescriptiveAnswersRepository _descriptiveAnswersRepository;
         private readonly IAiServices _aiServices;
         private readonly IExamAttamptRepository _examAttamptRepository;
-        public EndExamRequestHandler(IAccountRepository accountRepository
-            , IQuestionRepository questionRepository, IAuthServices authServices, ITrueOrFalseAnswersRepository trueOrFalseAnswersRepository
+        public EndExamRequestHandler(IQuestionRepository questionRepository, IAuthServices authServices, ITrueOrFalseAnswersRepository trueOrFalseAnswersRepository
             , IMultipleChoiceAnswersRepository multipleChoiceAnswersRepository, IDescriptiveAnswersRepository descriptiveAnswersRepository
             , IAiServices aiServices, IExamAttamptRepository examAttamptRepository)
         {
-            _accountRepository = accountRepository;
             _questionRepository = questionRepository;
             _authServices = authServices;
             _trueOrFalseAnswersRepository = trueOrFalseAnswersRepository;
@@ -32,42 +29,52 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
         }
         public async Task Handle(EndExamRequest request, CancellationToken cancellationToken)
         {
-            var currentUserId = await _authServices.GetCurrentUserIdAsync();
-            var user = await _accountRepository.GetUserByIdAsync(currentUserId);
-            await _examAttamptRepository.EndExamAsync(request.ExamId, currentUserId);
-
-            var questionList = await _questionRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 9999, PageNumber = 1 });
-
-            //Automatic Grading
-            foreach (var question in questionList.Data)
+            string currentUserId;
+            currentUserId = request.StudentId == null ? await _authServices.GetCurrentUserIdAsync() : request.StudentId;
+            var examEnded = await _examAttamptRepository.ExamEndedAsync(request.ExamId, currentUserId);
+            if (!examEnded)
             {
-                if (question.TrueOrFalseQuestion != null)
+                await _examAttamptRepository.EndExamAsync(request.ExamId, currentUserId);
+                var questionList = await _questionRepository.GetByExamIdAsync<GetQuestionTeacherDTO>(request.ExamId, false, currentUserId, new DTOs.Common.PaginateRequestDTO() { PageCount = 999999, PageNumber = 1 });
+                //Automatic Grading
+                foreach (var question in questionList.Data)
                 {
-                    var answer = await _trueOrFalseAnswersRepository.GetByQuestionIdAsync(question.TrueOrFalseQuestion.Id);
-                    if (answer.StudentAnswer == question.TrueOrFalseQuestion.CorrectAnswer)
+                    if (question.TrueOrFalseQuestion != null)
                     {
-                        answer.StudentScore = question.TotalScore;
+                        var answer = await _trueOrFalseAnswersRepository.GetByQuestionIdAsync(question.TrueOrFalseQuestion.Id);
+                        if (answer != null)
+                        {
+                            if (answer.StudentAnswer == question.TrueOrFalseQuestion.CorrectAnswer)
+                            {
+                                answer.StudentScore = question.TotalScore;
+                            }
+                            await _trueOrFalseAnswersRepository.UpdateAsync(answer.Id, answer);
+                        }
                     }
-                    await _trueOrFalseAnswersRepository.UpdateAsync(answer.Id, answer);
-                }
-                if (question.MultipleChoiceQuestion != null)
-                {
-                    var answer = await _multipleChoiceAnswersRepository.GetByQuestionIdAsync(question.MultipleChoiceQuestion.Id);
-                    if (answer.StudentChoice == question.MultipleChoiceQuestion.CorrectChoice)
+                    if (question.MultipleChoiceQuestion != null)
                     {
-                        answer.StudentScore = question.TotalScore;
+                        var answer = await _multipleChoiceAnswersRepository.GetByQuestionIdAsync(question.MultipleChoiceQuestion.Id);
+                        if (answer != null)
+                        {
+                            if (answer.StudentChoice == question.MultipleChoiceQuestion.CorrectChoice)
+                            {
+                                answer.StudentScore = question.TotalScore;
+                            }
+                            await _multipleChoiceAnswersRepository.UpdateAsync(answer.Id, answer);
+                        }
                     }
-                    await _multipleChoiceAnswersRepository.UpdateAsync(answer.Id, answer);
-                }
-                else if (question.DescriptiveQuestion != null)
-                {
-                    var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.DescriptiveQuestion.Id);
-                    var score = await _aiServices.GetScoreAsync(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
-                    answer.StudentScore = score;
-                    await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);
+                    else if (question.DescriptiveQuestion != null)
+                    {
+                        var answer = await _descriptiveAnswersRepository.GetByQuestionIdAsync(question.DescriptiveQuestion.Id);
+                        if (answer != null)
+                        {
+                            var score = await _aiServices.GetScoreAsync(answer.StudentAnswer, question.DescriptiveQuestion.CorrectAnswer, question.TotalScore);
+                            answer.StudentScore = score;
+                            await _descriptiveAnswersRepository.UpdateAsync(answer.Id, answer);
+                        }
+                    }
                 }
             }
-
         }
     }
 }

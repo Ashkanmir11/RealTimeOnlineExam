@@ -22,7 +22,7 @@ namespace OnlineExam.Application
             });
             services.AddValidatorsFromAssemblyContaining<CreateTrueOrFalseAnswerValidation>();
             services.AddValidatorsFromAssemblyContaining<CreateTrueOrFalseQuestionDTO>();
-
+            services.AddHostedService<ExamBackgroundServices>();
             services.AddScoped<IAiServices, AiServices>();
         }
 

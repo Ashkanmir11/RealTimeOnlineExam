@@ -31,17 +31,24 @@ namespace OnlineExam.Persistence.Repositories
             var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
             if (examAttampt == null)
             {
-                throw new BadRequestException("آزمون شروع نشده.");
+                throw new NotFoundException("دانشجو ازمون را شروع نکرده است..");
             }
-            if (DateTime.Now > examAttampt.EndDate)
-            {
-                examAttampt.IsEnded = true;
-                await _context.SaveChangesAsync();
-            }
-
             return await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).Select(e => e.IsEnded).SingleOrDefaultAsync();
         }
+        public async Task EndAllTimeoutExams()
+        {
+            var examAttampt = await _context.ExamAttampts.Where(e => e.EndDate.AddMinutes(2) < DateTime.Now && e.IsEnded == false).ToListAsync();
+            foreach (var attampt in examAttampt)
+            {
+                attampt.IsEnded = true;
+            }
+            await _context.SaveChangesAsync();
 
+        }
+        public async Task<List<ExamAttampt>> GetTimeoutExamAttampt()
+        {
+            return await _context.ExamAttampts.Where(e => e.EndDate.AddMinutes(2) < DateTime.Now && e.IsEnded == false).ToListAsync();
+        }
         public async Task<bool> ExamStartedAsync(int examId, string userId)
         {
             return await _context.ExamAttampts.AnyAsync(e => e.ExamId == examId && e.StudentId == userId);

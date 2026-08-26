@@ -1,6 +1,8 @@
-﻿namespace OnlineExam.Domain.Entities
+﻿using OnlineExam.Domain.Common;
+
+namespace OnlineExam.Domain.Entities
 {
-    public class ExamAttampt
+    public class ExamAttampt : BaseModel
     {
         public string? StudentId { get; set; }
         public int ExamId { get; set; }
