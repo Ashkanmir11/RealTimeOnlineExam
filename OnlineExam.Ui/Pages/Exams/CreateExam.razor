@@ -64,6 +64,25 @@
                     </div>
                 </div>
 
+                @* زمان پایان *@
+                <div class="create-exam-field">
+                    <label>زمان پایان</label>
+
+                    <div class="create-exam-time-row">
+                        <InputNumber id="examEndHour"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="ساعت"
+                                     @bind-Value="@EndTimeHour" />
+
+                        <span class="create-exam-time-separator">:</span>
+
+                        <InputNumber id="examEndMinute"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="دقیقه"
+                                     @bind-Value="@EndTimeMinute" />
+                    </div>
+                </div>
+
                 @* زمان شروع *@
                 <div class="create-exam-field">
                     <label>زمان شروع</label>
@@ -83,24 +102,7 @@
                     </div>
                 </div>
 
-                @* زمان پایان *@
-                <div class="create-exam-field">
-                    <label>زمان پایان</label>
-
-                    <div class="create-exam-time-row">
-                        <InputNumber id="examEndHour"
-                                     class="create-exam-input create-exam-time-input"
-                                     placeholder="ساعت"
-                                     @bind-Value="@EndTimeHour" />
-
-                        <span class="create-exam-time-separator">:</span>
-
-                        <InputNumber id="examEndMinute"
-                                     class="create-exam-input create-exam-time-input"
-                                     placeholder="دقیقه"
-                                     @bind-Value="@EndTimeMinute" />
-                    </div>
-                </div>
+            
 
                 <div class="create-exam-field create-exam-full-width">
                     <label for="examAllowDelay">میزان تأخیر مجاز (دقیقه)</label>
