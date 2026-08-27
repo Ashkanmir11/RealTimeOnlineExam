@@ -46,6 +46,11 @@ namespace OnlineExam.Persistence.Repositories
             return result;
         }
 
+        public async Task<bool> IsExamFullyEnded(int examId)
+        {
+            return await _context.Exams.Where(e => e.Id == examId && e.EndDate.Value.AddMinutes(e.AllowedDelay + 5) < DateTime.Now).AnyAsync();
+        }
+
         public async Task<bool> IsUserTeacherAsync(string userId, int examId)
         {
             var exam = await _context.Exams.Where(e => e.Id == examId).SingleOrDefaultAsync();

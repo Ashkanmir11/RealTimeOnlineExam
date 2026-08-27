@@ -10,5 +10,6 @@ namespace OnlineExam.Application.Contracts.Persistence
         Task<bool> IsUserTeacherAsync(string userId, int examId);
         Task<PaginateResponse<GetExamDetailDTO>> GetByClassIdAsync(int classId, PaginateRequestDTO paginateRequestDTO);
         Task<bool> CanModifyExamAsync(int examId);
+        Task <bool> IsExamFullyEnded(int examId);
     }
 }

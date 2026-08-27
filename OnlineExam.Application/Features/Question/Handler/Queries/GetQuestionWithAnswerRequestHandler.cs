@@ -42,7 +42,11 @@ namespace OnlineExam.Application.Features.Question.Handler.Queries
             {
                 throw new AccessForbiddenException("شما دسترسی به سوالات و پاسخ های این آزمون ندارید.");
             }
-
+            var isExamEnded =await _examRepository.IsExamFullyEnded(request.ExamId);
+            if(!isExamEnded)
+            {
+                throw new ConflictException("این آزمون هنوز به پایان نرسیده است.");
+            }
             var questions = await _quesitonRepository.GetByExamIdAsync<GetQuestionWithAnswerDTO>(request.ExamId, false, request.StudentId, request.PaginateRequestDTO);
             if (questions == null)
             {
