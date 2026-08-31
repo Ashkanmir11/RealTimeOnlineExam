@@ -9,12 +9,10 @@ namespace OnlineExam.Application.Features.ClassRoom.Handler.Queries
 {
     public class GetClassRoomStudentRequestHandler : IRequestHandler<GetClassRoomStudentRequest, PaginateResponse<GetClassRoomStudentDTO>>
     {
-        private readonly IClassRoomMembersRepository _classRoomMemberRepository;
         private readonly IClassRoomRepository _classRoomRepository;
         private readonly IAuthServices _authServices;
-        public GetClassRoomStudentRequestHandler(IClassRoomMembersRepository classRoomMemberRepository, IClassRoomRepository classRoomRepository, IAuthServices authServices)
+        public GetClassRoomStudentRequestHandler(IClassRoomRepository classRoomRepository, IAuthServices authServices)
         {
-            _classRoomMemberRepository = classRoomMemberRepository;
             _classRoomRepository = classRoomRepository;
             _authServices = authServices;
         }

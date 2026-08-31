@@ -18,12 +18,13 @@ using System.Text;
 using System.Threading.Tasks;
 using OnlineExam.Application.Features.ClassRoom.Request.Command;
 using Shouldly;
+using OnlineExam.Persistence.Repositories;
 
 namespace OnlineExam.Test.ClassRoomTest.Handlers.Commands
 {
     public class CreateClassRoomRequestHandlerTest
     {
-        private readonly Mock<IClassRoomRepository> _repository;
+        private readonly Mock<IClassRoomRepository> _classRoomRepository;
         private readonly IMapper _mapper;
         private readonly Mock<IAuthServices> _authServices;
         private readonly IValidator<CreateClassRoomDTO> _validator;
@@ -31,8 +32,8 @@ namespace OnlineExam.Test.ClassRoomTest.Handlers.Commands
 
         public CreateClassRoomRequestHandlerTest()
         {
-            _repository = MockClassRoomRepository.AddClassRoom();
-            _authServices=MockAuthServices.GetCurrentUser();
+            _classRoomRepository = MockClassRoomRepository.MockSetup();
+            _authServices=MockAuthServices.MockSetup();
             var mapperConfiguration = new MapperConfiguration(
             cfg =>
             {
@@ -40,19 +41,24 @@ namespace OnlineExam.Test.ClassRoomTest.Handlers.Commands
             },
             LoggerFactory.Create(builder => { }));
             _mapper = mapperConfiguration.CreateMapper();
-            _accountRepository = MockAcoountRepository.UserExistAsync();
+            _accountRepository = MockAcoountRepository.MockSetup();
             _validator = new CreateClassRoomValidation(_accountRepository.Object);
         }
         [Fact]
         public async Task AddClassRoom()
         {
+            //Arange
             var requestData = new CreateClassRoomDTO()
             {
                 ClassName = "Class Test",
                 TeacherId = Guid.NewGuid().ToString()
             };
-            var handler = new CreateClassRoomRequestHandler(_repository.Object,_mapper,_authServices.Object,_validator);
+            //Act
+            var handler = new CreateClassRoomRequestHandler(_classRoomRepository.Object,_mapper,_authServices.Object,_validator);
             var result = await handler.Handle(new CreateClassRoomRequest() { CreateClassRoomDTO= requestData },CancellationToken.None);
+
+            //Assert
+            _classRoomRepository.Verify(e=>e.AddAsync(It.Is<CreateClassRoomDTO>(e=> e.ClassName == requestData.ClassName && e.TeacherId == requestData.TeacherId)), Times.Once()); 
             result.ShouldBeOfType<GetClassRoomDTO>();
         }
     }

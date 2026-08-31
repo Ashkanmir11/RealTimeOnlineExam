@@ -10,12 +10,14 @@ namespace OnlineExam.Test.Mocks
 {
     public static class MockAuthServices
     {
-        public static Mock<IAuthServices> GetCurrentUser()
+        public static Mock<IAuthServices> MockSetup()
         {
             var userId= Guid.NewGuid().ToString();
 
             var mock = new Mock<IAuthServices>();
             mock.Setup(e=>e.GetCurrentUserIdAsync()).ReturnsAsync(userId);
+
+            mock.Setup(e=>e.IsUserAdminAsync(It.IsAny<string>())).ReturnsAsync(true);
             return mock;
         }
     }

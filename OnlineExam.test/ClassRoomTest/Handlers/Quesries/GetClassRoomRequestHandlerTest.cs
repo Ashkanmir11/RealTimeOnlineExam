@@ -20,7 +20,7 @@ namespace OnlineExam.Test.ClassRoomTest.Handlers.Quesries
         private readonly Mock<IClassRoomRepository> _mockRepository;
         public GetClassRoomRequestHandlerTest()
         {
-            _mockRepository = MockClassRoomRepository.GetAllClassRoom();
+            _mockRepository = MockClassRoomRepository.MockSetup();
         }
         [Fact]
         public async Task GetAllClassRoomTest()

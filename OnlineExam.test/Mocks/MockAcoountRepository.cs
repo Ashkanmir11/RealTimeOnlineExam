@@ -10,7 +10,7 @@ namespace OnlineExam.Test.Mocks
 {
     public static class MockAcoountRepository
     {
-        public static Mock<IAccountRepository> UserExistAsync()
+        public static Mock<IAccountRepository> MockSetup()
         {
             var mock= new Mock<IAccountRepository>();
             mock.Setup(e=>e.UserExistAsync(It.IsAny<string>())).ReturnsAsync(true);
