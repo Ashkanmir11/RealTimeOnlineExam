@@ -125,6 +125,9 @@ namespace OnlineExam.Test.Mocks
 
             //Update Class Room
             mock.Setup(e => e.UpdateAsync(It.IsAny<int>(), It.IsAny<UpdateClassRoomDTO>()));
+
+            //Exist 
+            mock.Setup(e => e.ExistAsync(It.IsAny<int>())).ReturnsAsync(true);
             return mock;
         }
 

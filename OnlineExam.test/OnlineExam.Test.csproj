@@ -31,4 +31,8 @@
     <ProjectReference Include="..\OnlineExam.Persistence\OnlineExam.Persistence.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Exam\Queries\" />
+  </ItemGroup>
+
 </Project>
