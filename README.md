@@ -94,6 +94,12 @@ The project is built using **Clean Architecture and CQRS** to provide a maintain
   * Business Logic and Handler testing
   * Dependency mocking using Moq
   * Success and failure scenario testing
+ 
+> **⚠️ API Key Notice**
+>
+> The API key included in this project is **inactive and cannot be used**.
+>
+> To use the AI features, please add your own API key to the appropriate `appsettings.json` configuration.
 
 ## Project Structure
 
@@ -213,6 +219,12 @@ OnlineExam
   * تست Business Logic و Handlerها
   * Mock کردن Dependencyها با Moq
   * تست سناریوهای موفق و خطا
+
+⚠️ اطلاعیه API Key
+
+API Key موجود در این پروژه غیرفعال است و قابل استفاده نیست.
+
+برای استفاده از قابلیت‌های AI، API Key خود را در بخش مربوطه در فایل appsettings.json قرار دهید.
 
 ## ساختار پروژه
 
