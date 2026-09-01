@@ -31,7 +31,7 @@ namespace OnlineExam.Persistence.Repositories
             var examAttampt = await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).SingleOrDefaultAsync();
             if (examAttampt == null)
             {
-                throw new NotFoundException("دانشجو ازمون را شروع نکرده است..");
+                throw new NotFoundException("دانشجو ازمون را شروع نکرده است.");
             }
             return await _context.ExamAttampts.Where(e => e.ExamId == examId && e.StudentId == userId).Select(e => e.IsEnded).SingleOrDefaultAsync();
         }

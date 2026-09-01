@@ -33,11 +33,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
             {
                 throw new AccessForbiddenException("شما دسترسی به این آزمون ندارید.");
             }
-            var examEnded = await _meditor.Send(new ExamAttamptEndedRequest() { ExamId = request.ExamId, UserId = currentUserId });
-            if (examEnded)
-            {
-                throw new AccessForbiddenException("شما قبلا در این آزمون شرکت کرده اید.");
-            }
+            
 
             //Check Time
             var exam = await _examRepository.GetAsync(request.ExamId);
@@ -54,6 +50,7 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
 
 
             //Exam Attampt
+           
             var examStarted = await _meditor.Send(new ExamAttamptStartedRequest() { UserId = currentUserId, ExamId = request.ExamId });
 
             if (examStarted == false)
@@ -63,8 +60,12 @@ namespace OnlineExam.Application.Features.Exam.Handler.Commands
                 int minute = Convert.ToInt32(totalMinute);
                 await _meditor.Send(new CreateExamAttamptRequest() { ExamId = request.ExamId, ExamMinute = minute, UserId = currentUserId });
             }
+            var examEnded = await _meditor.Send(new ExamAttamptEndedRequest() { ExamId = request.ExamId, UserId = currentUserId });
+            if (examEnded)
+            {
+                throw new AccessForbiddenException("شما قبلا در این آزمون شرکت کرده اید.");
+            }
 
-           
             var questions = await _meditor.Send(new GetQuestionExamStudentRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
             return questions;
         }
