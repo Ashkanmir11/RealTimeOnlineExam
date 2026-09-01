@@ -237,7 +237,6 @@ OnlineExam
 
 ## تصاویر محیط پروژه
 
-> Screenshots در این بخش قرار می‌گیرند.
 
 ## Screenshots
 
