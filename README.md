@@ -105,6 +105,8 @@ OnlineExam
 ├── OnlineExam.Infrastructure
 ├── OnlineExam.Identity
 ├── OnlineExam.Ui
+└── OnlineExam.Tests
+```
 
 ### Layers
 
