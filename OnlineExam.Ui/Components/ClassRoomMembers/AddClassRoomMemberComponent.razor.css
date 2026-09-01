@@ -1,0 +1,136 @@
+﻿/* ============ کارت فرم ============ */
+.member-form {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* ============ ردیف ورودی + دکمه ============ */
+.phone-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+    .phone-row input {
+        flex: 1;
+        min-width: 0;
+        background: rgba(8, 13, 26, 0.7);
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        border-radius: 10px;
+        padding: 0.65rem 1rem;
+        color: #f8fafc;
+        font-family: Vazirmatn, Tahoma, sans-serif;
+        font-size: 0.9rem;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .phone-row input::placeholder {
+            color: #64748b;
+        }
+
+        .phone-row input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
+
+        /* رفع مشکل autofill مرورگر */
+        .phone-row input:-webkit-autofill,
+        .phone-row input:-webkit-autofill:hover,
+        .phone-row input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #f8fafc !important;
+            -webkit-box-shadow: 0 0 0 1000px #0f172a inset !important;
+            transition: background-color 9999s ease-in-out 0s;
+        }
+
+/* ============ دکمه افزودن ============ */
+.btn-add-phone {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: #f8fafc;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.4rem;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    transition: all 0.25s ease;
+}
+
+    .btn-add-phone:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 22px rgba(99, 102, 241, 0.5);
+    }
+
+/* ============ چیپهای شماره ============ */
+.phones-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.phone-chip {
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #c7d2fe;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+.phones-empty {
+    color: #64748b;
+    font-size: 0.85rem;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    margin-top: 1rem;
+}
+
+/* ============ دکمه ثبت تغییرات ============ */
+.btn-save {
+    width: 100%;
+    margin-top: 1.5rem;
+    background: linear-gradient(135deg, #22d3ee, #6366f1);
+    color: #f8fafc;
+    border: none;
+    border-radius: 12px;
+    padding: 0.8rem;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(34, 211, 238, 0.25);
+    transition: all 0.25s ease;
+}
+
+    .btn-save:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 26px rgba(34, 211, 238, 0.4);
+    }
+
+    .btn-save:active {
+        transform: translateY(0);
+    }
+
+/* ============ موبایل ============ */
+@media (max-width: 640px) {
+    .member-form {
+        padding: 1rem;
+    }
+
+    .phone-row {
+        flex-direction: column;
+    }
+
+        .phone-row input,
+        .btn-add-phone {
+            width: 100%;
+        }
+}

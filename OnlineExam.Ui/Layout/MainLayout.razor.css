@@ -1,0 +1,50 @@
+﻿/* MainLayout.razor.css */
+
+.page {
+    min-height: calc(100vh - 78px);
+    padding: 32px 24px 48px;
+    color: #e5edf9;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+main {
+    /*    width: min(100%, 1280px);*/
+    margin: 0 auto;
+    width:90%;
+}
+
+article {
+    min-height: 500px;
+    padding: 28px;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+    border-radius: 22px;
+    background: rgba(15, 23, 42, 0.72);
+    box-shadow: 0 20px 55px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    backdrop-filter: blur(12px);
+}
+
+    /* استایل عمومی محتواهایی که داخل @Body نمایش داده می‌شوند */
+    article ::deep h1,
+    article ::deep h2,
+    article ::deep h3,
+    article ::deep h4 {
+        color: #f8fafc;
+        font-family: Vazirmatn, Tahoma, sans-serif;
+    }
+
+/*article ::deep p {
+        color: #b7c4d8;
+        line-height: 2;
+    }*/
+
+@media (max-width: 768px) {
+    .page {
+        padding: 20px 14px 32px;
+    }
+
+    article {
+        min-height: 400px;
+        padding: 18px;
+        border-radius: 17px;
+    }
+}

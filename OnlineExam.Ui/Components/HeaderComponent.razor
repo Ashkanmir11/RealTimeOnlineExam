@@ -1,0 +1,75 @@
+﻿<div>
+    @{
+        if (!DataLoaded)
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+        else
+        {
+            <ul style="display:flex; flex-direction:row; flex-wrap:wrap; justify-content:right; width:100%;">
+                @{
+                    <li>
+                        <a href="/">
+                            خانه
+
+                        </a>
+                    </li>
+                    if (!IsUserLogin)
+                    {
+                        <li>
+                            <a href="register">
+                                ثبت نام
+                            </a>
+                        </li>
+                        <li>
+                            <a href="login">
+                                ورود
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="classroom">
+                                داشبورد استاد
+                            </a>
+                        </li>
+                        <li>
+                            <a href="StudentClassRoom">
+                                داشبورد دانش آموز
+                            </a>
+                        </li>
+                        <li>
+                            <a href="profile">
+                                مشاهده پروفایل
+                            </a>
+                        </li>
+                        <li>
+                            <a @onclick="@Logout">
+                                خروج از حساب
+                            </a>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    }
+</div>
+@code {
+    bool IsUserLogin;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsUserLogin = await _authServices.IsUserLogin();
+        DataLoaded = true;
+        await base.OnInitializedAsync();
+    }
+    private async Task Logout()
+    {
+        IsUserLogin = false;
+        await _authServices.Logout();
+        _navigationManager.NavigateTo("");
+
+    }
+
+}

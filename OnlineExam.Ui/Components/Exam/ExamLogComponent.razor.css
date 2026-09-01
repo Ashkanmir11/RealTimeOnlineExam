@@ -1,0 +1,171 @@
+﻿.exam-log-card {
+    overflow: hidden;
+    border: 1px solid rgba(100, 116, 139, 0.27);
+    border-radius: 17px;
+    color: #f8fafc;
+    background: linear-gradient( 145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.94) );
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    .exam-log-card .exam-log-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 18px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+        background: rgba(15, 23, 42, 0.34);
+    }
+
+        .exam-log-card .exam-log-header h4 {
+            margin: 0 0 5px;
+            color: #f1f5f9;
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .exam-log-card .exam-log-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            line-height: 1.75;
+        }
+
+    .exam-log-card .exam-log-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 30px;
+        flex: 0 0 auto;
+        padding: 0 9px;
+        border: 1px solid rgba(99, 102, 241, 0.3);
+        border-radius: 8px;
+        color: #c7d2fe;
+        background: rgba(79, 70, 229, 0.16);
+        font-size: 0.72rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    /* ------------------------------
+   Log table
+   ------------------------------ */
+
+    .exam-log-card .exam-log-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .exam-log-card .exam-log-table {
+        width: 100%;
+        min-width: 350px;
+        border-collapse: collapse;
+        text-align: right;
+    }
+
+        .exam-log-card .exam-log-table th {
+            padding: 13px 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+            color: #a5b4fc;
+            background: rgba(30, 41, 59, 0.48);
+            font-size: 0.74rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .exam-log-card .exam-log-table td {
+            padding: 13px 15px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.09);
+            color: #cbd5e1;
+            vertical-align: top;
+            font-size: 0.77rem;
+            line-height: 1.9;
+        }
+
+        .exam-log-card .exam-log-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .exam-log-card .exam-log-table tbody tr:hover {
+                background: rgba(51, 65, 85, 0.28);
+            }
+
+            .exam-log-card .exam-log-table tbody tr:last-child td {
+                border-bottom: 0;
+            }
+
+    .exam-log-card .exam-log-type {
+        display: inline-block;
+        padding: 4px 8px;
+        border: 1px solid rgba(45, 212, 191, 0.22);
+        border-radius: 7px;
+        color: #99f6e4;
+        background: rgba(13, 148, 136, 0.1);
+        font-size: 0.7rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .exam-log-card .exam-log-description {
+        min-width: 200px;
+        color: #cbd5e1;
+        overflow-wrap: anywhere;
+    }
+
+    /* ------------------------------
+   Empty / loading
+   ------------------------------ */
+
+    .exam-log-card .exam-log-empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 42px 18px;
+        text-align: center;
+    }
+
+    .exam-log-card .exam-log-empty-icon {
+        display: grid;
+        width: 47px;
+        height: 47px;
+        margin-bottom: 12px;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(79, 70, 229, 0.19);
+        font-size: 1.3rem;
+    }
+
+    .exam-log-card .exam-log-empty-state h5 {
+        margin: 0 0 6px;
+        color: #e2e8f0;
+        font-size: 0.91rem;
+        font-weight: 800;
+    }
+
+    .exam-log-card .exam-log-empty-state p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.77rem;
+        line-height: 1.85;
+    }
+
+    .exam-log-card .exam-log-loading {
+        display: flex;
+        justify-content: center;
+        min-height: 150px;
+        padding: 20px;
+    }
+
+/* ------------------------------
+   Responsive
+   ------------------------------ */
+
+@media (max-width: 640px) {
+    .exam-log-card .exam-log-header {
+        padding: 15px;
+    }
+
+        .exam-log-card .exam-log-header p {
+            display: none;
+        }
+}

@@ -1,0 +1,313 @@
+﻿.classes-page {
+    width: min(100% - 32px, 1120px);
+    margin: 40px auto;
+    direction: rtl;
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    /* ------------------------------
+   Page header
+   ------------------------------ */
+
+    .classes-page .classes-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 24px;
+        padding: 24px 26px;
+        border: 1px solid rgba(100, 116, 139, 0.26);
+        border-radius: 18px;
+        background: linear-gradient( 145deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.95) );
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+
+        .classes-page .classes-header h3 {
+            margin: 0 0 7px;
+            color: #f8fafc;
+            font-size: 1.45rem;
+            font-weight: 800;
+        }
+
+        .classes-page .classes-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+    .classes-page .add-class-button,
+    .classes-page .empty-add-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        flex: 0 0 auto;
+        padding: 0 16px;
+        border: 1px solid rgba(96, 165, 250, 0.35);
+        border-radius: 10px;
+        cursor: pointer;
+        color: #eff6ff;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+        font-family: inherit;
+        font-size: 0.82rem;
+        font-weight: 800;
+        white-space: nowrap;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+        .classes-page .add-class-button:hover,
+        .classes-page .empty-add-button:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 11px 25px rgba(79, 70, 229, 0.31);
+            transform: translateY(-2px);
+        }
+
+        .classes-page .add-class-button:focus-visible,
+        .classes-page .empty-add-button:focus-visible {
+            outline: 3px solid rgba(96, 165, 250, 0.32);
+            outline-offset: 3px;
+        }
+
+    /* ------------------------------
+   Table
+   ------------------------------ */
+
+    .classes-page .classes-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid rgba(100, 116, 139, 0.25);
+        border-radius: 17px;
+        background: linear-gradient( 145deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.94) );
+        box-shadow: 0 14px 32px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    }
+
+    .classes-page .classes-table {
+        width: 100%;
+        min-width: 680px;
+        border-collapse: collapse;
+        text-align: right;
+    }
+
+        .classes-page .classes-table th {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.17);
+            color: #c7d2fe;
+            background: rgba(15, 23, 42, 0.4);
+            font-size: 0.79rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .classes-page .classes-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            color: #cbd5e1;
+            vertical-align: middle;
+            font-size: 0.86rem;
+        }
+
+        .classes-page .classes-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .classes-page .classes-table tbody tr:hover {
+                background: rgba(51, 65, 85, 0.32);
+            }
+
+            .classes-page .classes-table tbody tr:last-child td {
+                border-bottom: 0;
+            }
+
+    .classes-page .class-name {
+        min-width: 190px;
+        color: #f8fafc !important;
+        font-weight: 800;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+    }
+
+    /* ------------------------------
+   Action buttons
+   ------------------------------ */
+
+    .classes-page .actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .classes-page .action-button {
+        min-height: 36px;
+        padding: 0 11px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.74rem;
+        font-weight: 750;
+        white-space: nowrap;
+        transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease, color 0.18s ease;
+    }
+
+        .classes-page .action-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .classes-page .action-button:focus-visible {
+            outline: 3px solid rgba(226, 232, 240, 0.22);
+            outline-offset: 2px;
+        }
+
+        /* Delete */
+
+        .classes-page .action-button.danger {
+            border-color: rgba(248, 113, 113, 0.34);
+            color: #fecaca;
+            background: rgba(220, 38, 38, 0.13);
+        }
+
+            .classes-page .action-button.danger:hover {
+                color: #fff;
+                background: #dc2626;
+                box-shadow: 0 8px 18px rgba(220, 38, 38, 0.22);
+            }
+
+        /* Edit */
+
+        .classes-page .action-button.edit {
+            border-color: rgba(251, 191, 36, 0.33);
+            color: #fde68a;
+            background: rgba(180, 83, 9, 0.14);
+        }
+
+            .classes-page .action-button.edit:hover {
+                color: #fff;
+                background: #d97706;
+                box-shadow: 0 8px 18px rgba(217, 119, 6, 0.22);
+            }
+
+        /* Students */
+
+        .classes-page .action-button.members {
+            border-color: rgba(45, 212, 191, 0.28);
+            color: #99f6e4;
+            background: rgba(13, 148, 136, 0.12);
+        }
+
+            .classes-page .action-button.members:hover {
+                color: #fff;
+                background: #0f766e;
+                box-shadow: 0 8px 18px rgba(13, 148, 136, 0.22);
+            }
+
+        /* Exams */
+
+        .classes-page .action-button.exams {
+            border-color: rgba(129, 140, 248, 0.34);
+            color: #c7d2fe;
+            background: rgba(79, 70, 229, 0.15);
+        }
+
+            .classes-page .action-button.exams:hover {
+                color: #fff;
+                background: #4f46e5;
+                box-shadow: 0 8px 18px rgba(79, 70, 229, 0.24);
+            }
+
+    /* ------------------------------
+   Empty state
+   ------------------------------ */
+
+    .classes-page .empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 55px 20px;
+        border: 1px dashed rgba(100, 116, 139, 0.48);
+        border-radius: 17px;
+        background: rgba(30, 41, 59, 0.3);
+        text-align: center;
+    }
+
+    .classes-page .empty-icon {
+        display: grid;
+        width: 58px;
+        height: 58px;
+        margin-bottom: 15px;
+        place-items: center;
+        border: 1px solid rgba(129, 140, 248, 0.26);
+        border-radius: 50%;
+        color: #c7d2fe;
+        background: rgba(79, 70, 229, 0.19);
+        font-size: 2rem;
+        font-weight: 400;
+        line-height: 1;
+    }
+
+    .classes-page .empty-state h4 {
+        margin: 0 0 7px;
+        color: #e2e8f0;
+        font-size: 1.03rem;
+        font-weight: 800;
+    }
+
+    .classes-page .empty-state p {
+        margin: 0 0 20px;
+        color: #94a3b8;
+        font-size: 0.84rem;
+        line-height: 1.8;
+    }
+
+    /* ------------------------------
+   Pagination component
+   ------------------------------ */
+
+    .classes-page ::deep .pagination,
+    .classes-page ::deep .paginate,
+    .classes-page ::deep .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 22px;
+    }
+
+/* ------------------------------
+   Responsive
+   ------------------------------ */
+
+@media (max-width: 640px) {
+    .classes-page {
+        width: min(100% - 24px, 1120px);
+        margin-top: 28px;
+    }
+
+        .classes-page .classes-header {
+            align-items: stretch;
+            flex-direction: column;
+            padding: 20px 16px;
+        }
+
+            .classes-page .classes-header h3 {
+                font-size: 1.25rem;
+            }
+
+        .classes-page .add-class-button {
+            width: 100%;
+        }
+
+        .classes-page .classes-table th,
+        .classes-page .classes-table td {
+            padding: 14px;
+        }
+
+        .classes-page .actions {
+            flex-wrap: nowrap;
+        }
+
+        .classes-page .action-button {
+            min-height: 34px;
+            padding: 0 10px;
+        }
+}

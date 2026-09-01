@@ -1,0 +1,276 @@
+﻿.exams-page {
+    width: min(100% - 32px, 1450px);
+    margin: 58px auto 40px;
+    color: #f8fafc;
+    direction: rtl;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    .exams-page .exams-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+        .exams-page .exams-header h3 {
+            margin: 0 0 7px;
+            color: #f8fafc;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-shadow: 0 4px 20px rgba(59, 130, 246, 0.22);
+        }
+
+        .exams-page .exams-header p {
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+    .exams-page .add-exam-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 45px;
+        padding: 0 18px;
+        border: 0;
+        border-radius: 11px;
+        cursor: pointer;
+        color: #ffffff;
+        background: linear-gradient(135deg, #3b82f6, #4f46e5);
+        box-shadow: 0 10px 24px rgba(59, 130, 246, 0.26);
+        font-family: inherit;
+        font-size: 0.9rem;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+        .exams-page .add-exam-button:hover {
+            filter: brightness(1.12);
+            box-shadow: 0 14px 30px rgba(59, 130, 246, 0.42);
+            transform: translateY(-2px);
+        }
+
+        .exams-page .add-exam-button:active {
+            transform: translateY(0);
+        }
+
+    /* حالت خالی */
+    .exams-page .exams-empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 300px;
+        padding: 32px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        text-align: center;
+    }
+
+    .exams-page .empty-icon {
+        display: grid;
+        width: 56px;
+        height: 56px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(96, 165, 250, 0.22);
+        border-radius: 16px;
+        place-items: center;
+        background: rgba(59, 130, 246, 0.12);
+        font-size: 1.7rem;
+    }
+
+    .exams-page .exams-empty-state h4 {
+        margin: 0 0 8px;
+        color: #f8fafc;
+        font-size: 1.15rem;
+    }
+
+    .exams-page .exams-empty-state p {
+        margin: 0 0 21px;
+        color: #94a3b8;
+        font-size: 0.9rem;
+    }
+
+    /* جدول */
+    .exams-page .exams-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .exams-page .exams-table {
+        width: 100%;
+        min-width: 1250px;
+        border-collapse: collapse;
+    }
+
+        .exams-page .exams-table th {
+            padding: 17px 18px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+            color: #94a3b8;
+            background: rgba(30, 41, 59, 0.55);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .exams-page .exams-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.11);
+            color: #e2e8f0;
+            font-size: 0.86rem;
+            vertical-align: middle;
+        }
+
+        .exams-page .exams-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .exams-page .exams-table tbody tr:hover {
+                background: rgba(59, 130, 246, 0.07);
+            }
+
+            .exams-page .exams-table tbody tr:last-child td {
+                border-bottom: 0;
+            }
+
+    .exams-page .exam-name {
+        min-width: 150px;
+        color: #f8fafc !important;
+        font-weight: 750;
+    }
+
+    .exams-page .exam-description {
+        max-width: 240px;
+        overflow: hidden;
+        color: #cbd5e1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .exams-page .date-cell {
+        direction: ltr;
+        color: #cbd5e1;
+        font-family: Tahoma, sans-serif;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .exams-page .question-count,
+    .exams-page .delay-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 30px;
+        min-height: 28px;
+        padding: 0 8px;
+        border-radius: 8px;
+        color: #bfdbfe;
+        background: rgba(59, 130, 246, 0.13);
+        font-size: 0.78rem;
+        font-weight: 700;
+    }
+
+    .exams-page .delay-badge {
+        color: #ddd6fe;
+        background: rgba(139, 92, 246, 0.14);
+    }
+
+    /* چک‌باکس‌های فقط‌خواندنی */
+    .exams-page .checkbox-cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .exams-page ::deep input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        cursor: not-allowed;
+        accent-color: #6366f1;
+        opacity: 0.9;
+    }
+
+    /* دکمه‌های عملیات */
+    .exams-page .exam-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+        min-width: 225px;
+    }
+
+    .exams-page .exam-action-button {
+        min-height: 34px;
+        padding: 0 10px;
+        border: 1px solid transparent;
+        border-radius: 9px;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.76rem;
+        font-weight: 650;
+        white-space: nowrap;
+        transition: transform 0.18s ease, filter 0.18s ease, background 0.18s ease;
+    }
+
+        .exams-page .exam-action-button:hover {
+            filter: brightness(1.15);
+            transform: translateY(-1px);
+        }
+
+        .exams-page .exam-action-button:active {
+            transform: translateY(0);
+        }
+
+        .exams-page .exam-action-button.danger {
+            border-color: rgba(248, 113, 113, 0.23);
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.12);
+        }
+
+        .exams-page .exam-action-button.edit {
+            border-color: rgba(96, 165, 250, 0.23);
+            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        .exams-page .exam-action-button.questions {
+            border-color: rgba(52, 211, 153, 0.22);
+            color: #6ee7b7;
+            background: rgba(16, 185, 129, 0.12);
+        }
+
+        .exams-page .exam-action-button.grading {
+            border-color: rgba(251, 191, 36, 0.22);
+            color: #fcd34d;
+            background: rgba(245, 158, 11, 0.12);
+        }
+
+@media (max-width: 768px) {
+    .exams-page {
+        width: min(100% - 24px, 1450px);
+        margin-top: 32px;
+    }
+
+        .exams-page .exams-header {
+            align-items: stretch;
+            flex-direction: column;
+        }
+
+        .exams-page .add-exam-button {
+            width: 100%;
+        }
+
+        .exams-page .exams-table th,
+        .exams-page .exams-table td {
+            padding: 14px;
+        }
+}

@@ -1,0 +1,159 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/classroom";
+@inject ClassRoomServices _classRoomServices;
+<div class="classes-page">
+    @{
+        if (DataLoaded)
+        {
+            <div class="classes-header">
+                <div>
+                    <h3>مدیریت کلاس‌ها</h3>
+                    <p>کلاس‌های خود را ایجاد و مدیریت کنید.</p>
+                </div>
+
+                <button class="add-class-button" @onclick="@AddClass">
+                    افزودن کلاس
+                </button>
+            </div>
+
+            @if (Result.Data.Count == 0)
+            {
+                <div class="empty-state">
+                    <div class="empty-icon">+</div>
+                    <h4>کلاسی یافت نشد</h4>
+                    <p>برای شروع، اولین کلاس خود را ایجاد کنید.</p>
+
+                    <button class="empty-add-button" @onclick="@AddClass">
+                        افزودن کلاس جدید
+                    </button>
+                </div>
+            }
+            else
+            {
+                <ErrorComponent Errors="@Errors"></ErrorComponent>
+
+                <div class="classes-table-wrapper">
+                    <table class="classes-table">
+                        <thead>
+                            <tr>
+                                <th>نام کلاس</th>
+                                <th>عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var classRoom in Result.Data)
+                            {
+                                <tr>
+                                    <td class="class-name">@classRoom.ClassName</td>
+
+                                    <td>
+                                        <div class="actions">
+                                            <button class="action-button danger"
+                                                    @onclick="()=>DeleteClassRoom(classRoom.Id)">
+                                                حذف
+                                            </button>
+
+                                            <button class="action-button edit"
+                                                    @onclick="()=>UpdateClass(classRoom.Id)">
+                                                ویرایش
+                                            </button>
+
+                                            <button class="action-button members"
+                                                    @onclick="()=>ManageStudents(classRoom.Id)">
+                                                مدیریت اعضا
+                                            </button>
+
+                                            <button class="action-button exams"
+                                                    @onclick="()=>ManageExams(classRoom.Id)">
+                                                مدیریت آزمون‌ها
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <PaginateComponent SelectedPage="@changePage"
+                               TotalPage="Result.TotalPage"
+                               CurrentPage="Result.PageNumber">
+            </PaginateComponent>
+        }
+        else
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+    }
+</div>
+
+
+@code {
+    PaginateResponse<GetClassRoomTeacherDTO> Result = new PaginateResponse<GetClassRoomTeacherDTO>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+
+
+    private async Task DeleteClassRoom(int id)
+    {
+        var result = await _classRoomServices.DeleteAsync(id);
+        if (!result.IsSuccess)
+        {
+            SetErrors(result.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
+    }
+
+    private async void changePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        StateHasChanged();
+        await GetData();
+    }
+
+    private async Task GetData()
+    {
+        Result = new PaginateResponse<GetClassRoomTeacherDTO>();
+        Result.Data = new List<GetClassRoomTeacherDTO>();
+        var response = await _classRoomServices.GetMyClassAsTeacherAsync(GetDefultPaginate());
+        DataLoaded = true;
+        if (response.IsSuccess && response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        else if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        StateHasChanged();
+    }
+
+    #region Redirect merhods
+    private void AddClass()
+    {
+        _navigationManager.NavigateTo("CreateClassRoom");
+    }
+    private void UpdateClass(int id)
+    {
+        _navigationManager.NavigateTo($"updateclassroom/{id}");
+    }
+    private void ManageStudents(int id)
+    {
+        _navigationManager.NavigateTo($"classRoomMember/{id}");
+    }
+    private void ManageExams(int id)
+    {
+        _navigationManager.NavigateTo($"Exams/{id}");
+    }
+    #endregion
+}

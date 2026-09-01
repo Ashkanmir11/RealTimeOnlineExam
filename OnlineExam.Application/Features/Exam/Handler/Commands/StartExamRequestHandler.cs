@@ -1,0 +1,72 @@
+﻿using MediatR;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.Exam.Request.Commands;
+using OnlineExam.Application.Features.ExamAttampt.Request.Commands;
+using OnlineExam.Application.Features.ExamAttampt.Request.Queries;
+using OnlineExam.Application.Features.Question.Request.Queries;
+using OnlineExam.Application.Response;
+namespace OnlineExam.Application.Features.Exam.Handler.Commands
+{
+    public class StartExamRequestHandler : IRequestHandler<StartExamRequest, PaginateResponse<GetQuestionStudentDTO>>
+    {
+        private readonly IExamRepository _examRepository;
+        private readonly IClassRoomMembersRepository _classRoomMembersRepository;
+        private readonly IAuthServices _authServices;
+        private readonly IMediator _meditor;
+        public StartExamRequestHandler(IExamRepository examRepository, IClassRoomMembersRepository classRoomMembersRepository, IAuthServices authServices, IMediator meditor)
+        {
+            _examRepository = examRepository;
+            _classRoomMembersRepository = classRoomMembersRepository;
+            _authServices = authServices;
+            _meditor = meditor;
+        }
+
+        public async Task<PaginateResponse<GetQuestionStudentDTO>> Handle(StartExamRequest request, CancellationToken cancellationToken)
+        {
+            //Check User Is In class
+            var currentUserId = await _authServices.GetCurrentUserIdAsync();
+            var studentExist = await _classRoomMembersRepository.StudentIsInClassByExamIdAsync(currentUserId, request.ExamId);
+            if (studentExist == false)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این آزمون ندارید.");
+            }
+            var examEnded = await _meditor.Send(new ExamAttamptEndedRequest() { ExamId = request.ExamId, UserId = currentUserId });
+            if (examEnded)
+            {
+                throw new AccessForbiddenException("شما قبلا در این آزمون شرکت کرده اید.");
+            }
+
+            //Check Time
+            var exam = await _examRepository.GetAsync(request.ExamId);
+            var startWIthDelay = exam.StartDate.Value.AddMinutes(exam.AllowedDelay);
+
+            if (DateTime.Now < exam.StartDate)
+            {
+                throw new AccessForbiddenException("این آزمون هنوز شروع نشده است.");
+            }
+            if (DateTime.Now > startWIthDelay)
+            {
+                throw new AccessForbiddenException("مهلت شروع آزمون گذشته است.");
+            }
+
+
+            //Exam Attampt
+            var examStarted = await _meditor.Send(new ExamAttamptStartedRequest() { UserId = currentUserId, ExamId = request.ExamId });
+
+            if (examStarted == false)
+            {
+                var difference = exam.EndDate - exam.StartDate;
+                var totalMinute = difference.Value.TotalMinutes;
+                int minute = Convert.ToInt32(totalMinute);
+                await _meditor.Send(new CreateExamAttamptRequest() { ExamId = request.ExamId, ExamMinute = minute, UserId = currentUserId });
+            }
+
+           
+            var questions = await _meditor.Send(new GetQuestionExamStudentRequest() { ExamId = request.ExamId, RandomQuesiton = exam.RandomQuestions, StudentId = currentUserId, PaginateRequestDTO = request.paginateRequestDTO });
+            return questions;
+        }
+    }
+}

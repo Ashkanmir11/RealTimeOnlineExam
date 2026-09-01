@@ -1,0 +1,95 @@
+﻿@using OnlineExam.Ui.DTO.ExamLog;
+@inject ExamLogServices _examLogServices;
+<div class="exam-log-card">
+
+    <div class="exam-log-header">
+        <div>
+            <h4>لاگ‌های آزمون</h4>
+            <p>تاریخچه رویدادها و فعالیت‌های دانش‌آموز در آزمون</p>
+        </div>
+
+        @if (DataLoaded && Logs != null && Logs.Count > 0)
+        {
+            <span class="exam-log-count">
+                @Logs.Count رویداد
+            </span>
+        }
+    </div>
+
+    @{
+        if (DataLoaded)
+        {
+            if (Logs == null || Logs.Count == 0)
+            {
+                <div class="exam-log-empty-state">
+                    <div class="exam-log-empty-icon">📋</div>
+                    <h5>لاگی موجود نیست</h5>
+                    <p>هنوز رویدادی برای این دانش‌آموز در آزمون ثبت نشده است.</p>
+                </div>
+            }
+            else
+            {
+                <div class="exam-log-table-wrapper">
+                    <table class="exam-log-table">
+
+                        <thead>
+                            <tr>
+                                <th>نوع لاگ</th>
+                                <th>توضیحات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var log in Logs)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="exam-log-type">
+                                            @log.LogType.Name
+                                        </span>
+                                    </td>
+
+                                    <td class="exam-log-description">
+                                        @log.LogDescription
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="exam-log-loading">
+                <LoadingComponent></LoadingComponent>
+            </div>
+        }
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public required string StudentId { get; set; }
+    List<GetExamLogDTO> Logs = new List<GetExamLogDTO>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _examLogServices.GetLogs(ExamId, StudentId);
+        DataLoaded = true;
+        if (response.IsSuccess && response.StatusCode != 204)
+        {
+            Logs = response.Data;
+        }
+        StateHasChanged();
+    }
+}

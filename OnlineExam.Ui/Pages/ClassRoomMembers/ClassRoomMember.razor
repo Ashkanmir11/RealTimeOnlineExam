@@ -1,0 +1,114 @@
+﻿@page "/classRoomMember/{ClassId:int}"
+@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@using OnlineExam.Ui.Components.ClassRoomMembers;
+@inject ClassRoomMemberServices _classRoomMembersServices;
+<h3>مدیریت اعضای کلاس</h3>
+@{
+    @if (DataLoaded)
+    {
+        <h4>@GetClassRoomMembersDTO.className</h4>
+
+        @if (ShowCreateMember)
+        {
+            <button class="btn-close" @onclick="@ChangeShowCreateStatus">بستن</button>
+            <AddClassRoomMemberComponent SuccessAdd="AddComplete" ClassId="@ClassId"></AddClassRoomMemberComponent>
+        }
+        else
+        {
+            <button class="btn-add" @onclick="@ChangeShowCreateStatus">افزودن اعضا</button>
+        }
+
+        @if (GetClassRoomMembersDTO.students != null && GetClassRoomMembersDTO.students.Count > 0)
+        {
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>نام کاربری</th>
+                            <th>نام و نام خانوادگی</th>
+                            <th>شماره موبایل</th>
+                            <th>ایمیل</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in GetClassRoomMembersDTO.students)
+                        {
+                            <tr>
+                                <td>@student.UserName</td>
+                                <td>@student.FirstName @student.LastName</td>
+                                <td>@student.PhoneNumber</td>
+                                <td>@student.Email</td>
+                                <td>
+                                    <button class="btn-delete" @onclick="()=>DeleteMember(student.Id)">حذف</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="empty-state">کلاس عضوی ندارد.</p>
+        }
+
+        <ErrorComponent Errors="Errors"></ErrorComponent>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
+
+}
+
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+    bool ShowCreateMember = false;
+    private GetClassRoomMembersDTO GetClassRoomMembersDTO = new GetClassRoomMembersDTO();
+
+    private void ChangeShowCreateStatus()
+    {
+        ShowCreateMember = ShowCreateMember == true ? false : true;
+    }
+    private async Task AddComplete()
+    {
+        ChangeShowCreateStatus();
+        await GetData();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task DeleteMember(string studentId)
+    {
+        var result = await _classRoomMembersServices.DeleteMember(studentId, ClassId);
+        if (!result.IsSuccess)
+        {
+            SetErrors(result.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
+    }
+    private async Task GetData()
+    {
+        this.GetClassRoomMembersDTO = new GetClassRoomMembersDTO();
+        var classMembers = await _classRoomMembersServices.GetClassStudnets(ClassId);
+        DataLoaded = true;
+        if (!classMembers.IsSuccess)
+        {
+            SetErrors(classMembers.Errors);
+        }
+        else if (classMembers.StatusCode != 204)
+        {
+            GetClassRoomMembersDTO.students = new List<StudentsInfoDTO>();
+            Console.WriteLine(GetClassRoomMembersDTO.students.Count);
+            GetClassRoomMembersDTO = classMembers.Data;
+        }
+        StateHasChanged();
+    }
+}

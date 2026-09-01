@@ -1,0 +1,155 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@page "/examGrading/{ClassId:int}/{ExamId:int}"
+@inject ClassRoomMemberServices _classRoomMember;
+<div class="exam-grading-page">
+
+    <div class="exam-grading-card">
+
+        <div class="exam-grading-header">
+            <div>
+                <h3>تصحیح آزمون</h3>
+                <p>
+                    دانش‌آموز موردنظر را انتخاب کنید تا پاسخ‌های ثبت‌شده او را بررسی و نمره‌دهی کنید.
+                </p>
+            </div>
+
+            @if (DataLoaded && Result?.students != null && Result.students.Count > 0)
+            {
+                <span class="exam-grading-count">
+                    @Result.students.Count دانش‌آموز
+                </span>
+            }
+        </div>
+
+        @{
+            if (DataLoaded)
+            {
+                @if (Result?.students == null || Result.students.Count == 0)
+                {
+                    <div class="exam-grading-empty-state">
+                        <div class="exam-grading-empty-icon">
+                            👥
+                        </div>
+
+                        <h4>دانش‌آموزی در این کلاس وجود ندارد</h4>
+                        <p>
+                            هنوز دانش‌آموزی در کلاس مرتبط با این آزمون ثبت نشده است.
+                        </p>
+                    </div>
+                }
+                else
+                {
+                    <div class="exam-grading-table-wrapper">
+                        <table class="exam-grading-table">
+
+                            <thead>
+                                <tr>
+                                    <th>نام و نام خانوادگی</th>
+                                    <th>شماره تلفن</th>
+                                    <th class="exam-grading-action-column">
+                                        عملیات
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @{
+                                    foreach (var student in Result.students)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="exam-grading-student">
+                                                    <div class="exam-grading-avatar">
+                                                        @GetInitials(student.FirstName, student.LastName)
+                                                    </div>
+
+                                                    <span class="exam-grading-student-name">
+                                                        @student.FirstName @student.LastName
+                                                    </span>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <span class="exam-grading-phone">
+                                                    @student.PhoneNumber
+                                                </span>
+                                            </td>
+
+                                            <td class="exam-grading-action-column">
+                                                <button type="button"
+                                                        class="exam-grading-view-button"
+                                                        @onclick="() => RedirectToStudentAnswers(student.Id)">
+                                                    مشاهده پاسخ‌ها
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+
+                        </table>
+                    </div>
+                }
+
+                <ErrorComponent Errors="@Errors"></ErrorComponent>
+            }
+            else
+            {
+                <LoadingComponent></LoadingComponent>
+            }
+        }
+
+    </div>
+
+</div>
+
+
+
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public int ClassId { get; set; }
+
+    GetClassRoomMembersDTO Result = new GetClassRoomMembersDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _classRoomMember.GetClassStudnets(ClassId);
+        DataLoaded = true;
+        if (!response.IsSuccess)
+        {
+            Result.students = new List<StudentsInfoDTO>();
+            SetErrors(Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        StateHasChanged();
+    }
+    private void RedirectToStudentAnswers(string studentId)
+    {
+        _navigationManager.NavigateTo($"studentAnswer/{ExamId}?StudentId={studentId}");
+    }
+    private static string GetInitials(string? firstName, string? lastName)
+    {
+        var firstInitial = string.IsNullOrWhiteSpace(firstName)
+            ? string.Empty
+            : firstName.Trim()[0].ToString();
+
+        var lastInitial = string.IsNullOrWhiteSpace(lastName)
+            ? string.Empty
+            : lastName.Trim()[0].ToString();
+
+        var initials = $"{firstInitial}{lastInitial}";
+
+        return string.IsNullOrWhiteSpace(initials) ? "؟" : initials;
+    }
+}

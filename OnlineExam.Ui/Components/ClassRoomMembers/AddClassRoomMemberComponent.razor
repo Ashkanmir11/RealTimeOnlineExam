@@ -1,0 +1,70 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoomMembers;
+@inject ClassRoomMemberServices _classRoomMembersServices;
+
+<div class="member-form">
+    <div class="phone-row">
+        <input type="text" @bind-value="@TempPhone" placeholder="شماره موبایل" />
+        <button class="btn-add-phone" @onclick="@AddToPhones">افزودن</button>
+    </div>
+
+    <ErrorComponent Errors="Errors"></ErrorComponent>
+
+    @if (Phones != null && Phones.Count > 0)
+    {
+        <div class="phones-list">
+            @foreach (var phone in Phones)
+            {
+                <span class="phone-chip">@phone</span>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="phones-empty">هنوز شمارهای اضافه نشده است.</p>
+    }
+
+    <button class="btn-save" @onclick="@AddAsync">ثبت تغییرات</button>
+</div>
+
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+    [Parameter]
+    public EventCallback<bool> SuccessAdd { get; set; }
+
+    string TempPhone = "";
+    List<string> Phones = new List<string>();
+
+    CreateClassRoomMemberDTO CreateClassRoomMemberDTO = new CreateClassRoomMemberDTO();
+    private async Task AddAsync()
+    {
+        CreateClassRoomMemberDTO.Phones = Phones;
+        CreateClassRoomMemberDTO.ClassRomeId = ClassId;
+        var result = await _classRoomMembersServices.CreateClassStudent(CreateClassRoomMemberDTO);
+        if (result.IsSuccess)
+        {
+            await SuccessAdd.InvokeAsync(true);
+        }
+        else
+        {
+            Phones.Clear();
+            SetErrors(result.Errors);
+        }
+
+    }
+    private void AddToPhones()
+    {
+        if (TempPhone.Length != 11)
+        {
+            SetErrors("شماره تلفن معتبر نیست.");
+        }
+        else
+        {
+            Phones.Add(TempPhone);
+            TempPhone = "";
+            StateHasChanged();
+        }
+
+    }
+
+}

@@ -1,0 +1,341 @@
+﻿.student-exam-page {
+    width: min(100% - 32px, 1050px);
+    margin: 0 auto 45px;
+    direction: rtl;
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    /* --------------------------------
+   Auto-save status
+   -------------------------------- */
+
+    .student-exam-page .student-exam-autosave-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin: 4px 0 22px;
+        padding: 9px 13px;
+        border: 1px solid rgba(45, 212, 191, 0.24);
+        border-radius: 10px;
+        color: #99f6e4;
+        background: rgba(13, 148, 136, 0.1);
+    }
+
+        .student-exam-page .student-exam-autosave-status h3 {
+            margin: 0;
+            font-size: 0.79rem;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+    .student-exam-page .student-exam-autosave-dot {
+        width: 8px;
+        height: 8px;
+        flex: 0 0 8px;
+        border-radius: 50%;
+        background: #2dd4bf;
+        box-shadow: 0 0 0 4px rgba(45, 212, 191, 0.11);
+    }
+
+    /* --------------------------------
+   Question cards
+   -------------------------------- */
+
+    .student-exam-page .student-exam-questions {
+        display: grid;
+        gap: 18px;
+    }
+
+    .student-exam-page .student-exam-question-card {
+        padding: 22px;
+        border: 1px solid rgba(100, 116, 139, 0.28);
+        border-radius: 17px;
+        background: linear-gradient( 145deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.92) );
+        box-shadow: 0 13px 30px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+    }
+
+    .student-exam-page .student-exam-question-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        margin-bottom: 15px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    }
+
+    .student-exam-page .student-exam-question-label {
+        color: #c7d2fe;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .student-exam-page .student-exam-score {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 29px;
+        padding: 0 9px;
+        border: 1px solid rgba(251, 191, 36, 0.26);
+        border-radius: 8px;
+        color: #fde68a;
+        background: rgba(180, 83, 9, 0.14);
+        font-size: 0.73rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .student-exam-page .student-exam-question-text {
+        margin: 0;
+        color: #f1f5f9;
+        font-size: 0.96rem;
+        font-weight: 600;
+        line-height: 2;
+        overflow-wrap: anywhere;
+    }
+
+    /* --------------------------------
+   Answers
+   -------------------------------- */
+
+    .student-exam-page .student-exam-answer-section {
+        margin-top: 21px;
+        padding-top: 17px;
+        border-top: 1px solid rgba(148, 163, 184, 0.13);
+    }
+
+    .student-exam-page .student-exam-answer-label {
+        display: block;
+        margin-bottom: 11px;
+        color: #94a3b8;
+        font-size: 0.8rem;
+        font-weight: 700;
+    }
+
+    /* True / False */
+
+    .student-exam-page .student-exam-true-false-answer {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 42px;
+        padding: 0 13px;
+        border: 1px solid rgba(96, 165, 250, 0.28);
+        border-radius: 10px;
+        cursor: pointer;
+        color: #dbeafe;
+        background: rgba(37, 99, 235, 0.1);
+        font-size: 0.84rem;
+        font-weight: 700;
+    }
+
+    .student-exam-page ::deep .student-exam-checkbox {
+        width: 17px;
+        height: 17px;
+        margin: 0;
+        accent-color: #6366f1;
+        cursor: pointer;
+    }
+
+    /* Descriptive question */
+
+    .student-exam-page ::deep .student-exam-descriptive-input {
+        display: block;
+        width: 100%;
+        min-height: 130px;
+        box-sizing: border-box;
+        resize: vertical;
+        padding: 13px 14px;
+        border: 1px solid rgba(100, 116, 139, 0.38);
+        border-radius: 11px;
+        outline: none;
+        color: #e2e8f0;
+        background: rgba(15, 23, 42, 0.72);
+        font-family: inherit;
+        font-size: 0.88rem;
+        line-height: 1.9;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+        .student-exam-page ::deep .student-exam-descriptive-input::placeholder {
+            color: #64748b;
+        }
+
+        .student-exam-page ::deep .student-exam-descriptive-input:focus {
+            border-color: rgba(99, 102, 241, 0.85);
+            background: rgba(15, 23, 42, 0.94);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.16);
+        }
+
+        .student-exam-page ::deep .student-exam-descriptive-input:-webkit-autofill,
+        .student-exam-page ::deep .student-exam-descriptive-input:-webkit-autofill:hover,
+        .student-exam-page ::deep .student-exam-descriptive-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #e2e8f0;
+            -webkit-box-shadow: 0 0 0 1000px #0f172a inset;
+            transition: background-color 9999s ease-in-out 0s;
+        }
+
+    /* Multiple-choice question */
+
+    .student-exam-page .student-exam-choices {
+        display: grid;
+        gap: 10px;
+    }
+
+    .student-exam-page .student-exam-choice {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+        padding: 12px 13px;
+        border: 1px solid rgba(100, 116, 139, 0.28);
+        border-radius: 11px;
+        cursor: pointer;
+        color: #cbd5e1;
+        background: rgba(15, 23, 42, 0.45);
+        transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+        .student-exam-page .student-exam-choice:hover {
+            border-color: rgba(99, 102, 241, 0.56);
+            background: rgba(67, 56, 202, 0.12);
+            transform: translateX(-2px);
+        }
+
+        .student-exam-page .student-exam-choice input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            flex: 0 0 17px;
+            margin: 0;
+            accent-color: #6366f1;
+            cursor: pointer;
+        }
+
+    .student-exam-page .student-exam-choice-number {
+        display: grid;
+        width: 25px;
+        height: 25px;
+        flex: 0 0 25px;
+        place-items: center;
+        border-radius: 7px;
+        color: #c7d2fe;
+        background: rgba(79, 70, 229, 0.22);
+        font-size: 0.73rem;
+        font-weight: 800;
+    }
+
+    .student-exam-page .student-exam-choice-text {
+        min-width: 0;
+        line-height: 1.8;
+        overflow-wrap: anywhere;
+    }
+
+    /* --------------------------------
+   End-exam action
+   -------------------------------- */
+
+    .student-exam-page .student-exam-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .student-exam-page .student-exam-end-button {
+        min-height: 43px;
+        padding: 0 20px;
+        border: 1px solid rgba(248, 113, 113, 0.4);
+        border-radius: 10px;
+        cursor: pointer;
+        color: #fee2e2;
+        background: rgba(220, 38, 38, 0.16);
+        font-family: inherit;
+        font-size: 0.84rem;
+        font-weight: 800;
+        transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+    }
+
+        .student-exam-page .student-exam-end-button:hover {
+            background: #dc2626;
+            box-shadow: 0 10px 22px rgba(220, 38, 38, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .student-exam-page .student-exam-end-button:focus-visible {
+            outline: 3px solid rgba(248, 113, 113, 0.32);
+            outline-offset: 3px;
+        }
+
+    /* --------------------------------
+   Empty state
+   -------------------------------- */
+
+    .student-exam-page .student-exam-empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: 20px 0;
+        padding: 48px 20px;
+        border: 1px dashed rgba(100, 116, 139, 0.5);
+        border-radius: 16px;
+        background: rgba(30, 41, 59, 0.32);
+        text-align: center;
+    }
+
+    .student-exam-page .student-exam-empty-icon {
+        display: grid;
+        width: 54px;
+        height: 54px;
+        margin-bottom: 14px;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(79, 70, 229, 0.2);
+        font-size: 1.5rem;
+    }
+
+    .student-exam-page .student-exam-empty-state h4 {
+        margin: 0 0 7px;
+        color: #e2e8f0;
+        font-size: 1rem;
+        font-weight: 800;
+    }
+
+    .student-exam-page .student-exam-empty-state p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.84rem;
+        line-height: 1.8;
+    }
+
+/* --------------------------------
+   Responsive
+   -------------------------------- */
+
+@media (max-width: 640px) {
+    .student-exam-page {
+        width: min(100% - 24px, 1050px);
+    }
+
+        .student-exam-page .student-exam-question-card {
+            padding: 17px 14px;
+            border-radius: 14px;
+        }
+
+        .student-exam-page .student-exam-question-header {
+            margin-bottom: 12px;
+        }
+
+        .student-exam-page .student-exam-question-text {
+            font-size: 0.9rem;
+        }
+
+        .student-exam-page .student-exam-footer {
+            justify-content: stretch;
+        }
+
+        .student-exam-page .student-exam-end-button {
+            width: 100%;
+        }
+}

@@ -1,0 +1,153 @@
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using OnlineExam.Application.Constants;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity;
+using OnlineExam.Application.Response;
+using OnlineExam.Identity.Model;
+using System.Data;
+using System.IdentityModel.Tokens.Jwt;
+
+namespace OnlineExam.Identity.Services
+{
+    public class AuthServices : IAuthServices
+    {
+        private readonly UserManager<OnlineExamUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly TokenServices _tokenServices;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IValidator<LoginDTO> _loginValidator;
+        private readonly IValidator<RegisterDTO> _registerValidation;
+        private readonly OnlineExamIdentityDbContext _context;
+        public AuthServices(UserManager<OnlineExamUser> userManager, RoleManager<IdentityRole> roleManager, TokenServices tokenServices
+            , IHttpContextAccessor httpContextAccessor, IValidator<LoginDTO> loginValidator, OnlineExamIdentityDbContext context
+            , IValidator<RegisterDTO> registerValidator)
+        {
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _tokenServices = tokenServices;
+            _httpContextAccessor = httpContextAccessor;
+            _context = context;
+            _loginValidator = loginValidator;
+            _registerValidation = registerValidator;
+        }
+
+
+        public Task<PaginateResponse<GetUserDTO>> GetAllAsync(PaginateRequestDTO paginateRequestDTO)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginDto)
+        {
+            var validationResult = await _loginValidator.ValidateAsync(loginDto);
+            if (validationResult.IsValid == false)
+            {
+                throw new Application.Exceptions.ValidationException(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+            }
+            //var role = await _roleManager.FindByNameAsync("User");
+            var user = await _context.Users.Where(e => e.PhoneNumber == loginDto.PhoneNumber).SingleOrDefaultAsync();
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+            if (isPasswordValid)
+            {
+
+                JwtSecurityToken jwtSecurityToken = await _tokenServices.GenerateAccessTokenAsync(user);
+                var refreshToken = await _tokenServices.AddRefreshTokenAsync(user.Id);
+                var result = new SuccessLoginResultDTO()
+                {
+                    AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                    RefreshToken = refreshToken.Token,
+                    User = new GetUserDTO()
+                    {
+                        Email = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Phone = user.PhoneNumber,
+                        UserName = user.UserName,
+                        Id = user.Id
+                    },
+                };
+                return result;
+
+            }
+            else
+            {
+
+                throw new UnauthorizedAccessException("نام کاربری یا رمز عبور اشتباهه است.");
+
+            }
+        }
+
+        public async Task<GetUserDTO> RegisterAsync(RegisterDTO registerDTO)
+        {
+            var valid = await _registerValidation.ValidateAsync(registerDTO, CancellationToken.None);
+
+            if (valid.IsValid == false)
+            {
+                var errors = valid.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new Application.Exceptions.ValidationException(errors);
+
+            }
+
+            var identityUser = new OnlineExamUser()
+            {
+                NationalCode = registerDTO.NationCode,
+                Email = registerDTO.Email,
+                EmailConfirmed = true,
+                PhoneNumber = registerDTO.PhoneNumber,
+                FirstName = registerDTO.FirstName,
+                LastName = registerDTO.LastName,
+                UserName = registerDTO.PhoneNumber,
+                PhoneNumberConfirmed = true,
+            };
+            var result = await _userManager.CreateAsync(identityUser, registerDTO.Password);
+            if (result.Succeeded)
+            {
+                var response = await _userManager.FindByNameAsync(identityUser.UserName);
+                var role = await _userManager.AddToRoleAsync(response, "User");
+                return new GetUserDTO()
+                {
+                    Email = response.Email,
+                    FirstName = response.FirstName,
+                    LastName = response.LastName,
+                    Phone = response.PhoneNumber,
+                    UserName = response.UserName,
+                    Id = response.Id
+                };
+
+            }
+            else
+            {
+                throw new Application.Exceptions.ValidationException(result.Errors.Select(e => e.Description).ToList());
+            }
+        }
+        public async Task<GetTokens> RefreshTokenAsync(string refreshToken)
+        {
+            return await _tokenServices.RefreshTokenAsync(refreshToken);
+        }
+
+        public async Task<string> GetCurrentUserIdAsync()
+        {
+            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == CustomClaimTypes.UserId)?.Value;
+
+        }
+
+        public async Task LogoutAsync(string refreshToken)
+        {
+            await _tokenServices.DeleteRefreshToken(refreshToken);
+        }
+
+        public async Task<bool> IsUserAdminAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles.Contains("Admin"))
+            {
+                return true;
+            }
+            return false;
+        }
+    }
+}

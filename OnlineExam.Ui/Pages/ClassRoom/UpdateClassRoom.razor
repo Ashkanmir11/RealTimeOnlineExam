@@ -1,0 +1,74 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/updateclassroom/{Id:int}";
+@inject ClassRoomServices _classRoomServices;
+<h1>ویرایش کلاس</h1>
+@{
+    if (DataLoaded)
+    {
+        <div class="edit-class-page">
+            <div class="edit-card">
+                <h4>ویرایش کلاس</h4>
+                <EditForm EditContext="@EditContext" OnValidSubmit="@UpdateClass">
+                    <DataAnnotationsValidator></DataAnnotationsValidator>
+                    <div class="form-group">
+                        <label>نام کلاس</label>
+                        <InputText @bind-Value="@UpdateClassRoomDTO.ClassName" placeholder="نام کلاس را وارد کنید"></InputText>
+                    </div>
+                    <button type="submit" class="btn-save">ویرایش</button>
+                </EditForm>
+            </div>
+            <ErrorComponent Errors="Errors"></ErrorComponent>
+        </div>
+    }
+    else
+    {
+        <LoadingComponent></LoadingComponent>
+    }
+}
+
+@code {
+    private EditContext EditContext;
+
+    [Parameter]
+    public int Id { get; set; }
+    UpdateClassRoomDTO UpdateClassRoomDTO = new UpdateClassRoomDTO();
+    protected override async void OnInitialized()
+    {
+        EditContext = new EditContext(UpdateClassRoomDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
+        {
+            var validationErrors = EditContext.GetValidationMessages();
+            SetErrors(validationErrors.ToList());
+            StateHasChanged();
+        };
+
+        var classRoom = await _classRoomServices.GetByIdAsync(Id);
+        DataLoaded = true;
+        if (!classRoom.IsSuccess)
+        {
+            SetErrors(classRoom.Errors);
+        }
+        else
+        {
+            UpdateClassRoomDTO.ClassName = classRoom.Data.ClassName;
+            StateHasChanged();
+        }
+
+        base.OnInitialized();
+
+
+    }
+    private async Task UpdateClass()
+    {
+        var updateResult = await _classRoomServices.UpdateAsync(Id, UpdateClassRoomDTO);
+        Console.WriteLine(updateResult);
+        if (!updateResult.IsSuccess)
+        {
+            SetErrors(updateResult.Errors);
+        }
+        else
+        {
+            _navigationManager.NavigateTo("classroom");
+        }
+    }
+}

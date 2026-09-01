@@ -1,0 +1,54 @@
+﻿@page "/profile"
+<div class="profile-page">
+    <h3>پروفایل کاربری</h3>
+
+    @{
+        if (DataLoaded)
+        {
+            <div class="profile-card">
+                <div class="profile-item">
+                    <span class="profile-label">نام و نام خانوادگی</span>
+                    <span class="profile-value">@Result.FirstName @Result.LastName</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">نام کاربری</span>
+                    <span class="profile-value">@Result.UserName</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">شماره تلفن</span>
+                    <span class="profile-value phone-value">@Result.PhoneNumber</span>
+                </div>
+
+                <div class="profile-item">
+                    <span class="profile-label">ایمیل</span>
+                    <span class="profile-value email-value">@Result.Email</span>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="profile-loading">
+                <LoadingComponent></LoadingComponent>
+            </div>
+        }
+    }
+</div>
+@code {
+    MyInfoDTO Result = new MyInfoDTO();
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await _authServices.GetMyInfo();
+        DataLoaded = true;
+        if (response.IsSuccess)
+        {
+            Result = response.Data;
+        }
+        if (response.StatusCode == 401)
+        {
+            _navigationManager.NavigateTo("/login");
+        }
+        await base.OnInitializedAsync();
+    }
+}

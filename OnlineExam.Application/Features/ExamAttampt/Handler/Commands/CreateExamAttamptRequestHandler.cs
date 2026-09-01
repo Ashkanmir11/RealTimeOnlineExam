@@ -1,0 +1,27 @@
+﻿using MediatR;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.Features.ExamAttampt.Request.Commands;
+
+namespace OnlineExam.Application.Features.ExamAttampt.Handler.Commands
+{
+    public class CreateExamAttamptRequestHandler : IRequestHandler<CreateExamAttamptRequest>
+    {
+        private readonly IExamAttamptRepository _examAttamptRepository;
+        public CreateExamAttamptRequestHandler(IExamAttamptRepository examAttamptRepository)
+        {
+            _examAttamptRepository = examAttamptRepository;
+        }
+        public async Task Handle(CreateExamAttamptRequest request, CancellationToken cancellationToken)
+        {
+            var examAttampt = new Domain.Entities.ExamAttampt()
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddMinutes(request.ExamMinute),
+                ExamId = request.ExamId,
+                IsEnded = false,
+                StudentId = request.UserId
+            };
+            await _examAttamptRepository.AddAsync(examAttampt);
+        }
+    }
+}

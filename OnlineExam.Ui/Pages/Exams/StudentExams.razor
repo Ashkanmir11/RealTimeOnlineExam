@@ -1,0 +1,191 @@
+﻿@using OnlineExam.Ui.DTO.Exam;
+@page "/StudentExams/{ClassId:int}"
+@inject ExamServices _examServices;
+@if (DataLoaded)
+{
+    <div class="student-exams-page">
+
+        <div class="student-exams-card">
+
+            <div class="student-exams-header">
+                <div>
+                    <h3>آزمون‌های کلاس</h3>
+                    <p>
+                        آزمون موردنظر را انتخاب کنید و در بازه زمانی تعیین‌شده وارد آزمون شوید.
+                    </p>
+                </div>
+
+                @if (Result?.Data != null && Result.Data.Count > 0)
+                {
+                    <span class="student-exams-count">
+                        @Result.Data.Count آزمون
+                    </span>
+                }
+            </div>
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
+            {
+                <div class="student-exams-empty-state">
+                    <div class="student-exams-empty-icon">
+                        📝
+                    </div>
+
+                    <h4>آزمونی یافت نشد</h4>
+                    <p>
+                        در حال حاضر آزمونی برای این کلاس در دسترس نیست.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="student-exams-table-wrapper">
+                    <table class="student-exams-table">
+
+                        <thead>
+                            <tr>
+                                <th>نام آزمون</th>
+                                <th>توضیحات</th>
+                                <th>تعداد سؤال</th>
+                                <th>تاریخ شروع</th>
+                                <th>تاریخ پایان</th>
+                                <th>تأخیر مجاز</th>
+                                <th>کپی</th>
+                                <th>سؤال درهم</th>
+                                <th>لاگ دانشجو</th>
+                                <th class="student-exams-action-column">
+                                    عملیات
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var exam in Result.Data)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="student-exams-name">
+                                            @exam.Name
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(exam.Description))
+                                        {
+                                            <span class="student-exams-no-description">
+                                                بدون توضیحات
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <div class="student-exams-description">
+                                                @exam.Description
+                                            </div>
+                                        }
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-question-count">
+                                            @exam.QuestionCount
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-date">
+                                            @DateHelper.MiladiToShamsi((DateTime)exam.StartDate)
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-date">
+                                            @DateHelper.MiladiToShamsi((DateTime)exam.EndDate)
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span class="student-exams-delay">
+                                            @exam.AllowedDelay دقیقه
+                                        </span>
+                                    </td>
+
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.AllowedCopy ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.AllowedCopy ? "مجاز" : "غیرمجاز")
+                                        </span>
+                                    </td>
+
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.RandomQuestions ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.RandomQuestions ? "فعال" : "غیرفعال")
+                                        </span>
+                                    </td>
+                                    <td class="student-exams-status-column">
+                                        <span class="student-exams-status @(exam.LogStudent ? "student-exams-status-allowed" : "student-exams-status-disabled")">
+                                            @(exam.RandomQuestions ? "فعال" : "غیرفعال")
+                                        </span>
+                                    </td>
+                                    <td class="student-exams-action-column">
+                                        <button type="button"
+                                                class="student-exams-start-button"
+                                                @onclick="() => StartExam(exam.Id)">
+                                            شروع آزمون
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <LoadingComponent />
+}
+
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+    PaginateResponse<GetExamDetailDTO> Result = new PaginateResponse<GetExamDetailDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        Result.Data = new List<GetExamDetailDTO>();
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        var response = await _examServices.GetExamTeacher(ClassId, GetDefultPaginate());
+        DataLoaded = true;
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        StateHasChanged();
+    }
+    private async Task StartExam(int examId)
+    {
+        var response = await _examServices.StartExam(examId, GetDefultPaginate());
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            bool CanCopy = Result.Data.Where(e => e.Id == examId).Select(e => e.AllowedCopy).FirstOrDefault();
+            bool StudentLog = Result.Data.Where(e => e.Id == examId).Select(e => e.LogStudent).FirstOrDefault();
+            _navigationManager.NavigateTo($"StartExam/{examId}?canCopy={CanCopy}&&StudentLog={StudentLog}");
+        }
+    }
+
+}

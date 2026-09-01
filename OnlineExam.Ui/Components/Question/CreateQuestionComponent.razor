@@ -1,0 +1,275 @@
+﻿@using OnlineExam.Ui.DTO.Question;
+@using OnlineExam.Ui.DTO.TrueOrFalseQuestion;
+@using OnlineExam.Ui.DTO.DescriptiveQuestion;
+@using OnlineExam.Ui.DTO.MultipleChoiceQuestion;
+@inject QuestionServices _questionServices;
+
+<EditForm Model="@CreateQuestionDTO"
+          OnValidSubmit="@AddQuesiton">
+
+    <DataAnnotationsValidator />
+
+    <div class="create-question-form">
+
+        <div class="create-question-field create-question-full-width">
+            <label for="questionText">متن سؤال</label>
+
+            <InputText id="questionText"
+                       class="create-question-input"
+                       placeholder="متن سؤال را وارد کنید..."
+                       @bind-Value="@CreateQuestionDTO.QuestionText" />
+        </div>
+
+        <div class="create-question-field">
+            <label for="questionScore">نمره سؤال</label>
+
+            <InputNumber id="questionScore"
+                         class="create-question-input"
+                         placeholder="مثلاً 2"
+                         @bind-Value="@CreateQuestionDTO.TotalScore" />
+        </div>
+
+        <div class="create-question-field">
+            <label for="questionType">نوع سؤال</label>
+
+            <InputSelect id="questionType"
+                         class="create-question-input create-question-select"
+                         @bind-Value="@QuestionType">
+                <option value="@QuestionType.TrueOrFalse">صحیح و غلط</option>
+                <option value="@QuestionType.MultipleChoice">چند گزینه‌ای</option>
+                <option value="@QuestionType.Descripite">تشریحی</option>
+            </InputSelect>
+        </div>
+
+        @switch (QuestionType)
+        {
+            case QuestionType.MultipleChoice:
+                <div class="create-question-type-panel create-question-full-width">
+
+                    <div class="create-question-panel-header">
+                        <h4>تنظیمات سؤال چندگزینه‌ای</h4>
+                        <p>گزینه‌ها را اضافه کنید و شماره گزینه صحیح را مشخص کنید.</p>
+                    </div>
+
+                    <div class="create-question-choice-adder">
+                        <input id="newChoice"
+                               class="create-question-input"
+                               type="text"
+                               placeholder="متن گزینه را وارد کنید..."
+                               @bind-value="@TempChoice" />
+
+                        <button type="button"
+                                class="create-question-add-choice-button"
+                                @onclick="@AddChoice">
+                            افزودن گزینه
+                        </button>
+                    </div>
+
+                    @if (MultipleChoices != null && MultipleChoices.Count > 0)
+                    {
+                        <div class="create-question-choice-list">
+                            @for (var index = 0; index < MultipleChoices.Count; index++)
+                            {
+                                <div class="create-question-choice-item">
+                                    <span class="create-question-choice-index">
+                                        @(index + 1)
+                                    </span>
+
+                                    <span class="create-question-choice-text">
+                                        @MultipleChoices[index]
+                                    </span>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="create-question-hint">
+                            هنوز گزینه‌ای اضافه نشده است.
+                        </p>
+                    }
+
+                    <div class="create-question-correct-choice-row">
+                        <div class="create-question-field">
+                            <label for="correctChoice">
+                                شماره گزینه صحیح
+                            </label>
+
+                            <InputNumber id="correctChoice"
+                                         class="create-question-input"
+                                         placeholder="مثلاً 1"
+                                         @bind-Value="@CorrentChoice" />
+                        </div>
+
+                        <button type="button"
+                                class="create-question-set-type-button"
+                                @onclick="@AddMultipleChoiceQuestion">
+                            ثبت تنظیمات چندگزینه‌ای
+                        </button>
+                    </div>
+
+                </div>
+                break;
+
+            case QuestionType.TrueOrFalse:
+                <div class="create-question-type-panel create-question-full-width">
+
+                    <div class="create-question-panel-header">
+                        <h4>تنظیمات سؤال صحیح و غلط</h4>
+                        <p>پاسخ صحیح سؤال را تعیین کنید.</p>
+                    </div>
+
+                    <div class="create-question-true-false-row">
+                        <label class="create-question-checkbox-label"
+                               for="correctAnswer">
+
+                            <InputCheckbox id="correctAnswer"
+                                           class="create-question-checkbox"
+                                           @bind-Value="@CorrectAnswer" />
+
+                            <span>
+                                پاسخ صحیح است
+                            </span>
+                        </label>
+
+                        <button type="button"
+                                class="create-question-set-type-button"
+                                @onclick="@AddTrueOrFalseQuestion">
+                            ثبت تنظیمات صحیح و غلط
+                        </button>
+                    </div>
+
+                </div>
+                break;
+
+            case QuestionType.Descripite:
+                <div class="create-question-type-panel create-question-full-width">
+
+                    <div class="create-question-panel-header">
+                        <h4>تنظیمات سؤال تشریحی</h4>
+                        <p>پاسخ نمونه یا پاسخ صحیح سؤال را وارد کنید.</p>
+                    </div>
+
+                    <div class="create-question-field">
+                        <label for="correctDescriptiveAnswer">
+                            پاسخ صحیح سؤال
+                        </label>
+
+                        <InputTextArea id="correctDescriptiveAnswer"
+                                       class="create-question-input create-question-textarea"
+                                       placeholder="پاسخ صحیح یا پاسخ نمونه را بنویسید..."
+                                       @bind-Value="@CorrectDescriptiveAnswer" />
+                    </div>
+
+                    <div class="create-question-panel-actions">
+                        <button type="button"
+                                class="create-question-set-type-button"
+                                @onclick="@AddDescrptiveQuestion">
+                            ثبت تنظیمات تشریحی
+                        </button>
+                    </div>
+
+                </div>
+                break;
+        }
+
+        <div class="create-question-submit-row create-question-full-width">
+            <button type="submit"
+                    class="create-question-submit-button">
+                افزودن سؤال
+            </button>
+        </div>
+
+    </div>
+
+</EditForm>
+
+<ErrorComponent Errors="@Errors" />
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    QuestionType QuestionType;
+    CreateQuestionDTO CreateQuestionDTO = new CreateQuestionDTO();
+    //For true or false
+    bool CorrectAnswer;
+    [Parameter]
+    public EventCallback<bool> AddComplete{ get; set; }
+    //for multiple choice
+    List<string> MultipleChoices = new List<string>();
+    int ChoiceNumber = 0;
+    string TempChoice;
+    int CorrentChoice;
+
+    //for descriptive
+    string CorrectDescriptiveAnswer;
+    protected override void OnInitialized()
+    {
+        CreateQuestionDTO.ExamId = ExamId;
+        base.OnInitialized();
+    }
+
+    private async Task AddQuesiton()
+    {
+        //todo create add;
+        if (!IsCorrectChoiceValid())
+        {
+
+        }
+        else
+        {
+            var response = await _questionServices.AddAsync(CreateQuestionDTO);
+            if(response.IsSuccess)
+            {
+                AddComplete.InvokeAsync(true);
+                CreateQuestionDTO = new CreateQuestionDTO();
+                CreateQuestionDTO.ExamId = ExamId;
+                StateHasChanged();
+            }
+            else
+            {
+                SetErrors(response.Errors);
+            }
+
+        }
+
+
+    }
+    private void AddChoice()
+    {
+        ChoiceNumber += 1;
+        MultipleChoices.Add(ChoiceNumber.ToString() + "-" + TempChoice);
+        TempChoice = "";
+        StateHasChanged();
+    }
+    private bool IsCorrectChoiceValid()
+    {
+        if (CorrentChoice > ChoiceNumber)
+        {
+            SetErrors("کزینه وارد شده صحیح نیست.");
+            return false;
+        }
+        return true;
+
+    }
+    private void AddTrueOrFalseQuestion()
+    {
+        CreateTrueOrFalseQuestionDTO createTrueOrFalseQuestionDTO = new CreateTrueOrFalseQuestionDTO();
+        createTrueOrFalseQuestionDTO.CorrectAnswer = CorrectAnswer;
+        CreateQuestionDTO.TrueOrFalseQuestion = createTrueOrFalseQuestionDTO;
+    }
+    private void AddDescrptiveQuestion()
+    {
+        CreateDescriptiveQuestionDTO createDescriptiveQuestionDTO = new CreateDescriptiveQuestionDTO();
+        createDescriptiveQuestionDTO.CorrectAnswer = CorrectDescriptiveAnswer;
+        CreateQuestionDTO.DescriptiveQuestion = createDescriptiveQuestionDTO;
+    }
+    private void AddMultipleChoiceQuestion()
+    {
+        CreateMultipleChoiceQuestionDTO createMultipleChoiceQuestionDTO = new CreateMultipleChoiceQuestionDTO();
+        createMultipleChoiceQuestionDTO.Choices = MultipleChoices;
+        createMultipleChoiceQuestionDTO.CorrectChoice = CorrentChoice;
+        CreateQuestionDTO.MultipleChoiceQuestion = createMultipleChoiceQuestionDTO;
+
+    }
+}

@@ -1,0 +1,52 @@
+﻿using FluentValidation;
+using MediatR;
+using OnlineExam.Application.Contracts.Identity;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.Exam;
+using OnlineExam.Application.Exceptions;
+using OnlineExam.Application.Features.Exam.Request.Commands;
+
+namespace OnlineExam.Application.Features.Exam.Handler.Commands
+{
+    public class UpdateExamRequestHandler : IRequestHandler<UpdateExamRequest>
+    {
+        private readonly IExamRepository _examRepository;
+        private readonly IAuthServices _authServices;
+        private readonly IValidator<UpdateExamDTO> _validator;
+        public UpdateExamRequestHandler(IExamRepository examRepository, IAuthServices authServices, IValidator<UpdateExamDTO> validator)
+        {
+            _examRepository = examRepository;
+            _authServices = authServices;
+            _validator = validator;
+        }
+
+        public async Task Handle(UpdateExamRequest request, CancellationToken cancellationToken)
+        {
+            var exam = await _examRepository.ExistAsync(request.Id);
+            if (!exam)
+            {
+                throw new NotFoundException("آزمون یافت نشد.");
+            }
+            var canEdit = await _examRepository.CanModifyExamAsync(request.Id);
+            if (!canEdit)
+            {
+                throw new ConflictException("امکان ویرایش بعد شروع آزمون وجود ندارد.");
+            }
+            var currentUser = await _authServices.GetCurrentUserIdAsync();
+            bool isTeacher = await _examRepository.IsUserTeacherAsync(currentUser, request.Id);
+            bool isAdmin = await _authServices.IsUserAdminAsync(currentUser);
+            if (!isTeacher && !isAdmin)
+            {
+                throw new AccessForbiddenException("شما دسترسی به این عملیات را ندارید.");
+            }
+
+            var validationResult = await _validator.ValidateAsync(request.UpdateExamDTO);
+            if (validationResult.IsValid == false)
+            {
+                var errors = validationResult.Errors.Select(e => e.ErrorMessage).ToList();
+                throw new Application.Exceptions.ValidationException(errors);
+            }
+            await _examRepository.UpdateAsync(request.Id, request.UpdateExamDTO);
+        }
+    }
+}

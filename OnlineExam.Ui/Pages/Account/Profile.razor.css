@@ -1,0 +1,110 @@
+﻿.profile-page {
+    width: min(100% - 32px, 620px);
+    margin: 58px auto 40px;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+    direction: rtl;
+}
+
+    .profile-page h3 {
+        margin: 0 0 20px;
+        color: #f8fafc;
+        font-size: 1.8rem;
+        font-weight: 800;
+        text-align: center;
+        text-shadow: 0 4px 20px rgba(59, 130, 246, 0.22);
+    }
+
+.profile-card {
+    overflow: hidden;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.94);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(14px);
+}
+
+.profile-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    min-height: 72px;
+    padding: 15px 22px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    transition: background-color 0.2s ease;
+}
+
+    .profile-item:last-child {
+        border-bottom: 0;
+    }
+
+    .profile-item:hover {
+        background: rgba(59, 130, 246, 0.06);
+    }
+
+.profile-label {
+    flex-shrink: 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.profile-value {
+    overflow: hidden;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    font-weight: 700;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.phone-value,
+.email-value {
+    direction: ltr;
+}
+
+.profile-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 220px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 20px;
+    background: rgba(15, 23, 42, 0.94);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+    .profile-page {
+        width: min(100% - 24px, 620px);
+        margin-top: 35px;
+    }
+
+        .profile-page h3 {
+            font-size: 1.55rem;
+        }
+
+    .profile-card,
+    .profile-loading {
+        border-radius: 16px;
+    }
+
+    .profile-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 7px;
+        min-height: auto;
+        padding: 16px 18px;
+    }
+
+    .profile-value {
+        max-width: 100%;
+        text-align: right;
+    }
+
+    .phone-value,
+    .email-value {
+        align-self: flex-end;
+    }
+}

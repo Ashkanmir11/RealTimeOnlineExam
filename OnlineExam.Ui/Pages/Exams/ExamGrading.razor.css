@@ -1,0 +1,246 @@
+﻿.exam-grading-page {
+    width: min(100% - 32px, 1050px);
+    margin: 45px auto;
+    direction: rtl;
+    color: #f8fafc;
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+    .exam-grading-page .exam-grading-card {
+        padding: 32px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94);
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    /* --------------------------------
+   Header
+   -------------------------------- */
+
+    .exam-grading-page .exam-grading-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        margin-bottom: 28px;
+        padding-bottom: 19px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+        .exam-grading-page .exam-grading-header h3 {
+            margin: 0 0 6px;
+            color: #f8fafc;
+            font-size: 1.55rem;
+            font-weight: 800;
+        }
+
+        .exam-grading-page .exam-grading-header p {
+            max-width: 680px;
+            margin: 0;
+            color: #94a3b8;
+            font-size: 0.87rem;
+            line-height: 1.75;
+        }
+
+    .exam-grading-page .exam-grading-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 36px;
+        flex-shrink: 0;
+        padding: 0 13px;
+        border: 1px solid rgba(99, 102, 241, 0.36);
+        border-radius: 10px;
+        color: #c7d2fe;
+        background: rgba(79, 70, 229, 0.14);
+        font-size: 0.8rem;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* --------------------------------
+   Table
+   -------------------------------- */
+
+    .exam-grading-page .exam-grading-table-wrapper {
+        overflow-x: auto;
+        border: 1px solid rgba(148, 163, 184, 0.17);
+        border-radius: 15px;
+        background: rgba(15, 23, 42, 0.48);
+    }
+
+    .exam-grading-page .exam-grading-table {
+        width: 100%;
+        min-width: 620px;
+        border-collapse: collapse;
+        text-align: right;
+    }
+
+        .exam-grading-page .exam-grading-table th {
+            padding: 15px 18px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.18);
+            color: #c7d2fe;
+            background: rgba(30, 41, 59, 0.8);
+            font-size: 0.81rem;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .exam-grading-page .exam-grading-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            color: #dbeafe;
+            vertical-align: middle;
+            font-size: 0.85rem;
+        }
+
+        .exam-grading-page .exam-grading-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .exam-grading-page .exam-grading-table tbody tr:hover {
+                background: rgba(51, 65, 85, 0.34);
+            }
+
+            .exam-grading-page .exam-grading-table tbody tr:last-child td {
+                border-bottom: 0;
+            }
+
+    .exam-grading-page .exam-grading-student {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 190px;
+    }
+
+    .exam-grading-page .exam-grading-avatar {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        place-items: center;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 11px;
+        color: #dbeafe;
+        background: linear-gradient( 135deg, rgba(37, 99, 235, 0.36), rgba(79, 70, 229, 0.32) );
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+
+    .exam-grading-page .exam-grading-student-name {
+        overflow: hidden;
+        color: #f8fafc;
+        font-weight: 800;
+        line-height: 1.7;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .exam-grading-page .exam-grading-phone {
+        direction: ltr;
+        color: #cbd5e1;
+        font-family: Tahoma, sans-serif;
+        letter-spacing: 0.2px;
+        white-space: nowrap;
+    }
+
+    /* --------------------------------
+   Action button
+   -------------------------------- */
+
+    .exam-grading-page .exam-grading-action-column {
+        width: 155px;
+        text-align: center;
+    }
+
+    .exam-grading-page .exam-grading-view-button {
+        min-height: 38px;
+        padding: 0 14px;
+        border: 1px solid rgba(96, 165, 250, 0.32);
+        border-radius: 9px;
+        cursor: pointer;
+        color: #dbeafe;
+        background: rgba(37, 99, 235, 0.13);
+        font-family: inherit;
+        font-size: 0.78rem;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+        .exam-grading-page .exam-grading-view-button:hover {
+            color: #ffffff;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            transform: translateY(-2px);
+        }
+
+        .exam-grading-page .exam-grading-view-button:focus-visible {
+            outline: 3px solid rgba(96, 165, 250, 0.3);
+            outline-offset: 3px;
+        }
+
+    /* --------------------------------
+   Empty state
+   -------------------------------- */
+
+    .exam-grading-page .exam-grading-empty-state {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 52px 20px;
+        border: 1px dashed rgba(100, 116, 139, 0.46);
+        border-radius: 16px;
+        background: rgba(30, 41, 59, 0.26);
+        text-align: center;
+    }
+
+    .exam-grading-page .exam-grading-empty-icon {
+        display: grid;
+        width: 55px;
+        height: 55px;
+        margin-bottom: 14px;
+        place-items: center;
+        border-radius: 50%;
+        background: rgba(79, 70, 229, 0.2);
+        font-size: 1.55rem;
+    }
+
+    .exam-grading-page .exam-grading-empty-state h4 {
+        margin: 0 0 7px;
+        color: #e2e8f0;
+        font-size: 1.02rem;
+        font-weight: 800;
+    }
+
+    .exam-grading-page .exam-grading-empty-state p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 0.84rem;
+        line-height: 1.8;
+    }
+
+/* --------------------------------
+   Responsive
+   -------------------------------- */
+
+@media (max-width: 640px) {
+    .exam-grading-page {
+        width: min(100% - 24px, 1050px);
+        margin-top: 28px;
+    }
+
+        .exam-grading-page .exam-grading-card {
+            padding: 22px 16px;
+        }
+
+        .exam-grading-page .exam-grading-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .exam-grading-page .exam-grading-count {
+            width: 100%;
+            box-sizing: border-box;
+        }
+}

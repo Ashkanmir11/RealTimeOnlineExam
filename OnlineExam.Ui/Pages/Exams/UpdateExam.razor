@@ -1,0 +1,245 @@
+﻿@using OnlineExam.Ui.DTO.Exam;
+@page "/updateExam/{ExamId:int}/{ClassId:int}"
+@inject ExamServices _examServices;
+@if (DataLoaded)
+{
+    <div class="edit-exam-page">
+
+        <div class="edit-exam-card">
+
+            <div class="edit-exam-header">
+                <h3>ویرایش آزمون</h3>
+                <p>اطلاعات آزمون و تنظیمات آن را ویرایش کنید.</p>
+            </div>
+
+            <EditForm EditContext="@EditContext" OnValidSubmit="@PreEditAsync">
+                <DataAnnotationsValidator />
+
+                <div class="edit-exam-form-grid">
+
+                    <div class="edit-exam-field">
+                        <label for="examName">نام آزمون</label>
+
+                        <InputText id="examName"
+                                   class="edit-exam-input"
+                                   placeholder="مثلاً آزمون میان‌ترم"
+                                   @bind-Value="@UpdateExamDTO.Name" />
+                    </div>
+
+                    <div class="edit-exam-field">
+                        <label for="questionCount">تعداد سؤال</label>
+
+                        <InputNumber id="questionCount"
+                                     class="edit-exam-input"
+                                     placeholder="مثلاً 20"
+                                     @bind-Value="@UpdateExamDTO.QuestionCount" />
+                    </div>
+
+                    <div class="edit-exam-field edit-exam-full-width">
+                        <label for="examDescription">توضیحات آزمون</label>
+
+                        <InputTextArea id="examDescription"
+                                       class="edit-exam-input edit-exam-textarea"
+                                       placeholder="توضیحات آزمون را وارد کنید..."
+                                       @bind-Value="@UpdateExamDTO.Description" />
+                    </div>
+
+                    <div class="edit-exam-field">
+                        <label for="examStartDate">تاریخ شروع</label>
+
+                        <div class="edit-exam-datepicker">
+                            <InputPersianDatePicker id="examStartDate"
+                                                    @bind-ValueAsDateTime="@UpdateExamDTO.StartDate"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    ReadOnly="true" />
+                        </div>
+                    </div>
+
+                    <div class="edit-exam-field">
+                        <label for="examEndDate">تاریخ پایان</label>
+
+                        <div class="edit-exam-datepicker">
+                            <InputPersianDatePicker id="examEndDate"
+                                                    @bind-ValueAsDateTime="@UpdateExamDTO.EndDate"
+                                                    CalendarType="Calendar.SingleModeJalali"
+                                                    ReadOnly="true" />
+                        </div>
+                    </div>
+
+
+                    <div class="edit-exam-field">
+                        <label>زمان پایان</label>
+
+                        <div class="edit-exam-time-row">
+                            <InputNumber id="examEndHour"
+                                         class="edit-exam-input edit-exam-time-input"
+                                         placeholder="ساعت"
+                                         @bind-Value="@EndHour" />
+
+                            <span class="edit-exam-time-separator">:</span>
+
+                            <InputNumber id="examEndMinute"
+                                         class="edit-exam-input edit-exam-time-input"
+                                         placeholder="دقیقه"
+                                         @bind-Value="@EndMinute" />
+                        </div>
+                    </div>
+
+                    <div class="edit-exam-field">
+                        <label>زمان شروع</label>
+
+                        <div class="edit-exam-time-row">
+                            <InputNumber id="examStartHour"
+                                         class="edit-exam-input edit-exam-time-input"
+                                         placeholder="ساعت"
+                                         @bind-Value="@StartHour" />
+
+                            <span class="edit-exam-time-separator">:</span>
+
+                            <InputNumber id="examStartMinute"
+                                         class="edit-exam-input edit-exam-time-input"
+                                         placeholder="دقیقه"
+                                         @bind-Value="@StartMinute" />
+                        </div>
+                    </div>
+
+
+                    <div class="edit-exam-field edit-exam-full-width">
+                        <label for="examAllowDelay">میزان تأخیر مجاز (دقیقه)</label>
+
+                        <InputNumber id="examAllowDelay"
+                                     class="edit-exam-input"
+                                     placeholder="مثلاً 15"
+                                     @bind-Value="@UpdateExamDTO.AllowedDelay" />
+                    </div>
+
+                </div>
+
+                <div class="edit-exam-options">
+
+                    <label class="edit-exam-option" for="examAllowCopy">
+                        <InputCheckbox id="examAllowCopy"
+                                       class="edit-exam-checkbox"
+                                       @bind-Value="@UpdateExamDTO.AllowedCopy" />
+
+                        <span class="edit-exam-option-text">
+                            <span class="edit-exam-option-title">اجازه کپی</span>
+                            <span class="edit-exam-option-description">
+                                دانشجو بتواند متن سؤال‌ها را کپی کند.
+                            </span>
+                        </span>
+                    </label>
+
+                    <label class="edit-exam-option" for="examLogStudent">
+                        <InputCheckbox id="examLogStudent"
+                                       class="edit-exam-checkbox"
+                                       @bind-Value="@UpdateExamDTO.LogStudent" />
+
+                        <span class="edit-exam-option-text">
+                            <span class="edit-exam-option-title">ثبت لاگ دانشجویان</span>
+                            <span class="edit-exam-option-description">
+                                فعالیت‌های دانشجو حین آزمون ثبت شود.
+                            </span>
+                        </span>
+                    </label>
+
+                    <label class="edit-exam-option" for="examRandomQuestion">
+                        <InputCheckbox id="examRandomQuestion"
+                                       class="edit-exam-checkbox"
+                                       @bind-Value="@UpdateExamDTO.RandomQuestions" />
+
+                        <span class="edit-exam-option-text">
+                            <span class="edit-exam-option-title">سؤالات درهم</span>
+                            <span class="edit-exam-option-description">
+                                ترتیب سؤال‌ها برای دانشجویان متفاوت باشد.
+                            </span>
+                        </span>
+                    </label>
+
+                </div>
+
+                <div class="edit-exam-actions">
+                    <button type="submit" class="edit-exam-submit">
+                        ذخیره تغییرات
+                    </button>
+                </div>
+
+            </EditForm>
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <LoadingComponent />
+}
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public int ClassId { get; set; }
+    UpdateExamDTO UpdateExamDTO = new UpdateExamDTO();
+    int StartHour;
+    int StartMinute;
+    int EndHour;
+    int EndMinute;
+    EditContext EditContext;
+    protected override async Task OnInitializedAsync()
+    {
+        EditContext = new EditContext(UpdateExamDTO);
+        var response = await _examServices.GetByIdAsync(ExamId);
+        DataLoaded = true;
+        if (response.IsSuccess)
+        {
+            UpdateExamDTO = response.Data;
+            StartHour = UpdateExamDTO.StartDate.Value.Hour;
+            StartMinute = UpdateExamDTO.StartDate.Value.Minute;
+            EndHour = UpdateExamDTO.EndDate.Value.Hour;
+            EndMinute = UpdateExamDTO.EndDate.Value.Minute;
+        }
+        else
+        {
+            SetErrors(response.Errors);
+        }
+        EditContext = new EditContext(UpdateExamDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
+        {
+            var validationErrors = EditContext.GetValidationMessages();
+            Errors.AddRange(validationErrors);
+            StateHasChanged();
+        };
+        await base.OnInitializedAsync();
+    }
+    private async Task PreEditAsync()
+    {
+
+        if (StartHour > 23 || StartHour < 0 || StartMinute > 59 || StartMinute < 0 ||
+        EndHour > 23 || EndHour < 0 || EndMinute > 59 || EndMinute < 0)
+        {
+            SetErrors("ساعت انتخابی درست نیست.");
+        }
+        else
+        {
+            Errors.Clear();
+            UpdateExamDTO.StartDate = new DateTime(UpdateExamDTO.StartDate.Value.Year, UpdateExamDTO.StartDate.Value.Month, UpdateExamDTO.StartDate.Value.Day, StartHour, StartMinute, 1);
+            UpdateExamDTO.EndDate = new DateTime(UpdateExamDTO.EndDate.Value.Year, UpdateExamDTO.EndDate.Value.Month, UpdateExamDTO.EndDate.Value.Day, EndHour, EndMinute, 1);
+            await UpdateAsync();
+        }
+    }
+    private async Task UpdateAsync()
+    {
+        var response = await _examServices.UpdateAsync(ExamId, UpdateExamDTO);
+        if (response.IsSuccess)
+        {
+            _navigationManager.NavigateTo($"Exams/{ClassId}");
+        }
+        else
+        {
+            SetErrors(response.Errors);
+        }
+    }
+}

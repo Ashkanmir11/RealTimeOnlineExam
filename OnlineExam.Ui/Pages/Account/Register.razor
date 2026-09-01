@@ -1,0 +1,52 @@
+﻿@page "/register"
+<h3>Register</h3>
+<p>@Massage</p>
+<div class="register-page">
+    <EditForm EditContext="@EditContext" OnValidSubmit="CreateUser">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+
+        <InputText @bind-Value="@RegisterDTO.FirstName" placeholder="نام"></InputText>
+        <InputText @bind-Value="@RegisterDTO.LastName" placeholder="نام خانوادگی"></InputText>
+        <InputText @bind-Value="@RegisterDTO.Email" placeholder="ایمیل"></InputText>
+        <InputText type="password" @bind-Value="@RegisterDTO.Password" placeholder="رمز عبور" />
+        <InputText type="password" @bind-Value="@RegisterDTO.ConfirmPassword" placeholder="تکرار رمز عبور" />
+        <InputText @bind-Value="@RegisterDTO.PhoneNumber" placeholder="شماره تلفن" />
+
+        <button type="submit">ثبت نام</button>
+    </EditForm>
+</div>
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+
+@code {
+    private EditContext EditContext;
+    string Massage="";
+    private RegisterDTO RegisterDTO { get; set; } = new RegisterDTO();
+
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(RegisterDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
+        {
+            var validationErrors = EditContext.GetValidationMessages();
+            SetErrors(validationErrors.ToList());
+            StateHasChanged();
+        };
+        base.OnInitialized();
+    }
+    public async Task CreateUser()
+    {
+        var result = await _authServices.Register(RegisterDTO);
+        Console.WriteLine(result);
+        if (result.IsSuccess)
+        {
+            Massage = "ثبت نام با موفقیت انجام شد به صفحه ورود هدایت میشوید.";
+            StateHasChanged();
+            await Task.Delay(5000);
+            _navigationManager.NavigateTo("login");
+        }
+        else
+        {
+            SetErrors(result.Errors);
+        }
+    }
+}

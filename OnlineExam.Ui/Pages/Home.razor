@@ -1,0 +1,111 @@
+﻿@page "/"
+<div class="home-page">
+
+    <section class="exam-intro">
+
+        <header class="exam-intro-hero">
+            <span class="exam-intro-badge">سامانه آزمون آنلاین</span>
+
+            <h1>سامانه برگزاری آزمون آنلاین</h1>
+
+            <p>
+                آزمون‌های خود را با محیطی امن، منظم و قابل‌اعتماد برگزار کنید.
+            </p>
+        </header>
+
+        <div class="exam-intro-content">
+
+            <section class="exam-intro-section intro-description">
+                <h2>به سامانه خوش آمدید</h2>
+
+                <p>
+                    در این سامانه می‌توانید آزمون‌های خود را به‌صورت آنلاین و در محیطی امن و منظم برگزار کنید.
+                    پس از ورود به حساب کاربری، آزمون‌های در دسترس شما نمایش داده می‌شوند و می‌توانید
+                    در زمان تعیین‌شده در آزمون شرکت کنید.
+                </p>
+            </section>
+
+            <section class="exam-intro-section">
+                <div class="section-heading">
+                    <span class="section-icon">✓</span>
+                    <h2>قبل از شروع آزمون</h2>
+                </div>
+
+                <ul class="exam-tips-list">
+                    <li>از اتصال پایدار اینترنت خود مطمئن شوید.</li>
+                    <li>ترجیحاً از کامپیوتر یا لپ‌تاپ استفاده کنید.</li>
+                    <li>قبل از شروع آزمون، از بسته بودن برنامه‌ها و صفحات غیرضروری اطمینان حاصل کنید.</li>
+                    <li>در طول آزمون صفحه آزمون را بدون دلیل ترک نکنید.</li>
+                    <li>
+                        نگران ذخیره شدن پاسخ‌های خود نباشید؛ پاسخ‌های شما در لحظه و به‌صورت خودکار
+                        در سامانه ذخیره می‌شوند.
+                    </li>
+                    <li>
+                        در صورت قطع موقت اینترنت، پس از برقراری مجدد ارتباط می‌توانید ادامه آزمون را دنبال کنید.
+                    </li>
+                    <li>
+                        زمان باقی‌مانده آزمون توسط سامانه مدیریت می‌شود و پس از پایان زمان،
+                        آزمون به پایان خواهد رسید.
+                    </li>
+                </ul>
+            </section>
+
+            <section class="exam-intro-section exam-rules-section">
+                <div class="section-heading">
+                    <span class="section-icon warning">!</span>
+                    <h2>قوانین آزمون</h2>
+                </div>
+
+                <p>
+                    در صورت فعال بودن محدودیت‌های آزمون، اقداماتی مانند خروج از صفحه آزمون،
+                    تلاش برای Copy/Paste یا استفاده از روش‌های غیرمجاز ممکن است توسط سامانه ثبت شود.
+                </p>
+
+                <p>
+                    لطفاً در طول آزمون از Refresh کردن صفحه یا بستن مرورگر خودداری کنید،
+                    مگر در شرایط ضروری.
+                </p>
+            </section>
+
+            <section class="exam-intro-section exam-start-section">
+                <div class="section-heading">
+                    <span class="section-icon play">▶</span>
+                    <h2>شروع آزمون</h2>
+                </div>
+
+                <p>
+                    پس از ورود به بخش آزمون، ابتدا اطلاعات آزمون و زمان باقی‌مانده را مشاهده خواهید کرد.
+                    با انتخاب گزینه <strong>«شروع آزمون»</strong>، زمان آزمون برای شما آغاز می‌شود.
+                </p>
+
+                <div class="exam-start-warning">
+                    <span>!</span>
+                    <p>
+                        <strong>توجه:</strong>
+                        پس از شروع آزمون، زمان باقی‌مانده محاسبه می‌شود و صرفاً خروج از صفحه
+                        یا قطع ارتباط اینترنت باعث توقف زمان آزمون نخواهد شد.
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <footer class="exam-intro-footer">
+            <button type="button" class="start-exam-btn" @onclick="RedirectToClassess">
+                آزمون خود را بسازید
+                <span>←</span>
+            </button>
+        </footer>
+
+    </section>
+
+</div>
+
+@code
+{
+    private void RedirectToClassess()
+    {
+        _navigationManager.NavigateTo("classroom");
+    }
+}
+

@@ -1,0 +1,135 @@
+﻿.exam-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    width: min(100% - 32px, 1320px);
+    box-sizing: border-box;
+    margin: 24px auto 18px;
+    padding: 15px 18px;
+    border: 1px solid rgba(100, 116, 139, 0.3);
+    border-radius: 15px;
+    direction: rtl;
+    color: #f8fafc;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.97));
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    font-family: Vazirmatn, Tahoma, sans-serif;
+}
+
+.exam-status-main {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.exam-status-timer,
+.exam-status-connection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.exam-status-timer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+
+.exam-status-label {
+    display: block;
+    color: #94a3b8;
+    font-size: 0.72rem;
+    font-weight: 600;
+}
+
+.exam-status-time {
+    color: #fef3c7;
+    direction: ltr;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+    line-height: 1.2;
+}
+
+.exam-status-divider {
+    width: 1px;
+    height: 38px;
+    background: rgba(148, 163, 184, 0.25);
+}
+
+.exam-status-connection strong {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.82rem;
+    font-weight: 800;
+}
+
+.exam-status-indicator {
+    width: 10px;
+    height: 10px;
+    flex: 0 0 10px;
+    border-radius: 50%;
+}
+
+.exam-status-online .exam-status-indicator {
+    background: #2dd4bf;
+    box-shadow: 0 0 0 5px rgba(45, 212, 191, 0.12);
+}
+
+.exam-status-online strong {
+    color: #99f6e4;
+}
+
+.exam-status-offline .exam-status-indicator {
+    background: #fb923c;
+    box-shadow: 0 0 0 5px rgba(251, 146, 60, 0.12);
+    animation: exam-status-pulse 1.5s ease-in-out infinite;
+}
+
+.exam-status-offline strong {
+    color: #fdba74;
+}
+
+.exam-status-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 14px;
+}
+
+.exam-status-warning {
+    max-width: 270px;
+    margin: 0;
+    color: #fdba74;
+    font-size: 0.72rem;
+    line-height: 1.7;
+}
+
+.exam-status-end-button {
+    min-height: 39px;
+    padding: 0 15px;
+    border: 1px solid rgba(248, 113, 113, 0.32);
+    border-radius: 9px;
+    cursor: pointer;
+    color: #fee2e2;
+    background: rgba(220, 38, 38, 0.16);
+    font-family: inherit;
+    font-size: 0.78rem;
+    font-weight: 800;
+    white-space: nowrap;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+    .exam-status-end-button:hover {
+        border-color: #ef4444;
+        background: #dc2626;
+        transform: translateY(-2px);
+    }
+
+    .exam-status-end-button:focus-visible {
+        outline: 3px solid rgba(248, 113, 113, 0.35);
+        outline-offset: 3px;
+    }
+
+@keyframes exam-status-pulse

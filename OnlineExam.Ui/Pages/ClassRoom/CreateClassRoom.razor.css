@@ -1,0 +1,94 @@
+﻿/* استایل صفحه اصلی */
+.create-class-page {
+    width: min(100% - 32px, 700px);
+    margin: 58px auto 40px;
+    direction: rtl;
+    color: #f8fafc;
+}
+
+    /* استایل فرم (والد مستقیم) */
+    .create-class-page ::deep form {
+        padding: 25px;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.94) !important; /* اجبار به رنگ تیره */
+        box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+    }
+.class-form-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ====== استایل ورودی (بخش حیاتی) ====== */
+/* ما اینجا هم از ::deep استفاده می‌کنیم و هم از کلاس مستقیم */
+.create-class-page ::deep .class-name-input {
+    flex: 1;
+    min-width: 0;
+    height: 52px !important;
+    padding: 0 16px !important;
+    border: 1px solid #263550 !important;
+    border-radius: 14px !important;
+    background-color: #0b1325 !important; /* رنگ پس‌زمینه تیره */
+    color: #f8fafc !important; /* رنگ متن روشن */
+    font-size: 0.95rem !important;
+    text-align: right !important;
+    direction: rtl !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+}
+
+    /* رفع سفید شدن توسط مرورگر (Autofill) */
+    .create-class-page ::deep .class-name-input:-webkit-autofill {
+        -webkit-text-fill-color: #f8fafc !important;
+        -webkit-box-shadow: 0 0 0 1000px #0b1325 inset !important;
+        transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .create-class-page ::deep .class-name-input:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.18) !important;
+    }
+
+/* ====== استایل دکمه (بخش شیک) ====== */
+.submit-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-shrink: 0;
+    height: 52px;
+    padding: 0 26px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb, #4f46e5, #7c3aed);
+    background-size: 200% auto;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3);
+}
+
+    .submit-button:hover {
+        background-position: right center;
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(37, 99, 235, 0.4);
+    }
+
+    .submit-button:active {
+        transform: translateY(0);
+    }
+
+/* موبایل */
+@media (max-width: 480px) {
+    .class-form-row {
+        flex-direction: column;
+    }
+
+    .submit-button {
+        width: 100%;
+ 
+    }
+}

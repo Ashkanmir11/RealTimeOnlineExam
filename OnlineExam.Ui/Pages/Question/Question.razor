@@ -1,0 +1,267 @@
+﻿@using OnlineExam.Ui.Components.Question;
+@using OnlineExam.Ui.DTO.Question;
+@page "/question/{ExamId:int}"
+@inject QuestionServices _questionServices;
+@if (DataLoaded)
+{
+    <div class="question-page">
+
+        <div class="question-card">
+
+            <div class="question-header">
+                <div>
+                    <h3>مدیریت سؤال‌ها</h3>
+                    <p>سؤال‌های آزمون را مشاهده، اضافه یا حذف کنید.</p>
+                </div>
+
+                <div class="question-total-score">
+                    <span>نمره کامل آزمون</span>
+                    <strong>@TotalScore</strong>
+                </div>
+            </div>
+
+            <div class="question-toolbar">
+                @if (!ShowCreate)
+                {
+                    <button type="button"
+                            class="question-create-button"
+                            @onclick="@ChangeShowCreatStatus">
+                        <span class="question-button-icon">+</span>
+                        افزودن سؤال
+                    </button>
+                }
+                else
+                {
+                    <button type="button"
+                            class="question-close-button"
+                            @onclick="@ChangeShowCreatStatus">
+                        بستن فرم افزودن
+                    </button>
+                }
+            </div>
+
+            @if (ShowCreate)
+            {
+                <div class="question-create-container">
+                    <CreateQuestionComponent ExamId="ExamId"
+                                             AddComplete="AddComplete" />
+                </div>
+            }
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
+            {
+                <div class="question-empty-state">
+                    <div class="question-empty-icon">؟</div>
+                    <h4>سؤالی یافت نشد</h4>
+                    <p>برای شروع، اولین سؤال این آزمون را اضافه کنید.</p>
+                </div>
+            }
+            else
+            {
+                <div class="question-table-wrapper">
+                    <table class="question-table">
+                        <thead>
+                            <tr>
+                                <th>نام سؤال</th>
+                                <th>نمره</th>
+                                <th>جزئیات و پاسخ صحیح</th>
+                                <th class="question-action-column">عملیات</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Result.Data)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="question-text">
+                                            @item.QuestionText
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="question-score-badge">
+                                            @item.TotalScore
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        @if (item.TrueOrFalseQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    پاسخ صحیح
+                                                </span>
+
+                                                <div class="question-true-false-answer">
+                                                    <InputCheckbox class="question-checkbox"
+                                                                   disabled="true"
+                                                                   @bind-Value="@item.TrueOrFalseQuestion.CorrectAnswer" />
+
+                                                    <span>
+                                                        @(item.TrueOrFalseQuestion.CorrectAnswer
+                                                            ? "صحیح"
+                                                            : "غلط")
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        }
+                                        else if (item.DescriptiveQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    پاسخ صحیح
+                                                </span>
+
+                                                <textarea class="question-descriptive-answer"
+                                                          readonly>@item.DescriptiveQuestion.CorrectAnswer</textarea>
+                                            </div>
+                                        }
+                                        else if (item.MultipleChoiceQuestion != null)
+                                        {
+                                            <div class="question-answer-box">
+                                                <span class="question-answer-label">
+                                                    گزینه‌ها
+                                                </span>
+
+                                                <div class="question-choices-list">
+                                                    @for (var index = 0; index < item.MultipleChoiceQuestion.Choices.Count; index++)
+                                                    {
+                                                        var choiceNumber = index + 1;
+                                                        var isCorrectChoice =
+                                                        choiceNumber == item.MultipleChoiceQuestion.CorrectChoice;
+
+                                                        <div class="question-choice @(isCorrectChoice ? "question-choice-correct" : "")">
+                                                            <span class="question-choice-number">
+                                                                @choiceNumber
+                                                            </span>
+
+                                                            <span class="question-choice-text">
+                                                                @item.MultipleChoiceQuestion.Choices[index]
+                                                            </span>
+
+                                                            @if (isCorrectChoice)
+                                                            {
+                                                                <span class="question-correct-badge">
+                                                                    پاسخ صحیح
+                                                                </span>
+                                                            }
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="question-no-details">
+                                                جزئیاتی برای این سؤال ثبت نشده است.
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <td class="question-action-column">
+                                        <button type="button"
+                                                class="question-delete-button"
+                                                title="حذف سؤال"
+                                                @onclick="() => DeleteQuestion(item.Id)">
+                                            حذف
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            @if (Result != null)
+            {
+                <div class="question-pagination-container">
+                    <PaginateComponent CurrentPage="@Result.PageNumber"
+                                       TotalPage="@Result.TotalPage"
+                                       SelectedPage="@ChangePage" />
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <LoadingComponent />
+}
+
+@code {
+
+    [Parameter]
+    public int ExamId { get; set; }
+    bool ShowCreate = false;
+    decimal TotalScore;
+    PaginateResponse<GetQuestionTeacherDTO> Result = new PaginateResponse<GetQuestionTeacherDTO>();
+    protected async override Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async void ChangeShowCreatStatus()
+    {
+        ShowCreate = ShowCreate == false ? true : false;
+        await GetData();
+    }
+    private async Task DeleteQuestion(int id)
+    {
+        var response = await _questionServices.DeleteQuestion(id);
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            await GetData();
+        }
+    }
+    private async Task GetData()
+    {
+        Result = new PaginateResponse<GetQuestionTeacherDTO>();
+        SetOrderById(false);
+        Result.Data = new List<GetQuestionTeacherDTO>();
+        var response = await _questionServices.GetByExamIdTeacher(GetDefultPaginate(), ExamId);
+        DataLoaded = true;
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        RefreshTotalScore();
+        StateHasChanged();
+    }
+    private async Task AddComplete(bool complete)
+    {
+        await GetData();
+    }
+
+    private void RefreshTotalScore()
+    {
+        TotalScore = 0;
+        if (Result.Data != null)
+        {
+            foreach (var item in Result.Data)
+            {
+                TotalScore += item.TotalScore;
+            }
+        }
+        StateHasChanged();
+    }
+    private async void ChangePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        await GetData();
+    }
+
+}

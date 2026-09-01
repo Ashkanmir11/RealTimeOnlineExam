@@ -1,0 +1,228 @@
+﻿@using OnlineExam.Ui.DTO.Exam;
+@page "/CreateExams/{ClassId:int}";
+@inject ExamServices _examServices;
+<div class="create-exam-page">
+
+    <div class="create-exam-card">
+
+        <div class="create-exam-header">
+            <h3>ایجاد آزمون جدید</h3>
+            <p>اطلاعات آزمون و تنظیمات مورد نیاز را وارد کنید.</p>
+        </div>
+
+        <EditForm EditContext="@EditContext" OnValidSubmit="@preAddAsync">
+            <DataAnnotationsValidator />
+
+            <div class="create-exam-form-grid">
+
+                <div class="create-exam-field">
+                    <label for="examName">نام آزمون</label>
+
+                    <InputText id="examName"
+                               class="create-exam-input"
+                               placeholder="مثلاً آزمون میان‌ترم"
+                               @bind-Value="@CreateExamDTO.Name" />
+                </div>
+
+                <div class="create-exam-field">
+                    <label for="questionCount">تعداد سؤال</label>
+
+                    <InputNumber id="questionCount"
+                                 class="create-exam-input"
+                                 placeholder="مثلاً 20"
+                                 @bind-Value="@CreateExamDTO.QuestionCount" />
+                </div>
+
+                <div class="create-exam-field create-exam-full-width">
+                    <label for="examDescription">توضیحات آزمون</label>
+
+                    <InputTextArea id="examDescription"
+                                   class="create-exam-input create-exam-textarea"
+                                   placeholder="توضیحات آزمون را وارد کنید..."
+                                   @bind-Value="@CreateExamDTO.Description" />
+                </div>
+
+                <div class="create-exam-field">
+                    <label for="examStartDate">تاریخ شروع</label>
+
+                    <div class="create-exam-datepicker">
+                        <InputPersianDatePicker id="examStartDate"
+                                                @bind-ValueAsDateTime="@CreateExamDTO.StartDate"
+                                                CalendarType="Calendar.SingleModeJalali"
+                                                ReadOnly="true" />
+                    </div>
+                </div>
+
+                <div class="create-exam-field">
+                    <label for="examEndDate">تاریخ پایان</label>
+
+                    <div class="create-exam-datepicker">
+                        <InputPersianDatePicker id="examEndDate"
+                                                @bind-ValueAsDateTime="@CreateExamDTO.EndDate"
+                                                CalendarType="Calendar.SingleModeJalali"
+                                                ReadOnly="true" />
+                    </div>
+                </div>
+
+                @* زمان پایان *@
+                <div class="create-exam-field">
+                    <label>زمان پایان</label>
+
+                    <div class="create-exam-time-row">
+                        <InputNumber id="examEndHour"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="ساعت"
+                                     @bind-Value="@EndTimeHour" />
+
+                        <span class="create-exam-time-separator">:</span>
+
+                        <InputNumber id="examEndMinute"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="دقیقه"
+                                     @bind-Value="@EndTimeMinute" />
+                    </div>
+                </div>
+
+                @* زمان شروع *@
+                <div class="create-exam-field">
+                    <label>زمان شروع</label>
+
+                    <div class="create-exam-time-row">
+                        <InputNumber id="examStartHour"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="ساعت"
+                                     @bind-Value="@StartTimeHour" />
+
+                        <span class="create-exam-time-separator">:</span>
+
+                        <InputNumber id="examStartMinute"
+                                     class="create-exam-input create-exam-time-input"
+                                     placeholder="دقیقه"
+                                     @bind-Value="@StartTimeMinute" />
+                    </div>
+                </div>
+
+            
+
+                <div class="create-exam-field create-exam-full-width">
+                    <label for="examAllowDelay">میزان تأخیر مجاز (دقیقه)</label>
+
+                    <InputNumber id="examAllowDelay"
+                                 class="create-exam-input"
+                                 placeholder="مثلاً 15"
+                                 @bind-Value="@CreateExamDTO.AllowedDelay" />
+                </div>
+
+            </div>
+
+            <div class="create-exam-options">
+
+                <label class="create-exam-option" for="examAllowCopy">
+                    <InputCheckbox id="examAllowCopy"
+                                   class="create-exam-checkbox"
+                                   @bind-Value="@CreateExamDTO.AllowedCopy" />
+
+                    <span class="create-exam-option-text">
+                        <span class="create-exam-option-title">اجازه کپی</span>
+                        <span class="create-exam-option-description">
+                            دانشجو بتواند متن سؤال‌ها را کپی کند.
+                        </span>
+                    </span>
+                </label>
+
+                <label class="create-exam-option" for="examLogStudent">
+                    <InputCheckbox id="examLogStudent"
+                                   class="create-exam-checkbox"
+                                   @bind-Value="@CreateExamDTO.LogStudent" />
+
+                    <span class="create-exam-option-text">
+                        <span class="create-exam-option-title">ثبت لاگ دانشجویان</span>
+                        <span class="create-exam-option-description">
+                            فعالیت‌های دانشجو در طول آزمون ثبت شود.
+                        </span>
+                    </span>
+                </label>
+
+                <label class="create-exam-option" for="examRandomQuestion">
+                    <InputCheckbox id="examRandomQuestion"
+                                   class="create-exam-checkbox"
+                                   @bind-Value="@CreateExamDTO.RandomQuestions" />
+
+                    <span class="create-exam-option-text">
+                        <span class="create-exam-option-title">سؤالات درهم</span>
+                        <span class="create-exam-option-description">
+                            ترتیب سؤال‌ها برای دانشجویان متفاوت باشد.
+                        </span>
+                    </span>
+                </label>
+
+            </div>
+
+            <div class="create-exam-actions">
+                <button type="submit" class="create-exam-submit">
+                    افزودن آزمون
+                </button>
+            </div>
+
+        </EditForm>
+
+        <ErrorComponent Errors="@Errors" />
+
+    </div>
+
+</div>
+
+
+@code {
+    [Parameter]
+    public int ClassId { get; set; }
+
+    public EditContext EditContext;
+    CreateExamDTO CreateExamDTO = new CreateExamDTO();
+    int StartTimeHour;
+    int StartTimeMinute;
+    int EndTimeHour;
+    int EndTimeMinute;
+
+    protected override void OnInitialized()
+    {
+        EditContext = new EditContext(CreateExamDTO);
+        EditContext.OnValidationStateChanged += (sender, args) =>
+        {
+            var validationErrors = EditContext.GetValidationMessages();
+            SetErrors(validationErrors.ToList());
+            StateHasChanged();
+        };
+        base.OnInitialized();
+    }
+    private async void preAddAsync()
+    {
+        CreateExamDTO.ClassId = ClassId;
+        if (StartTimeHour > 23 || StartTimeHour < 0 || StartTimeMinute > 59 || StartTimeMinute < 0 ||
+        EndTimeHour > 23 || EndTimeHour < 0 || EndTimeMinute > 59 || EndTimeMinute < 0)
+        {
+            SetErrors("ساعت انتخابی درست نیست.");
+            StateHasChanged();
+        }
+        else
+        {
+            Errors.Clear();
+            CreateExamDTO.StartDate = new DateTime(CreateExamDTO.StartDate.Value.Year, CreateExamDTO.StartDate.Value.Month, CreateExamDTO.StartDate.Value.Day, StartTimeHour, StartTimeMinute, 1);
+            CreateExamDTO.EndDate = new DateTime(CreateExamDTO.EndDate.Value.Year, CreateExamDTO.EndDate.Value.Month, CreateExamDTO.EndDate.Value.Day, EndTimeHour, EndTimeMinute, 1);
+            await AddAsync();
+        }
+    }
+    private async Task AddAsync()
+    {
+        var result = await _examServices.AddExamAsync(CreateExamDTO);
+        if(!result.IsSuccess)
+        {
+            SetErrors(result.Errors);
+            StateHasChanged();
+        }
+        else
+        {
+            _navigationManager.NavigateTo($"Exams/{ClassId}");
+        }
+    }
+}

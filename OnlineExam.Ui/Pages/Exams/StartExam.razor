@@ -1,0 +1,490 @@
+﻿@using OnlineExam.Ui.Components.Exam;
+@using OnlineExam.Ui.DTO.Question;
+@using OnlineExam.Ui.DTO.TrueOrFalseAnswers;
+@using OnlineExam.Ui.DTO.DescriptiveAnswers;
+@using OnlineExam.Ui.DTO.MultipleChoiceAnswers;
+@page "/StartExam/{examId:int}";
+@inject ExamServices _examServices;
+@inject ExamLogServices _examLogServices;
+<div class="student-exam-page">
+
+    <ExamStatusComponent ExamId="@ExamId"
+                         AfterConnect="@SaveChangeAfterConnect"
+                         EndExam="@EndExam">
+    </ExamStatusComponent>
+
+    <div class="student-exam-autosave-status">
+        <span class="student-exam-autosave-dot"></span>
+        <h3>
+            @RefreshTimer مانده تا ذخیره‌سازی خودکار
+        </h3>
+    </div>
+
+    @{
+        if (Result == null || Result.Data.Count == 0)
+        {
+            <div class="student-exam-empty-state">
+                <div class="student-exam-empty-icon">📝</div>
+                <h4>سؤالی موجود نیست</h4>
+                <p>در حال حاضر سؤالی برای این آزمون در دسترس نیست.</p>
+            </div>
+        }
+
+        if (DataLoaded == false)
+        {
+            <LoadingComponent></LoadingComponent>
+        }
+        else
+        {
+            <div class="student-exam-questions">
+                @foreach (var question in Result.Data)
+                {
+                    <section class="student-exam-question-card">
+
+                        <div class="student-exam-question-header">
+                            <span class="student-exam-question-label">
+                                سؤال
+                            </span>
+
+                            <span class="student-exam-score">
+                                @question.TotalScore نمره
+                            </span>
+                        </div>
+
+                        <p class="student-exam-question-text">
+                            @question.QuestionText
+                        </p>
+
+                        <div class="student-exam-answer-section">
+                            <label class="student-exam-answer-label">
+                                پاسخ شما
+                            </label>
+
+                            @if (question.TrueOrFalseQuestion != null)
+                            {
+                                <label class="student-exam-true-false-answer">
+                                    <InputCheckbox class="student-exam-checkbox"
+                                                   @bind-Value:after="() => UpdateTrueOrFalseAnswer(question.TrueOrFalseQuestion.Id)"
+                                                   @bind-Value="@question.TrueOrFalseAnswer.StudentAnswer">
+                                    </InputCheckbox>
+
+                                    <span>صحیح است</span>
+                                </label>
+                            }
+                            else if (question.DescriptiveQuestion != null)
+                            {
+                                <InputTextArea class="student-exam-descriptive-input"
+                                               placeholder="پاسخ خود را اینجا بنویسید..."
+                                               @bind-Value="@question.DescriptiveAnswer.StudentAnswer"
+                                               @onblur="() => UpdateDescriptiveAnswer(question.DescriptiveQuestion.Id)">
+                                </InputTextArea>
+                            }
+                            else if (question.MultipleChoiceQuestion != null)
+                            {
+                                <div class="student-exam-choices">
+                                    @for (int i = 0; i < question.MultipleChoiceQuestion.Choices.Count; i++)
+                                    {
+                                        int index = i + 1;
+
+                                        <label class="student-exam-choice"
+                                               for="@($"{question.Id}multipleChoiceAnswer{i}")">
+
+                                            <input type="checkbox"
+                                                  id="@($"{question.Id}multipleChoiceAnswer{i}")"
+                                                  @onchange="arg => GetSelectedItem(arg, index, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id)" />
+
+                                            <span class="student-exam-choice-number">
+                                                @index
+                                            </span>
+
+                                            <span class="student-exam-choice-text">
+                                                @question.MultipleChoiceQuestion.Choices[i]
+                                            </span>
+                                        </label>
+                                    }
+                                </div>
+                            }
+                        </div>
+
+                    </section>
+                }
+            </div>
+        }
+    }
+
+    <div class="student-exam-footer">
+        <button type="button"
+                class="student-exam-end-button"
+                @onclick="EndExam">
+            پایان آزمون
+        </button>
+    </div>
+
+    <ErrorComponent Errors="@Errors"></ErrorComponent>
+
+</div>
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [SupplyParameterFromQuery]
+    public bool CanCopy { get; set; }
+    [SupplyParameterFromQuery]
+    public bool StudentLog { get; set; }
+    public int RefreshTimer = 60;
+    bool DataLoaded = false;
+    PaginateResponse<GetQuestionStudentDTO> Result = new PaginateResponse<GetQuestionStudentDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        RefreshTimerCountDown();
+        if (StudentLog)
+        {
+            MonitorPage();
+        }
+        await base.OnInitializedAsync();
+        StateHasChanged();
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!CanCopy)
+        {
+            PreventCopyAndPasting();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+    private async Task GetData()
+    {
+        Result.Data = new List<GetQuestionStudentDTO>();
+        var response = await _examServices.StartExam(ExamId, GetDefultPaginate());
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode != 204)
+        {
+            foreach (var question in response.Data.Data)
+            {
+                // quesiton type is true or false
+                if (question.TrueOrFalseQuestion != null)
+                {
+                    question.TrueOrFalseAnswer = new GetTrueOrFalseAnswerStudentDTO();
+                    var answer = await GetMyTrueOrFlaseAnswer(question.TrueOrFalseQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.TrueOrFalseAnswer = answer;
+                    }
+                }
+                // quesiton type is Descriptive
+                else if (question.DescriptiveQuestion != null)
+                {
+                    question.DescriptiveAnswer = new GetDescriptiveAnswerStudentDTO();
+                    var answer = await GetMyDescriptiveAnswer(question.DescriptiveQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.DescriptiveAnswer = answer;
+                    }
+                }
+                else if (question.MultipleChoiceQuestion != null)
+                {
+                    question.MultipleChoiceAnswer = new GetMultipleChoiceAnswerStudentDTO();
+
+                }
+                Result.Data.Add(question);
+            }
+            DataLoaded = true;
+            await RefreshMultipleChoiceAnswer();
+        }
+    }
+    private async Task SaveChangeAfterConnect()
+    {
+        RefreshTimer = 60;
+        foreach (var item in Result.Data)
+        {
+            if (item.TrueOrFalseQuestion != null)
+            {
+                var answerExist = await GetMyTrueOrFlaseAnswer(item.TrueOrFalseQuestion.Id);
+                if (answerExist != null)
+                {
+                    await UpdateTrueOrFalseAnswer(item.TrueOrFalseQuestion.Id);
+                }
+            }
+            if (item.DescriptiveQuestion != null)
+            {
+                var answerExist = await GetMyDescriptiveAnswer(item.DescriptiveQuestion.Id);
+                if (answerExist != null)
+                {
+                    await UpdateDescriptiveAnswer(item.DescriptiveQuestion.Id);
+                }
+            }
+            else
+            {
+                var answer = await GetMyMultipleChoiceAnswer(item.MultipleChoiceQuestion.Id);
+                if (answer != null)
+                {
+                    await GetSelectedItem(null, (int)item.MultipleChoiceAnswer.StudentChoice, item.Id, item.MultipleChoiceQuestion.Choices.Count, item.MultipleChoiceQuestion.Id);
+                }
+            }
+        }
+    }
+    private async Task RefreshTimerCountDown()
+    {
+        while (true)
+        {
+            await Task.Delay(1000);
+           RefreshTimer = RefreshTimer - 1;
+            if (RefreshTimer == 0)
+            {
+                SaveChangeAfterConnect();
+            }
+            StateHasChanged();
+        }
+    }
+    private async Task MonitorPage()
+    {
+        while (true)
+        {
+            var monitor = await _jsRuntime.InvokeAsync<bool>("examPageMonitor");
+            if (monitor)
+            {
+                var response = await _examLogServices.LeavePageLog(ExamId);
+                if (!response.IsSuccess)
+                {
+                    SetErrors(response.Errors);
+                }
+                else
+                {
+                    await Task.Delay(30000);
+                }
+            }
+
+
+            await Task.Delay(1000);
+        }
+    }
+    private async Task PreventCopyAndPasting()
+    {
+        await _jsRuntime.InvokeAsync<bool>("PreventCopyAndPaste");
+
+    }
+
+
+    #region true or false answers
+    private async Task<GetTrueOrFalseAnswerStudentDTO> GetMyTrueOrFlaseAnswer(int questionId)
+    {
+        var answerResult = await _examServices.GetMyTrueOrFalseAnswer(questionId);
+        if (answerResult.IsSuccess != false || answerResult.StatusCode != 204)
+        {
+            return answerResult.Data;
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+    private async Task UpdateTrueOrFalseAnswer(int questionDeatilId)
+    {
+        var answer = await GetMyTrueOrFlaseAnswer(questionDeatilId);
+        if (answer == null)
+        {
+            //add answer
+            var newAnswer = new CreateTrueOrFalseAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = Result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault(),
+                    TrueOrFalseQuestionId = questionDeatilId
+                };
+            var response = await _examServices.CreateTrueOrFalseAnswer(newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+        }
+        else
+        {
+            //Update answer
+            var newAnswer = new UpdateTrueOrFalseAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = Result.Data.Where(e => e.TrueOrFalseQuestion?.Id == questionDeatilId).Select(e => e.TrueOrFalseAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.UpdateTrueOrFalseAnswer(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+
+        }
+    }
+    #endregion
+
+    #region Descriptive answer
+    private async Task<GetDescriptiveAnswerStudentDTO> GetMyDescriptiveAnswer(int questionId)
+    {
+        var response = await _examServices.GetMyDescriptiveAnswer(questionId);
+
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+            return null;
+        }
+        if (response.StatusCode == 204)
+        {
+            return null;
+        }
+        return response.Data;
+    }
+
+
+    private async Task UpdateDescriptiveAnswer(int questionDeatilId)
+    {
+        var answer = await GetMyDescriptiveAnswer(questionDeatilId);
+        if (answer == null)
+        {
+            //add
+            var newAnswer = new CreateDescriptiveAnswersDTO()
+                {
+                    DescriptiveQuestionId = questionDeatilId,
+                    ExamId = ExamId,
+                    StudentAnswer = Result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.CreateDescriptiveAnswers(newAnswer);
+
+            if (!response.IsSuccess)
+            {
+                SetErrors(Errors);
+            }
+            else
+            {
+                RefreshTimer = 60;
+            }
+
+        }
+        else
+        {
+            var newAnswer = new UpdateDescriptiveAnswersDTO()
+                {
+                    ExamId = ExamId,
+                    StudentAnswer = Result.Data.Where(e => e.DescriptiveQuestion?.Id == questionDeatilId).Select(e => e.DescriptiveAnswer.StudentAnswer).FirstOrDefault()
+                };
+            var response = await _examServices.UpadteDescriptiveAnswers(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(Errors);
+            }
+            else
+            {
+                RefreshTimer = 60;
+            }
+        }
+    }
+    #endregion
+
+    #region Multiple choice answer
+    private async Task GetSelectedItem(ChangeEventArgs args, int selectedItem, int questionId, int totalChoices, int questionDeatilId)
+    {
+        Console.WriteLine("selectedItem" + selectedItem);
+        Console.WriteLine("questionId" + questionId);
+        Console.WriteLine("totalChoices" + totalChoices);
+        Console.WriteLine("questionDeatilId" + questionDeatilId);
+
+        var localData = Result.Data.Where(e => e.MultipleChoiceQuestion?.Id == questionDeatilId).Select(e => e.MultipleChoiceAnswer).FirstOrDefault();
+        localData.StudentChoice = selectedItem;
+        await _jsRuntime.InvokeVoidAsync("CheckExamInputDuplicate", questionId, totalChoices, selectedItem);
+        await UpdateMultipleChoiceAnswer(selectedItem, questionDeatilId);
+        StateHasChanged();
+    }
+    private async Task<GetMultipleChoiceAnswerStudentDTO> GetMyMultipleChoiceAnswer(int questionDetailId)
+    {
+        var response = await _examServices.GetMyMultipleChoiceAnswer(questionDetailId);
+        if (response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else if (response.StatusCode == 204)
+        {
+            return null;
+        }
+        return response.Data;
+
+    }
+    private async Task UpdateMultipleChoiceAnswer(int selectedItem, int questionDetailId)
+    {
+        var answer = await GetMyMultipleChoiceAnswer(questionDetailId);
+        if (answer == null)
+        {
+            //create
+            var newAnswer = new CreateMultipleChoiceAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    MultipleChoiceQuestionId = questionDetailId,
+                    StudentChoice = selectedItem
+                };
+            var response = await _examServices.CreateMultipleChoiceAnswer(newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+        }
+        else
+        {
+            var newAnswer = new UpdateMultipleChoiceAnswerDTO()
+                {
+                    ExamId = ExamId,
+                    StudentChoice = selectedItem
+                };
+            var response = await _examServices.UpdateMultipleChoiceAnswer(answer.Id, newAnswer);
+            if (!response.IsSuccess)
+            {
+                SetErrors(response.Errors);
+            }
+            else
+            {
+            }
+        }
+    }
+    private async Task RefreshMultipleChoiceAnswer()
+    {
+        if (DataLoaded == true)
+        {
+            foreach (var question in Result.Data)
+            {
+                if (question.MultipleChoiceQuestion != null)
+                {
+                    var answer = await GetMyMultipleChoiceAnswer(question.MultipleChoiceQuestion.Id);
+                    if (answer != null)
+                    {
+                        question.MultipleChoiceAnswer = answer;
+                        await GetSelectedItem(null, (int)answer.StudentChoice, question.Id, question.MultipleChoiceQuestion.Choices.Count, question.MultipleChoiceQuestion.Id);
+                    }
+                }
+            }
+        }
+    }
+    #endregion
+    private async Task EndExam()
+    {
+        var response = await _examServices.EndExam(ExamId);
+        if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        else
+        {
+            _navigationManager.NavigateTo($"");
+        }
+    }
+
+
+}
+

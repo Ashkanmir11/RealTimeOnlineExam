@@ -1,0 +1,86 @@
+﻿using Asp.Versioning;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.DescriptiveAnswers;
+using OnlineExam.Application.Features.DescriptiveAnswers.Request.Commands;
+using OnlineExam.Application.Features.DescriptiveAnswers.Request.Queries;
+
+namespace OnlineExam.Api.Controllers.V1
+{
+    [Route("api/v{version:apiVersion}/descriptive-answers")]
+    [ApiController]
+    [ApiVersion("1.0")]
+    public class DescriptiveAnswersController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+        public DescriptiveAnswersController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> Post(CreateDescriptiveAnswersDTO createDescriptiveAnswersDTO)
+        {
+            await _mediator.Send(new CreateDescriptiveAnswersRequest() { CreateDescriptiveAnswersDTO = createDescriptiveAnswersDTO });
+            return NoContent();
+        }
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var result = await _mediator.Send(new GetDescriptiveAnswersByIdRequest() { Id = id });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Get([FromQuery] PaginateRequestDTO paginateRequestDTO)
+        {
+            var result = await _mediator.Send(new GetDescriptiveAnswersRequest() { PaginateRequest = paginateRequestDTO });
+            if (result.Data.Count == 0)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+        [HttpDelete("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _mediator.Send(new DeleteDescriptiveAnswersRequest() { Id = id });
+            return NoContent();
+
+        }
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> Put(int id, UpdateDescriptiveAnswersDTO updateDescriptiveAnswersDTO)
+        {
+            await _mediator.Send(new UpdateDescriptiveAnswersRequest() { Id = id, UpdateDescriptiveAnswersDTO = updateDescriptiveAnswersDTO });
+            return NoContent();
+        }
+
+        [Authorize]
+        [HttpPut("{id}/grade")]
+        public async Task<IActionResult> Grade(int id, UpdateDescriptiveAnswersTeacherDTO updateDescriptiveAnswersTeacherDTO)
+        {
+            await _mediator.Send(new UpdateDescriptiveAnswersTeacherRequest() { Id = id, updateDescriptiveAnswersTeacherDTO = updateDescriptiveAnswersTeacherDTO });
+            return NoContent();
+        }
+        [Authorize]
+        [HttpGet("my/{descriptiveQuestionId}")]
+        public async Task<IActionResult> GetMyAnswer(int descriptiveQuestionId)
+        {
+            var result = await _mediator.Send(new GetMyDescriptiveAnswerRequest() { descriptiveQuestionId = descriptiveQuestionId });
+            if (result == null)
+            {
+                return NoContent();
+            }
+            return Ok(result);
+        }
+    }
+}

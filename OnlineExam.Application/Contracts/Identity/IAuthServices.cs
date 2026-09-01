@@ -1,0 +1,18 @@
+﻿using OnlineExam.Application.DTOs.Common;
+using OnlineExam.Application.DTOs.Identity;
+using OnlineExam.Application.Response;
+
+namespace OnlineExam.Application.Contracts.Identity
+{
+    public interface IAuthServices
+    {
+        Task<GetUserDTO> RegisterAsync(RegisterDTO registerionRequest);
+        Task<PaginateResponse<GetUserDTO>> GetAllAsync(PaginateRequestDTO paginateRequestDTO);
+        Task<SuccessLoginResultDTO> LoginAsync(LoginDTO loginRequest);
+        Task<GetTokens> RefreshTokenAsync(string refreshToken);
+        Task LogoutAsync(string refreshToken);
+        Task<string> GetCurrentUserIdAsync();
+        Task<bool> IsUserAdminAsync(string userId);
+
+    }
+}

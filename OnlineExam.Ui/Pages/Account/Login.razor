@@ -1,0 +1,35 @@
+﻿@using OnlineExam.Ui.Services;
+@page "/login"
+@inject AuthServices _authServices;
+@inject IJSRuntime _jsRunTime;
+@inject NavigationManager _navigationManagment;
+<h3>Login</h3>
+
+<form @onsubmit="loginUser" @onsubmit:preventDefault="true">
+    <input placeholder="شماره موبایل" @bind-value="@PhoneNumber">
+    <input type="password" placeholder="رمز عبور" @bind-value="@Password">
+    <button type="submit">ورود</button>
+</form>
+
+<ErrorComponent Errors="@Errors"></ErrorComponent>
+
+@code {
+    string PhoneNumber = "";
+    string Password = "";
+    public async Task loginUser()
+    {
+        if (PhoneNumber.Length != 11)
+        {
+            SetErrors("شماره تلفن باید 11 رقم باشد.");
+        }
+        var result = await _authServices.Login(PhoneNumber, Password);
+        if (!result.IsSuccess)
+        {
+            SetErrors(result.Errors);
+        }
+        else
+        {
+            _navigationManagment.NavigateTo("profile", forceLoad: true);
+        }
+    }
+}

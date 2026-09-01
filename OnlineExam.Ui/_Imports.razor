@@ -1,0 +1,22 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.JSInterop
+@using OnlineExam.Ui
+@using OnlineExam.Ui.Layout
+@using OnlineExam.Ui.DTO.Account;
+@using OnlineExam.Ui.Services;
+@using OnlineExam.Ui.Components;
+@using OnlineExam.Ui.DTO.Common;
+@using OnlineExam.Ui.Response;
+@using Blazor.PersianDatePicker;
+@using OnlineExam.Ui.Helper;
+@using OnlineExam.Ui.Enums;
+@inject AuthServices _authServices;
+@inject NavigationManager _navigationManager;
+@inherits BaseComponent;
+@inject IJSRuntime _jsRuntime;

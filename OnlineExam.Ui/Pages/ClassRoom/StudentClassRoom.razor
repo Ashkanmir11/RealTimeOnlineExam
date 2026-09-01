@@ -1,0 +1,130 @@
+﻿@using OnlineExam.Ui.DTO.ClassRoom;
+@page "/StudentClassRoom"
+@inject ClassRoomServices _classRoomServices;
+@if (DataLoaded)
+{
+    <div class="student-classroom-page">
+
+        <div class="student-classroom-card">
+
+            <div class="student-classroom-header">
+                <div>
+                    <h3>کلاس‌های من</h3>
+                    <p>کلاس موردنظر را انتخاب کنید تا آزمون‌های آن را مشاهده کنید.</p>
+                </div>
+
+                @if (Result?.Data != null && Result.Data.Count > 0)
+                {
+                    <span class="student-classroom-count">
+                        @Result.Data.Count کلاس
+                    </span>
+                }
+            </div>
+
+            @if (Result?.Data == null || Result.Data.Count == 0)
+            {
+                <div class="student-classroom-empty-state">
+                    <div class="student-classroom-empty-icon">
+                        🎓
+                    </div>
+
+                    <h4>کلاسی موجود نیست</h4>
+                    <p>
+                        در حال حاضر کلاسی برای حساب کاربری شما ثبت نشده است.
+                    </p>
+                </div>
+            }
+            else
+            {
+                <div class="student-classroom-grid">
+                    @foreach (var classRoom in Result.Data)
+                    {
+                        <article class="student-classroom-item">
+
+                            <div class="student-classroom-item-top">
+                                <div class="student-classroom-icon">
+                                    <span>ک</span>
+                                </div>
+
+                                <div class="student-classroom-info">
+                                    <span class="student-classroom-label">
+                                        کلاس
+                                    </span>
+
+                                    <h4>
+                                        @classRoom.ClassName
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="student-classroom-item-footer">
+                                <span class="student-classroom-exam-hint">
+                                    مشاهده آزمون‌های کلاس
+                                </span>
+
+                                <button type="button"
+                                        class="student-classroom-view-button"
+                                        @onclick="() => RedirectToStudentExams(classRoom.Id)">
+                                    <span>مشاهده آزمون‌ها</span>
+                                    <span class="student-classroom-arrow">←</span>
+                                </button>
+                            </div>
+
+                        </article>
+                    }
+                </div>
+            }
+
+            @if (Result != null)
+            {
+                <div class="student-classroom-pagination">
+                    <PaginateComponent TotalPage="@Result.TotalPage"
+                                       CurrentPage="@Result.PageNumber"
+                                       SelectedPage="@ChangePage" />
+                </div>
+            }
+
+            <ErrorComponent Errors="@Errors" />
+
+        </div>
+
+    </div>
+}
+else
+{
+    <LoadingComponent />
+}
+
+
+@code {
+    PaginateResponse<GetClassRoomStudentDTO> Result = new PaginateResponse<GetClassRoomStudentDTO>();
+    protected override async Task OnInitializedAsync()
+    {
+        await GetData();
+        await base.OnInitializedAsync();
+    }
+    private async Task GetData()
+    {
+        Result.Data = new List<GetClassRoomStudentDTO>();
+        var response = await _classRoomServices.GetStudentClasses(GetDefultPaginate());
+        DataLoaded = true;
+        if (response.IsSuccess && response.StatusCode != 204)
+        {
+            Result = response.Data;
+        }
+        else if (!response.IsSuccess)
+        {
+            SetErrors(response.Errors);
+        }
+        StateHasChanged();
+    }
+    private async Task ChangePage(int selectedPage)
+    {
+        SetPageNumber(selectedPage);
+        await GetData();
+    }
+    private void RedirectToStudentExams(int classId)
+    {
+        _navigationManager.NavigateTo($"StudentExams/{classId}");
+    }
+}

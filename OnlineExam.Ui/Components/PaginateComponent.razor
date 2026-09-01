@@ -1,0 +1,36 @@
+﻿<nav class="pagination-wrapper" aria-label="صفحه‌بندی">
+    <ul class="pagination-list">
+        @{
+            for (int i = 1; i <= TotalPage; i++)
+            {
+                var page = i;
+
+                <li class="pagination-item">
+                    <button class="pagination-button @(CurrentPage == i ? "active" : "")"
+                            type="button"
+                            aria-label="صفحه @i"
+                            aria-current="@(CurrentPage == i ? "page" : null)"
+                            @onclick="()=>OnChangePage(page)">
+                        @i
+                    </button>
+                </li>
+            }
+        }
+    </ul>
+</nav>
+@code {
+    [Parameter]
+    public int TotalPage { get; set; }
+    [Parameter]
+    public int CurrentPage { get; set; }
+
+    [Parameter]
+    public EventCallback<int> SelectedPage { get; set; }
+    public async Task OnChangePage(int selectedPage)
+    {
+        CurrentPage = selectedPage;
+        StateHasChanged();
+        await SelectedPage.InvokeAsync(selectedPage);
+    }
+
+}

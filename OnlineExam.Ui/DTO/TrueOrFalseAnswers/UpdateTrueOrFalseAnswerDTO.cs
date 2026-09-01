@@ -1,0 +1,9 @@
+﻿namespace OnlineExam.Ui.DTO.TrueOrFalseAnswers
+{
+    public class UpdateTrueOrFalseAnswerDTO
+    {
+        public bool StudentAnswer { get; set; }
+        public int ExamId { get; set; }
+
+    }
+}

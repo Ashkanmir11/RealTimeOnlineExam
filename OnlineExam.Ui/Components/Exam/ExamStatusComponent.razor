@@ -1,0 +1,162 @@
+﻿@using Microsoft.AspNetCore.SignalR.Client
+@using OnlineExam.Ui.Handler;
+@using Microsoft.AspNetCore.Http.Connections;
+@using Microsoft.AspNetCore.Components.WebAssembly.Http;
+
+<div class="exam-status" role="status" aria-live="polite">
+
+    <div class="exam-status-main">
+
+        <div class="exam-status-timer">
+            <span class="exam-status-label">زمان باقی‌مانده</span>
+
+            <strong class="exam-status-time">
+                @RemainTime
+            </strong>
+        </div>
+
+        <div class="exam-status-divider"></div>
+
+        @if (HubConnection?.State == HubConnectionState.Connected)
+        {
+            <div class="exam-status-connection exam-status-online">
+                <span class="exam-status-indicator"></span>
+
+                <div>
+                    <span class="exam-status-label">وضعیت ارتباط</span>
+                    <strong>آنلاین و متصل</strong>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="exam-status-connection exam-status-offline">
+                <span class="exam-status-indicator"></span>
+
+                <div>
+                    <span class="exam-status-label">وضعیت ارتباط</span>
+                    <strong>در حال اتصال به سرور</strong>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <div class="exam-status-actions">
+
+        @if (HubConnection?.State != HubConnectionState.Connected)
+        {
+            <p class="exam-status-warning">
+                زمان در حالت عدم اتصال ممکن است دقیق نباشد.
+            </p>
+        }
+
+        <button type="button"
+                class="exam-status-end-button"
+                @onclick="EndExam">
+            پایان آزمون
+        </button>
+
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public int ExamId { get; set; }
+    [Parameter]
+    public EventCallback AfterConnect { get; set; }
+    [Parameter]
+    public EventCallback EndExam { get; set; }
+    private HubConnection HubConnection;
+    //ConnectionStatuses connectionStatus = ConnectionStatuses.Disconnected;
+    int TotalSeconds;
+    string RemainTime;
+    private Task OnConnectionClosed(Exception? error)
+    {
+        return Task.CompletedTask;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await Connect();
+        await base.OnInitializedAsync();
+    }
+
+    private async Task Connect()
+    {
+        try
+        {
+            HubConnection = new HubConnectionBuilder().WithUrl("http://localhost/ExamApi/startExam", options =>
+            {
+                options.Transports = HttpTransportType.LongPolling;
+                options.HttpMessageHandlerFactory = innerHandler => new IncludeCredentialsHandler
+                    {
+                        InnerHandler = innerHandler
+                    };
+            }).Build();
+
+
+
+            TotalSeconds = 0;
+            HubConnection.On<int>("ReceiveRemaindSeconds", (remainingTime) =>
+               {
+                   TotalSeconds = remainingTime;
+                   CreateTime();
+               });
+            HubConnection.Closed += OnDisconnected;
+            await HubConnection.StartAsync();
+            await HubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+
+        }
+        StateHasChanged();
+    }
+    private async Task OnDisconnected(Exception? exception)
+    {
+        HubConnection.Closed += OnDisconnected;
+        StateHasChanged();
+        CountDown();
+        while (HubConnection.State != HubConnectionState.Connected)
+        {
+            try
+            {
+                await Task.Delay(5000);
+                await HubConnection.StartAsync();
+                await AfterConnect.InvokeAsync();
+                await HubConnection.InvokeAsync("ReceiveRemaindSeconds", ExamId);
+                await InvokeAsync(StateHasChanged);
+            }
+            catch
+            {
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        StateHasChanged();
+
+    }
+    private async void CreateTime()
+    {
+        var time = TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(TotalSeconds));
+        RemainTime = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", time.Hour, time.Minute, time.Second);
+        if (TotalSeconds == 0 && HubConnection.State == HubConnectionState.Connected)
+        {
+            await EndExam.InvokeAsync();
+        }
+        StateHasChanged();
+    }
+    private async Task CountDown()
+    {
+        while (HubConnection.State != HubConnectionState.Connected)
+        {
+            await Task.Delay(1000);
+            if (TotalSeconds <= 1)
+            {
+                TotalSeconds -= 1;
+            }
+            CreateTime();
+        }
+    }
+}

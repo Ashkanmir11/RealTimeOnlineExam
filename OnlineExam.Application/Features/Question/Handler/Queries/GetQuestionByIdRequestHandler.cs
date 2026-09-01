@@ -1,0 +1,20 @@
+﻿using MediatR;
+using OnlineExam.Application.Contracts.Persistence;
+using OnlineExam.Application.DTOs.Question;
+using OnlineExam.Application.Features.Question.Request.Queries;
+
+namespace OnlineExam.Application.Features.Question.Handler.Queries
+{
+    public class GetQuestionByIdRequestHandler : IRequestHandler<GetQuestionByIdRequest, GetQuestionTeacherDTO>
+    {
+        private readonly IQuestionRepository _questionRepository;
+        public GetQuestionByIdRequestHandler(IQuestionRepository questionRepository)
+        {
+            _questionRepository = questionRepository;
+        }
+        public async Task<GetQuestionTeacherDTO> Handle(GetQuestionByIdRequest request, CancellationToken cancellationToken)
+        {
+            return await _questionRepository.GetAsync<GetQuestionTeacherDTO>(request.Id);
+        }
+    }
+}
