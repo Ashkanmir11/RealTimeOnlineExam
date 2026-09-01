@@ -21,7 +21,7 @@ namespace OnlineExam.Api.Controllers.V1
         {
             _authServices = authServices;
             _cookieHelper = cookieHelper;
-            _accountRepository = accountRepository;
+            _accountRepository = accountRepository; 
         }
         [HttpPost("auth/register")]
         [AllowAnonymous]
