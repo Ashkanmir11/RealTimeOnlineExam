@@ -95,11 +95,11 @@ The project is built using **Clean Architecture and CQRS** to provide a maintain
   * Dependency mocking using Moq
   * Success and failure scenario testing
  
-> **⚠️ API Key Notice**
+> **⚠️ AI Key Notice**
 >
-> The API key included in this project is **inactive and cannot be used**.
+> The AI key included in this project is **inactive and cannot be used**.
 >
-> To use the AI features, please add your own API key to the appropriate `appsettings.json` configuration.
+> To use the AI features, please add your own AI key to the appropriate `appsettings.json` configuration.
 
 ## Project Structure
 
@@ -222,9 +222,9 @@ OnlineExam
 
 ⚠️ اطلاعیه API Key
 
-کلید api موجود در این پروژه غیرفعال است و قابل استفاده نیست.
+کلید ai موجود در این پروژه غیرفعال است و قابل استفاده نیست.
 
-برای استفاده از قابلیت‌های AI، API Key خود را در بخش مربوطه در فایل `appsettings.json` قرار دهید.
+برای استفاده از قابلیت‌های AI، AI Key خود را در بخش مربوطه در فایل `appsettings.json` قرار دهید.
 
 ## ساختار پروژه
 
