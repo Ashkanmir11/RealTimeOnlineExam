@@ -18,7 +18,6 @@ The project is built using **Clean Architecture and CQRS** to provide a maintain
 * Clean Architecture
 * CQRS
 * MediatR
-* Repository Pattern
 * AutoMapper
 * FluentValidation
 * SignalR
@@ -143,7 +142,6 @@ OnlineExam
 * Clean Architecture
 * CQRS
 * MediatR
-* Repository Pattern
 * AutoMapper
 * FluentValidation
 * SignalR
