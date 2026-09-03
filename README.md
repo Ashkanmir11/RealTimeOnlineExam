@@ -23,7 +23,6 @@ The project is built using **Clean Architecture and CQRS** to provide a maintain
 * SignalR
 * BackgroundService
 * JWT & Refresh Token
-* Cookies
 * xUnit
 * Moq
 * Shouldly
@@ -147,7 +146,6 @@ OnlineExam
 * SignalR
 * BackgroundService
 * JWT & Refresh Token
-* Cookies
 * xUnit
 * Moq
 * Shouldly
